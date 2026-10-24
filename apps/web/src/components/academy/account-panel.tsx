@@ -1,0 +1,25 @@
+"use client";
+import Link from 'next/link';
+import {useRouter} from 'next/navigation';
+import {useState} from 'react';
+import {useAuth,authRequest} from '@/features/auth/auth-provider';
+import {useProgress} from '@/features/progress/progress-provider';
+import {MfaEnrollmentCard} from '@/components/security/mfa-enrollment-card';
+export function AccountPanel(){
+ const {user,loading,signOut}=useAuth();const {state,ready,remote,importDeviceProgress,syncError}=useProgress();
+ const [message,setMessage]=useState(''),[busy,setBusy]=useState(false);const router=useRouter();
+ const [reauth,setReauth]=useState(''),[totp,setTotp]=useState(''),[setup,setSetup]=useState<{secret:string;uri:string}|null>(null),[recovery,setRecovery]=useState<string[]>([]),[securityError,setSecurityError]=useState('');
+ const beginMfa=async()=>{setSecurityError('');setBusy(true);try{setSetup(await authRequest('/auth/mfa/setup','POST',{password:reauth}));setReauth('')}catch(e){setSecurityError(e instanceof Error?e.message:'Error MFA')}finally{setBusy(false)}};
+ const confirmMfa=async()=>{setSecurityError('');setBusy(true);try{const activated=await authRequest<{recoveryCodes:string[]}>('/auth/mfa/activate','POST',{code:totp});setRecovery(activated.recoveryCodes);setSetup(null);setTotp('');setMessage('MFA activado. Guarda tus códigos de recuperación.')}catch(e){setSecurityError(e instanceof Error?e.message:'Código inválido')}finally{setBusy(false)}};
+ const logout=async()=>{setBusy(true);try{await signOut();router.replace('/login')}catch(e){setMessage(e instanceof Error?e.message:'Error al cerrar sesión')}finally{setBusy(false)}};
+ const importPrevious=async()=>{setBusy(true);setMessage('');try{await importDeviceProgress();setMessage('Progreso anterior importado en PostgreSQL correctamente.')}catch(e){setMessage(e instanceof Error?e.message:'No se pudo importar')}finally{setBusy(false)}};
+ return <><div className="page-heading"><div><p className="eyebrow">IDENTIDAD · SEGURIDAD</p><h1>Mi cuenta</h1><p className="page-description">Identidad, roles y persistencia de los avances académicos.</p></div></div>
+ {loading||!ready?<p role="status">Cargando sesión y progreso…</p>:user?<div className="account-card"><h2>Sesión activa</h2><p><b>Correo:</b> {user.email}</p><p><b>Rol:</b> {user.role}</p><p><b>Almacenamiento:</b> {user.role==='STUDENT'?(remote?'PostgreSQL (sincronizado)':'Local'):'No aplica a administradores'}</p>{user.role==='STUDENT'&&<p><b>Semanas completadas:</b> {state.weeks.length} de 24</p>}<div className="auth-actions">{user.role==='STUDENT'&&<button className="button button-outline" disabled={busy} onClick={()=>void importPrevious()}>↑ Importar avances de este navegador</button>}<button className="button button-outline" disabled={busy} onClick={()=>void logout()}>Cerrar sesión</button></div>
+ {user.role==='STUDENT'?<p className="hint">La importación local es voluntaria y fusiona tus avances sin eliminar los existentes de la cuenta.</p>:<p className="hint">El rol ADMIN utiliza el panel de administración y no almacena progreso de estudiante.</p>}<section className="account-card"><h2>Autenticación en dos pasos (MFA)</h2><p>{user.mfaEnabled?'MFA está activado para tu cuenta. Usa tu aplicación autenticadora al iniciar sesión.':'Introduce tu contraseña actual para vincular una aplicación autenticadora TOTP.'}</p>
+ {!user.mfaEnabled&&!setup&&recovery.length===0&&<form onSubmit={e=>{e.preventDefault();void beginMfa()}}><label>Contraseña actual<input autoComplete="current-password" type="password" value={reauth} onChange={e=>setReauth(e.target.value)} required/></label><button className="button button-outline" disabled={busy}>Configurar MFA</button></form>}
+ {setup&&<form onSubmit={e=>{e.preventDefault();void confirmMfa()}}><MfaEnrollmentCard uri={setup.uri} secret={setup.secret}/><label>Código de 6 dígitos<input value={totp} onChange={e=>setTotp(e.target.value.replace(/\D/g,''))} maxLength={6} pattern="[0-9]{6}" autoComplete="one-time-code" inputMode="numeric" required/></label><button className="button button-primary" disabled={busy}>Activar MFA</button></form>}
+ {recovery.length>0&&<div className="feedback good"><p><b>Guarda estos códigos ahora. No volverán a mostrarse.</b></p><pre style={{whiteSpace:'pre-wrap'}}>{recovery.join('\n')}</pre><button className="button button-outline" onClick={()=>void navigator.clipboard.writeText(recovery.join('\n'))}>Copiar</button></div>}
+ {securityError&&<p className="feedback bad" role="alert">{securityError}</p>}
+ </section>{message&&<p role="status" className="feedback good">{message}</p>}{syncError&&<p role="alert" className="feedback bad">{syncError}</p>}</div>:<div className="account-card"><h2>Aprendizaje como invitado</h2><p>Tus avances se almacenan solo en este navegador. Para sincronizarlos entre dispositivos necesitas una cuenta.</p><div className="auth-actions"><Link className="button button-primary" href="/register">Crear cuenta de estudiante</Link><Link className="button button-outline" href="/login">Iniciar sesión</Link></div></div>}
+ </>;
+}

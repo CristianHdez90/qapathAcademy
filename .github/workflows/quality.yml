@@ -1,0 +1,61 @@
+name: QAPath Academy | CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      # En el primer commit sin lockfile, usar --no-frozen-lockfile.
+      # Después de generar/commitear pnpm-lock.yaml cambiar a --frozen-lockfile.
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm test
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm build
+  e2e:
+    needs: quality
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: qapath
+          POSTGRES_PASSWORD: ci_only_password
+          POSTGRES_DB: qapath_academy
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U qapath -d qapath_academy"
+          --health-interval 5s --health-timeout 5s --health-retries 15
+    env:
+      DATABASE_URL: postgresql://qapath:ci_only_password@localhost:5432/qapath_academy
+      WEB_ORIGIN: http://localhost:3000,http://127.0.0.1:3000
+      API_INTERNAL_URL: http://localhost:4000
+      API_PROXY_TARGET: http://localhost:4000
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm build:libs
+      - run: pnpm db:migrate
+      - run: pnpm --filter @qapath/web exec playwright install --with-deps chromium webkit
+      - run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 14

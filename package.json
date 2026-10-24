@@ -1,0 +1,27 @@
+{
+  "name": "qapath-academy",
+  "private": true,
+  "version": "6.1.0",
+  "packageManager": "pnpm@10.18.2",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "pnpm run build:libs && concurrently -n api,web -c cyan,magenta \"pnpm --filter @qapath/api dev\" \"pnpm --filter @qapath/web dev\"",
+    "build:libs": "pnpm --filter @qapath/contracts --filter @qapath/identity --filter @qapath/administration --filter @qapath/learning --filter @qapath/content --filter @qapath/progress --filter @qapath/database build",
+    "build": "pnpm run build:libs && pnpm --filter @qapath/api build && pnpm --filter @qapath/web build",
+    "typecheck": "pnpm run build:libs && pnpm --filter @qapath/api typecheck && pnpm --filter @qapath/web typecheck",
+    "lint": "pnpm --filter @qapath/web lint && pnpm --filter @qapath/api lint",
+    "test": "pnpm run build:libs && node --test tests/*.test.mjs",
+    "test:e2e": "pnpm --filter @qapath/web test:e2e",
+    "check": "pnpm run test && pnpm run typecheck && pnpm run lint && pnpm run build",
+    "db:generate": "pnpm --filter @qapath/database db:generate",
+    "db:migrate": "pnpm --filter @qapath/database db:migrate",
+    "db:create-admin": "pnpm --filter @qapath/database db:create-admin"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.0",
+    "@types/node": "^22.15.0"
+  }
+}

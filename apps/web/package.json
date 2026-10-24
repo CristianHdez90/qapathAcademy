@@ -1,0 +1,32 @@
+{
+  "name": "@qapath/web",
+  "private": true,
+  "version": "6.0.0",
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "next": "^16.3.6",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "@qapath/contracts": "workspace:*",
+    "@qapath/progress": "workspace:*",
+    "qrcode.react": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@playwright/test": "^1.56.0",
+    "@tailwindcss/postcss": "^4.1.0",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.3.6"
+  }
+}

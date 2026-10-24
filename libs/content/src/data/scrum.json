@@ -1,0 +1,260 @@
+{
+  "roles": [
+    {
+      "id": "usuario",
+      "name": "Usuario final / stakeholder",
+      "short": "Necesidad y feedback",
+      "category": "Fuera del Scrum Team",
+      "glyph": "◎",
+      "responsibility": "Expresa problemas reales, da contexto y contrasta si el resultado es valioso y usable.",
+      "inStory": "Solicita una forma segura de acceder a su información; en la Review comparte si el flujo le resulta claro.",
+      "artifact": "Necesidad y feedback de producto",
+      "question": "¿Qué problema necesito resolver?",
+      "accent": "#78dacf"
+    },
+    {
+      "id": "po",
+      "name": "Product Owner",
+      "short": "Valor y priorización",
+      "category": "Scrum Team",
+      "glyph": "◆",
+      "responsibility": "Maximiza el valor del producto y responde por una gestión eficaz del Product Backlog.",
+      "inStory": "Ordena HU-LOGIN-001, explica su valor, aclara reglas de negocio y acuerda prioridades con el equipo.",
+      "artifact": "Product Backlog ordenado y objetivo de producto",
+      "question": "¿Qué es más valioso entregar ahora?",
+      "accent": "#f1bd70"
+    },
+    {
+      "id": "ingenieria",
+      "name": "Ingeniería de software",
+      "short": "Construcción de producto",
+      "category": "Developers · especialidad",
+      "glyph": "</>",
+      "responsibility": "Desarrolla la solución, su integración y pruebas técnicas. Como parte de Developers responde por el incremento y la Definition of Done.",
+      "inStory": "Diseña la API de autenticación, desarrolla el formulario, implementa manejo de errores y revisiones de código.",
+      "artifact": "Código integrado, pruebas técnicas y funcionalidad operativa",
+      "question": "¿Cómo implementamos una solución robusta?",
+      "accent": "#88b9ff"
+    },
+    {
+      "id": "qa",
+      "name": "QA / Software Testing",
+      "short": "Riesgos y evidencia",
+      "category": "Developers · especialidad",
+      "glyph": "✓",
+      "responsibility": "Identifica riesgos desde el refinamiento, diseña escenarios, prueba exploratoriamente y automatiza verificaciones. La calidad es responsabilidad compartida.",
+      "inStory": "Propone casos positivos, negativos y de borde; revisa criterios, prueba API y UI y automatiza el flujo crítico con Playwright.",
+      "artifact": "Escenarios, evidencias, defectos y tests confiables",
+      "question": "¿Qué podría fallar y cómo lo comprobamos?",
+      "accent": "#85e9cb"
+    },
+    {
+      "id": "sm",
+      "name": "Scrum Master",
+      "short": "Eficacia de Scrum",
+      "category": "Scrum Team",
+      "glyph": "✳",
+      "responsibility": "Apoya la adopción correcta de Scrum y la eficacia del equipo; facilita colaboración y la eliminación de impedimentos.",
+      "inStory": "Ayuda a resolver bloqueos del ambiente de pruebas, mejora la colaboración y facilita el aprendizaje continuo.",
+      "artifact": "Mejoras de proceso e impedimentos abordados",
+      "question": "¿Qué impide crear valor de forma sostenible?",
+      "accent": "#c3a3ff"
+    },
+    {
+      "id": "ux",
+      "name": "UX / Diseño / DevOps",
+      "short": "Competencias complementarias",
+      "category": "Según el contexto",
+      "glyph": "◈",
+      "responsibility": "Aporta accesibilidad, usabilidad, diseño, plataforma y despliegue. Puede integrar Developers o colaborar desde fuera según la organización.",
+      "inStory": "Diseña mensajes comprensibles, valida accesibilidad y habilita entrega y monitoreo seguro.",
+      "artifact": "Diseño, accesibilidad y capacidad de entrega",
+      "question": "¿Cómo será usable, accesible y desplegable?",
+      "accent": "#ffb5ac"
+    }
+  ],
+  "steps": [
+    {
+      "title": "Necesidad del usuario",
+      "phase": "Antes del Sprint",
+      "who": [
+        "usuario",
+        "po"
+      ],
+      "main": "Comprender el problema: el cliente necesita acceder a sus datos de forma segura.",
+      "qa": "QA puede aportar preguntas tempranas sobre riesgos cuando se involucra desde descubrimiento.",
+      "evidence": "Necesidad expresada, alcance preliminar, objetivo de negocio."
+    },
+    {
+      "title": "Backlog y refinamiento",
+      "phase": "Actividad continua",
+      "who": [
+        "po",
+        "ingenieria",
+        "qa",
+        "ux"
+      ],
+      "main": "El PO ordena la historia; el equipo conversa sobre reglas, ambigüedades, tamaño y dependencias.",
+      "qa": "QA propone escenarios Given–When–Then y detecta que no está definido el umbral de intentos fallidos.",
+      "evidence": "HU-LOGIN-001 con criterios verificables y preguntas pendientes identificadas."
+    },
+    {
+      "title": "Sprint Planning",
+      "phase": "Inicio del Sprint",
+      "who": [
+        "po",
+        "ingenieria",
+        "qa",
+        "sm"
+      ],
+      "main": "Todo Scrum Team acuerda por qué el Sprint es valioso. Developers definen qué pueden abordar y cómo comenzar.",
+      "qa": "QA anticipa datos, ambientes, cobertura y riesgos de autenticación en el plan.",
+      "evidence": "Sprint Goal + Sprint Backlog (ítems seleccionados y plan)."
+    },
+    {
+      "title": "Construcción colaborativa",
+      "phase": "Durante el Sprint",
+      "who": [
+        "ingenieria",
+        "qa",
+        "ux"
+      ],
+      "main": "Ingeniería construye UI/API mientras se integran código, revisiones y verificación continua.",
+      "qa": "QA no espera al final: prepara datos, revisa ejemplos, ejecuta exploratorias y diseña tests Playwright/API.",
+      "evidence": "Commits, pull requests, unit tests, pruebas API, funcionalidad integrada."
+    },
+    {
+      "title": "Verificación y DoD",
+      "phase": "Durante el Sprint",
+      "who": [
+        "ingenieria",
+        "qa",
+        "po"
+      ],
+      "main": "Developers verifican condiciones de aceptación y el estándar compartido de Definition of Done.",
+      "qa": "QA comparte defectos, evidencia de regresión y riesgos remanentes; el equipo corrige antes de declarar terminado.",
+      "evidence": "Incremento usable integrado; CA y DoD contrastados con evidencia."
+    },
+    {
+      "title": "Sprint Review",
+      "phase": "Cierre del Sprint",
+      "who": [
+        "usuario",
+        "po",
+        "ingenieria",
+        "qa",
+        "sm"
+      ],
+      "main": "Scrum Team y stakeholders inspeccionan el resultado y adaptan qué hacer después.",
+      "qa": "QA aporta evidencia y resultados de escenarios relevantes; el equipo recoge feedback del flujo.",
+      "evidence": "Feedback, posibles cambios al Product Backlog y siguientes oportunidades."
+    },
+    {
+      "title": "Sprint Retrospective",
+      "phase": "Cierre del Sprint",
+      "who": [
+        "po",
+        "ingenieria",
+        "qa",
+        "sm"
+      ],
+      "main": "Todo Scrum Team identifica mejoras concretas en calidad, herramientas y trabajo conjunto.",
+      "qa": "QA propone prevenir pruebas inestables y disponer antes del ambiente de autenticación.",
+      "evidence": "1–2 mejoras accionables para próximos Sprints."
+    }
+  ],
+  "events": [
+    {
+      "id": "sprint",
+      "title": "Sprint",
+      "time": "Hasta 1 mes",
+      "people": "Scrum Team",
+      "goal": "Contenedor en el que se transforma trabajo en incrementos de valor, con inspección y adaptación.",
+      "detail": "Empieza un Sprint inmediatamente después del anterior. Se puede entregar valor durante el Sprint; no hace falta esperar al Review."
+    },
+    {
+      "id": "planning",
+      "title": "Sprint Planning",
+      "time": "Hasta 8 h / Sprint mensual",
+      "people": "Scrum Team",
+      "goal": "Responder por qué el Sprint vale la pena, qué puede hacerse y cómo comenzar.",
+      "detail": "El PO presenta el contexto y los Developers elaboran el plan. El resultado incluye Sprint Goal y Sprint Backlog."
+    },
+    {
+      "id": "daily",
+      "title": "Daily Scrum",
+      "time": "15 min / día hábil",
+      "people": "Developers",
+      "goal": "Inspeccionar progreso hacia el Sprint Goal y adaptar el plan para el siguiente día.",
+      "detail": "No es un reporte individual al Scrum Master. Developers deciden la estructura que les resulte eficaz."
+    },
+    {
+      "id": "review",
+      "title": "Sprint Review",
+      "time": "Hasta 4 h / Sprint mensual",
+      "people": "Scrum Team + stakeholders",
+      "goal": "Inspeccionar el incremento y discutir adaptaciones a partir de resultados y feedback.",
+      "detail": "No es solo una demostración ni una puerta de aprobación obligatoria antes de publicar."
+    },
+    {
+      "id": "retro",
+      "title": "Sprint Retrospective",
+      "time": "Hasta 3 h / Sprint mensual",
+      "people": "Scrum Team",
+      "goal": "Planear mejoras en eficacia, colaboración y calidad para próximos Sprints.",
+      "detail": "Un ejemplo: estabilizar el ambiente y agregar pruebas tempranas de autenticación."
+    }
+  ],
+  "quiz": [
+    {
+      "q": "Según la Guía Scrum, ¿cuáles son las tres responsabilidades formales?",
+      "choices": [
+        "Usuario, QA y Scrum Master",
+        "Product Owner, Developers y Scrum Master",
+        "Product Owner, Project Manager y QA"
+      ],
+      "correct": 1,
+      "why": "Scrum define Product Owner, Developers y Scrum Master. QA puede ser especialidad dentro de Developers."
+    },
+    {
+      "q": "¿Qué hace un QA eficaz cuando recibe una historia de usuario?",
+      "choices": [
+        "Espera a que desarrollo termine",
+        "Explora riesgos y criterios desde el refinamiento",
+        "Solo redacta un reporte final"
+      ],
+      "correct": 1,
+      "why": "Testing temprano ayuda a eliminar ambigüedades y defectos antes de que crezcan."
+    },
+    {
+      "q": "¿Cuál es la finalidad central del Daily Scrum?",
+      "choices": [
+        "Informar al jefe lo que hizo cada persona",
+        "Aprobar nuevas historias de usuario",
+        "Inspeccionar avance hacia Sprint Goal y adaptar plan"
+      ],
+      "correct": 2,
+      "why": "Es un evento de 15 minutos para Developers enfocado en el Sprint Goal."
+    },
+    {
+      "q": "¿El refinamiento del Product Backlog es un sexto evento oficial?",
+      "choices": [
+        "Sí, obligatorio cada martes",
+        "No, es una actividad continua",
+        "Sí, reemplaza Sprint Review"
+      ],
+      "correct": 1,
+      "why": "Scrum define cinco eventos. El refinamiento del backlog es una actividad continua."
+    },
+    {
+      "q": "¿Cuál es la relación entre criterios de aceptación y Definition of Done?",
+      "choices": [
+        "Son sinónimos",
+        "La DoD corresponde solo a QA",
+        "Los CA validan la historia; DoD establece el estándar del incremento"
+      ],
+      "correct": 2,
+      "why": "Ambos importan: criterios propios del ítem y estándar común de calidad para un incremento terminado."
+    }
+  ]
+}

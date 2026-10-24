@@ -1,0 +1,24 @@
+{
+  "name": "@qapath/database",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/migrate.mjs",
+    "db:create-admin": "node scripts/create-admin.mjs"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.0",
+    "pg": "^8.16.0",
+    "@qapath/progress": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "drizzle-kit": "^0.31.0",
+    "@types/pg": "^8.15.0",
+    "@types/node": "^22.15.0"
+  }
+}

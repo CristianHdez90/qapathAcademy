@@ -1,0 +1,29 @@
+node_modules/
+**/node_modules/
+**/dist/
+**/.next/
+**/.turbo/
+**/playwright-report/
+**/test-results/
+.env
+.env.local
+.env.*.local
+!.env.example
+.DS_Store
+*.tsbuildinfo
+.vercel/
+
+# Datos privados y credenciales
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+
+.local-mailbox/
+**/.local-mailbox/
+
+# Firebase / Google credentials: never version service-account keys
+.firebase/
+**/*service-account*.json
+**/*serviceAccount*.json
+**/firebase-admin-key*.json

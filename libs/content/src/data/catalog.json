@@ -1,0 +1,1108 @@
+{
+  "modules": [
+    {
+      "id": "fundamentos",
+      "number": "01",
+      "title": "Fundamentos del Testing",
+      "range": "Semanas 1–2",
+      "icon": "book",
+      "track": "QA MANUAL",
+      "color": "#5dd8c2",
+      "summary": "Pensamiento crítico, lenguaje común y fundamentos de calidad del software.",
+      "outcome": "Comprendes qué probar, por qué hacerlo y cómo medir el riesgo.",
+      "weeks": [
+        1,
+        2
+      ],
+      "skills": [
+        "ISTQB CTFL",
+        "SDLC / STLC",
+        "Tipos y niveles",
+        "Defectos"
+      ],
+      "project": "Elabora un glosario y un mapa de riesgos para una app.",
+      "minutes": 90
+    },
+    {
+      "id": "manual",
+      "number": "02",
+      "title": "QA Manual profesional",
+      "range": "Semanas 3–6",
+      "icon": "clipboard",
+      "track": "QA MANUAL",
+      "color": "#7cc5ff",
+      "summary": "Diseña escenarios y casos de prueba de alta calidad, basados en riesgos.",
+      "outcome": "Puedes ejecutar una estrategia de pruebas de principio a fin.",
+      "weeks": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "skills": [
+        "Historias de usuario",
+        "Técnicas de diseño",
+        "Evidencias",
+        "Jira"
+      ],
+      "project": "Matriz de 20 casos para un login y reporte de defectos.",
+      "minutes": 120
+    },
+    {
+      "id": "herramientas",
+      "number": "03",
+      "title": "API, SQL, Git y herramientas",
+      "range": "Semanas 7–8",
+      "icon": "terminal",
+      "track": "QA TÉCNICO",
+      "color": "#74b6ff",
+      "summary": "Comprueba servicios, inspecciona datos y versiona tus entregables.",
+      "outcome": "Validas API REST, consultas una base de datos y usas Git.",
+      "weeks": [
+        7,
+        8
+      ],
+      "skills": [
+        "HTTP / REST",
+        "Postman",
+        "SQL",
+        "Git / DevTools"
+      ],
+      "project": "Colección Postman de 15 pruebas y 10 consultas SQL.",
+      "minutes": 120
+    },
+    {
+      "id": "typescript",
+      "number": "04",
+      "title": "JavaScript + TypeScript",
+      "range": "Semanas 9–12",
+      "icon": "code",
+      "track": "PROGRAMACIÓN",
+      "color": "#b195ff",
+      "summary": "Aprende la lógica necesaria para construir automatizaciones mantenibles.",
+      "outcome": "Creas funciones, objetos tipados y manejas operaciones asíncronas.",
+      "weeks": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "skills": [
+        "JavaScript",
+        "TypeScript",
+        "POO",
+        "async / await"
+      ],
+      "project": "Miniaplicación que procesa y valida datos JSON.",
+      "minutes": 150
+    },
+    {
+      "id": "playwright",
+      "number": "05",
+      "title": "Automatización con Playwright",
+      "range": "Semanas 13–16",
+      "icon": "play",
+      "track": "AUTOMATION",
+      "color": "#e4a2f5",
+      "summary": "Diseña pruebas web rápidas, aisladas y resistentes a cambios.",
+      "outcome": "Implementas una suite UI E2E con Playwright Test.",
+      "weeks": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "skills": [
+        "Locators",
+        "Assertions",
+        "Fixtures",
+        "Trace Viewer"
+      ],
+      "project": "Suite UI de login y checkout en varios navegadores.",
+      "minutes": 150
+    },
+    {
+      "id": "arquitectura",
+      "number": "06",
+      "title": "Framework y automatización API",
+      "range": "Semanas 17–20",
+      "icon": "layers",
+      "track": "AUTOMATION",
+      "color": "#ffbf83",
+      "summary": "Escala de scripts aislados a una solución reutilizable y configurable.",
+      "outcome": "Organizas un framework UI + API siguiendo buenas prácticas.",
+      "weeks": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "skills": [
+        "Page Object Model",
+        "Fixtures avanzados",
+        "APIRequestContext",
+        "Mocks"
+      ],
+      "project": "Framework modular con datos de prueba y pruebas API.",
+      "minutes": 160
+    },
+    {
+      "id": "cicd",
+      "number": "07",
+      "title": "CI/CD y calidad de la suite",
+      "range": "Semanas 21–22",
+      "icon": "git",
+      "track": "DEVOPS QA",
+      "color": "#ffc17b",
+      "summary": "Lleva tus pruebas a un pipeline y vuelve confiables los resultados.",
+      "outcome": "Ejecutas y publicas reportes automáticamente en cada PR.",
+      "weeks": [
+        21,
+        22
+      ],
+      "skills": [
+        "GitHub Actions",
+        "Reportes HTML",
+        "Paralelismo",
+        "Flaky tests"
+      ],
+      "project": "Pipeline estable con evidencias y reportes publicados.",
+      "minutes": 130
+    },
+    {
+      "id": "portafolio",
+      "number": "08",
+      "title": "Proyecto final y portafolio",
+      "range": "Semanas 23–24",
+      "icon": "rocket",
+      "track": "PORTAFOLIO",
+      "color": "#69dfb3",
+      "summary": "Integra análisis, desarrollo, ejecución, métricas y documentación.",
+      "outcome": "Publicas un proyecto demostrable de nivel profesional.",
+      "weeks": [
+        23,
+        24
+      ],
+      "skills": [
+        "E2E + API",
+        "Trazabilidad",
+        "README",
+        "Demostración técnica"
+      ],
+      "project": "Proyecto QA completo listo para mostrar en una entrevista.",
+      "minutes": 180
+    }
+  ],
+  "weeks": [
+    {
+      "id": 1,
+      "module": "fundamentos",
+      "title": "Mentalidad QA y ciclo de vida",
+      "goal": "Diferenciar calidad, testing, verificación y validación.",
+      "topics": [
+        "Qué hace QA y qué es un defecto",
+        "SDLC: cascada y enfoques ágiles",
+        "STLC y actividades de testing",
+        "Los 7 principios de testing"
+      ],
+      "tasks": [
+        "Crear un glosario de 15 términos QA",
+        "Describir dónde interviene QA en un sprint"
+      ],
+      "evidence": "Glosario y diagrama SDLC/STLC"
+    },
+    {
+      "id": 2,
+      "module": "fundamentos",
+      "title": "Niveles, tipos y gestión de riesgos",
+      "goal": "Seleccionar tipos de prueba según el impacto del fallo.",
+      "topics": [
+        "Unitarias, integración, sistema y aceptación",
+        "Funcionales y no funcionales",
+        "Smoke, regresión, exploratorias y E2E",
+        "Riesgo, impacto y probabilidad"
+      ],
+      "tasks": [
+        "Clasificar 15 pruebas por nivel y tipo",
+        "Construir una matriz de 5 riesgos para una tienda web"
+      ],
+      "evidence": "Catálogo de pruebas y matriz de riesgos"
+    },
+    {
+      "id": 3,
+      "module": "manual",
+      "title": "Historias de usuario y criterios de aceptación",
+      "goal": "Convertir requisitos en condiciones verificables.",
+      "topics": [
+        "Formato Como / Quiero / Para",
+        "Criterios de aceptación comprobables",
+        "Ambigüedades y preguntas al PO",
+        "Criterios funcionales y no funcionales"
+      ],
+      "tasks": [
+        "Redactar HU de inicio de sesión",
+        "Escribir 8 criterios de aceptación medibles"
+      ],
+      "evidence": "HU de login con criterios claros"
+    },
+    {
+      "id": 4,
+      "module": "manual",
+      "title": "Técnicas de diseño de pruebas",
+      "goal": "Diseñar casos con buena cobertura y sin duplicación.",
+      "topics": [
+        "Partición de equivalencia",
+        "Análisis de valores límite",
+        "Tablas de decisión",
+        "Transición de estados"
+      ],
+      "tasks": [
+        "Crear una tabla de decisión de login",
+        "Diseñar 10 casos positivos, negativos y de borde"
+      ],
+      "evidence": "Matriz de diseño de pruebas"
+    },
+    {
+      "id": 5,
+      "module": "manual",
+      "title": "Ejecución, defectos y evidencias",
+      "goal": "Registrar resultados reproducibles.",
+      "topics": [
+        "Casos: precondiciones, pasos y resultados",
+        "Estados de ejecución y trazabilidad",
+        "Severidad versus prioridad",
+        "Reporte de defectos y adjuntos"
+      ],
+      "tasks": [
+        "Ejecutar 20 casos sobre un sitio de práctica",
+        "Crear 3 bugs reproducibles con evidencia"
+      ],
+      "evidence": "Matriz ejecutada y reportes de defectos"
+    },
+    {
+      "id": 6,
+      "module": "manual",
+      "title": "Agile QA y estrategia de pruebas",
+      "goal": "Planificar y comunicar pruebas orientadas a riesgo.",
+      "topics": [
+        "QA en Scrum y refinamiento",
+        "Smoke y regresión basadas en riesgo",
+        "Exploratory testing y charters",
+        "Reporte de cobertura y cierre"
+      ],
+      "tasks": [
+        "Diseñar mini plan de pruebas para una sprint",
+        "Entregar informe de ejecución con métricas"
+      ],
+      "evidence": "Estrategia y cierre de pruebas"
+    },
+    {
+      "id": 7,
+      "module": "herramientas",
+      "title": "HTTP, REST y pruebas API con Postman",
+      "goal": "Validar endpoints y reglas de negocio de un servicio.",
+      "topics": [
+        "Métodos HTTP y códigos de respuesta",
+        "Headers, auth, body y JSON",
+        "Colecciones, ambientes y variables",
+        "Aserciones y pruebas negativas"
+      ],
+      "tasks": [
+        "Crear 15 pruebas sobre una API de práctica",
+        "Validar status, estructura, campos y errores"
+      ],
+      "evidence": "Colección Postman exportada"
+    },
+    {
+      "id": 8,
+      "module": "herramientas",
+      "title": "SQL, DevTools y Git",
+      "goal": "Seguir datos del frontend a backend y versionar trabajo.",
+      "topics": [
+        "SELECT, WHERE, JOIN y GROUP BY",
+        "Network / Console de DevTools",
+        "Commits, ramas, pull requests",
+        "Repositorio y archivo README"
+      ],
+      "tasks": [
+        "Escribir 10 consultas SQL",
+        "Publicar un repositorio con casos y colección"
+      ],
+      "evidence": "Repositorio documentado + consultas SQL"
+    },
+    {
+      "id": 9,
+      "module": "typescript",
+      "title": "JavaScript: lógica fundamental",
+      "goal": "Resolver problemas básicos sin frameworks.",
+      "topics": [
+        "Variables y tipos primitivos",
+        "Condicionales y ciclos",
+        "Funciones y alcance",
+        "Operadores y manejo de errores"
+      ],
+      "tasks": [
+        "Implementar validador de contraseña",
+        "Crear función de cálculo de descuento"
+      ],
+      "evidence": "Archivo JS con tests de funciones"
+    },
+    {
+      "id": 10,
+      "module": "typescript",
+      "title": "Objetos, arrays y JSON",
+      "goal": "Transformar estructuras de datos de pruebas.",
+      "topics": [
+        "Objetos y arreglos",
+        "map, filter, find, reduce",
+        "Desestructuración y spread",
+        "JSON y módulos ES"
+      ],
+      "tasks": [
+        "Filtrar usuarios por estado activo",
+        "Procesar respuesta JSON de productos"
+      ],
+      "evidence": "Scripts de procesamiento de datos"
+    },
+    {
+      "id": 11,
+      "module": "typescript",
+      "title": "TypeScript y POO",
+      "goal": "Escribir código seguro y organizado.",
+      "topics": [
+        "Tipos, uniones e interfaces",
+        "Funciones tipadas",
+        "Clases y composición",
+        "tsconfig y módulos"
+      ],
+      "tasks": [
+        "Crear interfaz Usuario y objeto tipado",
+        "Diseñar clase para un carrito de compras"
+      ],
+      "evidence": "Mini librería TypeScript tipada"
+    },
+    {
+      "id": 12,
+      "module": "typescript",
+      "title": "Asincronía y calidad de código",
+      "goal": "Manejar operaciones que toman tiempo.",
+      "topics": [
+        "Promises y async / await",
+        "fetch y respuesta HTTP",
+        "try/catch y errores",
+        "npm y depuración"
+      ],
+      "tasks": [
+        "Consultar API y validar resultado",
+        "Controlar errores de una petición fallida"
+      ],
+      "evidence": "Cliente API simple en TypeScript"
+    },
+    {
+      "id": 13,
+      "module": "playwright",
+      "title": "Primer proyecto Playwright",
+      "goal": "Instalar, ejecutar y entender el test runner.",
+      "topics": [
+        "Node.js y npm",
+        "npm init playwright@latest",
+        "test, page y expect",
+        "Headed, UI Mode y HTML Reporter"
+      ],
+      "tasks": [
+        "Instalar Playwright con TypeScript",
+        "Automatizar navegación y primer login"
+      ],
+      "evidence": "Repositorio con primera suite verde"
+    },
+    {
+      "id": 14,
+      "module": "playwright",
+      "title": "Locators y assertions robustos",
+      "goal": "Automatizar sin selectores frágiles ni pausas arbitrarias.",
+      "topics": [
+        "getByRole, getByLabel y getByTestId",
+        "Filtrado y encadenamiento de locators",
+        "Auto-waiting y actionability",
+        "Expect auto-retrying assertions"
+      ],
+      "tasks": [
+        "Crear 5 pruebas sin waitForTimeout",
+        "Reparar 3 selectores inestables"
+      ],
+      "evidence": "Suite con locators accesibles"
+    },
+    {
+      "id": 15,
+      "module": "playwright",
+      "title": "Flujos reales y debugging",
+      "goal": "Resolver escenarios complejos y fallos.",
+      "topics": [
+        "Formularios y validaciones",
+        "Ventanas, iframes y uploads",
+        "Trace Viewer y Codegen",
+        "Screenshots, videos y depuración"
+      ],
+      "tasks": [
+        "Automatizar checkout de una tienda",
+        "Investigar un fallo usando trace.zip"
+      ],
+      "evidence": "Suite E2E y diagnóstico de fallo"
+    },
+    {
+      "id": 16,
+      "module": "playwright",
+      "title": "Configuración y pruebas multiplataforma",
+      "goal": "Ejecutar suites independientes en varios entornos.",
+      "topics": [
+        "playwright.config.ts",
+        "Projects Chromium, Firefox y WebKit",
+        "Hooks, retries y test isolation",
+        "Etiquetas y ejecución selectiva"
+      ],
+      "tasks": [
+        "Configurar 3 proyectos de navegador",
+        "Ejecutar smoke y regresión por separado"
+      ],
+      "evidence": "Configuración reproducible por navegador"
+    },
+    {
+      "id": 17,
+      "module": "arquitectura",
+      "title": "Page Object Model y modularidad",
+      "goal": "Separar elementos, acciones y aserciones según su responsabilidad.",
+      "topics": [
+        "Page Object Model",
+        "Encapsulamiento y composición",
+        "Organización de carpetas",
+        "Evitar sobreabstracción"
+      ],
+      "tasks": [
+        "Crear LoginPage y ProductsPage",
+        "Refactorizar 5 pruebas para reutilizar páginas"
+      ],
+      "evidence": "POM funcional con pruebas limpias"
+    },
+    {
+      "id": 18,
+      "module": "arquitectura",
+      "title": "Fixtures y datos de prueba",
+      "goal": "Aislar escenarios y evitar dependencia entre tests.",
+      "topics": [
+        "Fixtures extendidas",
+        "Setup y teardown",
+        "Datos estáticos y dinámicos",
+        "Estado autenticado y storageState"
+      ],
+      "tasks": [
+        "Crear fixture para usuarios de prueba",
+        "Reutilizar sesión sin compartir estado mutable"
+      ],
+      "evidence": "Fixtures y estrategia de datos"
+    },
+    {
+      "id": 19,
+      "module": "arquitectura",
+      "title": "Automatización API con Playwright",
+      "goal": "Cubrir servicios con el mismo framework.",
+      "topics": [
+        "APIRequestContext",
+        "GET, POST, PUT y DELETE",
+        "Autenticación y JSON",
+        "UI + API para preparar datos"
+      ],
+      "tasks": [
+        "Implementar 8 pruebas de API",
+        "Crear datos por API antes de un test UI"
+      ],
+      "evidence": "Suite de contratos y flujos API"
+    },
+    {
+      "id": 20,
+      "module": "arquitectura",
+      "title": "Mocks, ambientes y arquitectura avanzada",
+      "goal": "Reducir acoplamiento a servicios externos.",
+      "topics": [
+        "route.fulfill y network mocking",
+        "Variables por ambiente",
+        "Buenas prácticas de secretos",
+        "Screenplay como alternativa avanzada"
+      ],
+      "tasks": [
+        "Mockear una respuesta de productos",
+        "Documentar decisiones arquitectónicas"
+      ],
+      "evidence": "Framework configurable y documentado"
+    },
+    {
+      "id": 21,
+      "module": "cicd",
+      "title": "Pipeline QA con GitHub Actions",
+      "goal": "Ejecutar automatización en integración continua.",
+      "topics": [
+        "Workflow YAML",
+        "npm ci y playwright install",
+        "Triggers push y pull_request",
+        "Artifacts para reportes"
+      ],
+      "tasks": [
+        "Crear workflow funcional",
+        "Publicar HTML report y trace como artifacts"
+      ],
+      "evidence": "Pipeline verde con reportes descargables"
+    },
+    {
+      "id": 22,
+      "module": "cicd",
+      "title": "Estabilidad, métricas y ejecución eficiente",
+      "goal": "Medir confiabilidad, no solo cantidad de tests.",
+      "topics": [
+        "Pruebas flaky y causas raíz",
+        "Sharding y workers",
+        "Retries con criterio",
+        "Cobertura por riesgo y tiempos de ejecución"
+      ],
+      "tasks": [
+        "Identificar y corregir 2 fallos inestables",
+        "Presentar tablero de métricas básico"
+      ],
+      "evidence": "Informe de confiabilidad de la suite"
+    },
+    {
+      "id": 23,
+      "module": "portafolio",
+      "title": "Proyecto E2E integrador",
+      "goal": "Conectar requisitos, pruebas, automatización y riesgos.",
+      "topics": [
+        "Selección de app de práctica",
+        "Criterios y matriz de trazabilidad",
+        "Cobertura UI + API",
+        "Estrategia de datos y ambientes"
+      ],
+      "tasks": [
+        "Integrar 20–30 escenarios automatizados",
+        "Relacionar HU, casos, pruebas y evidencias"
+      ],
+      "evidence": "Proyecto funcional con matriz de trazabilidad"
+    },
+    {
+      "id": 24,
+      "module": "portafolio",
+      "title": "Portafolio y presentación técnica",
+      "goal": "Demostrar habilidades en un contexto profesional.",
+      "topics": [
+        "README técnico de calidad",
+        "Arquitectura y decisiones",
+        "Demo de pipeline y resultados",
+        "Evaluación retrospectiva"
+      ],
+      "tasks": [
+        "Publicar repo público sin secretos",
+        "Grabar o preparar demo de 5 minutos"
+      ],
+      "evidence": "Repositorio final, documentación y demo"
+    }
+  ],
+  "labs": [
+    {
+      "id": "l1",
+      "module": "fundamentos",
+      "level": "Inicial",
+      "title": "Detective de defectos",
+      "time": "40 min",
+      "desc": "Inspecciona una aplicación web y clasifica 10 hallazgos entre error, defecto, fallo y mejora.",
+      "criteria": [
+        "Clasificación sustentada",
+        "Al menos 3 riesgos identificados"
+      ]
+    },
+    {
+      "id": "l2",
+      "module": "manual",
+      "level": "Inicial",
+      "title": "Matriz de pruebas de login",
+      "time": "90 min",
+      "desc": "Redacta 20 casos para autenticación: válidos, inválidos, bordes, bloqueo y recuperación.",
+      "criteria": [
+        "Precondición + pasos + resultado",
+        "Cobertura positiva y negativa"
+      ]
+    },
+    {
+      "id": "l3",
+      "module": "manual",
+      "level": "Inicial",
+      "title": "Reporta un bug como profesional",
+      "time": "45 min",
+      "desc": "Crea 3 defectos reproducibles con severidad, prioridad, ambiente y evidencia.",
+      "criteria": [
+        "Pasos reproducibles",
+        "Comportamiento actual y esperado"
+      ]
+    },
+    {
+      "id": "l4",
+      "module": "herramientas",
+      "level": "Intermedio",
+      "title": "Colección Postman con validaciones",
+      "time": "120 min",
+      "desc": "Automatiza 15 checks de HTTP, esquema básico, datos y comportamiento negativo.",
+      "criteria": [
+        "Variables de entorno",
+        "Validaciones de código y body"
+      ]
+    },
+    {
+      "id": "l5",
+      "module": "herramientas",
+      "level": "Intermedio",
+      "title": "Rastrea un dato con SQL",
+      "time": "60 min",
+      "desc": "Escribe 10 consultas que combinen filtros, JOINs y agrupaciones.",
+      "criteria": [
+        "Al menos 2 JOINs",
+        "Resultados documentados"
+      ]
+    },
+    {
+      "id": "l6",
+      "module": "typescript",
+      "level": "Intermedio",
+      "title": "Validador TypeScript",
+      "time": "90 min",
+      "desc": "Implementa una biblioteca de validación de usuarios con tipos, funciones y promesas.",
+      "criteria": [
+        "Interfaces tipadas",
+        "Errores manejados con try/catch"
+      ]
+    },
+    {
+      "id": "l7",
+      "module": "playwright",
+      "level": "Intermedio",
+      "title": "Automatiza el login",
+      "time": "90 min",
+      "desc": "Crea pruebas de inicio de sesión sin esperas fijas, usando locators semánticos.",
+      "criteria": [
+        "getByRole o getByLabel",
+        "Assertions visibles y estables"
+      ]
+    },
+    {
+      "id": "l8",
+      "module": "playwright",
+      "level": "Intermedio",
+      "title": "Checkout E2E",
+      "time": "120 min",
+      "desc": "Prueba el viaje completo de compra con validación de carrito y orden.",
+      "criteria": [
+        "Pruebas independientes",
+        "Captura de trace en fallo"
+      ]
+    },
+    {
+      "id": "l9",
+      "module": "arquitectura",
+      "level": "Avanzado",
+      "title": "Refactor con POM y fixtures",
+      "time": "180 min",
+      "desc": "Migra tu suite de login y checkout a Page Objects y fixtures reutilizables.",
+      "criteria": [
+        "Responsabilidades separadas",
+        "Datos gestionados por fixture"
+      ]
+    },
+    {
+      "id": "l10",
+      "module": "arquitectura",
+      "level": "Avanzado",
+      "title": "API + UI en una misma prueba",
+      "time": "120 min",
+      "desc": "Prepara datos desde API y verifica el resultado en UI sin depender de pruebas anteriores.",
+      "criteria": [
+        "Request context",
+        "Limpieza de datos si aplica"
+      ]
+    },
+    {
+      "id": "l11",
+      "module": "cicd",
+      "level": "Avanzado",
+      "title": "Pipeline GitHub Actions",
+      "time": "120 min",
+      "desc": "Ejecuta Playwright en PR y publica reportes y trazas como artifacts.",
+      "criteria": [
+        "Ejecución automática",
+        "Diagnóstico accesible en fallo"
+      ]
+    },
+    {
+      "id": "l12",
+      "module": "portafolio",
+      "level": "Avanzado",
+      "title": "Demo de tu framework",
+      "time": "150 min",
+      "desc": "Prepara una presentación de 5 minutos sobre arquitectura, cobertura, riesgos y métricas.",
+      "criteria": [
+        "README completo",
+        "Ejecución reproducible y sin secretos"
+      ]
+    }
+  ],
+  "quizzes": {
+    "fundamentos": [
+      {
+        "q": "¿Qué describe mejor el objetivo del testing?",
+        "a": [
+          "Demostrar que no existen errores",
+          "Reducir riesgos aportando información de calidad",
+          "Reemplazar la revisión de requisitos"
+        ],
+        "correct": 1,
+        "why": "El testing proporciona información sobre calidad y riesgos; no prueba ausencia total de defectos."
+      },
+      {
+        "q": "¿Cuál es un nivel de prueba?",
+        "a": [
+          "Regresión",
+          "Integración",
+          "Smoke"
+        ],
+        "correct": 1,
+        "why": "Integración es un nivel; regresión y smoke describen objetivos o conjuntos de pruebas."
+      },
+      {
+        "q": "¿Cuál debería probarse antes?",
+        "a": [
+          "Función decorativa de bajo impacto",
+          "Transferencia de dinero con riesgo alto",
+          "Animación del footer"
+        ],
+        "correct": 1,
+        "why": "Las prioridades deben considerar probabilidad e impacto del fallo."
+      }
+    ],
+    "manual": [
+      {
+        "q": "¿Qué técnica funciona mejor para rangos de edad de 18 a 65?",
+        "a": [
+          "Valores límite",
+          "Solo pruebas exploratorias",
+          "Solo pruebas de humo"
+        ],
+        "correct": 0,
+        "why": "Los límites 17/18 y 65/66 detectan errores clásicos."
+      },
+      {
+        "q": "¿Qué es indispensable en un bug reproducible?",
+        "a": [
+          "Solo una captura",
+          "Pasos y resultados actual y esperado",
+          "Nombre del desarrollador"
+        ],
+        "correct": 1,
+        "why": "Reproducibilidad y claridad permiten investigar y corregir."
+      },
+      {
+        "q": "¿Qué diferencia severidad y prioridad?",
+        "a": [
+          "Son sinónimos",
+          "Severidad es impacto; prioridad es urgencia",
+          "Prioridad es impacto técnico"
+        ],
+        "correct": 1,
+        "why": "Un defecto puede ser grave y no urgente, o viceversa."
+      }
+    ],
+    "herramientas": [
+      {
+        "q": "¿Qué significa HTTP 404 normalmente?",
+        "a": [
+          "No encontrado",
+          "Creado",
+          "Sin contenido"
+        ],
+        "correct": 0,
+        "why": "404 indica que el recurso no fue encontrado."
+      },
+      {
+        "q": "¿Qué cláusula SQL sirve para filtrar filas?",
+        "a": [
+          "GROUP BY",
+          "WHERE",
+          "ORDER BY"
+        ],
+        "correct": 1,
+        "why": "WHERE restringe las filas devueltas."
+      },
+      {
+        "q": "¿Para qué sirve Git?",
+        "a": [
+          "Versionar cambios",
+          "Hacer consultas SQL",
+          "Crear locators"
+        ],
+        "correct": 0,
+        "why": "Git permite mantener historial y colaborar en ramas."
+      }
+    ],
+    "typescript": [
+      {
+        "q": "¿Cuál es el beneficio de una interfaz TypeScript?",
+        "a": [
+          "Tipar la forma de objetos",
+          "Acelerar la red",
+          "Evitar ejecutar tests"
+        ],
+        "correct": 0,
+        "why": "Las interfaces describen la estructura esperada de los objetos."
+      },
+      {
+        "q": "¿Qué espera await?",
+        "a": [
+          "Un número exclusivamente",
+          "La resolución de una promesa",
+          "La carga del CSS"
+        ],
+        "correct": 1,
+        "why": "await pausa la función asíncrona hasta obtener el resultado de la promesa."
+      },
+      {
+        "q": "¿Qué método transforma elementos de un array?",
+        "a": [
+          "map",
+          "find",
+          "includes"
+        ],
+        "correct": 0,
+        "why": "map devuelve un nuevo array con los elementos transformados."
+      }
+    ],
+    "playwright": [
+      {
+        "q": "¿Qué locator suele ser más resistente y accesible?",
+        "a": [
+          "CSS nth-child(3)",
+          "getByRole con nombre accesible",
+          "XPath absoluto"
+        ],
+        "correct": 1,
+        "why": "Los locators semánticos reflejan la interfaz percibida por las personas."
+      },
+      {
+        "q": "¿Por qué preferir expect(locator).toBeVisible()?",
+        "a": [
+          "Reintenta hasta el timeout",
+          "Siempre pasa",
+          "Desactiva el navegador"
+        ],
+        "correct": 0,
+        "why": "Las aserciones de locator reintentan automáticamente durante la espera."
+      },
+      {
+        "q": "¿Cuál de estas prácticas conviene evitar?",
+        "a": [
+          "Pruebas aisladas",
+          "waitForTimeout arbitrario",
+          "Trace Viewer"
+        ],
+        "correct": 1,
+        "why": "Las esperas fijas hacen lentos e inestables los tests."
+      }
+    ],
+    "arquitectura": [
+      {
+        "q": "¿Qué busca Page Object Model?",
+        "a": [
+          "Centralizar acciones y locators de páginas",
+          "Poner todo en un test gigante",
+          "Eliminar assertions"
+        ],
+        "correct": 0,
+        "why": "POM encapsula interacción de UI y reduce duplicación."
+      },
+      {
+        "q": "¿Qué herramienta permite interceptar una respuesta web?",
+        "a": [
+          "page.route",
+          "page.reload",
+          "page.title"
+        ],
+        "correct": 0,
+        "why": "page.route permite gestionar e incluso simular peticiones."
+      },
+      {
+        "q": "¿Cuál es el objetivo de fixtures por test?",
+        "a": [
+          "Compartir estado mutable global",
+          "Preparar y aislar recursos",
+          "Omitir teardown"
+        ],
+        "correct": 1,
+        "why": "Fixtures gestionan precondiciones y recursos con aislamiento."
+      }
+    ],
+    "cicd": [
+      {
+        "q": "¿Qué evento suele ejecutar pruebas antes de integrar cambios?",
+        "a": [
+          "pull_request",
+          "issues.deleted",
+          "solo workflow_dispatch"
+        ],
+        "correct": 0,
+        "why": "pull_request permite validar contribuciones antes del merge."
+      },
+      {
+        "q": "¿Qué es una prueba flaky?",
+        "a": [
+          "Una prueba que falla intermitentemente sin cambio relevante",
+          "Una prueba siempre roja",
+          "Una prueba manual"
+        ],
+        "correct": 0,
+        "why": "La inestabilidad erosiona la confianza en la suite."
+      },
+      {
+        "q": "¿Qué conviene conservar al fallar un test en CI?",
+        "a": [
+          "Solo el nombre",
+          "Reporte y trazas",
+          "La contraseña real"
+        ],
+        "correct": 1,
+        "why": "Evidencias como reportes y traces permiten diagnosticar sin exponer secretos."
+      }
+    ],
+    "portafolio": [
+      {
+        "q": "¿Qué evidencia más convincente demuestra competencia QA?",
+        "a": [
+          "Solo número de tests",
+          "Trazabilidad, resultados y decisiones de riesgo",
+          "Un README vacío"
+        ],
+        "correct": 1,
+        "why": "La calidad del criterio y la confiabilidad importan más que la cantidad."
+      },
+      {
+        "q": "¿Qué debe evitar un repositorio público?",
+        "a": [
+          "Instrucciones de ejecución",
+          "Credenciales y tokens",
+          "Información de arquitectura"
+        ],
+        "correct": 1,
+        "why": "Nunca se deben publicar secretos."
+      },
+      {
+        "q": "¿Qué incluirías en una demo técnica?",
+        "a": [
+          "Arquitectura, ejecución, resultados y limitaciones",
+          "Solo capturas bonitas",
+          "Solo el editor de código"
+        ],
+        "correct": 0,
+        "why": "Una demo útil muestra decisiones y valor técnico de extremo a extremo."
+      }
+    ]
+  },
+  "finalChecklist": [
+    "Documento de estrategia, objetivos y alcance",
+    "20 casos manuales con trazabilidad",
+    "Matriz de riesgos y reporte de defectos",
+    "20–30 pruebas automatizadas UI y API",
+    "Framework modular con Page Object Model",
+    "Datos de prueba independientes",
+    "Pipeline funcional en GitHub Actions",
+    "Reportes HTML, capturas y traces",
+    "README de instalación, ejecución y arquitectura",
+    "Presentación técnica o demo de 5 minutos"
+  ],
+  "resources": [
+    {
+      "title": "ISTQB CTFL",
+      "type": "Fundamentos",
+      "description": "Sílabo oficial de certificación Foundation Level.",
+      "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+      "module": "fundamentos"
+    },
+    {
+      "title": "Playwright: Introducción",
+      "type": "Automatización",
+      "description": "Instalación y primeros pasos oficiales.",
+      "url": "https://playwright.dev/docs/intro",
+      "module": "playwright"
+    },
+    {
+      "title": "Playwright: Locators",
+      "type": "Automatización",
+      "description": "Buenas prácticas de selección de elementos.",
+      "url": "https://playwright.dev/docs/locators",
+      "module": "playwright"
+    },
+    {
+      "title": "Playwright: Best Practices",
+      "type": "Automatización",
+      "description": "Pruebas robustas y mantenibles.",
+      "url": "https://playwright.dev/docs/best-practices",
+      "module": "playwright"
+    },
+    {
+      "title": "Playwright: API Testing",
+      "type": "Automatización",
+      "description": "APIRequestContext, validaciones y peticiones.",
+      "url": "https://playwright.dev/docs/api-testing",
+      "module": "arquitectura"
+    },
+    {
+      "title": "TypeScript Handbook",
+      "type": "Programación",
+      "description": "Guía oficial de tipos, interfaces y funciones.",
+      "url": "https://www.typescriptlang.org/docs/handbook/intro.html",
+      "module": "typescript"
+    },
+    {
+      "title": "MDN: JavaScript",
+      "type": "Programación",
+      "description": "Tutoriales y referencia del lenguaje.",
+      "url": "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide",
+      "module": "typescript"
+    },
+    {
+      "title": "Postman Learning Center",
+      "type": "API",
+      "description": "Pruebas API, colecciones y ambientes.",
+      "url": "https://learning.postman.com/",
+      "module": "herramientas"
+    },
+    {
+      "title": "Git Documentation",
+      "type": "Herramientas",
+      "description": "Guías de control de versiones.",
+      "url": "https://git-scm.com/doc",
+      "module": "herramientas"
+    },
+    {
+      "title": "GitHub Actions",
+      "type": "CI/CD",
+      "description": "Introducción a workflows automatizados.",
+      "url": "https://docs.github.com/en/actions",
+      "module": "cicd"
+    },
+    {
+      "title": "SauceDemo",
+      "type": "Práctica",
+      "description": "App demo para practicar login y compra.",
+      "url": "https://www.saucedemo.com/",
+      "module": "manual"
+    },
+    {
+      "title": "SQLBolt",
+      "type": "Práctica",
+      "description": "Ejercicios SQL interactivos.",
+      "url": "https://sqlbolt.com/",
+      "module": "herramientas"
+    }
+  ]
+}

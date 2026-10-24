@@ -1,0 +1,17 @@
+# SOLO desarrollo local. No usar estas credenciales en producción.
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports: ['127.0.0.1:5432:5432']
+    environment:
+      POSTGRES_DB: qapath_academy
+      POSTGRES_USER: qapath
+      POSTGRES_PASSWORD: qapath_dev_only
+    volumes: [qapath_pg_data:/var/lib/postgresql/data]
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U qapath -d qapath_academy']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  qapath_pg_data:

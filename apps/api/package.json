@@ -1,0 +1,36 @@
+{
+  "name": "@qapath/api",
+  "version": "6.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "nest start --watch",
+    "build": "nest build",
+    "start": "node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint src --ext .ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.0",
+    "@nestjs/core": "^11.1.0",
+    "@nestjs/platform-express": "^11.1.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.0",
+    "@qapath/learning": "workspace:*",
+    "@qapath/content": "workspace:*",
+    "@qapath/contracts": "workspace:*",
+    "@qapath/identity": "workspace:*",
+    "@qapath/progress": "workspace:*",
+    "@qapath/database": "workspace:*",
+    "firebase-admin": "^13.5.0",
+    "zod": "^4.0.0",
+    "@qapath/administration": "workspace:*"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@types/node": "^22.15.0",
+    "typescript": "^5.9.0",
+    "eslint": "^9.0.0",
+    "@typescript-eslint/parser": "^8.34.0",
+    "@typescript-eslint/eslint-plugin": "^8.34.0"
+  }
+}
