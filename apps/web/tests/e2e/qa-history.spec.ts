@@ -31,6 +31,29 @@ test('Lia retains every exchange after reload, archives, restores and separates 
   await expect(page.getByRole('log')).toContainText('Respuesta de QA '+i);
  }
  await expect(page.locator('.qa-message')).toHaveCount(8);
+ await input.fill('Borrador que debe conservarse al maximizar');
+ await page.getByRole('button',{name:'Maximizar chat',exact:true}).click();
+ const restoreSize=page.getByRole('button',{name:'Restaurar tamaño del chat',exact:true});
+ await expect(restoreSize).toHaveAttribute('aria-pressed','true');
+ for(const width of [1280,390,320]){
+  await page.setViewportSize({width,height:844});
+  const bounds=await page.getByRole('dialog').boundingBox();
+  expect(bounds).not.toBeNull();expect(bounds!.x).toBeGreaterThanOrEqual(0);expect(bounds!.y).toBeGreaterThanOrEqual(0);
+  expect(bounds!.x+bounds!.width).toBeLessThanOrEqual(width+1);expect(bounds!.y+bounds!.height).toBeLessThanOrEqual(845);
+  expect(bounds!.width).toBeGreaterThanOrEqual(width-32);
+  await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');await expect(page.locator('.qa-message')).toHaveCount(8);
+  expect(await page.evaluate(()=>document.body.style.overflow)).toBe('hidden');
+  expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth)).toBe(false);
+  if(width!==390)await page.screenshot({path:testInfo.outputPath('lia-maximized-'+width+'.png')});
+ }
+ await restoreSize.click();await expect(page.getByRole('button',{name:'Maximizar chat',exact:true})).toHaveAttribute('aria-pressed','false');
+ expect(await page.evaluate(()=>document.body.style.overflow)).not.toBe('hidden');
+ await page.getByRole('button',{name:'Maximizar chat',exact:true}).click();await page.keyboard.press('Escape');
+ await expect(page.getByRole('button',{name:'Maximizar chat',exact:true})).toBeVisible();await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');
+ await page.getByRole('button',{name:'Maximizar chat',exact:true}).click();await page.getByRole('button',{name:'Cerrar asistente',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Abrir asistente Lía QA'})).toBeFocused();expect(await page.evaluate(()=>document.body.style.overflow)).not.toBe('hidden');
+ await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');
+ await page.setViewportSize({width:390,height:844});
  await page.reload();await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();
  await expect(page.locator('.qa-message')).toHaveCount(8);await expect(page.getByRole('log')).toContainText('Pregunta de QA 1');
  failArchive=true;await page.getByRole('button',{name:'Archivar',exact:true}).click();await expect(page.getByRole('dialog').getByRole('alert')).toContainText('No se pudo archivar');await expect(input).toBeEnabled();

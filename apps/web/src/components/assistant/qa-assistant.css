@@ -21,3 +21,17 @@
 .qa-history>button:not(.qa-history-item){margin:8px 6px 0 0}
 .qa-current-title{font-size:12px;line-height:1.6;color:#8de2c8;overflow-wrap:anywhere;border-bottom:1px solid #324c60;padding-bottom:12px;margin:0 0 18px}
 .qa-composer-meta{flex-wrap:wrap}
+.qa-window-controls{display:flex;gap:6px;margin-left:auto;flex-shrink:0}
+.qa-window-controls .qa-icon-button{display:grid;place-items:center;margin-left:0;width:40px;height:40px}
+.qa-window-controls svg{width:19px;height:19px}
+.qa-chat-header>div:not(.qa-window-controls){min-width:0}
+.qa-helper.is-maximized .qa-chat{position:fixed;inset:16px;width:auto;max-width:none;height:auto;animation:none}
+.qa-helper.is-maximized .qa-launcher{display:none}
+.is-maximized .qa-chat-body{padding-inline:max(24px,calc((100% - 900px)/2))}
+.is-maximized .qa-composer{padding-inline:max(24px,calc((100% - 900px)/2))}
+@media(max-width:600px){
+ .qa-helper.is-maximized .qa-chat{inset:0;border-radius:0;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+ .is-maximized .qa-chat-body,.is-maximized .qa-composer{padding-inline:16px}
+ .qa-chat-header{gap:8px}.qa-chat-header p{font-size:10px}
+ .qa-chat-avatar{flex-shrink:0}
+}

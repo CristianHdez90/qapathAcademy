@@ -42,7 +42,7 @@ export function QaAssistant(){
 function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;authLoading:boolean;open:boolean;setOpen:(open:boolean)=>void}){
  const path=usePathname();
  const [messages,setMessages]=useState<Message[]>([]),[draft,setDraft]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
- const [obscuresFocus,setObscuresFocus]=useState(false);
+ const [obscuresFocus,setObscuresFocus]=useState(false),[maximized,setMaximized]=useState(false);
  const [conversation,setConversation]=useState<Conversation|null>(null),[history,setHistory]=useState<Summary[]>([]),[historyOpen,setHistoryOpen]=useState(false),[archivedView,setArchivedView]=useState(false),[historyBusy,setHistoryBusy]=useState(signedIn),[nextOffset,setNextOffset]=useState<number|null>(null);
  useEffect(()=>{
   if(!signedIn||authLoading)return;
@@ -60,7 +60,12 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
  },[signedIn,authLoading]);
  const trigger=useRef<HTMLButtonElement>(null),input=useRef<HTMLTextAreaElement>(null),bottom=useRef<HTMLDivElement>(null),pending=useRef<AbortController|null>(null);
  const returnFocus=useRef<HTMLElement|null>(null);
- const close=()=>{setOpen(false);(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus()};
+ const close=()=>{setOpen(false);setMaximized(false);requestAnimationFrame(()=>(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus())};
+ useEffect(()=>{
+  if(!open||!maximized)return;
+  const previous=document.body.style.overflow;document.body.style.overflow='hidden';
+  return()=>{document.body.style.overflow=previous};
+ },[open,maximized]);
  useEffect(()=>{
   const inspect=()=>{
    const focused=document.activeElement,button=trigger.current;
@@ -129,9 +134,9 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
    }
   }finally{clearTimeout(timer);if(pending.current===controller){pending.current=null;setBusy(false)}}
  }
- return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')}>
-  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();close()}}}>
-   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>Lía QA <span>IA</span></h2><p>Tu mentora de QA Engineer</p></div><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente">×</button></header>
+ return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')+(open&&maximized?' is-maximized':'')}>
+  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();if(maximized)setMaximized(false);else close()}}}>
+   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>Lía QA <span>IA</span></h2><p>Tu mentora de QA Engineer</p></div><div className="qa-window-controls"><button type="button" className="qa-icon-button" aria-label={maximized?'Restaurar tamaño del chat':'Maximizar chat'} title={maximized?'Restaurar tamaño':'Maximizar chat'} aria-pressed={maximized} onClick={event=>{event.currentTarget.focus();setMaximized(value=>!value)}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{maximized?<><path d="M8 8V4h12v12h-4"/><rect x="4" y="8" width="12" height="12" rx="1"/></>:<rect x="4" y="4" width="16" height="16" rx="1"/>}</svg></button><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente" title="Cerrar asistente">×</button></div></header>
    {signedIn&&<nav className="qa-chat-actions" aria-label="Gestionar conversaciones">
     <button type="button" disabled={busy||historyBusy} onClick={newConversation}>＋ Nueva</button>
     <button type="button" disabled={busy||historyBusy} aria-expanded={historyOpen} onClick={()=>{setHistoryOpen(!historyOpen);if(!historyOpen)void refreshHistory()}}>Historial</button>
