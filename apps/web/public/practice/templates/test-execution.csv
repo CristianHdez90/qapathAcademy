@@ -1,0 +1,3 @@
+Execution ID,Test ID,Build,Entorno,Fecha,Paso,Resultado esperado,Resultado obtenido (observado),Estado,Evidencia,Bug relacionado
+RUN-001,QA-001,,,,3,Total 104500 COP,,No ejecutado,,
+RUN-002,QA-002,,,,2,API responde 422 sin total válido,,No ejecutado,,

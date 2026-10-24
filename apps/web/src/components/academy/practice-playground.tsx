@@ -4,7 +4,8 @@ import './practical-exercise.css';
 type Product={id:string;name:string;price:number;available:boolean};
 type Quote={subtotal:number;discount:number;shipping:number;total:number};
 const statusCodes=[200,201,202,204,400,401,403,404,409,422,429,500,503];
-export function PracticePlayground(){
+export function PracticePlayground({embedded=false}:{embedded?:boolean}){
+ const Title=embedded?'h2':'h1';
  const [products,setProducts]=useState<Product[]>([]),[catalogError,setCatalogError]=useState('');
  const [productId,setProductId]=useState('basic'),[quantity,setQuantity]=useState('1'),[coupon,setCoupon]=useState(''),[shipping,setShipping]=useState('pickup'),[defect,setDefect]=useState(false);
  const [quote,setQuote]=useState<Quote|null>(null),[quoteError,setQuoteError]=useState(''),[quoting,setQuoting]=useState(false);
@@ -26,7 +27,7 @@ export function PracticePlayground(){
  async function downloadPostman(){
   setRequestError('');try{const response=await fetch('/practice/kit/qapath.postman_collection.json');if(!response.ok)throw new Error('No se pudo descargar la colección.');const collection=await response.json();collection.variable.find((v:{key:string})=>v.key==='baseUrl').value=window.location.origin;const url=URL.createObjectURL(new Blob([JSON.stringify(collection,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='qapath.postman_collection.json';a.click();URL.revokeObjectURL(url)}catch(e){setRequestError(e instanceof Error?e.message:'No se pudo descargar.')}
  }
- return <div className="practice-playground"><div className="page-heading"><div><p className="eyebrow">LABORATORIO DE EJECUCIÓN</p><h1>QA Store · entorno de práctica</h1><p className="page-description">Ejecuta escenarios, compara resultados y reúne evidencia desde fundamentos hasta automatización.</p></div></div>
+ return <div className="practice-playground"><div className="page-heading"><div><p className="eyebrow">LABORATORIO DE EJECUCIÓN</p><Title>QA Store · entorno de práctica</Title><p className="page-description">Ejecuta escenarios, compara resultados y reúne evidencia desde fundamentos hasta automatización.</p></div></div>
   <p className="practice-banner">Todos los productos, roles y tokens de este entorno son ficticios. Las cotizaciones no crean pedidos, no cobran dinero y no modifican usuarios ni progreso. Los códigos de error del simulador son intencionales.</p>
   <div className="practice-links"><button type="button" className="button button-primary" onClick={()=>void downloadPostman()}>↓ Colección de Postman</button><a className="button button-outline" href="/practice/qapath-practice-kit.zip" download>↓ Kit completo de prácticas</a></div>
   <div className="practice-grid"><section className="practice-card" aria-label="Cotizador QA Store"><h2>Cotizador para tus pruebas</h2><ul className="practice-rules"><li>Cantidad: entero entre 1 y 5.</li><li>QA10: 10 % de descuento si el subtotal es de al menos 100000 COP.</li><li>Recogida: 0 COP. Envío: 10000 COP. El descuento excluye el envío.</li></ul>

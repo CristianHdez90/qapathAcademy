@@ -1,0 +1,3 @@
+ID,Riesgo,Tipo,Probabilidad 1-5,Impacto 1-5,Exposición P x I,Nivel,Mitigación,Responsable,Probabilidad residual,Impacto residual,Exposición residual,Estado
+R-01,Total incorrecto con cupón y envío,Producto,4,5,20,Alto,Pruebas de límites y combinaciones más regresión automatizada,Por asignar,2,5,10,Abierto
+R-02,Entorno de pruebas indisponible,Proyecto,2,3,6,Medio,Preparar entorno alternativo y verificar disponibilidad,Por asignar,,,,Abierto

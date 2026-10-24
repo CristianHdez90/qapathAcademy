@@ -197,7 +197,7 @@
     {
       "id": 1,
       "module": "fundamentos",
-      "title": "Mentalidad QA y ciclo de vida",
+      "title": "Mentalidad QA y ciclo de vida del software",
       "goal": "Diferenciar calidad, testing, verificación y validación.",
       "topics": [
         "Qué hace QA y qué es un defecto",

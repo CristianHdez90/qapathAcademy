@@ -1,0 +1,6 @@
+TCID,Test Summary,Description,Action,Data,Expected Result
+QA-001,Cotizar con QA10 y envío,Precondición: producto básico disponible y defecto UI desactivado. Regla: descuento solo sobre subtotal.,Abrir el cotizador,https://qapath-academy-vvfw.vercel.app/practice,Formulario disponible
+QA-001,,,Completar datos,"productId=basic; quantity=3; coupon=QA10; shipping=delivery",Datos seleccionados
+QA-001,,,Pulsar Cotizar,,"Subtotal 105000 COP; descuento 10500 COP; envío 10000 COP; total 104500 COP"
+QA-002,Rechazar cantidad superior al máximo,Precondición: producto básico disponible. Cantidad permitida: enteros de 1 a 5.,Abrir el cotizador,https://qapath-academy-vvfw.vercel.app/practice,Formulario disponible
+QA-002,,,Completar datos y cotizar,"productId=basic; quantity=6; shipping=pickup",API responde 422 y no se presenta un total válido

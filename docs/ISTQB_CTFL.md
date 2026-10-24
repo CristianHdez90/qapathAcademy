@@ -4,6 +4,10 @@ Módulo complementario en `/certification/istqb`, accesible desde Ruta de aprend
 
 ## Contenido
 
+Las lecturas se amplían con tipos y niveles de prueba, diseño de casos, pirámide de Mike Cohn, release frente a deploy, planificación, valoración cualitativa y cuantitativa de riesgos, documentación de bugs y gestión de casos con Xray. Los complementos profesionales de herramientas y entrega acompañan el repaso CTFL, sin afirmar que cada detalle de una herramienta forme parte del examen.
+
+El capítulo 5 incluye una calculadora ilustrativa de riesgo P × I (escala 1–5, umbrales explícitos) y cinco plantillas descargables en `/practice/templates`: reporte de bug, plan de pruebas, definición de casos manuales para mapear en Xray, ejecución separada y matriz de riesgos. Los resultados obtenidos pertenecen a la ejecución y no reemplazan el resultado esperado de la definición del caso. El CSV de Xray requiere configurar el mapeo y los campos de la instancia; no realiza importaciones ni exige contratar la herramienta.
+
 Seis capítulos de repaso con lecturas, práctica guiada, solución razonada y confusiones habituales. Banco original de 40 preguntas, con referencia de objetivo de aprendizaje y nivel cognitivo: 8 K1, 24 K2 y 8 K3. Las preguntas son ejercicios de QAPath; no se copian preguntas de exámenes oficiales y no se afirma acreditación.
 
 El simulacro utiliza el mismo banco que las autoevaluaciones, aleatoriza el orden y distribuye las preguntas por capítulos en 8/6/4/11/9/2. Una respuesta por pregunta, un punto por acierto, objetivo de 26/40 (65%), 60 minutos y entrega automática al agotarse el tiempo. Se ofrece una opción de práctica de 75 minutos; la elegibilidad oficial para tiempo adicional debe confirmarse con el proveedor del examen.
@@ -24,6 +28,8 @@ Verificadas el 24 de octubre de 2026:
 - [Temario CTFL v4.0.1](https://istqb.org/?download_id=3345&sdm_process_download=1). El temario y sus derechos pertenecen a ISTQB y sus autores.
 - [Estructura y reglas de examen, tablas v1.19](https://istqb.org/?download_id=3832&sdm_process_download=1).
 - [Glosario ISTQB](https://glossary.istqb.org/).
+- [Mike Cohn: pirámide de automatización](https://www.mountaingoatsoftware.com/agile/the-forgotten-layer-of-the-test-automation-pyramid).
+- [Xray: ejemplos del Test Case Importer](https://getxraydocs.atlassian.net/wiki/spaces/XRAY740/pages/48431888/Examples+using+Test+Case+Importer), documentación Server/DC 7.4; verificar el mapeo aplicable en Cloud o en la edición instalada.
 
 El contenido propio es un repaso con ejemplos; se enlaza el material oficial para consultar todos los objetivos examinables y practicar con sus muestras.
 

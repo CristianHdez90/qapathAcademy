@@ -55,3 +55,8 @@ La plataforma registra lo entregado; no certifica automáticamente que un estudi
 El runner rechaza Neon y producción. Los fixtures SQL se ejecutan en una base de práctica con tablas TEMP y ROLLBACK; no son tablas de la academia.
 
 Referencias: [Postman scripts](https://learning.postman.com/docs/tests-and-scripts/write-scripts/test-examples/), [Playwright assertions](https://playwright.dev/docs/test-assertions), [GitHub Actions con Node.js](https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs).
+# Actividades específicas por semana
+
+Los botones de cada lectura abren `/practice/1` a `/practice/24`. Cada página obtiene su ejercicio desde la API, presenta instrucciones, entregables y criterios de esa semana y ofrece campos adecuados a su tarea: Gherkin, riesgos, historia, diseño, reporte de bug, Postman, SQL, código, automatización, pipeline, métricas o entrega. QA Store permanece como laboratorio compartido y se puede abrir dentro de las actividades que lo necesitan; las tareas locales de SQL, código y CI explican las herramientas de ejecución externas.
+
+El trabajo se guarda en `evidence["exercise:N"]`, reutilizando la persistencia existente, con descarga Markdown del borrador. Las evidencias anteriores se conservan y pueden consultarse; no se modifican los requisitos ni porcentajes de la ruta. No requiere migración SQL.

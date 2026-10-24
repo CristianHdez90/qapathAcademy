@@ -61,3 +61,14 @@
 .ctfl-card p{color:#bed2e1;font-size:13px;line-height:1.8;max-width:700px}
 .ctfl-card .button{flex-shrink:0}
 @media(max-width:600px){.ctfl-index{grid-template-columns:1fr}.ctfl-chapter>summary{padding:16px;gap:10px}.ctfl-chapter summary strong{font-size:16px}.ctfl-number{font-size:18px}.ctfl-card{flex-direction:column;align-items:stretch}.ctfl-card .button{width:100%}.ctfl-hero{padding:22px 18px}.ctfl-facts span{min-width:100px;padding:12px}.ctfl-page{gap:18px}.ctfl-quiz-actions .button{flex:1}.ctfl-quiz h2{font-size:20px}}
+.ctfl-supplements>section{margin-top:26px}
+.ctfl-worked-example{padding:16px 20px;border-left:3px solid #73d9c0;background:#132c3a;border-radius:0 10px 10px 0}
+.ctfl-worked-example>strong{font-size:12px;color:#87e7cc}
+.ctfl-risk-fields{display:flex;flex-wrap:wrap;gap:16px}
+.ctfl-risk-fields label{display:grid;gap:8px;min-width:110px;font-size:14px}
+.ctfl-risk-fields select{font:inherit;background:#0b1d30;color:#eff7ff;border:1px solid #4c6d81;border-radius:8px;padding:10px;min-height:44px}
+.ctfl-pyramid{margin:24px 0;text-align:center;padding:20px 12px;border:1px solid #3c6472;border-radius:12px}
+.ctfl-pyramid figcaption{font-size:14px;color:#c7dbea;margin-bottom:16px}
+.ctfl-pyramid>div{padding:15px 8px;margin:6px auto;background:#1f574e;border:1px solid #529b88;border-radius:8px;font-size:12px;line-height:1.5}
+.ctfl-pyramid>div:nth-of-type(1){width:58%;background:#263f60}
+.ctfl-pyramid>div:nth-of-type(2){width:79%;background:#214a5a}

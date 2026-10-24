@@ -9,7 +9,22 @@ test.beforeEach(async({page})=>{
  await expect(page.getByRole('button',{name:'Autoevaluación · Capítulo 1',exact:true})).toBeEnabled();
 });
 
+test('expanded study tools calculate risk and download separate Xray definitions and execution templates',async({page})=>{
+ const chapter=page.locator('#ctfl-chapter-5');await chapter.locator(':scope > summary').click();
+ await expect(chapter.getByRole('heading',{name:'Qué es un plan de pruebas y cómo construirlo'})).toBeVisible();
+ await expect(chapter.getByRole('heading',{name:'Cómo documentar un bug reproducible'})).toBeVisible();
+ await chapter.getByLabel('Probabilidad',{exact:true}).selectOption('5');await chapter.getByLabel('Impacto',{exact:true}).selectOption('5');
+ await expect(chapter.getByRole('status')).toContainText('25/25 · Alto');
+ const download=page.waitForEvent('download');await chapter.getByRole('link',{name:'Casos manuales para mapear en Xray · CSV',exact:false}).click();
+ expect((await download).suggestedFilename()).toBe('xray-manual-tests.csv');
+ const csv=await page.request.get('/practice/templates/xray-manual-tests.csv');expect(csv.status()).toBe(200);expect(await csv.text()).toContain('Expected Result');expect(await csv.text()).not.toContain('Resultado obtenido');
+ const execution=await page.request.get('/practice/templates/test-execution.csv');expect(await execution.text()).toContain('Resultado obtenido (observado)');
+ const chapter2=page.locator('#ctfl-chapter-2');await chapter2.locator(':scope > summary').click();await expect(chapter2.getByRole('heading',{name:'Release y deploy: de publicar código a habilitar valor'})).toBeVisible();
+ const chapter6=page.locator('#ctfl-chapter-6');await chapter6.locator(':scope > summary').click();await expect(chapter6.getByRole('figure')).toContainText('Servicios');
+});
+
 test('chapter practice grades automatically, explains mistakes and restores saved results',async({page},testInfo)=>{
+ test.setTimeout(45_000);
  await page.screenshot({path:testInfo.outputPath('ctfl-desktop.png')});
  await page.getByRole('button',{name:'Autoevaluación · Capítulo 1',exact:true}).click();
  const quiz=page.getByRole('region',{name:'Autoevaluación del capítulo 1'});
@@ -77,7 +92,7 @@ test('mobile readings and quiz fit 320px and expose Gherkin practice',async({pag
  await page.setViewportSize({width:320,height:740});
  const chapter=page.locator('#ctfl-chapter-4');await chapter.locator(':scope > summary').click();
  await chapter.getByText('Comparar con una solución razonada').click();
- await expect(chapter.locator('.ctfl-solution')).toContainText('Given');
+ await expect(chapter.locator('.ctfl-practice .ctfl-solution')).toContainText('Given');
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await chapter.getByRole('button',{name:'Autoevaluación · Capítulo 4',exact:true}).click();
  const quiz=page.getByRole('region',{name:'Autoevaluación del capítulo 4'});

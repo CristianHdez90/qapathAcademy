@@ -1,0 +1,16 @@
+.practice-activity{max-width:1100px;margin:auto;display:grid;gap:24px;min-width:0;overflow-wrap:anywhere}
+.activity-back{display:inline-block;color:#8ae8d0;font-size:13px;margin-bottom:24px}
+.practice-activity header h1{font-size:clamp(28px,4vw,42px);line-height:1.25;margin:14px 0}
+.practice-activity header>p:not(.eyebrow),.activity-section>p{color:#bcd0e2;line-height:1.8;font-size:14px}
+.activity-section{padding:clamp(18px,3vw,30px);border:1px solid #36556b;background:#112237;border-radius:14px;min-width:0}
+.activity-section h2{font-size:23px;margin:0 0 18px;line-height:1.4}
+.activity-section h3{font-size:18px}
+.activity-section li{font-size:14px;line-height:1.9;color:#c0d0e2;margin:10px 0}
+.activity-section>ul{padding-left:20px}
+.activity-section form{display:grid;gap:18px;margin-top:24px}
+.activity-section form>label{display:grid;gap:10px;font-size:14px;line-height:1.6;color:#dfebf8}
+.activity-section .notes{min-height:145px;max-width:100%}
+.activity-section .code-block{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}
+.activity-section summary{cursor:pointer;color:#8ce3cb;line-height:1.7}
+.activity-lab[open]>summary{margin-bottom:24px}
+.activity-saved{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:360px;overflow:auto;line-height:1.8}
