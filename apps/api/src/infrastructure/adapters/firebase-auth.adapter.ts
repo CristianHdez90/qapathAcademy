@@ -5,6 +5,31 @@ import {applicationDefault,cert,getApps,initializeApp} from 'firebase-admin/app'
 import {getAuth} from 'firebase-admin/auth';
 import type {Auth} from 'firebase-admin/auth';
 
+const providerCodes=new Set(['EMAIL_EXISTS','TOO_MANY_ATTEMPTS_TRY_LATER','QUOTA_EXCEEDED','INVALID_OOB_CODE','EXPIRED_OOB_CODE',
+ 'INVALID_LOGIN_CREDENTIALS','INVALID_PASSWORD','EMAIL_NOT_FOUND','USER_DISABLED','INVALID_ID_TOKEN','TOKEN_EXPIRED',
+ 'API_KEY_INVALID','INVALID_API_KEY','API_KEY_HTTP_REFERRER_BLOCKED','API_KEY_IP_ADDRESS_BLOCKED','API_KEY_SERVICE_BLOCKED',
+ 'SERVICE_DISABLED','PROJECT_NOT_FOUND','CONFIGURATION_NOT_FOUND','OPERATION_NOT_ALLOWED','UNAUTHORIZED_DOMAIN',
+ 'INVALID_CONTINUE_URI','MISSING_CONTINUE_URI','INVALID_EMAIL','WEAK_PASSWORD']);
+type ProviderError={message?:string;details?:{reason?:string}[]};
+function safeProviderCode(error?:ProviderError){
+ const candidates=[error?.message?.split(' : ')[0],...(error?.details?.map(detail=>detail.reason)||[])];
+ return candidates.find((code):code is string=>!!code&&providerCodes.has(code))||'UNKNOWN';
+}
+const configurationErrors:Record<string,string>={
+ OPERATION_NOT_ALLOWED:'Habilita Correo electrónico/contraseña en Firebase Authentication.',
+ UNAUTHORIZED_DOMAIN:'Autoriza el dominio del frontend en Firebase Authentication → Configuración → Dominios autorizados.',
+ INVALID_CONTINUE_URI:'APP_URL debe ser la URL HTTPS válida del frontend.',
+ MISSING_CONTINUE_URI:'Configura APP_URL con la URL HTTPS del frontend.',
+ API_KEY_INVALID:'Comprueba FIREBASE_WEB_API_KEY: copia apiKey del mismo proyecto Firebase, sin comillas.',
+ INVALID_API_KEY:'Comprueba FIREBASE_WEB_API_KEY: copia apiKey del mismo proyecto Firebase, sin comillas.',
+ API_KEY_HTTP_REFERRER_BLOCKED:'La API key exige un referente de navegador. Configura una clave para las llamadas del backend a Firebase Authentication.',
+ API_KEY_IP_ADDRESS_BLOCKED:'Las restricciones de IP de la API key bloquean al backend.',
+ API_KEY_SERVICE_BLOCKED:'Las restricciones de la API key deben permitir Identity Toolkit API para Firebase Authentication.',
+ SERVICE_DISABLED:'Habilita la API de Authentication (Identity Toolkit) en el proyecto Firebase.',
+ PROJECT_NOT_FOUND:'Comprueba que la API key y FIREBASE_PROJECT_ID correspondan al mismo proyecto.',
+ CONFIGURATION_NOT_FOUND:'Inicializa Firebase Authentication y habilita Correo electrónico/contraseña en ese proyecto.',
+};
+
 export function readFirebaseAuthConfig(env:NodeJS.ProcessEnv=process.env){
  const projectId=env.FIREBASE_PROJECT_ID?.trim();
  const apiKey=env.FIREBASE_WEB_API_KEY?.trim();
@@ -36,14 +61,18 @@ export class FirebaseAuthAdapter implements ExternalIdentityPort {
   try{response=await fetch(`${base}/accounts:${operation}?key=${encodeURIComponent(c.apiKey)}`,{
    method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(15000),
   });}catch{throw new SecurityFlowError('Firebase Authentication no está disponible. Reintenta más tarde.',503);}
-  const data=await response.json() as T&{error?:{message?:string}};
+  const data=await response.json() as T&{error?:ProviderError};
   if(!response.ok){
-   const code=data.error?.message?.split(' : ')[0];
+   const code=safeProviderCode(data.error);
+   // Log only enumerated codes and fixed operations, never provider text or request payloads.
+   const safeOperation=['signUp','signInWithPassword','sendOobCode','update'].includes(operation)?operation:'unknown';
+   console.warn(`FirebaseAuth operation=${safeOperation} status=${response.status} code=${code}`);
    if(code==='EMAIL_EXISTS')throw new AuthConflict();
    if(code==='TOO_MANY_ATTEMPTS_TRY_LATER'||code==='QUOTA_EXCEEDED'||response.status===429)throw new SecurityFlowError('Se alcanzó el límite de solicitudes. Inténtalo más tarde.',429);
    if(code==='INVALID_OOB_CODE'||code==='EXPIRED_OOB_CODE')throw new SecurityFlowError('Enlace inválido, usado o vencido.');
-   if(['INVALID_LOGIN_CREDENTIALS','INVALID_PASSWORD','EMAIL_NOT_FOUND','USER_DISABLED','INVALID_ID_TOKEN'].includes(code||''))throw new AuthError();
-   throw new SecurityFlowError('Firebase Authentication rechazó la operación. Comprueba el proveedor Correo/contraseña, la API key y los dominios autorizados.',503);
+   if(['INVALID_LOGIN_CREDENTIALS','INVALID_PASSWORD','EMAIL_NOT_FOUND','USER_DISABLED','INVALID_ID_TOKEN','TOKEN_EXPIRED'].includes(code))throw new AuthError();
+   if(configurationErrors[code])throw new SecurityFlowError(`Firebase Authentication [${code}]: ${configurationErrors[code]}`,503);
+   throw new SecurityFlowError(`Firebase Authentication rechazó la operación [${code}]. Revisa el código de diagnóstico en los logs de la API.`,503);
   }
   return data;
  }
