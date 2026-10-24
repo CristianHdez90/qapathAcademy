@@ -9,8 +9,8 @@ export const progressCommandSchema=z.union([
 ]);
 export type AuthUserDTO={id:string;email:string;role:'STUDENT'|'INSTRUCTOR'|'ADMIN';mfaEnabled:boolean};
 
-export const verifyEmailSchema=z.object({token:z.string().regex(/^[A-Za-z0-9_-]{32,128}$/)}).strict();
-export const verificationResendSchema=z.object({email:z.string().email().max(254)}).strict();
+export const verifyEmailSchema=z.object({token:z.string().regex(/^[A-Za-z0-9_-]{16,2048}$/)}).strict();
+export const verificationResendSchema=z.object({email:z.string().email().max(254),password:z.string().min(1).max(128).optional()}).strict();
 export const changeInitialPasswordSchema=z.object({newPassword:z.string().min(12).max(128)}).strict();
 export const mfaSetupSchema=z.object({password:z.string().min(1).max(128).optional()}).strict();
 export const mfaCodeSchema=z.object({code:z.string().min(6).max(40)}).strict();

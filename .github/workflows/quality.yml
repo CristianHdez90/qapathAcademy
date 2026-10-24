@@ -56,6 +56,8 @@ jobs:
       - run: pnpm build
       - run: pnpm --filter @qapath/web exec playwright install --with-deps chromium webkit
       - run: pnpm test:e2e
+      # Demo Firebase Auth + base PostgreSQL desechable: no credenciales ni recursos de pago.
+      - run: pnpm test:e2e:firebase
       - uses: actions/upload-artifact@v4
         if: always()
         with:

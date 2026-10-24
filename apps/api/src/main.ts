@@ -3,13 +3,17 @@ import {NestFactory} from '@nestjs/core';
 import {AppModule} from './app.module';
 import {existsSync} from 'node:fs';
 import {readFirebaseMailConfig} from './infrastructure/adapters/firebase-email.adapter';
+import {readFirebaseAuthConfig} from './infrastructure/adapters/firebase-auth.adapter';
 if(existsSync('.env'))process.loadEnvFile('.env');
 async function bootstrap(){
+ if(process.env.AUTH_PROVIDER&&!['local','firebase'].includes(process.env.AUTH_PROVIDER))throw new Error('AUTH_PROVIDER debe ser local o firebase.');
+ if(process.env.AUTH_PROVIDER==='firebase')readFirebaseAuthConfig();
  if(process.env.NODE_ENV==='production'){
   if(!/^https:\/\//.test(process.env.APP_URL||''))throw new Error('APP_URL HTTPS es obligatorio en producción.');
   if(!/^[A-Fa-f0-9]{64}$/.test(process.env.MFA_ENCRYPTION_KEY||''))throw new Error('MFA_ENCRYPTION_KEY válido es obligatorio en producción.');
   const transport=(process.env.EMAIL_TRANSPORT||'resend').toLowerCase();
-  if(transport==='firebase')readFirebaseMailConfig();
+  if(process.env.AUTH_PROVIDER==='firebase'){/* Authentication sends its own verification emails. */}
+  else if(transport==='firebase')readFirebaseMailConfig();
   else if(transport==='resend'){if(!process.env.RESEND_API_KEY||!process.env.EMAIL_FROM)throw new Error('Resend: configura RESEND_API_KEY y EMAIL_FROM.')}
   else throw new Error('EMAIL_TRANSPORT no permitido en producción.');
  }

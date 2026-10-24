@@ -200,3 +200,6 @@ como variables de entorno temporales; en su ausencia queda omitida.
 Configura `EMAIL_TRANSPORT=firebase` y credenciales del Firebase Admin SDK **solo en la API**, instala y despliega la Cloud Function propia incluida en `firebase/functions` y define los secretos SMTP. **Una cuenta de servicio no es un remitente SMTP**. Consulta [docs/FIREBASE_EMAIL_V61.md](docs/FIREBASE_EMAIL_V61.md) para instrucciones en Windows. Esta opción conserva por completo PostgreSQL para identidad, sesiones y MFA, y no agrega migraciones SQL.
 
 Pruebas unitarias de envío sin credenciales reales: `node --test tests/firebase-email.test.mjs firebase/functions/test/*.test.cjs`. La entrega efectiva necesita desplegar Firebase Functions y configurar el SMTP.
+## Firebase Authentication sin SMTP
+
+La integración opcional `AUTH_PROVIDER=firebase` usa Firebase Authentication para contraseñas y verificación de correo, conserva PostgreSQL para roles/progreso y mantiene el MFA TOTP de NestJS. Requiere aplicar la migración 005 antes de desplegar. Consulta [configuración y migración](docs/FIREBASE_AUTH.md). Prueba aislada con emulador: `pnpm.cmd test:e2e:firebase`.

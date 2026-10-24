@@ -14,6 +14,7 @@
     "lint": "pnpm --filter @qapath/web lint && pnpm --filter @qapath/api lint",
     "test": "pnpm run build:libs && node --test tests/*.test.mjs",
     "test:e2e": "pnpm --filter @qapath/web test:e2e",
+    "test:e2e:firebase": "node scripts/test-firebase-auth.mjs",
     "check": "pnpm run test && pnpm run typecheck && pnpm run lint && pnpm run build",
     "db:generate": "pnpm --filter @qapath/database db:generate",
     "db:migrate": "pnpm --filter @qapath/database db:migrate",

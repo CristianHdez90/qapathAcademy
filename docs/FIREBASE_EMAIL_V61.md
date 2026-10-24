@@ -1,5 +1,7 @@
 # QAPath Academy 6.1 — Verificación de correo mediante Firebase
 
+> Esta guía corresponde al transporte anterior Firestore + SMTP con `AUTH_PROVIDER=local`. Para Firebase Authentication sin Cloud Functions ni SMTP, sigue [Firebase Auth + NestJS + PostgreSQL](FIREBASE_AUTH.md).
+
 ## Decisión arquitectónica
 
 - **PostgreSQL** es la fuente de verdad para cuentas, contraseñas, sesiones, tokens de verificación, estado `email_verified_at` y auditoría. **No migrar cuentas a Firebase Authentication** para este flujo.

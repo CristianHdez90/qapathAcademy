@@ -5,6 +5,7 @@ export const users=pgTable('users',{
  id:uuid('id').defaultRandom().primaryKey(),
  email:varchar('email',{length:254}).notNull().unique(),
  passwordHash:text('password_hash').notNull(),
+ firebaseUid:varchar('firebase_uid',{length:128}).unique(),
  role:roleEnum('role').notNull().default('STUDENT'),
  failedAttempts:integer('failed_attempts').notNull().default(0),
  lockedUntil:timestamp('locked_until',{withTimezone:true}),

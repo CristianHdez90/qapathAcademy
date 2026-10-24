@@ -1,10 +1,12 @@
 export type UserRole = 'STUDENT'|'INSTRUCTOR'|'ADMIN';
-export type IdentityUser = {id:string;email:string;role:UserRole;passwordHash:string;failedAttempts:number;lockedUntil:Date|null;isActive:boolean;emailVerifiedAt:Date|null;mustChangePassword:boolean;mfaEnabled:boolean};
+export type IdentityUser = {id:string;email:string;role:UserRole;passwordHash:string;failedAttempts:number;lockedUntil:Date|null;isActive:boolean;emailVerifiedAt:Date|null;mustChangePassword:boolean;mfaEnabled:boolean;firebaseUid?:string|null;sessionIssuedAt?:Date};
 export type PublicUser = Pick<IdentityUser,'id'|'email'|'role'|'mfaEnabled'>;
 export interface IdentityRepository {
   findByEmail(email:string):Promise<IdentityUser|null>;
   findById(id:string):Promise<IdentityUser|null>;
-  create(input:{email:string;passwordHash:string;role:'STUDENT'}):Promise<IdentityUser>;
+  create(input:{email:string;passwordHash:string;role:'STUDENT';firebaseUid?:string}):Promise<IdentityUser>;
+  linkExternal(id:string,uid:string):Promise<IdentityUser>;
+  syncExternalVerification(id:string,verified:boolean):Promise<IdentityUser>;
   recordFailure(id:string):Promise<void>;
   resetFailures(id:string):Promise<void>;
 }

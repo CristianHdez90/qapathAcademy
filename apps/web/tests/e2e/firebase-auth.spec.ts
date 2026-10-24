@@ -1,0 +1,72 @@
+import {test,expect} from '@playwright/test';
+import {randomUUID,randomBytes,scryptSync} from 'node:crypto';
+import {createRequire} from 'node:module';
+import {resolve} from 'node:path';
+import {totp} from './helpers/security';
+
+test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page,baseURL})=>{
+ test.skip(process.env.AUTH_PROVIDER!=='firebase'||!process.env.FIREBASE_AUTH_EMULATOR_HOST,'Solo emulador Firebase con base desechable.');
+ test.setTimeout(60_000);
+ const password=`Academy-${randomUUID()}!`,email=`student-${randomUUID()}@example.test`;
+ await page.goto('/register');
+ await page.getByLabel('Correo electrónico').fill(email);
+ await page.getByLabel('Contraseña',{exact:true}).fill(password);
+ await page.getByLabel('Confirmar contraseña').fill(password);
+ await page.getByRole('button',{name:/Registrarme/}).click();
+ await expect(page.getByRole('status')).toContainText('enviamos instrucciones');
+ const inbox=await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${process.env.FIREBASE_PROJECT_ID}/oobCodes`).then(r=>r.json()) as {oobCodes:{email:string;oobCode:string}[]};
+ const code=inbox.oobCodes.find(item=>item.email===email)?.oobCode;
+ expect(!!code).toBeTruthy();
+ await page.goto(`/verify-email?mode=verifyEmail&oobCode=${encodeURIComponent(code!)}`);
+ await expect(page.getByText('Correo verificado. Ya puedes iniciar sesión.')).toBeVisible();
+ expect(page.url()).not.toContain('oobCode');
+ await page.goto('/login');await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña',{exact:true}).fill(password);
+ await page.getByRole('button',{name:/Continuar/}).click();await expect(page).toHaveURL(/\/account$/);
+ await page.goto('/study/1');const reading=page.getByLabel('He estudiado esta clase');await expect(reading).toBeEnabled();await reading.click();await expect(reading).toBeChecked();
+ await page.reload();await expect(page.getByLabel('He estudiado esta clase')).toBeChecked();
+ const headers={Origin:baseURL!};
+ expect((await page.request.get('/api/v1/admin/status')).status()).toBe(403);
+ const setup=await page.request.post('/api/v1/auth/mfa/setup',{headers,data:{password}});expect(setup.ok()).toBeTruthy();
+ const enrollment=await setup.json() as {data:{secret:string}};
+ const activation=await page.request.post('/api/v1/auth/mfa/activate',{headers,data:{code:totp(enrollment.data.secret)}});expect(activation.ok()).toBeTruthy();
+ const recovery=(await activation.json()).data.recoveryCodes[0] as string;
+ expect((await page.request.post('/api/v1/auth/logout',{headers})).ok()).toBeTruthy();
+ const login=await page.request.post('/api/v1/auth/login',{headers,data:{email,password}});expect((await login.json()).data.stage).toBe('MFA_VERIFY');
+ expect((await page.request.get('/api/v1/me/progress')).status()).toBe(401);
+ expect((await page.request.post('/api/v1/auth/mfa/verify',{headers,data:{code:recovery}})).ok()).toBeTruthy();
+ expect((await (await page.request.get('/api/v1/me/progress')).json()).data.read).toContain(1);
+ await page.request.post('/api/v1/auth/logout',{headers});
+ await page.request.post('/api/v1/auth/login',{headers,data:{email,password}});
+ expect((await page.request.post('/api/v1/auth/mfa/verify',{headers,data:{code:recovery}})).status()).toBe(401);
+ expect((await page.request.get('/api/v1/me/progress')).status()).toBe(401);
+});
+
+test('Firebase Auth: vincula ADMIN existente y exige cambio inicial y TOTP',async({request,baseURL})=>{
+ test.skip(process.env.AUTH_PROVIDER!=='firebase'||!process.env.FIREBASE_AUTH_EMULATOR_HOST,'Solo emulador Firebase con base desechable.');
+ const database=new URL(process.env.DATABASE_URL!);
+ expect(database.pathname).toMatch(/^\/qapath_firebase_test_[0-9a-f]{12}$/);
+ const dbRequire=createRequire(resolve(__dirname,'../../../../packages/database/package.json'));
+ const {Pool}=dbRequire('pg');
+ const pool=new Pool({connectionString:database.toString(),max:1});
+ const email=`admin-${randomUUID()}@example.test`,password=`Temporary-${randomUUID()}!`;
+ const salt=randomBytes(16),key=scryptSync(password,salt,32,{N:1<<15,r:8,p:1,maxmem:64*1024*1024});
+ try {
+  const inserted=await pool.query("INSERT INTO users(email,password_hash,role,email_verified_at,must_change_password) VALUES ($1,$2,'ADMIN',NOW(),true) RETURNING id",[email,`scrypt-v1:${salt.toString('hex')}:${key.toString('hex')}`]);
+  const originalId=inserted.rows[0].id;
+  const headers={Origin:baseURL!};
+  expect((await request.post('/api/v1/auth/login',{headers,data:{email,password:'incorrect'}})).status()).toBe(401);
+  const unverified=await request.post('/api/v1/auth/login',{headers,data:{email,password}});expect((await unverified.json()).data.stage).toBe('VERIFY_EMAIL');
+  expect((await request.get('/api/v1/admin/status')).status()).toBe(401);
+  const inbox=await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${process.env.FIREBASE_PROJECT_ID}/oobCodes`).then(r=>r.json()) as {oobCodes:{email:string;oobCode:string}[]};
+  const code=inbox.oobCodes.find(item=>item.email===email)?.oobCode;expect(!!code).toBeTruthy();
+  expect((await request.post('/api/v1/auth/verify-email',{headers,data:{token:code}})).ok()).toBeTruthy();
+  const login=await request.post('/api/v1/auth/login',{headers,data:{email,password}});expect((await login.json()).data.stage).toBe('CHANGE_PASSWORD');
+  const changed=await request.post('/api/v1/auth/change-initial-password',{headers,data:{newPassword:`Changed-${randomUUID()}!`}});expect((await changed.json()).data.stage).toBe('MFA_SETUP');
+  expect((await request.get('/api/v1/admin/status')).status()).toBe(401);
+  const setup=await request.post('/api/v1/auth/mfa/setup',{headers,data:{}});const secret=(await setup.json()).data.secret;
+  expect((await request.post('/api/v1/auth/mfa/activate',{headers,data:{code:totp(secret)}})).ok()).toBeTruthy();
+  expect((await request.get('/api/v1/admin/status')).status()).toBe(200);
+  const row=(await pool.query('SELECT id,role,firebase_uid,password_hash FROM users WHERE email=$1',[email])).rows[0];
+  expect(row.id).toBe(originalId);expect(row.role).toBe('ADMIN');expect(!!row.firebase_uid).toBeTruthy();expect(row.password_hash).toBe('external:firebase');
+ } finally {await pool.end();}
+});

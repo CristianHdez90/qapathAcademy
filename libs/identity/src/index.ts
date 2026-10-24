@@ -12,5 +12,6 @@ export class UserId {
 export type User={id:UserId;email:EmailAddress;role:UserRole};
 
 export * from './domain/identity';
+export * from './domain/external-identity';
 export * from './application/auth';
 export * from './application/account-security';

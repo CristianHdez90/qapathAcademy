@@ -24,6 +24,7 @@ node_modules/
 
 # Firebase / Google credentials: never version service-account keys
 .firebase/
+firebase-debug.log*
 **/*service-account*.json
 **/*serviceAccount*.json
 **/firebase-admin-key*.json

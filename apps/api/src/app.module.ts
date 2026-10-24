@@ -12,6 +12,7 @@ import {PostgresSecurityAdapter} from './infrastructure/adapters/postgres-securi
 import {TotpAdapter} from './infrastructure/adapters/totp.adapter';
 import {VerificationEmailAdapter} from './infrastructure/adapters/verification-email.adapter';
 import {FirebaseEmailAdapter} from './infrastructure/adapters/firebase-email.adapter';
+import {FirebaseAuthAdapter} from './infrastructure/adapters/firebase-auth.adapter';
 import {PostgresProgressAdapter} from './infrastructure/adapters/postgres-progress.adapter';
 import {PostgresAdministrationAdapter} from './infrastructure/adapters/postgres-administration.adapter';
 import {CryptoAuthAdapter,SecureTokensAdapter} from './infrastructure/adapters/crypto-auth.adapter';
@@ -30,12 +31,12 @@ import {DomainExceptionFilter} from './presentation/filters/domain-exception.fil
 @Module({
  controllers:[HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController],
  providers:[
-  DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,VerificationEmailAdapter,
+  DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,
   {provide:ADMIN_REPOSITORY,useExisting:PostgresAdministrationAdapter},
   {provide:ManageStudents,useFactory:(repo:AdministrationPort,crypto:CryptoAuthAdapter)=>new ManageStudents(repo,crypto),inject:[ADMIN_REPOSITORY,CryptoAuthAdapter]},
   {provide:IDENTITY_REPOSITORY,useExisting:PostgresIdentityAdapter},
   {provide:PROGRESS_REPOSITORY,useExisting:PostgresProgressAdapter},
-  {provide:SecureAuthenticationService,useFactory:(repo:IdentityRepository,crypto:CryptoAuthAdapter,adapter:PostgresIdentityAdapter,security:PostgresSecurityAdapter,totp:TotpAdapter,mailer:VerificationEmailAdapter)=>new SecureAuthenticationService({users:repo,passwords:crypto,sessions:new PostgresSessionsAdapter(adapter),tokens:new SecureTokensAdapter(crypto),security,totp,mailer}),inject:[IDENTITY_REPOSITORY,CryptoAuthAdapter,PostgresIdentityAdapter,PostgresSecurityAdapter,TotpAdapter,VerificationEmailAdapter]},
+  {provide:SecureAuthenticationService,useFactory:(repo:IdentityRepository,crypto:CryptoAuthAdapter,adapter:PostgresIdentityAdapter,security:PostgresSecurityAdapter,totp:TotpAdapter,mailer:VerificationEmailAdapter,external:FirebaseAuthAdapter)=>new SecureAuthenticationService({users:repo,passwords:crypto,sessions:new PostgresSessionsAdapter(adapter),tokens:new SecureTokensAdapter(crypto),security,totp,mailer,...(process.env.AUTH_PROVIDER==='firebase'?{external}:{})}),inject:[IDENTITY_REPOSITORY,CryptoAuthAdapter,PostgresIdentityAdapter,PostgresSecurityAdapter,TotpAdapter,VerificationEmailAdapter,FirebaseAuthAdapter]},
   {provide:APP_GUARD,useClass:OriginGuard},{provide:APP_GUARD,useClass:SessionGuard},{provide:APP_GUARD,useClass:RolesGuard},
   {provide:CONTENT_REPOSITORY,useClass:JsonContentAdapter},
   {provide:USE_CASES.listModules,useFactory:(repo:ContentRepository)=>new ListModules(repo),inject:[CONTENT_REPOSITORY]},

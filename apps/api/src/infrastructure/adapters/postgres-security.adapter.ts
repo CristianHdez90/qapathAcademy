@@ -32,7 +32,7 @@ export class PostgresSecurityAdapter implements AccountSecurityPort {
  }
  async findChallenge(hash:string):Promise<RestrictedChallenge|null>{
   const [v]=await this.provider.db.select().from(authChallenges).where(and(eq(authChallenges.tokenHash,hash),isNull(authChallenges.consumedAt),gt(authChallenges.expiresAt,new Date()),lt(authChallenges.attempts,5))).limit(1);
-  return v?{id:v.id,userId:v.userId,expiresAt:v.expiresAt,attempts:v.attempts}:null;
+  return v?{id:v.id,userId:v.userId,expiresAt:v.expiresAt,attempts:v.attempts,issuedAt:v.createdAt}:null;
  }
  async recordChallengeFailure(id:string){await this.provider.db.transaction(async tx=>{
   const [challenge]=await tx.update(authChallenges).set({attempts:sql`LEAST(${authChallenges.attempts}+1,5)`}).where(eq(authChallenges.id,id)).returning({userId:authChallenges.userId});

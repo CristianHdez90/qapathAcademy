@@ -23,9 +23,9 @@ async function remoteProgress(method:'GET'|'PATCH'|'POST',command?:unknown):Prom
  const result=await response.json() as {data:Progress};return fromUnknown(result.data);
 }
 export function ProgressProvider({children}:{children:ReactNode}){
- const {user,loading}=useAuth();
+ const {user}=useAuth();
  // Cada identidad tiene su propio estado y cola; el progreso anterior no se reutiliza al cambiar de sesión.
- return <SessionProgressProvider key={loading?'loading':user?`${user.id}:${user.role}`:'guest'}>{children}</SessionProgressProvider>;
+ return <SessionProgressProvider key={user?`${user.id}:${user.role}`:'guest'}>{children}</SessionProgressProvider>;
 }
 function SessionProgressProvider({children}:{children:ReactNode}){
  const {user,loading}=useAuth();const repository=useMemo(()=>new BrowserProgressRepository(),[]);
