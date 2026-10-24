@@ -8,7 +8,7 @@
 /* Identity + account pages (v4) */
 .account-sidebar{margin-top:16px;padding:12px 13px;border:1px solid #294b61;border-radius:9px;font-size:12px;overflow-wrap:anywhere;color:#b8f1df}
 .account-sidebar small{display:block;color:#89a9bf;margin-top:5px;font-size:10px}
-.auth-page{max-width:660px;margin:55px auto}.auth-card,.account-card{background:#14283c;border:1px solid #31576c;border-radius:18px;padding:32px}.auth-card h1{font-size:clamp(28px,3vw,38px);margin:15px 0}.auth-card p,.account-card p{color:#b7cfde;font-size:13px;line-height:1.75;margin:12px 0}.auth-card form{display:flex;flex-direction:column;gap:18px;margin:26px 0}.auth-card form label{display:flex;flex-direction:column;gap:8px;font-size:12px;color:#c3d9eb;font-weight:700}.auth-card input{width:100%;color:#ecf6ff;background:#0b1b2b;border:1px solid #36536d;border-radius:9px;padding:13px}.auth-card form .button{align-self:flex-start}.account-card{max-width:770px}.account-card h2{font-size:22px}.auth-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.sync-alert{position:fixed;right:18px;bottom:18px;z-index:80;background:#5c2f2f;border:1px solid #f39b9b;padding:15px 20px;color:#fff;border-radius:11px;max-width:440px;font-size:12px;box-shadow:0 12px 30px #0008}
+.auth-page{max-width:660px;margin:55px auto}.auth-card,.account-card{background:#14283c;border:1px solid #31576c;border-radius:18px;padding:32px}.auth-card h1{font-size:clamp(28px,3vw,38px);margin:15px 0}.auth-card p,.account-card p{color:#b7cfde;font-size:13px;line-height:1.75;margin:12px 0}.auth-card form,.account-card form{display:flex;flex-direction:column;gap:18px;margin:26px 0}.auth-card form label,.account-card form label{display:flex;flex-direction:column;gap:8px;font-size:12px;color:#c3d9eb;font-weight:700}.auth-card input,.account-card form input{width:100%;color:#ecf6ff;background:#0b1b2b;border:1px solid #36536d;border-radius:9px;padding:13px}.auth-card form .button,.account-card form .button{align-self:flex-start}.account-card{max-width:770px}.account-card h2{font-size:22px}.auth-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.sync-alert{position:fixed;right:18px;bottom:18px;z-index:80;background:#5c2f2f;border:1px solid #f39b9b;padding:15px 20px;color:#fff;border-radius:11px;max-width:440px;font-size:12px;box-shadow:0 12px 30px #0008}
 @media(max-width:650px){.auth-page{margin:22px auto}.auth-card,.account-card{padding:22px}.auth-actions{flex-direction:column}}
 
 /* QAPath Academy v5 — Administración */
@@ -57,13 +57,14 @@
 @media(max-width:650px){.admin-stats,.admin-detail-metrics,.admin-history-columns{grid-template-columns:1fr 1fr}.admin-history-columns{grid-template-columns:1fr}.admin-panel,.admin-form{padding:17px}.admin-manage{flex-direction:column}}
 
 /* Configuración MFA: QR local + alternativa manual (v6.1) */
-.mfa-enrollment{margin:12px 0 4px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:100%}
+.mfa-enrollment{min-width:0;width:100%;margin:12px 0 4px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;max-width:100%}
 .mfa-enrollment h2{font-size:18px;font-weight:750;color:#f2f8ff;margin:0}
 .mfa-enrollment p{margin:0}
 .mfa-qr-frame{background:white;border-radius:14px;padding:13px;width:min(100%,254px);border:1px solid #dfe7ee;box-shadow:0 8px 25px #02061733}
 .mfa-manual-key{background:#0b1b2e;border:1px solid #355b72;padding:16px;border-radius:12px;display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:100%;max-width:490px}
 .mfa-manual-heading{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;width:100%;font-size:13px}
 .mfa-manual-heading .button{font-size:11px;padding:8px 11px}
+.mfa-manual-key>div{min-width:0;max-width:100%}
 .mfa-secret-value{display:inline-block;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;overflow-wrap:anywhere;word-break:break-word;color:#a2ffe0;font-size:14px;letter-spacing:.5px}
 .mfa-secret-mask{font:700 14px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:#8ea9c3}
 .mfa-copy-status{font-size:12px;color:#b7d6de;min-height:14px}
