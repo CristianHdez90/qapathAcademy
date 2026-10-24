@@ -4,7 +4,7 @@ import {useProgress} from '@/features/progress/progress-provider';
 import type {Resource} from '@qapath/contracts';
 export function Resources({resources}:{resources:Resource[]}){
  const {state,exportJson,importJson,remote}=useProgress();const input=useRef<HTMLInputElement>(null);const [message,setMessage]=useState('');
- const importFile=async(file?:File)=>{if(!file)return;try{await importJson(file);setMessage('Progreso importado correctamente.')}catch(e){setMessage(e instanceof Error?e.message:'No fue posible importar el archivo.')}};
+ const importFile=async(file?:File)=>{if(!file)return;try{await importJson(file);setMessage(remote?'Notas recuperadas. El avance se calcula con las actividades registradas en tu cuenta.':'Respaldo local recuperado; avance recalculado.')}catch(e){setMessage(e instanceof Error?e.message:'No fue posible importar el archivo.')}};
  return <><div className="page-heading"><div><p className="eyebrow">BIBLIOTECA + CONFIGURACIÓN</p><h1>Recursos y progreso</h1><p className="page-description">Tu caja de herramientas: documentación oficial y copia de seguridad de tus avances.</p></div></div>
  <div className="section-head compact"><div><p className="eyebrow">FUENTES DE REFERENCIA</p><h2>Biblioteca profesional</h2></div></div><div className="resource-grid">{resources.map(r=><a key={r.url} className="resource-card" href={r.url} target="_blank" rel="noopener noreferrer"><span className="pill">{r.type}</span><h3>{r.title} ↗</h3><p>{r.description}</p></a>)}</div>
  <div className="section-head compact"><div><p className="eyebrow">TUS DATOS</p><h2>Respaldo de aprendizaje</h2></div></div>

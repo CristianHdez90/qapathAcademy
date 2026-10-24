@@ -30,7 +30,7 @@ test('Caso de uso lección obtiene semana y guía desde puerto mock',()=>{
 });
 test('Progress mantiene datos versionados y adapter injectable',()=>{
  let state=emptyProgress();const repo={read:()=>state,save:value=>{state=value}};
- new UpdateProgress(repo).toggle('weeks',1);
- assert.deepEqual(state.weeks,[1]);
- assert.deepEqual(fromUnknown({weeks:[1,'x',-3]}).weeks,[1]);
+ assert.throws(()=>new UpdateProgress(repo).toggle('weeks',1),/manual/);
+ assert.deepEqual(state.weeks,[]);
+ assert.deepEqual(fromUnknown({weeks:[1,'x',-3]}).weeks,[]);
 });

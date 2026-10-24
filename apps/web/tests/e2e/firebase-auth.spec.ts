@@ -1,3 +1,4 @@
+import {studyReading} from './helpers/learning';
 import {test,expect} from '@playwright/test';
 import {randomUUID,randomBytes,scryptSync} from 'node:crypto';
 import {createRequire} from 'node:module';
@@ -6,7 +7,7 @@ import {totp} from './helpers/security';
 
 test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page,baseURL})=>{
  test.skip(process.env.AUTH_PROVIDER!=='firebase'||!process.env.FIREBASE_AUTH_EMULATOR_HOST,'Solo emulador Firebase con base desechable.');
- test.setTimeout(60_000);
+ test.setTimeout(90_000);
  const password=`Academy-${randomUUID()}!`,email=`student-${randomUUID()}@example.test`;
  await page.goto('/register');
  await page.getByLabel('Correo electrónico').fill(email);
@@ -22,9 +23,35 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  expect(page.url()).not.toContain('oobCode');
  await page.goto('/login');await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña',{exact:true}).fill(password);
  await page.getByRole('button',{name:/Continuar/}).click();await expect(page).toHaveURL(/\/account$/);
- await page.goto('/study/1');const reading=page.getByLabel('He estudiado esta clase');await expect(reading).toBeEnabled();await reading.click();await expect(reading).toBeChecked();
- await page.reload();await expect(page.getByLabel('He estudiado esta clase')).toBeChecked();
+ await page.goto('/study/1');await studyReading(page);
+ await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
  const headers={Origin:baseURL!};
+ const content=createRequire(resolve(__dirname,'../../../../package.json'));
+ const catalog=content('./libs/content/src/data/catalog.json') as {weeks:{id:number;tasks:string[]}[];quizzes:Record<string,{correct:number}[]>};
+ const guides=content('./libs/content/src/data/study-guides.json') as Record<string,{question:{correct:number}}>;
+ const progress=async()=>(await (await page.request.get('/api/v1/me/progress')).json()).data;
+ expect((await progress()).weeks).toEqual([]);
+ expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'toggle',key:'weeks',value:1}})).status()).toBe(400);
+ const evidence='Documenté los escenarios positivos y negativos, resultados observados y riesgos con datos ficticios.';
+ const tasks=catalog.weeks.find(w=>w.id===1)!.tasks;
+ for(const title of tasks){
+  const card=page.locator('.study-aside .learning-evidence').filter({has:page.getByText(title,{exact:true})});
+  await card.getByRole('textbox').fill(evidence);await card.getByRole('button',{name:'Enviar evidencia'}).click();
+  await expect(card.getByText(/Evidencia entregada/)).toBeVisible();
+ }
+ await page.locator('.options').first().getByRole('button').nth(guides['1'].question.correct).click();
+ await expect.poll(async()=>(await progress()).lessonChecks).toContain(1);
+ expect((await progress()).weeks).toEqual([]);
+ await page.goto('/modules/fundamentos');
+ for(const card of await page.locator('.lab-card .learning-evidence').all()){
+  await card.getByRole('textbox').fill(evidence);await card.getByRole('button',{name:'Enviar evidencia'}).click();
+  await expect(card.getByText(/Evidencia entregada/)).toBeVisible();
+ }
+ for(const [i,question] of catalog.quizzes.fundamentos.entries())await page.locator('.question').nth(i).getByRole('radio').nth(question.correct).check();
+ await page.getByRole('button',{name:/Calificar respuestas/}).click();
+ await expect.poll(async()=>(await progress()).weeks).toEqual([1]);
+ await page.reload();await expect(page.getByLabel('Semana 1: completada',{exact:true})).toBeVisible();
+ await page.goto('/study/1');await expect(page.getByText('✓ Semana completada automáticamente',{exact:true})).toBeVisible();
  expect((await page.request.get('/api/v1/admin/status')).status()).toBe(403);
  const setup=await page.request.post('/api/v1/auth/mfa/setup',{headers,data:{password}});expect(setup.ok()).toBeTruthy();
  const enrollment=await setup.json() as {data:{secret:string}};

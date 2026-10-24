@@ -2,7 +2,7 @@
 import {createContext,useCallback,useContext,useEffect,useMemo,useRef,useState} from 'react';
 import type {ReactNode} from 'react';
 import {BrowserProgressRepository} from './infrastructure/browser-progress-repository';
-import {UpdateProgress,emptyProgress,fromUnknown,applyProgressCommand} from '@qapath/progress';
+import {emptyProgress,fromUnknown,applyProgressCommand} from '@qapath/progress';
 import type {Progress,ProgressCommand,Collection} from '@qapath/progress';
 import {useAuth} from '../auth/auth-provider';
 type ProgressContext={
@@ -12,6 +12,7 @@ type ProgressContext={
  saveGrade:(moduleId:string,score:number)=>void;
  saveScrum:(score?:number)=>void;
  toggleScrumIntro:()=>void;
+ recordLearning:(command:Extract<ProgressCommand,{type:'reading-section'|'lesson-answer'|'submit-evidence'}>)=>Promise<void>;
  exportJson:()=>void;importJson:(file:File)=>Promise<void>;
  importDeviceProgress:()=>Promise<void>;refreshProgress:()=>Promise<void>;
 };
@@ -30,7 +31,6 @@ export function ProgressProvider({children}:{children:ReactNode}){
 function SessionProgressProvider({children}:{children:ReactNode}){
  const {user,loading}=useAuth();const repository=useMemo(()=>new BrowserProgressRepository(),[]);
  const userId=user?.id;const role=user?.role;
- const command=useMemo(()=>new UpdateProgress(repository),[repository]);
  const [state,setState]=useState<Progress>(emptyProgress);const [ready,setReady]=useState(false);
  const [syncError,setSyncError]=useState('');const queue=useRef<Promise<unknown>>(Promise.resolve());
  const notesTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
@@ -42,17 +42,11 @@ function SessionProgressProvider({children}:{children:ReactNode}){
   void progress.then(value=>{if(alive)setState(value)}).catch(e=>{if(alive)setSyncError(e instanceof Error?e.message:'Error al cargar progreso')}).finally(()=>{if(alive)setReady(true)});
   return()=>{alive=false;if(notesTimer.current)clearTimeout(notesTimer.current)};
  },[loading,userId,role,repository]);
- const send=useCallback((cmd:ProgressCommand)=>{
+ const send=useCallback(async(cmd:ProgressCommand)=>{
   if(!ready)return;
   if(user?.role!=='STUDENT'){
    if(user)return;
-   switch(cmd.type){
-    case 'toggle':setState(command.toggle(cmd.key,cmd.value as never));break;
-    case 'note':setState(command.note(cmd.week,cmd.text));break;
-    case 'grade':setState(command.grade(cmd.moduleId,cmd.score));break;
-    case 'scrum-grade':setState(command.markScrum(cmd.score));break;
-    case 'scrum-intro':setState(command.toggleScrumIntro());break;
-   }
+   const updated=applyProgressCommand(repository.read(),cmd);repository.save(updated);setState(updated);
    return;
   }
   setSyncError('');
@@ -61,7 +55,8 @@ function SessionProgressProvider({children}:{children:ReactNode}){
    const saved=await remoteProgress('PATCH',cmd);
    setState(old=>cmd.type==='note'&&old.notes[String(cmd.week)]!==cmd.text?{...saved,notes:{...saved.notes,[String(cmd.week)]:old.notes[String(cmd.week)]}}:saved);
   }).catch(e=>setSyncError(e instanceof Error?e.message:'Error de sincronización'));
- },[user,command,ready]);
+  await queue.current;
+ },[user,repository,ready]);
  const toggle=useCallback((key:Collection,value:number|string)=>send({type:'toggle',key,value} as ProgressCommand),[send]);
  const saveNote=useCallback((week:number,note:string)=>{
   if(user?.role!=='STUDENT'){send({type:'note',week,text:note});return;}
@@ -91,6 +86,6 @@ function SessionProgressProvider({children}:{children:ReactNode}){
   await importClean(data);
  },[importClean]);
  const importDeviceProgress=useCallback(async()=>{if(user?.role!=='STUDENT')throw new Error('Solo los estudiantes sincronizan su progreso');await importClean(repository.read())},[user,repository,importClean]);
- return <Context.Provider value={{state,ready,syncError,remote:user?.role==='STUDENT',toggle,saveNote,flushNote,saveGrade,saveScrum,toggleScrumIntro,exportJson,importJson,importDeviceProgress,refreshProgress}}>{syncError&&<div className="sync-alert" role="alert">⚠ {syncError}</div>}{children}</Context.Provider>;
+ return <Context.Provider value={{state,ready,syncError,remote:user?.role==='STUDENT',toggle,recordLearning:send,saveNote,flushNote,saveGrade,saveScrum,toggleScrumIntro,exportJson,importJson,importDeviceProgress,refreshProgress}}>{syncError&&<div className="sync-alert" role="alert">⚠ {syncError}</div>}{children}</Context.Provider>;
 }
 export function useProgress(){const value=useContext(Context);if(!value)throw new Error('ProgressProvider ausente');return value;}

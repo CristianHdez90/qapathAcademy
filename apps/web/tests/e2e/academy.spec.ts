@@ -1,3 +1,4 @@
+import {studyReading} from './helpers/learning';
 import {test,expect} from '@playwright/test';
 test('dashboard, navegación y contenido de estudio',async({page})=>{
  await page.goto('/');
@@ -17,8 +18,8 @@ test('API permite lectura de módulos y calificación',async({request})=>{
 });
 test('marca lecturas y mantiene progreso en el navegador',async({page})=>{
  await page.goto('/study/1');
- const reading=page.getByLabel('He estudiado esta clase');await reading.check();
- await page.reload();await expect(reading).toBeChecked();
+ await studyReading(page);
+ await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
 });
 
 test('espera la sesión antes de permitir cambios de progreso',async({page})=>{
@@ -30,17 +31,11 @@ test('espera la sesión antes de permitir cambios de progreso',async({page})=>{
  });
  try {
   await page.goto('/study/1');
-  const reading=page.getByLabel('He estudiado esta clase');
-  await expect(reading).toBeDisabled();
+  await expect(page.getByRole('button',{name:'Enviar evidencia'}).first()).toBeDisabled();
+  expect(await page.locator('[data-reading-recorded="true"]').count()).toBe(0);
   releaseSession();
-  await reading.check();
-  await expect.poll(()=>page.evaluate(()=>{
-   const saved=JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}');
-   return saved.read;
-  })).toEqual([1]);
-  await page.reload();
-  await expect(reading).toBeEnabled();
-  await expect(reading).toBeChecked();
+  await studyReading(page);
+  await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
  } finally {
   releaseSession();
  }

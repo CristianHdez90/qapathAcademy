@@ -102,18 +102,15 @@ test.describe('QAPath - seguridad E2E y persistencia real', () => {
       expect(before.weeks).not.toContain(1);
       expect(before.read).not.toContain(1);
 
-      const changed = await asData<{weeks:number[];read:number[]}>(await a.api.patch('/api/v1/me/progress', {
-        data: {type:'toggle',key:'weeks',value:1},
-      }));
-      expect(changed.weeks).toContain(1);
-      await asData(await a.api.patch('/api/v1/me/progress', {data:{type:'toggle',key:'read',value:1}}));
+      expect((await a.api.patch('/api/v1/me/progress',{data:{type:'toggle',key:'weeks',value:1}})).status()).toBe(400);
+      for(let section=0;section<4;section++)await asData(await a.api.patch('/api/v1/me/progress',{data:{type:'reading-section',week:1,section}}));
       await logout(a.api);
       expect((await a.api.get('/api/v1/me/progress')).status()).toBe(401);
 
       const reLogin = await login(nextSession, a.email, a.password);
       expect(reLogin.stage).toBe('AUTHENTICATED');
       const recovered = await asData<{weeks:number[];read:number[]}>(await nextSession.get('/api/v1/me/progress'));
-      expect(recovered.weeks).toContain(1);
+      expect(recovered.weeks).not.toContain(1);
       expect(recovered.read).toContain(1);
 
       const other = await asData<{weeks:number[];read:number[]}>(await b.api.get('/api/v1/me/progress'));

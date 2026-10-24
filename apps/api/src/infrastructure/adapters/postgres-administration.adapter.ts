@@ -30,13 +30,10 @@ export class PostgresAdministrationAdapter implements AdministrationPort {
   return row?{student:readStudent(row.user),progress:overview(row.progress)}:null;
  }
  async metrics(){
-  const result=await this.provider.db.execute(sql`SELECT COUNT(*)::int AS students,
-   COUNT(*) FILTER (WHERE u.is_active)::int AS active_students,
-   COUNT(sp.user_id)::int AS students_with_progress,
-   COALESCE(ROUND(AVG(COALESCE(jsonb_array_length(CASE WHEN jsonb_typeof(sp.state->'weeks')='array' THEN sp.state->'weeks' ELSE '[]'::jsonb END),0)*100.0/24)),0)::int AS average_progress_percent
-   FROM users u LEFT JOIN student_progress sp ON sp.user_id=u.id WHERE u.role='STUDENT'`);
-  const row=result.rows[0] as Record<string,unknown>|undefined;
-  return {students:Number(row?.students??0),activeStudents:Number(row?.active_students??0),studentsWithProgress:Number(row?.students_with_progress??0),averageProgressPercent:Number(row?.average_progress_percent??0)};
+  const rows=await this.provider.db.select({active:users.isActive,progress:studentProgress}).from(users)
+   .leftJoin(studentProgress,eq(studentProgress.userId,users.id)).where(eq(users.role,'STUDENT'));
+  return {students:rows.length,activeStudents:rows.filter(r=>r.active).length,studentsWithProgress:rows.filter(r=>r.progress).length,
+   averageProgressPercent:rows.length?Math.round(rows.reduce((sum,r)=>sum+overview(r.progress).progressPercent,0)/rows.length):0};
  }
  async create(input:{email:string;passwordHash:string},actorId:string):Promise<Student>{
   return this.provider.db.transaction(async tx=>{

@@ -1,3 +1,4 @@
+import {studyReading} from './helpers/learning';
 import {test,expect} from '@playwright/test';
 import {randomUUID} from 'node:crypto';
 import {totp,verifyEmail} from './helpers/security';
@@ -19,7 +20,7 @@ test('ADMIN: crear, consultar avance y suspender estudiante',async({page,browser
   await student.goto('/login');await student.getByLabel('Correo electrónico').fill(email);
   await student.getByLabel('Contraseña').fill(password);await student.getByRole('button',{name:/Continuar/}).click();
   await verifyEmail(student,email);await student.goto('/login');await student.getByLabel('Correo electrónico').fill(email);await student.getByLabel('Contraseña').fill(password);await student.getByRole('button',{name:/Continuar/}).click();await expect(student).toHaveURL(/auth\/continue/);await student.getByLabel('Nueva contraseña').fill(password+'-changed');await student.getByLabel('Confirmar contraseña').fill(password+'-changed');await student.getByRole('button',{name:'Cambiar contraseña'}).click();
-  await student.goto('/study/1');await student.getByLabel('He estudiado esta clase').check();
+  await student.goto('/study/1');await studyReading(student);
   await expect.poll(async()=>{const r=await student.request.get('/api/v1/me/progress');return (await r.json()).data.read.includes(1)}).toBe(true);
   await page.getByRole('button',{name:/Actualizar/}).click();
   await page.getByRole('button',{name:/Ver detalle/}).first().click();

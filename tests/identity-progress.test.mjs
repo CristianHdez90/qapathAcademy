@@ -18,15 +18,15 @@ test('Registro público siempre usa rol STUDENT y evita duplicados',async()=>{
 });
 test('Operaciones de progreso mantienen datos entre actualizaciones',()=>{
  let current=emptyProgress();
- current=applyProgressCommand(current,{type:'toggle',key:'weeks',value:1});
+ current=applyProgressCommand(current,{type:'reading-section',week:1,section:0});
  current=applyProgressCommand(current,{type:'note',week:1,text:'Mi resumen'});
- current=applyProgressCommand(current,{type:'toggle',key:'weeks',value:2});
- assert.deepEqual(current.weeks,[1,2]);assert.equal(current.notes['1'],'Mi resumen');
+ current=applyProgressCommand(current,{type:'reading-section',week:1,section:1});
+ assert.deepEqual(current.weeks,[]);assert.deepEqual(current.readingSections['1'],[0,1]);assert.equal(current.notes['1'],'Mi resumen');
  assert.throws(()=>applyProgressCommand(current,{type:'toggle',key:'weeks',value:99}));
 });
 test('Importación fusiona progreso y conserva calificación más alta',()=>{
  const current={...emptyProgress(),weeks:[2],quizzes:{fundamentos:80},notes:{'2':'servidor'}};
  const incoming={...emptyProgress(),weeks:[1,2],quizzes:{fundamentos:20},notes:{'2':'local'}};
  const combined=mergeProgress(current,incoming);
- assert.deepEqual(combined.weeks,[2,1]);assert.equal(combined.quizzes.fundamentos,80);assert.equal(combined.notes['2'],'servidor');
+ assert.deepEqual(combined.weeks,[]);assert.equal(combined.quizzes.fundamentos,80);assert.equal(combined.notes['2'],'servidor');
 });
