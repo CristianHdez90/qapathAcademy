@@ -1,4 +1,4 @@
-# Lía QA — asistente de QA Engineer
+# MariBug — asistente de QA Engineer
 
 Botón de mariquita SVG en todas las páginas, esquina inferior derecha; en móvil queda sobre la navegación inferior. Chat para estudiantes, instructores y administradores con sesión completa. Los invitados pueden abrirlo y acceder a iniciar sesión.
 
@@ -14,7 +14,7 @@ QA_AI_MODEL=gemini-2.5-flash
 ```
 
 3. Despliega nuevamente la API y el frontend con los cambios del repositorio. La clave nunca debe tener prefijo `NEXT_PUBLIC_`, ir a Git ni compartirse en el chat.
-4. Inicia sesión y pulsa la mariquita «Lía QA». Pregunta, por ejemplo: «Diseña casos de prueba para un login con bloqueo tras cinco intentos».
+4. Inicia sesión y pulsa la mariquita «MariBug». Pregunta, por ejemplo: «Diseña casos de prueba para un login con bloqueo tras cinco intentos».
 
 Sin clave o con el servicio desactivado la academia funciona normalmente y el chat informa que falta configurar la IA. No hay respuestas simuladas. Para desactivar basta establecer `QA_AI_ENABLED=false` y redesplegar la API.
 

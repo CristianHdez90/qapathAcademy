@@ -1,4 +1,4 @@
-# Historial de Lía QA
+# Historial de MariBug
 
 Cada cuenta conserva sus conversaciones en PostgreSQL y puede recuperarlas desde otros dispositivos. Al volver a la aplicación se abre la conversación activa más reciente.
 

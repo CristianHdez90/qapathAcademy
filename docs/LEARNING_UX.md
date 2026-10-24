@@ -12,13 +12,13 @@ Las tarjetas de módulo distinguen «Sin iniciar», «En curso» y «Completado�
 - Índice enlazado que destaca la sección visible. En escritorio queda al lado de la lectura; en móvil se convierte en navegación horizontal.
 - Notas, entregables y recursos son desplegables nativos. Un enlace directo al bloque de entregables lo abre automáticamente. Los capítulos permanecen visibles para su seguimiento de lectura.
 - Lectura con texto más amplio, mayor interlineado y menos elementos compitiendo en la barra lateral.
-- Un acceso a Lía prepara una pregunta sobre el tema seleccionado en el índice. No envía consultas automáticamente ni comparte notas/evidencias. Al cerrar, el foco regresa al botón de ayuda.
+- Un acceso a MariBug prepara una pregunta sobre el tema seleccionado en el índice. No envía consultas automáticamente ni comparte notas/evidencias. Al cerrar, el foco regresa al botón de ayuda.
 
 ## Guardado y accesibilidad
 
 Cada nota, respuesta o evidencia presenta su estado local: guardando, guardado o error. Un fallo mantiene el texto y permite reenviar la misma operación. Las operaciones se serializan y un guardado antiguo no debe marcar como guardada una versión nueva pendiente. Los mensajes distinguen entre el navegador invitado y la cuenta autenticada.
 
-La página incluye un enlace para saltar al contenido, foco visible, navegación semántica, desplegables operables con teclado, estados textuales y respeto por la preferencia de movimiento reducido. Lía se cierra cuando el foco sale del panel hacia la página y oculta temporalmente el icono si cubriría un control enfocado. Los errores de sincronización ya no son un recuadro flotante sobre las acciones.
+La página incluye un enlace para saltar al contenido, foco visible, navegación semántica, desplegables operables con teclado, estados textuales y respeto por la preferencia de movimiento reducido. MariBug se cierra cuando el foco sale del panel hacia la página y oculta temporalmente el icono si cubriría un control enfocado. Los errores de sincronización ya no son un recuadro flotante sobre las acciones.
 
 Las pruebas de navegador verifican siguiente acción, enlaces a desplegables, recuperación ante un fallo de guardado, conservación de notas, ayuda contextual sin envío automático, salto al contenido y ausencia de desbordamiento a 320/390 px. Las capturas de las pruebas usan datos ficticios. No se declara conformidad completa con WCAG sin una auditoría específica.
 

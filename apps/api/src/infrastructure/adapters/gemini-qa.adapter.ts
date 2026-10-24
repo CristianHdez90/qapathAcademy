@@ -41,8 +41,8 @@ export class GeminiQaAdapter {
  configuration(){
   const key=process.env.GEMINI_API_KEY?.trim();
   const model=process.env.QA_AI_MODEL?.trim()||'gemini-2.5-flash';
-  if(process.env.QA_AI_ENABLED!=='true'||!key)throw new ServiceUnavailableException('Lía QA todavía no está configurada. El administrador debe activar el servicio de IA.');
-  if(!/^[a-zA-Z0-9.-]+$/.test(model))throw new ServiceUnavailableException('El modelo de Lía QA no es válido.');
+  if(process.env.QA_AI_ENABLED!=='true'||!key)throw new ServiceUnavailableException('MariBug todavía no está configurada. El administrador debe activar el servicio de IA.');
+  if(!/^[a-zA-Z0-9.-]+$/.test(model))throw new ServiceUnavailableException('El modelo de MariBug no es válido.');
   return {key,model};
  }
  async answer(input:QaChatInput){
@@ -66,7 +66,7 @@ export class GeminiQaAdapter {
    console.warn(`QaAI operation=generateContent status=${response.status} code=${code}`);
    if(response.status===429||code==='RESOURCE_EXHAUSTED')throw new HttpException('La cuota de IA está agotada temporalmente [RESOURCE_EXHAUSTED]. Revisa la cuota gratuita de tu proyecto en Google AI Studio.',429);
    const message=diagnosticMessages[code]||(response.status>=500?'Gemini no está disponible temporalmente. Inténtalo más tarde.':'Google rechazó la consulta. Revisa el código de diagnóstico en los logs del proyecto API.');
-   throw new ServiceUnavailableException(`Lía QA [${code}]: ${message}`);
+   throw new ServiceUnavailableException(`MariBug [${code}]: ${message}`);
   }
   let data:{candidates?:{content?:{parts?:{text?:string;thought?:boolean}[]};finishReason?:string}[]};
   try{data=await response.json() as typeof data}catch{throw new ServiceUnavailableException('Gemini devolvió una respuesta no válida. Inténtalo de nuevo.');}

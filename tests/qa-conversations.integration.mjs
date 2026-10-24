@@ -13,7 +13,7 @@ test('saved QA conversations preserve complete transcripts, isolate owners, arch
  try{
   const {rows:users}=await pool.query("INSERT INTO users(email,password_hash) VALUES('qa-history-a@example.test','unused'),('qa-history-b@example.test','unused') RETURNING id");
   const [a,b]=users.map(u=>u.id);const store=new QaConversationsAdapter({connection:{pool}});
-  let context;const ai={configuration(){},async answer(input){context=input;return {answer:'Respuesta guardada de Lía'}}};
+  let context;const ai={configuration(){},async answer(input){context=input;return {answer:'Respuesta guardada de MariBug'}}};
   const controller=new QaAssistantController(ai,{async reserve(){}},store);
   let result=await controller.chat({keepHistory:true,messages:[{role:'user',content:'Pregunta inicial'}]},{user:{id:a}});
   const id=result.data.conversation.id;

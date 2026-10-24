@@ -135,8 +135,8 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
   }finally{clearTimeout(timer);if(pending.current===controller){pending.current=null;setBusy(false)}}
  }
  return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')+(open&&maximized?' is-maximized':'')}>
-  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();if(maximized)setMaximized(false);else close()}}}>
-   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>Lía QA <span>IA</span></h2><p>Tu mentora de QA Engineer</p></div><div className="qa-window-controls"><button type="button" className="qa-icon-button" aria-label={maximized?'Restaurar tamaño del chat':'Maximizar chat'} title={maximized?'Restaurar tamaño':'Maximizar chat'} aria-pressed={maximized} onClick={event=>{event.currentTarget.focus();setMaximized(value=>!value)}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{maximized?<><path d="M8 8V4h12v12h-4"/><rect x="4" y="8" width="12" height="12" rx="1"/></>:<rect x="4" y="4" width="16" height="16" rx="1"/>}</svg></button><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente" title="Cerrar asistente">×</button></div></header>
+  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="MariBug, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();if(maximized)setMaximized(false);else close()}}}>
+   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>MariBug <span>IA</span></h2><p>Tu aliada en QA</p></div><div className="qa-window-controls"><button type="button" className="qa-icon-button" aria-label={maximized?'Restaurar tamaño del chat':'Maximizar chat'} title={maximized?'Restaurar tamaño':'Maximizar chat'} aria-pressed={maximized} onClick={event=>{event.currentTarget.focus();setMaximized(value=>!value)}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{maximized?<><path d="M8 8V4h12v12h-4"/><rect x="4" y="8" width="12" height="12" rx="1"/></>:<rect x="4" y="4" width="16" height="16" rx="1"/>}</svg></button><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente" title="Cerrar asistente">×</button></div></header>
    {signedIn&&<nav className="qa-chat-actions" aria-label="Gestionar conversaciones">
     <button type="button" disabled={busy||historyBusy} onClick={newConversation}>＋ Nueva</button>
     <button type="button" disabled={busy||historyBusy} aria-expanded={historyOpen} onClick={()=>{setHistoryOpen(!historyOpen);if(!historyOpen)void refreshHistory()}}>Historial</button>
@@ -151,13 +151,13 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
      <button type="button" disabled={historyBusy} onClick={()=>void refreshHistory()}>Actualizar historial</button>
      {historyBusy&&<p role="status">Cargando historial…</p>}{error&&<p className="qa-chat-error" role="alert">{error}</p>}
     </section>:<>
-    <div className="qa-intro"><span className="qa-intro-label">ENCUENTRA EL SIGUIENTE PASO</span><h3>Pequeña aliada.<br/>Grandes pruebas.</h3><p>Diseñemos mejores pruebas, investiguemos bugs y automaticemos con criterio.</p></div>
+    <div className="qa-intro"><span className="qa-intro-label">ENCUENTRA EL SIGUIENTE PASO</span><h3>¡Hola! Soy MariBug 🐞.</h3><p>Tu aliada para encontrar bugs y construir calidad. ¿Qué vamos a poner a prueba hoy?</p></div>
     {signedIn&&conversation&&<p className="qa-current-title">{conversation.title}{conversation.archived?' · Archivada':''}</p>}
     {historyBusy&&<p role="status">Cargando conversación…</p>}
     {!signedIn?<div className="qa-signin"><p>{authLoading?'Comprobando tu sesión…':'Inicia sesión para conversar conmigo y practicar QA.'}</p>{!authLoading&&<Link className="button button-primary" href="/login" onClick={close}>Iniciar sesión ↗</Link>}</div>:<>
      {messages.length===0&&!historyBusy&&<div className="qa-suggestions">{suggestions.map(([label,prompt])=><button key={label} onClick={()=>void send(prompt)} disabled={busy||historyBusy||conversation?.archived}>{label}<span aria-hidden="true">↗</span></button>)}</div>}
      <details className="qa-study-topics"><summary>Explorar módulos y temas de estudio</summary><div>{studySuggestions.map(group=><details key={group.title} className="qa-study-group"><summary>{group.title}</summary><div className="qa-suggestions">{group.questions.map(([label,prompt])=><button key={label} type="button" disabled={busy||historyBusy||conversation?.archived} onClick={()=>void send(prompt)}>{label}<span aria-hidden="true">↗</span></button>)}</div></details>)}</div></details>
-     <div className="qa-transcript" role="log" aria-label="Conversación con Lía QA" aria-live="polite" aria-relevant="additions">{messages.map((message,i)=><article className={`qa-message qa-message-${message.role}`} key={i}><b>{message.role==='user'?'Tú':'Lía QA'}</b><div><Answer text={message.content}/></div></article>)}</div>
+     <div className="qa-transcript" role="log" aria-label="Conversación con MariBug" aria-live="polite" aria-relevant="additions">{messages.map((message,i)=><article className={`qa-message qa-message-${message.role}`} key={i}><b>{message.role==='user'?'Tú':'MariBug'}</b><div><Answer text={message.content}/></div></article>)}</div>
      {busy&&<p className="qa-thinking" role="status"><span/> Preparando tu respuesta…</p>}
      {error&&<p className="qa-chat-error" role="alert">{error}</p>}
      <div ref={bottom}/>
@@ -170,6 +170,6 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
     <small>Tu consulta se envía a Google Gemini.</small>
    </form>}
   </section>}
-  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente Lía QA':'Abrir asistente Lía QA'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>
+  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente MariBug':'Abrir asistente MariBug'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>
  </div>;
 }

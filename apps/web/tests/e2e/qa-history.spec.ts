@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 
-test('Lia retains every exchange after reload, archives, restores and separates accounts',async({page},testInfo)=>{
+test('MariBug retains every exchange after reload, archives, restores and separates accounts',async({page},testInfo)=>{
  let user='history-a',calls=0,failArchive=false;
  type Chat={id:string;title:string;revision:number;archived:boolean;updatedAt:string;messages:{role:string;content:string}[]};
  const saved=new Map<string,Chat[]>();
@@ -24,7 +24,7 @@ test('Lia retains every exchange after reload, archives, restores and separates 
   await route.fulfill({json:{data:{answer:'Respuesta de QA '+calls,conversation:chat}}});
  });
  await page.setViewportSize({width:390,height:844});await page.goto('/resources');
- await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();
+ await page.getByRole('button',{name:'Abrir asistente MariBug'}).click();
  const input=page.getByLabel('Tu pregunta sobre QA');
  for(let i=1;i<=4;i++){
   await expect(input).toBeEnabled();await input.fill('Pregunta de QA '+i);await page.getByRole('button',{name:'Enviar pregunta'}).click();
@@ -51,10 +51,10 @@ test('Lia retains every exchange after reload, archives, restores and separates 
  await page.getByRole('button',{name:'Maximizar chat',exact:true}).click();await page.keyboard.press('Escape');
  await expect(page.getByRole('button',{name:'Maximizar chat',exact:true})).toBeVisible();await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');
  await page.getByRole('button',{name:'Maximizar chat',exact:true}).click();await page.getByRole('button',{name:'Cerrar asistente',exact:true}).click();
- await expect(page.getByRole('button',{name:'Abrir asistente Lía QA'})).toBeFocused();expect(await page.evaluate(()=>document.body.style.overflow)).not.toBe('hidden');
- await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');
+ await expect(page.getByRole('button',{name:'Abrir asistente MariBug'})).toBeFocused();expect(await page.evaluate(()=>document.body.style.overflow)).not.toBe('hidden');
+ await page.getByRole('button',{name:'Abrir asistente MariBug'}).click();await expect(input).toHaveValue('Borrador que debe conservarse al maximizar');
  await page.setViewportSize({width:390,height:844});
- await page.reload();await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();
+ await page.reload();await page.getByRole('button',{name:'Abrir asistente MariBug'}).click();
  await expect(page.locator('.qa-message')).toHaveCount(8);await expect(page.getByRole('log')).toContainText('Pregunta de QA 1');
  failArchive=true;await page.getByRole('button',{name:'Archivar',exact:true}).click();await expect(page.getByRole('dialog').getByRole('alert')).toContainText('No se pudo archivar');await expect(input).toBeEnabled();
  await page.getByRole('button',{name:'Archivar',exact:true}).click();await expect(input).toBeDisabled();await expect(page.getByRole('button',{name:'Restaurar',exact:true})).toBeVisible();
@@ -66,6 +66,6 @@ test('Lia retains every exchange after reload, archives, restores and separates 
  await page.getByRole('button',{name:'Restaurar',exact:true}).click();await expect(input).toBeEnabled();
  await input.fill('Retomamos la conversación');await page.getByRole('button',{name:'Enviar pregunta'}).click();await expect(page.locator('.qa-message')).toHaveCount(10);
  await page.setViewportSize({width:1280,height:900});await page.screenshot({path:testInfo.outputPath('lia-conversation-desktop.png')});
- user='history-b';await page.reload();await page.getByRole('button',{name:'Abrir asistente Lía QA'}).click();await expect(input).toBeEnabled();await expect(page.locator('.qa-message')).toHaveCount(0);
+ user='history-b';await page.reload();await page.getByRole('button',{name:'Abrir asistente MariBug'}).click();await expect(input).toBeEnabled();await expect(page.locator('.qa-message')).toHaveCount(0);
  await page.getByRole('button',{name:'Historial',exact:true}).click();await expect(page.locator('.qa-history-item')).toHaveCount(0);
 });

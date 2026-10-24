@@ -21,7 +21,7 @@ test('recommended next action opens the pending deliverables rather than restart
  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}').notes?.['1'])).toBe('Idea revisada para el siguiente reto');
 });
 
-test('notes expose save failures inline, retry preserves text, and contextual Lia waits for user submission',async({page},testInfo)=>{
+test('notes expose save failures inline, retry preserves text, and contextual MariBug waits for user submission',async({page},testInfo)=>{
  let state:Progress=emptyProgress(),failNote=true,aiCalls=0;
  await page.route('**/api/v1/auth/me',r=>r.fulfill({json:{data:{id:'ux-student',email:'student@example.test',role:'STUDENT',mfaEnabled:true}}}));
  await page.route('**/api/v1/me/progress',async route=>{
@@ -50,7 +50,7 @@ test('notes expose save failures inline, retry preserves text, and contextual Li
  expect(state.notes['1']).toContain('Mi resumen');
  const chapter=page.getByRole('navigation',{name:'Índice de la clase'}).getByRole('link').nth(1);
  const title=await chapter.innerText();await chapter.click();await expect(chapter).toHaveAttribute('aria-current','location');
- const ask=page.getByRole('button',{name:'Preguntar a Lía sobre este tema'});await ask.click();
+ const ask=page.getByRole('button',{name:'Preguntar a MariBug sobre este tema'});await ask.click();
  const question=page.getByLabel('Tu pregunta sobre QA');await expect(question).toBeFocused();
  await expect(question).toHaveValue(/Estoy estudiando la semana 1/);
  expect(await question.inputValue()).toContain(title.replace(/^\d+\s*/,''));expect(aiCalls).toBe(0);
