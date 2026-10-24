@@ -28,9 +28,13 @@ import {InstructorController} from './presentation/controllers/instructor.contro
 import {AdminController} from './presentation/controllers/admin.controller';
 import {OriginGuard,SessionGuard,RolesGuard} from './presentation/security/session-security';
 import {DomainExceptionFilter} from './presentation/filters/domain-exception.filter';
+import {QaAssistantController} from './presentation/controllers/qa-assistant.controller';
+import {GeminiQaAdapter} from './infrastructure/adapters/gemini-qa.adapter';
+import {QaQuotaAdapter} from './infrastructure/adapters/qa-quota.adapter';
 @Module({
- controllers:[HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController],
+ controllers:[HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
  providers:[
+  GeminiQaAdapter,QaQuotaAdapter,
   DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,
   {provide:ADMIN_REPOSITORY,useExisting:PostgresAdministrationAdapter},
   {provide:ManageStudents,useFactory:(repo:AdministrationPort,crypto:CryptoAuthAdapter)=>new ManageStudents(repo,crypto),inject:[ADMIN_REPOSITORY,CryptoAuthAdapter]},
