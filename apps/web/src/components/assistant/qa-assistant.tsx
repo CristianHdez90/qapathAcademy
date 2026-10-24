@@ -78,6 +78,6 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
     <small>Tu consulta se envía a Google Gemini.</small>
    </form>}
   </section>}
-  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente Lía QA':'Abrir asistente Lía QA'} aria-expanded={open} onClick={()=>open?close():setOpen(true)}><Ladybug/><span className="qa-launcher-name">Lía QA</span><span className="qa-launcher-dot"/></button>
+  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente Lía QA':'Abrir asistente Lía QA'} aria-expanded={open} onClick={()=>open?close():setOpen(true)}><Ladybug/></button>
  </div>;
 }
