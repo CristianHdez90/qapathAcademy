@@ -51,6 +51,9 @@ jobs:
       - run: pnpm install --no-frozen-lockfile
       - run: pnpm build:libs
       - run: pnpm db:migrate
+      # Este job tiene un checkout independiente del job quality.
+      # Playwright inicia los artefactos compilados de API y Web, sin next dev/HMR.
+      - run: pnpm build
       - run: pnpm --filter @qapath/web exec playwright install --with-deps chromium webkit
       - run: pnpm test:e2e
       - uses: actions/upload-artifact@v4
