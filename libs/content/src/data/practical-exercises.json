@@ -1,7 +1,7 @@
 {
   "1": {
-    "title": "Tu primera sesión QA: esperado frente a observado",
-    "objective": "Distinguir requisito, prueba, resultado y defecto ejecutando un cotizador real de entrenamiento.",
+    "title": "Tu primera sesión QA: escenarios de prueba en Gherkin",
+    "objective": "Diseñar escenarios de prueba en Gherkin con Given, When y Then; comparar el resultado esperado con el resultado obtenido (observado) al ejecutar un cotizador real de entrenamiento.",
     "minutes": 35,
     "tools": [
       "Navegador",
@@ -17,6 +17,10 @@
         "expected": "El curso básico vale 35000 COP, admite enteros de 1 a 5 y el envío vale 10000 COP."
       },
       {
+        "action": "Antes de ejecutar, escribe cuatro escenarios de prueba en Gherkin. Usa Scenario para el nombre, Given para el contexto y los datos, When para la acción y Then para el resultado esperado. Registra el resultado obtenido (observado), el estado y la fecha por separado después de ejecutar.",
+        "expected": "Ejemplo:\nScenario: Cotización básica con recogida\nGiven el curso básico cuesta 35000 COP y selecciono cantidad 1, sin cupón y con recogida\nWhen solicito la cotización\nThen el total debe ser 35000 COP\nEl Then expresa lo esperado según la regla; el resultado obtenido se registra como evidencia de la ejecución."
+      },
+      {
         "action": "Cotiza curso básico, cantidad 1, sin cupón y con recogida. Anota el esperado antes de pulsar Cotizar.",
         "expected": "La interfaz y la API muestran 35000 COP."
       },
@@ -29,15 +33,20 @@
         "expected": "La petición devuelve 422 y no se presenta un total válido."
       },
       {
+        "action": "Ejecuta el cuarto escenario con cantidad 6, fuera del máximo permitido, y registra el resultado obtenido (observado).",
+        "expected": "La petición devuelve 422 y no se presenta un total válido porque el máximo es 5 unidades."
+      },
+      {
         "action": "Escribe qué evidencias pedirías a desarrollo y producto antes de reportar un bug.",
         "expected": "El informe distingue hechos observados de suposiciones y no inventa defectos."
       }
     ],
     "deliverables": [
-      "Matriz de 4 escenarios con esperado, observado, estado y fecha.",
+      "Cuatro escenarios de prueba escritos en Gherkin con Scenario, Given, When y Then, acompañados de una matriz de ejecución con ID del escenario, resultado esperado, resultado obtenido (observado), estado y fecha.",
       "Captura de un caso válido y uno inválido; conclusión de 5 líneas."
     ],
     "rubric": [
+      "Cada escenario de prueba usa Given para el contexto, When para la acción y Then para un resultado esperado verificable; el resultado obtenido (observado) se registra por separado.",
       "Los cálculos se explican con números y moneda.",
       "Se distingue un error de entrada esperado de un defecto.",
       "La evidencia permite repetir el caso."

@@ -1,0 +1,51 @@
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 10px 38px;
+  width: fit-content;
+  border-radius: 8px;
+}
+
+.brand .brand-mark {
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 15px;
+  background: none;
+  box-shadow: 0 6px 20px #31d5c414;
+}
+
+.brand-wordmark {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.brand .brand-wordmark b {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: #f2f7ff;
+}
+
+.brand-wordmark b span {
+  color: #7ae9d1;
+}
+
+.brand .brand-wordmark small {
+  margin: 0;
+  padding-left: 2px;
+  color: #b0c4d7;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 3.8px;
+}
+
+.brand:hover .brand-wordmark b span {
+  color: #a6f5df;
+}
