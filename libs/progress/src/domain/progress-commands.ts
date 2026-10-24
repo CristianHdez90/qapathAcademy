@@ -10,7 +10,7 @@ export type ProgressCommand =
  |{type:'scrum-intro'}
  |{type:'reading-section';week:number;section:number}
  |{type:'lesson-answer';week:number;answer:number}
- |{type:'submit-evidence';kind:'task'|'lab'|'exercise';id:string;text:string};
+ |{type:'submit-evidence';kind:'task'|'lab'|'exercise'|'certification';id:string;text:string};
 const validNumber=(value:unknown)=>typeof value==='number'&&Number.isInteger(value)&&value>=0&&value<=100;
 export function applyProgressCommand(current:Progress,command:ProgressCommand):Progress {
  return fromUnknown(applyCommand(current,command));
@@ -34,7 +34,7 @@ function applyCommand(current:Progress,command:ProgressCommand):Progress {
    return command.answer===rule.answer?{...state,lessonChecks:[...new Set([...state.lessonChecks,command.week])]}:state;
   }
   case 'submit-evidence': {
-   const valid=command.kind==='exercise'?learningRules.some(r=>String(r.week)===command.id):command.kind==='task'?learningRules.some(r=>Array.from({length:r.tasks},(_,i)=>`${r.week}:${i}`).includes(command.id)):learningRules.some(r=>r.labs.some(id=>id===command.id));
+   const valid=command.kind==='certification'?/^ctfl-(chapter-[1-6]|mock)$/.test(command.id):command.kind==='exercise'?learningRules.some(r=>String(r.week)===command.id):command.kind==='task'?learningRules.some(r=>Array.from({length:r.tasks},(_,i)=>`${r.week}:${i}`).includes(command.id)):learningRules.some(r=>r.labs.some(id=>id===command.id));
    if(!valid||command.text.trim().length<40||command.text.length>8000)throw new Error('Evidencia inválida: escribe entre 40 y 8000 caracteres.');
    return {...state,evidence:{...state.evidence,[`${command.kind}:${command.id}`]:command.text.trim()}};
   }

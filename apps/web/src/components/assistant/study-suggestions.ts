@@ -1,4 +1,9 @@
 export const studySuggestions=[
+ {title:'ISTQB Foundation Level · CTFL',questions:[
+  ['Preparar CTFL','Ayúdame a preparar CTFL v4.0 con un plan para los seis capítulos. Haz preguntas originales, una a la vez, y explica los errores sin presentarlas como preguntas oficiales.'],
+  ['Practicar técnicas','Propón un ejercicio original de particiones, valores límite, decisiones o estados para preparar CTFL. Espera mi respuesta antes de explicar la solución.'],
+  ['Escenarios Gherkin','Ayúdame a escribir escenarios de prueba con Given, When y Then; separa resultado esperado del resultado obtenido (observado).'],
+ ]},
  {title:'Scrum, ceremonias y equipo',questions:[
   ['¿Qué es Scrum?','Explícame Scrum, sus pilares y valores con un ejemplo de un equipo que desarrolla una tienda en línea.'],
   ['Ceremonias de Scrum','Explícame los eventos de Scrum: Sprint, Sprint Planning, Daily Scrum, Sprint Review y Sprint Retrospective. Compara su propósito, participantes y cómo contribuye QA. Aclara la diferencia con el refinamiento del backlog.'],
