@@ -1,13 +1,13 @@
 import {Injectable} from '@nestjs/common';
 import {adminAuditEvents,authSessions,emailVerificationTokens,authChallenges,studentProgress,studentProgressEvents,users,and,asc,count,desc,eq,ilike,sql,alias} from '@qapath/database';
-import {assertStudentMutation,progressPercent} from '@qapath/administration';
+import {assertStudentMutation} from '@qapath/administration';
 import type {AdministrationPort,AuditRecord,Student,StudentDetail,StudentRow,StudentStatus,StudentProgressView} from '@qapath/administration';
-import {emptyProgress,fromUnknown} from '@qapath/progress';
+import {emptyProgress,fromUnknown,progressPercentage} from '@qapath/progress';
 import {DatabaseProvider} from '../database.provider';
 const readStudent=(user:typeof users.$inferSelect):Student=>({id:user.id,email:user.email,role:'STUDENT',isActive:user.isActive,emailVerified:!!user.emailVerifiedAt,mustChangePassword:user.mustChangePassword,mfaEnabled:user.mfaEnabled,createdAt:user.createdAt.toISOString(),updatedAt:user.updatedAt.toISOString()});
 function overview(row:typeof studentProgress.$inferSelect|null):StudentProgressView{
  const state=row?fromUnknown(row.state):emptyProgress();
- return {completedWeeks:state.weeks,readWeeks:state.read,tasksCount:state.tasks.length,labsCount:state.labs.length,finalCount:state.final.length,quizScores:state.quizzes,scrumCompleted:state.scrumIntro,progressPercent:progressPercent(state.weeks.length),revision:row?.revision??0,updatedAt:row?.updatedAt.toISOString()??null};
+ return {completedWeeks:state.weeks,readWeeks:state.read,tasksCount:state.tasks.length,labsCount:state.labs.length,finalCount:state.final.length,quizScores:state.quizzes,scrumCompleted:state.scrumIntro,progressPercent:progressPercentage(state),revision:row?.revision??0,updatedAt:row?.updatedAt.toISOString()??null};
 }
 const escapeLike=(value:string)=>value.replace(/[\\%_]/g,'\\$&');
 @Injectable()

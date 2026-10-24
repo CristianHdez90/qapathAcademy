@@ -21,3 +21,9 @@ Cada nota, respuesta o evidencia presenta su estado local: guardando, guardado o
 La página incluye un enlace para saltar al contenido, foco visible, navegación semántica, desplegables operables con teclado, estados textuales y respeto por la preferencia de movimiento reducido. Lía se cierra cuando el foco sale del panel hacia la página y oculta temporalmente el icono si cubriría un control enfocado. Los errores de sincronización ya no son un recuadro flotante sobre las acciones.
 
 Las pruebas de navegador verifican siguiente acción, enlaces a desplegables, recuperación ante un fallo de guardado, conservación de notas, ayuda contextual sin envío automático, salto al contenido y ausencia de desbordamiento a 320/390 px. Las capturas de las pruebas usan datos ficticios. No se declara conformidad completa con WCAG sin una auditoría específica.
+
+## Porcentaje de avance por actividades
+
+El porcentaje del módulo y de la ruta incorpora avances parciales. Cada semana aporta cinco etapas con el mismo peso: lectura, práctica, autoevaluación, laboratorios y test aprobado (70 % mínimo). Las secciones leídas y los entregables registrados incrementan su etapa proporcionalmente. Los laboratorios y el test del módulo satisfacen la etapa correspondiente de sus semanas. Se muestra un decimal para conservar avances pequeños en la ruta de 24 semanas.
+
+La tarjeta, el detalle del módulo, el panel, la barra lateral y el administrador utilizan el mismo cálculo. El contador de semanas completadas sigue exigiendo todos los requisitos; puede mostrar 0/2 junto a un porcentaje parcial mayor que cero. No se necesitan migraciones ni volver a completar actividades guardadas.

@@ -1,4 +1,5 @@
-import {automaticCompletion} from './automatic-completion';
+import {automaticCompletion,QUIZ_PASS_PERCENT} from './automatic-completion';
+import {learningRules} from './learning-rules';
 /** Estado serializable versionado. Nunca incluye contraseñas ni identificadores personales. */
 export type Progress = {
   version:2;weeks:number[];read:number[];tasks:string[];labs:string[];
@@ -22,4 +23,22 @@ export function fromUnknown(value:unknown):Progress {
   return automaticCompletion({...base,final:nums('final'),quizzes:objNums('quizzes'),notes:objStrings('notes'),readingSections,lessonChecks:nums('lessonChecks'),evidence,scrumIntro:v.scrumIntro===true,scrumQuizScore:typeof v.scrumQuizScore==='number'?Math.min(100,Math.max(0,v.scrumQuizScore)):0,hours:typeof v.hours==='number'&&v.hours>=1&&v.hours<=60?v.hours:9});
 }
 export function toggleInArray<T>(values:T[],value:T):T[]{return values.includes(value)?values.filter(x=>x!==value):[...values,value];}
-export function progressPercentage(progress:Progress,total=24){return total?Math.round(100*progress.weeks.length/total):0;}
+/** Each week has five equally weighted stages; reading and practice credit each completed activity. */
+export function progressPercentage(progress:Progress,scope:number|readonly number[]=24):number{
+ const requested=typeof scope==='number'?learningRules.slice(0,Math.max(0,scope)).map(r=>r.week):scope;
+ const rules=learningRules.filter(r=>requested.includes(r.week));
+ if(!rules.length)return 0;
+ const hasEvidence=(id:string)=>(progress.evidence[id]?.trim().length||0)>=40;
+ const fractions=rules.map(rule=>{
+  const sections=new Set(progress.readingSections[String(rule.week)]||[]);
+  const reading=Array.from({length:rule.sections},(_,i)=>i).filter(i=>sections.has(i)).length/rule.sections;
+  const practice=rule.tasks?Array.from({length:rule.tasks},(_,i)=>`${rule.week}:${i}`).filter(id=>hasEvidence(`task:${id}`)).length/rule.tasks:1;
+  const check=progress.lessonChecks.includes(rule.week)?1:0;
+  const labs=rule.labs.length?rule.labs.filter(id=>hasEvidence(`lab:${id}`)).length/rule.labs.length:1;
+  const quiz=(progress.quizzes[rule.module]??0)>=QUIZ_PASS_PERCENT?1:0;
+  return (reading+practice+check+labs+quiz)/5;
+ });
+ const value=100*fractions.reduce((sum,fraction)=>sum+fraction,0)/rules.length;
+ // Reserve 100% for all requirements; retain small advances in the full 24-week route.
+ return fractions.every(value=>value===1)?100:Math.min(99.9,Math.round(value*10)/10);
+}
