@@ -1,0 +1,41 @@
+/* Keep every destination reachable on short screens and when text is enlarged. */
+.sidebar {
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #506780 #0b1427;
+  scroll-padding-block: 16px;
+}
+.sidebar > * { flex-shrink: 0; }
+.sidebar-footer { margin-top: auto; }
+.sidebar:focus-visible { outline: 2px solid #70d7ff; outline-offset: -3px; }
+.nav-item { min-height: 44px; }
+@media (min-width: 901px) and (max-height: 800px) {
+  .sidebar { padding-block: 18px; }
+  .sidebar .brand { padding-bottom: 24px; }
+}
+@media (max-width: 900px) {
+  .mobile-tabs {
+    justify-content: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #506780 #0d182b;
+    padding-left: max(6px, env(safe-area-inset-left));
+    padding-right: max(6px, env(safe-area-inset-right));
+  }
+  .mobile-tabs a {
+    flex: 1 0 44px;
+    width: auto;
+    min-width: 44px;
+    min-height: 48px;
+    justify-content: center;
+    border-radius: 6px;
+  }
+  .mobile-tabs small { font-size: 10px; }
+  .mobile-tabs a:focus-visible { outline-offset: -3px; }
+}
