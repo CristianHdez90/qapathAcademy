@@ -11,3 +11,13 @@
 @media(max-width:480px){.qa-helper{right:12px}.qa-chat{max-width:calc(100vw - 24px);width:390px;bottom:69px;border-radius:17px}.qa-chat-header{padding:13px 15px}.qa-chat-body{padding:18px 16px}.qa-intro h3{font-size:25px}}
 @media(prefers-reduced-motion:reduce){.qa-chat,.qa-thinking span{animation:none}.qa-launcher,.qa-launcher svg{transition:none}}
 .qa-study-topics{margin:16px 0;border:1px solid #38546b;border-radius:10px;background:#15283a;font-size:12px}.qa-study-topics summary{cursor:pointer;padding:13px 12px;color:#d8e9f3;font-weight:650;line-height:1.6;overflow-wrap:anywhere}.qa-study-topics summary:focus-visible{outline:2px solid #7edfc5;outline-offset:-3px;border-radius:8px}.qa-study-topics>summary{color:#ffb3a0}.qa-study-topics>div{padding:0 10px 10px}.qa-study-group{border-top:1px solid #324c60}.qa-study-group summary{font-size:11px;padding:11px 2px}.qa-study-group .qa-suggestions{padding-bottom:12px}.qa-study-group .qa-suggestions button{min-width:0;overflow-wrap:anywhere;line-height:1.6}
+.qa-chat-actions{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px;border-bottom:1px solid #324c60;flex-shrink:0}
+.qa-chat-actions button,.qa-history>button,.qa-history-filters button{min-height:40px;padding:8px 11px;border:1px solid #3b566c;border-radius:8px;background:#192f43;color:#dcebf2;font-size:12px}
+.qa-chat-actions button[aria-expanded=true],.qa-history-filters button[aria-pressed=true]{background:#28574f;border-color:#71d4b3;color:#c2ffe9}
+.qa-history h3{font-size:17px;margin:0 0 14px}.qa-history p{font-size:12px;line-height:1.7;color:#b6ccdb}
+.qa-history-filters{display:flex;gap:8px;margin-bottom:15px}
+.qa-history>.qa-history-item{display:block;width:100%;text-align:left;margin-bottom:9px;padding:12px;overflow-wrap:anywhere;min-width:0}
+.qa-history-item strong{display:block;font-size:12px;line-height:1.6}.qa-history-item small{display:block;font-size:10px;color:#a9c4d3;margin-top:5px}
+.qa-history>button:not(.qa-history-item){margin:8px 6px 0 0}
+.qa-current-title{font-size:12px;line-height:1.6;color:#8de2c8;overflow-wrap:anywhere;border-bottom:1px solid #324c60;padding-bottom:12px;margin:0 0 18px}
+.qa-composer-meta{flex-wrap:wrap}

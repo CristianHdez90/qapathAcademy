@@ -9,6 +9,15 @@ import {studySuggestions} from './study-suggestions';
 import {ASK_LIA_EVENT} from './ask-lia';
 
 type Message={role:'user'|'assistant';content:string};
+type Conversation={id:string;title:string;messages:Message[];revision:number;archived:boolean;updatedAt:string};
+type Summary=Omit<Conversation,'messages'>;
+type HistoryPage={items:Summary[];nextOffset:number|null};
+async function assistantRequest<T>(url:string,init:RequestInit={}){
+ const response=await fetch('/api/v1/assistant/'+url,{...init,credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json',...init.headers}});
+ const body=await response.json() as {data:T;message?:string;error?:{message?:string}};
+ if(!response.ok)throw new AuthApiError(response.status,response.status===401?'Tu sesión venció. Vuelve a iniciar sesión.':body.message||body.error?.message||'No se pudo guardar o cargar la conversación.');
+ return body.data;
+}
 const suggestions=[['Casos de prueba','Ayúdame a diseñar casos de prueba para un formulario de inicio de sesión.'],['Reportar un bug','Enséñame a escribir un reporte de bug claro, con un ejemplo.'],['Playwright','Explícame cómo automatizar una prueba de login con Playwright y TypeScript.'],['Pruebas de API','¿Qué debo validar al probar una API REST?']];
 
 function Ladybug(){return <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -26,14 +35,29 @@ function Answer({text}:{text:string}){
 }
 
 export function QaAssistant(){
- const {user,loading}=useAuth();
- // Clear conversation and cancel requests when the identity changes.
- return <AssistantChat key={user?.id||'guest'} signedIn={!!user} authLoading={loading}/>;
+ const {user,loading}=useAuth();const [open,setOpen]=useState(false);
+ // Remount and cancel requests when the identity changes; server history is scoped to that identity.
+ return <AssistantChat key={user?.id||'guest'} signedIn={!!user} authLoading={loading} open={open} setOpen={setOpen}/>;
 }
-function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:boolean}){
+function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;authLoading:boolean;open:boolean;setOpen:(open:boolean)=>void}){
  const path=usePathname();
- const [open,setOpen]=useState(false),[messages,setMessages]=useState<Message[]>([]),[draft,setDraft]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const [messages,setMessages]=useState<Message[]>([]),[draft,setDraft]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
  const [obscuresFocus,setObscuresFocus]=useState(false);
+ const [conversation,setConversation]=useState<Conversation|null>(null),[history,setHistory]=useState<Summary[]>([]),[historyOpen,setHistoryOpen]=useState(false),[archivedView,setArchivedView]=useState(false),[historyBusy,setHistoryBusy]=useState(signedIn),[nextOffset,setNextOffset]=useState<number|null>(null);
+ useEffect(()=>{
+  if(!signedIn||authLoading)return;
+  const controller=new AbortController();let active=true;
+  void (async()=>{
+   try{
+    const page=await assistantRequest<HistoryPage>('conversations',{signal:controller.signal});
+    if(!active)return;setHistory(page.items);setNextOffset(page.nextOffset);
+    const recent=page.items.find(item=>!item.archived);
+    if(recent){const saved=await assistantRequest<Conversation>('conversations/'+recent.id,{signal:controller.signal});if(active){setConversation(saved);setMessages(saved.messages)}}
+   }catch(e){if(active){setError(e instanceof Error?e.message:'No se pudo recuperar el historial.');setHistoryOpen(true)}}
+   finally{if(active)setHistoryBusy(false)}
+  })();
+  return()=>{active=false;controller.abort()};
+ },[signedIn,authLoading]);
  const trigger=useRef<HTMLButtonElement>(null),input=useRef<HTMLTextAreaElement>(null),bottom=useRef<HTMLDivElement>(null),pending=useRef<AbortController|null>(null);
  const returnFocus=useRef<HTMLElement|null>(null);
  const close=()=>{setOpen(false);(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus()};
@@ -55,27 +79,52 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
    setDraft(prompt);setOpen(true);requestAnimationFrame(()=>input.current?.focus());
   };
   window.addEventListener(ASK_LIA_EVENT,ask);return()=>window.removeEventListener(ASK_LIA_EVENT,ask);
- },[]);
+ },[setOpen]);
  useEffect(()=>()=>pending.current?.abort(),[]);
- useEffect(()=>{if(open&&signedIn)input.current?.focus()},[open,signedIn]);
+ useEffect(()=>{if(open&&signedIn&&!historyBusy&&!historyOpen&&!conversation?.archived)input.current?.focus()},[open,signedIn,historyBusy,historyOpen,conversation?.archived]);
  useEffect(()=>{if(open)bottom.current?.scrollIntoView({block:'nearest'})},[messages,busy,open,error]);
+ async function refreshHistory(offset=0){
+  if(busy||historyBusy)return;setHistoryBusy(true);setError('');
+  const controller=new AbortController();pending.current=controller;
+  try{const page=await assistantRequest<HistoryPage>('conversations?offset='+offset,{signal:controller.signal});setHistory(old=>offset?[...old,...page.items.filter(item=>!old.some(saved=>saved.id===item.id))]:page.items);setNextOffset(page.nextOffset)}
+  catch(e){if(!controller.signal.aborted)setError(e instanceof Error?e.message:'No se pudo cargar el historial.')}
+  finally{if(pending.current===controller){pending.current=null;setHistoryBusy(false)}}
+ }
+ function selectConversation(saved:Conversation){setConversation(saved);setMessages(saved.messages);setDraft('');setError('');setHistoryOpen(false)}
+ async function openConversation(id:string){
+  if(busy||historyBusy)return;setHistoryBusy(true);setError('');
+  const controller=new AbortController();pending.current=controller;
+  try{selectConversation(await assistantRequest<Conversation>('conversations/'+id,{signal:controller.signal}))}
+  catch(e){if(!controller.signal.aborted)setError(e instanceof Error?e.message:'No se pudo abrir la conversación.')}
+  finally{if(pending.current===controller){pending.current=null;setHistoryBusy(false)}}
+ }
+ async function archiveConversation(){
+  if(!conversation||busy||historyBusy)return;setHistoryBusy(true);setError('');
+  const controller=new AbortController();pending.current=controller;
+  try{
+   const saved=await assistantRequest<Conversation>('conversations/'+conversation.id,{method:'PATCH',signal:controller.signal,body:JSON.stringify({archived:!conversation.archived})});
+   setConversation(saved);setHistory(old=>[saved,...old.filter(item=>item.id!==saved.id)]);
+  }catch(e){if(!controller.signal.aborted)setError(e instanceof Error?e.message:'No se pudo archivar la conversación.')}
+  finally{if(pending.current===controller){pending.current=null;setHistoryBusy(false)}}
+ }
+ function newConversation(){setConversation(null);setMessages([]);setDraft('');setError('');setHistoryOpen(false);input.current?.focus()}
  async function send(text=draft){
-  if(!text.trim()||busy||!signedIn)return;
-  // Only complete pairs are retained. The next request always ends with a user turn.
+  if(!text.trim()||busy||historyBusy||conversation?.archived||!signedIn)return;
+  // Keep the complete transcript on screen; bound only the context sent to Gemini.
   const history=[...messages.slice(-4).map(m=>({...m,content:m.content.slice(0,3000)})),{role:'user' as const,content:text.trim()}];
-  setMessages(history);setDraft('');setError('');setBusy(true);
+  const fullHistory=[...messages,{role:'user' as const,content:text.trim()}];
+  setMessages(fullHistory);setDraft('');setError('');setBusy(true);
   const controller=new AbortController();pending.current=controller;
   const timer=setTimeout(()=>controller.abort(),35000);
   try{
    const safePath=/^\/(?:modules(?:\/[a-zA-Z0-9-]+)?|study\/\d+|scrum|project|resources|account|admin)?$/.test(path)?path:undefined;
-   const response=await fetch('/api/v1/assistant/chat',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json'},signal:controller.signal,body:JSON.stringify({messages:history,page:safePath})});
-   const data=await response.json() as {data?:{answer:string;truncated?:boolean};message?:string;error?:{message?:string}};
-   if(!response.ok)throw new AuthApiError(response.status,response.status===401?'Tu sesión venció. Vuelve a iniciar sesión.':data.message||data.error?.message||'No fue posible consultar a Lía QA.');
-   if(!data.data?.answer)throw new Error('La IA no devolvió una respuesta. Inténtalo de nuevo.');
-   setMessages([...history,{role:'assistant',content:data.data.answer+(data.data.truncated?'\n\nRespuesta recortada. Puedes pedirme que continúe.':'')}]);
+   const data=await assistantRequest<{answer:string;truncated?:boolean;conversation?:Conversation}>('chat',{method:'POST',signal:controller.signal,body:JSON.stringify({messages:history,page:safePath,keepHistory:true,...(conversation?{conversationId:conversation.id,revision:conversation.revision}:{})})});
+   if(!data.conversation)throw new Error('No se pudo guardar la conversación. Comprueba que la API esté actualizada.');
+   const saved=data.conversation;setConversation(saved);setMessages(saved.messages);
+   setHistory(old=>[saved,...old.filter(item=>item.id!==saved.id)]);
   }catch(e){
    if(!controller.signal.aborted||pending.current===controller){
-    setMessages(history.slice(0,-1));setDraft(text);
+    setMessages(messages);setDraft(text);
     setError(controller.signal.aborted?'La consulta tardó demasiado. Puedes volver a enviarla.':e instanceof Error?e.message:'No se pudo conectar con la IA.');
    }
   }finally{clearTimeout(timer);if(pending.current===controller){pending.current=null;setBusy(false)}}
@@ -83,20 +132,36 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
  return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')}>
   {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();close()}}}>
    <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>Lía QA <span>IA</span></h2><p>Tu mentora de QA Engineer</p></div><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente">×</button></header>
+   {signedIn&&<nav className="qa-chat-actions" aria-label="Gestionar conversaciones">
+    <button type="button" disabled={busy||historyBusy} onClick={newConversation}>＋ Nueva</button>
+    <button type="button" disabled={busy||historyBusy} aria-expanded={historyOpen} onClick={()=>{setHistoryOpen(!historyOpen);if(!historyOpen)void refreshHistory()}}>Historial</button>
+    {conversation&&<button type="button" disabled={busy||historyBusy} onClick={()=>void archiveConversation()}>{conversation.archived?'Restaurar':'Archivar'}</button>}
+   </nav>}
    <div className="qa-chat-body">
+    {signedIn&&historyOpen?<section className="qa-history" aria-label="Historial de conversaciones">
+     <h3>Tus conversaciones</h3><div className="qa-history-filters"><button type="button" aria-pressed={!archivedView} onClick={()=>setArchivedView(false)}>Activas</button><button type="button" aria-pressed={archivedView} onClick={()=>setArchivedView(true)}>Archivadas</button></div>
+     {history.filter(item=>item.archived===archivedView).map(item=><button type="button" className="qa-history-item" disabled={historyBusy} key={item.id} onClick={()=>void openConversation(item.id)}><strong>{item.title}</strong><small>{new Date(item.updatedAt).toLocaleDateString('es-CO')}{item.archived?' · Archivada':''}</small></button>)}
+     {!historyBusy&&!history.some(item=>item.archived===archivedView)&&<p>No hay conversaciones {archivedView?'archivadas':'activas'} en esta página.</p>}
+     {nextOffset!==null&&<button type="button" disabled={historyBusy} onClick={()=>void refreshHistory(nextOffset)}>Cargar más conversaciones</button>}
+     <button type="button" disabled={historyBusy} onClick={()=>void refreshHistory()}>Actualizar historial</button>
+     {historyBusy&&<p role="status">Cargando historial…</p>}{error&&<p className="qa-chat-error" role="alert">{error}</p>}
+    </section>:<>
     <div className="qa-intro"><span className="qa-intro-label">ENCUENTRA EL SIGUIENTE PASO</span><h3>Pequeña aliada.<br/>Grandes pruebas.</h3><p>Diseñemos mejores pruebas, investiguemos bugs y automaticemos con criterio.</p></div>
+    {signedIn&&conversation&&<p className="qa-current-title">{conversation.title}{conversation.archived?' · Archivada':''}</p>}
+    {historyBusy&&<p role="status">Cargando conversación…</p>}
     {!signedIn?<div className="qa-signin"><p>{authLoading?'Comprobando tu sesión…':'Inicia sesión para conversar conmigo y practicar QA.'}</p>{!authLoading&&<Link className="button button-primary" href="/login" onClick={close}>Iniciar sesión ↗</Link>}</div>:<>
-     {messages.length===0&&<div className="qa-suggestions">{suggestions.map(([label,prompt])=><button key={label} onClick={()=>void send(prompt)} disabled={busy}>{label}<span aria-hidden="true">↗</span></button>)}</div>}
-     <details className="qa-study-topics"><summary>Explorar módulos y temas de estudio</summary><div>{studySuggestions.map(group=><details key={group.title} className="qa-study-group"><summary>{group.title}</summary><div className="qa-suggestions">{group.questions.map(([label,prompt])=><button key={label} type="button" disabled={busy} onClick={()=>void send(prompt)}>{label}<span aria-hidden="true">↗</span></button>)}</div></details>)}</div></details>
+     {messages.length===0&&!historyBusy&&<div className="qa-suggestions">{suggestions.map(([label,prompt])=><button key={label} onClick={()=>void send(prompt)} disabled={busy||historyBusy||conversation?.archived}>{label}<span aria-hidden="true">↗</span></button>)}</div>}
+     <details className="qa-study-topics"><summary>Explorar módulos y temas de estudio</summary><div>{studySuggestions.map(group=><details key={group.title} className="qa-study-group"><summary>{group.title}</summary><div className="qa-suggestions">{group.questions.map(([label,prompt])=><button key={label} type="button" disabled={busy||historyBusy||conversation?.archived} onClick={()=>void send(prompt)}>{label}<span aria-hidden="true">↗</span></button>)}</div></details>)}</div></details>
      <div className="qa-transcript" role="log" aria-label="Conversación con Lía QA" aria-live="polite" aria-relevant="additions">{messages.map((message,i)=><article className={`qa-message qa-message-${message.role}`} key={i}><b>{message.role==='user'?'Tú':'Lía QA'}</b><div><Answer text={message.content}/></div></article>)}</div>
      {busy&&<p className="qa-thinking" role="status"><span/> Preparando tu respuesta…</p>}
      {error&&<p className="qa-chat-error" role="alert">{error}</p>}
      <div ref={bottom}/>
     </>}
+   </>}
    </div>
-   {signedIn&&<form className="qa-composer" onSubmit={e=>{e.preventDefault();void send()}}>
-    <label className="qa-sr-only" htmlFor="qa-question">Tu pregunta sobre QA</label><div><textarea id="qa-question" ref={input} placeholder="¿Qué vamos a probar hoy?" value={draft} maxLength={2000} rows={2} disabled={busy} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();void send()}}}/><button type="submit" disabled={busy||!draft.trim()} aria-label="Enviar pregunta">↑</button></div>
-    <div className="qa-composer-meta"><span>IA · Revisa sus respuestas. No compartas datos sensibles.</span><button type="button" disabled={busy||messages.length===0} onClick={()=>{setMessages([]);setError('');setDraft('');input.current?.focus()}}>Limpiar</button></div>
+   {signedIn&&!historyOpen&&<form className="qa-composer" onSubmit={e=>{e.preventDefault();void send()}}>
+    <label className="qa-sr-only" htmlFor="qa-question">Tu pregunta sobre QA</label><div><textarea id="qa-question" ref={input} placeholder="¿Qué vamos a probar hoy?" value={draft} maxLength={2000} rows={2} disabled={busy||historyBusy||conversation?.archived} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();void send()}}}/><button type="submit" disabled={busy||historyBusy||conversation?.archived||!draft.trim()} aria-label="Enviar pregunta">↑</button></div>
+    <div className="qa-composer-meta"><span>IA · Revisa sus respuestas. No compartas datos sensibles.</span><span>{conversation?.archived?'Archivada · Restaura para continuar':busy?'Enviando…':conversation?'Guardada en tu cuenta':'Nueva conversación'}</span></div>
     <small>Tu consulta se envía a Google Gemini.</small>
    </form>}
   </section>}

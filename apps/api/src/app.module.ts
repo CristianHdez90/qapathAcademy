@@ -31,10 +31,11 @@ import {DomainExceptionFilter} from './presentation/filters/domain-exception.fil
 import {QaAssistantController} from './presentation/controllers/qa-assistant.controller';
 import {GeminiQaAdapter} from './infrastructure/adapters/gemini-qa.adapter';
 import {QaQuotaAdapter} from './infrastructure/adapters/qa-quota.adapter';
+import {QaConversationsAdapter} from './infrastructure/adapters/qa-conversations.adapter';
 @Module({
  controllers:[HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
  providers:[
-  GeminiQaAdapter,QaQuotaAdapter,
+  GeminiQaAdapter,QaQuotaAdapter,QaConversationsAdapter,
   DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,
   {provide:ADMIN_REPOSITORY,useExisting:PostgresAdministrationAdapter},
   {provide:ManageStudents,useFactory:(repo:AdministrationPort,crypto:CryptoAuthAdapter)=>new ManageStudents(repo,crypto),inject:[ADMIN_REPOSITORY,CryptoAuthAdapter]},

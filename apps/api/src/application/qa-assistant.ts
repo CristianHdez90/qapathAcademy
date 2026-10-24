@@ -1,9 +1,13 @@
 import {z} from 'zod';
 
 export const qaChatSchema=z.object({
+ keepHistory:z.boolean().optional(),
+ conversationId:z.string().uuid().optional(),
+ revision:z.number().int().min(0).optional(),
  messages:z.array(z.object({role:z.enum(['user','assistant']),content:z.string().trim().min(1).max(4000)}).strict()).min(1).max(11),
  page:z.string().max(100).regex(/^\/(?:modules(?:\/[a-zA-Z0-9-]+)?|study\/\d+|scrum|project|resources|account|admin)?$/).optional(),
-}).strict().superRefine(({messages},ctx)=>{
+}).strict().superRefine(({messages,conversationId,revision,keepHistory},ctx)=>{
+ if(conversationId&&(!keepHistory||revision===undefined))ctx.addIssue({code:'custom',message:'Identificador o revisión de conversación inválidos.'});
  if(messages.some((m,i)=>m.role!==(i%2===0?'user':'assistant'))||messages.at(-1)?.role!=='user')
   ctx.addIssue({code:'custom',message:'La conversación debe alternar preguntas y respuestas.'});
  if(messages.reduce((n,m)=>n+m.content.length,0)>16000)ctx.addIssue({code:'custom',message:'Conversación demasiado larga.'});

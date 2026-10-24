@@ -32,7 +32,8 @@ test('notes expose save failures inline, retry preserves text, and contextual Li
   }
   await route.fulfill({json:{data:state}});
  });
- await page.route('**/api/v1/assistant/chat',async route=>{aiCalls++;await route.fulfill({json:{data:{answer:'Probemos un ejemplo práctico de QA.'}}})});
+ await page.route('**/api/v1/assistant/conversations',route=>route.fulfill({json:{data:{items:[],nextOffset:null}}}));
+ await page.route('**/api/v1/assistant/chat',async route=>{aiCalls++;const messages=route.request().postDataJSON().messages;await route.fulfill({json:{data:{answer:'Probemos un ejemplo práctico de QA.',conversation:{id:'00000000-0000-4000-8000-000000000001',title:'Ayuda contextual',revision:1,archived:false,updatedAt:new Date().toISOString(),messages:[...messages,{role:'assistant',content:'Probemos un ejemplo práctico de QA.'}]}}}})});
  await page.goto('/study/1');
  await expect(page.getByRole('navigation',{name:'Etapas de la semana'})).toHaveAttribute('aria-busy','false');
  await page.screenshot({path:testInfo.outputPath('study-desktop.png')});

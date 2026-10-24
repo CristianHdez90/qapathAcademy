@@ -28,6 +28,12 @@ test('chat validates user-first alternating history and excludes arbitrary roles
   assert.equal(domain.qaChatSchema.safeParse(value).success,false);
 });
 
+test('saved conversations require valid UUIDs and a revision; clients cannot overwrite stored messages',()=>{
+ const id='00000000-0000-4000-8000-000000000001';
+ assert.equal(domain.qaChatSchema.safeParse({...input,keepHistory:true,conversationId:id,revision:0}).success,true);
+ for(const value of [{...input,conversationId:id},{...input,keepHistory:true,conversationId:id},{...input,keepHistory:true,conversationId:'invalid',revision:0},{...input,keepHistory:true,conversationId:id,revision:-1},{...input,keepHistory:true,archived:true}])assert.equal(domain.qaChatSchema.safeParse(value).success,false);
+});
+
 test('Gemini adapter sends server-owned QA instruction and private header, maps conversation roles and filters thoughts',async()=>{
  let called;
  const adapter=ai(async(url,options)=>{called={url,options};return {ok:true,status:200,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:'private thought',thought:true},{text:'Valida el status y el contrato.'}]}}]})}});
