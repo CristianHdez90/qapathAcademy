@@ -39,7 +39,17 @@ test('Gemini adapter sends server-owned QA instruction and private header, maps 
  assert.match(body.systemInstruction.parts[0].text,/Playwright/);
  assert.match(body.contents[0].parts[0].text,/Página actual/);
  assert.equal(body.generationConfig.maxOutputTokens,1600);
+ assert.equal(body.generationConfig.thinkingConfig.thinkingBudget,0);
  assert.equal(body.tools,undefined);
+});
+
+test('Gemini 3.8 uses the configured model without forcing the Gemini 2.5 thinking budget',async()=>{
+ let called;
+ const adapter=ai(async(url,options)=>{called={url,options};return {ok:true,status:200,json:async()=>({candidates:[{finishReason:'STOP',content:{parts:[{text:'Respuesta QA'}]}}]})}},
+  {QA_AI_ENABLED:'true',GEMINI_API_KEY:'PRIVATE_SECRET',QA_AI_MODEL:'gemini-3.8-flash'});
+ assert.equal((await adapter.answer(input)).answer,'Respuesta QA');
+ assert.match(called.url,/\/gemini-3\.8-flash:generateContent$/);
+ assert.equal(JSON.parse(called.options.body).generationConfig.thinkingConfig,undefined);
 });
 
 test('disabled or missing-key AI never calls the provider',async()=>{

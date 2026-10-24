@@ -18,6 +18,8 @@ QA_AI_MODEL=gemini-2.5-flash
 
 Sin clave o con el servicio desactivado la academia funciona normalmente y el chat informa que falta configurar la IA. No hay respuestas simuladas. Para desactivar basta establecer `QA_AI_ENABLED=false` y redesplegar la API.
 
+Si el proyecto responde `NOT_FOUND`, consulta `models.list` con la misma clave y elige un modelo que admita `generateContent` y tenga cuota gratuita para tu proyecto. Por ejemplo, `QA_AI_MODEL=gemini-3.8-flash` si está disponible. Cambiar la variable requiere redesplegar la API. El código solo envía `thinkingBudget: 0` a Gemini 2.5 Flash/Flash-Lite; para otros modelos mantiene la configuración de razonamiento predeterminada del proveedor. Una consulta de metadatos con `models.get` no confirma cuota ni generación de respuestas.
+
 Gemini ofrece acceso gratuito limitado según modelo, región y proyecto. Las cuotas reales se consultan en AI Studio y pueden ser menores que los límites de la aplicación. No se configura una cuenta de pago, no se habilita facturación y no se cambia automáticamente a modelos de pago desde el código. Documentación: https://ai.google.dev/gemini-api/docs/pricing y https://ai.google.dev/gemini-api/docs/rate-limits.
 
 ## Funcionamiento y límites

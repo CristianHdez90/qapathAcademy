@@ -27,7 +27,7 @@ const diagnosticMessages:Record<string,string>={
  API_KEY_IP_ADDRESS_BLOCKED:'Las restricciones de IP de la clave bloquean al servidor de Vercel.',
  SERVICE_DISABLED:'Habilita Generative Language API en el proyecto de la clave Gemini.',
  NOT_FOUND:'El modelo no está disponible para esta API o proyecto. Revisa QA_AI_MODEL y los modelos disponibles en Google AI Studio.',
- GENERATION_CONFIG_UNSUPPORTED:'El modelo configurado no admite los parámetros de generación actuales. Usa gemini-2.5-flash o revisa la integración del modelo elegido.',
+ GENERATION_CONFIG_UNSUPPORTED:'El modelo configurado no admite los parámetros de generación actuales. Revisa QA_AI_MODEL y la compatibilidad de la integración.',
  REGION_UNSUPPORTED:'Gemini API no está disponible para la ubicación de esta solicitud. Revisa la disponibilidad regional de Google.',
  BILLING_DISABLED:'Google exige facturación para esta configuración. Mantén el proyecto gratuito y elige un modelo con cuota gratuita disponible.',
  PERMISSION_DENIED:'Google rechazó los permisos. Revisa el estado de la clave, sus restricciones y el acceso del proyecto a Gemini API.',
@@ -53,7 +53,9 @@ export class GeminiQaAdapter {
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},signal:AbortSignal.timeout(25000),
     body:JSON.stringify({systemInstruction:{parts:[{text:QA_SYSTEM_PROMPT}]},
      contents:input.messages.map((m,i)=>({role:m.role==='assistant'?'model':'user',parts:[{text:i===input.messages.length-1&&input.page?`Página actual de la academia: ${input.page}\n\n${m.content}`:m.content}]})),
-     generationConfig:{temperature:0.4,maxOutputTokens:1600,thinkingConfig:{thinkingBudget:0}},
+     generationConfig:{temperature:0.4,maxOutputTokens:1600,
+      ...(/^gemini-2\.5-flash(?:-lite)?$/.test(model)?{thinkingConfig:{thinkingBudget:0}}:{}),
+     },
     }),
    });
   }catch{throw new ServiceUnavailableException('La IA está tardando demasiado o no está disponible. Inténtalo de nuevo.');}
