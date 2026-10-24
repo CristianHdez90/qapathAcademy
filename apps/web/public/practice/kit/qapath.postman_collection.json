@@ -1,0 +1,813 @@
+{
+  "info": {
+    "name": "QAPath · HTTP, contratos y datos",
+    "description": "Solo sandbox educativo stateless. Los 4xx/5xx son intencionales. No realiza compras ni usa usuarios reales. Ejecuta la carpeta Datos con data/quote-cases.csv. Los tokens demo-* son públicos y no autentican la academia.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://qapath-academy-vvfw.vercel.app",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Códigos HTTP",
+      "item": [
+        {
+          "name": "HTTP 200",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/200"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 201",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/201"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(201));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 202",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/202"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(202));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 204",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/204"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(204));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "pm.test('204 sin cuerpo', () => pm.expect(pm.response.text()).to.eql(''));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 400",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/400"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(400));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/401"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(401));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Challenge de autorización', () => pm.expect(pm.response.headers.get('WWW-Authenticate')).to.eql('Bearer realm=\"qapath-practice\"'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 403",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/403"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(403));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 404",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/404"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(404));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 409",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/409"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(409));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 422",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/422"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(422));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 429",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/429"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(429));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Retry-After', () => pm.expect(pm.response.headers.get('Retry-After')).to.eql('5'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 500",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/500"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(500));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "HTTP 503",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/status/503"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(503));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Retry-After', () => pm.expect(pm.response.headers.get('Retry-After')).to.eql('5'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cotizaciones",
+      "item": [
+        {
+          "name": "Q-01 · 200",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": 1,\n  \"coupon\": \"\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Total exacto', () => pm.expect(json.data.total).to.eql(35000));",
+                  "pm.test('Moneda', () => pm.expect(json.data.currency).to.eql('COP'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-02 · 200",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": 3,\n  \"coupon\": \"QA10\",\n  \"shipping\": \"delivery\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Total exacto', () => pm.expect(json.data.total).to.eql(104500));",
+                  "pm.test('Moneda', () => pm.expect(json.data.currency).to.eql('COP'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-03 · 200",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"pro\",\n  \"quantity\": 2,\n  \"coupon\": \"QA10\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Total exacto', () => pm.expect(json.data.total).to.eql(135000));",
+                  "pm.test('Moneda', () => pm.expect(json.data.currency).to.eql('COP'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-04 · 422",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": 0,\n  \"coupon\": \"\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(422));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-05 · 404",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"missing\",\n  \"quantity\": 1,\n  \"coupon\": \"\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(404));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-06 · 409",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"sold-out\",\n  \"quantity\": 1,\n  \"coupon\": \"\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(409));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-07 · 422",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": 2,\n  \"coupon\": \"QA10\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(422));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Q-08 · 422",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": 1,\n  \"coupon\": \"NOPE\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(422));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Tipo incorrecto · 400",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"productId\": \"basic\",\n  \"quantity\": \"3\",\n  \"shipping\": \"pickup\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(400));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));",
+                  "pm.test('Error de contrato', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Autorización",
+      "item": [
+        {
+          "name": "Sin token · 401",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/api/v1/practice/access?scope=read"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(401));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reader puede leer · 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-reader"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/access?scope=read"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Reader no escribe · 403",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-reader"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/access?scope=write"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(403));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Admin puede escribir · 200",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer demo-admin"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/access?scope=write"
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status esperado', () => pm.response.to.have.status(200));",
+                  "pm.test('Sandbox identificado', () => pm.expect(pm.response.headers.get('X-QAPath-Sandbox')).to.eql('true'));",
+                  "const json = pm.response.json();",
+                  "pm.test('Solo datos ficticios', () => pm.expect(json.sandbox).to.eql(true));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Datos",
+      "item": [
+        {
+          "name": "Cotización por fila CSV",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{baseUrl}}/api/v1/practice/quotes",
+            "body": {
+              "mode": "raw",
+              "raw": "{\"productId\":\"{{caseProduct}}\",\"quantity\":{{caseQuantity}},\"coupon\":\"{{caseCoupon}}\",\"shipping\":\"{{caseShipping}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.variables.set('caseProduct', pm.iterationData.get('productId') || 'basic');",
+                  "pm.variables.set('caseQuantity', Number(pm.iterationData.get('quantity') ?? 3));",
+                  "pm.variables.set('caseCoupon', pm.iterationData.get('coupon') ?? 'QA10');",
+                  "pm.variables.set('caseShipping', pm.iterationData.get('shipping') || 'delivery');"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const expected = Number(pm.iterationData.get('expectedStatus') || 200);",
+                  "pm.test('Status de esta fila', () => pm.response.to.have.status(expected));",
+                  "const json = pm.response.json();",
+                  "pm.test('Sandbox', () => pm.expect(json.sandbox).to.eql(true));",
+                  "if (expected === 200) pm.test('Total de esta fila', () => pm.expect(json.data.total).to.eql(Number(pm.iterationData.get('expectedTotal') || 104500)));",
+                  "else pm.test('Error explicado', () => pm.expect(typeof json.error).to.eql('string'));"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -7,7 +7,7 @@ export class JsonContentAdapter implements ContentRepository {
  weeks(){return this.data.catalog.weeks as Week[];}
  module(id:string){return this.modules().find(m=>m.id===id);}
  week(id:number){return this.weeks().find(w=>w.id===id);}
- guide(id:number){return (this.data.guides as Record<string,StudyGuide>)[String(id)];}
+ guide(id:number){const guide=(this.data.guides as Record<string,StudyGuide>)[String(id)];return guide?{...guide,exercise:(this.data.exercises as Record<string,NonNullable<StudyGuide['exercise']>>)[String(id)]}:undefined;}
  quiz(id:string){return (this.data.catalog.quizzes as Record<string,Question[]>)[id];}
  labs(){return this.data.catalog.labs as Lab[];}
  resources(){return this.data.catalog.resources as Resource[];}

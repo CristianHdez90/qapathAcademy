@@ -1,0 +1,69 @@
+[
+  {
+    "id": "Q-01",
+    "productId": "basic",
+    "quantity": 1,
+    "coupon": "",
+    "shipping": "pickup",
+    "expectedStatus": 200,
+    "expectedTotal": 35000
+  },
+  {
+    "id": "Q-02",
+    "productId": "basic",
+    "quantity": 3,
+    "coupon": "QA10",
+    "shipping": "delivery",
+    "expectedStatus": 200,
+    "expectedTotal": 104500
+  },
+  {
+    "id": "Q-03",
+    "productId": "pro",
+    "quantity": 2,
+    "coupon": "QA10",
+    "shipping": "pickup",
+    "expectedStatus": 200,
+    "expectedTotal": 135000
+  },
+  {
+    "id": "Q-04",
+    "productId": "basic",
+    "quantity": 0,
+    "coupon": "",
+    "shipping": "pickup",
+    "expectedStatus": 422
+  },
+  {
+    "id": "Q-05",
+    "productId": "missing",
+    "quantity": 1,
+    "coupon": "",
+    "shipping": "pickup",
+    "expectedStatus": 404
+  },
+  {
+    "id": "Q-06",
+    "productId": "sold-out",
+    "quantity": 1,
+    "coupon": "",
+    "shipping": "pickup",
+    "expectedStatus": 409
+  },
+  {
+    "id": "Q-07",
+    "productId": "basic",
+    "quantity": 2,
+    "coupon": "QA10",
+    "shipping": "pickup",
+    "expectedStatus": 422
+  },
+  {
+    "id": "Q-08",
+    "productId": "basic",
+    "quantity": 1,
+    "coupon": "NOPE",
+    "shipping": "pickup",
+    "expectedStatus": 422
+  }
+]

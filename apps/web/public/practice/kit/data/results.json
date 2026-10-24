@@ -1,0 +1,26 @@
+[
+  {
+    "id": "TC-01",
+    "status": "passed"
+  },
+  {
+    "id": "TC-02",
+    "status": "passed"
+  },
+  {
+    "id": "TC-03",
+    "status": "failed"
+  },
+  {
+    "id": "TC-04",
+    "status": "blocked"
+  },
+  {
+    "id": "TC-05",
+    "status": "failed"
+  },
+  {
+    "id": "TC-06",
+    "status": "passed"
+  }
+]

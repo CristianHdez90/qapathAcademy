@@ -5,7 +5,7 @@ export const progressCommandSchema=z.union([
  z.object({type:z.literal('toggle'),key:z.literal('final'),value:z.number().int().min(0).max(9)}).strict(),
  z.object({type:z.literal('reading-section'),week:z.number().int().min(1).max(24),section:z.number().int().min(0).max(19)}).strict(),
  z.object({type:z.literal('lesson-answer'),week:z.number().int().min(1).max(24),answer:z.number().int().min(0).max(10)}).strict(),
- z.object({type:z.literal('submit-evidence'),kind:z.enum(['task','lab']),id:z.string().min(1).max(80),text:z.string().trim().min(40).max(8000)}).strict(),
+ z.object({type:z.literal('submit-evidence'),kind:z.enum(['task','lab','exercise']),id:z.string().min(1).max(80),text:z.string().trim().min(40).max(8000)}).strict(),
  z.object({type:z.literal('note'),week:z.number().int().min(1).max(24),text:z.string().max(8000)}).strict(),
  z.object({type:z.literal('scrum-intro')}).strict()
 ]);

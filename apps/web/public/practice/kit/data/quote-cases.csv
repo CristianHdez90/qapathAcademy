@@ -1,0 +1,9 @@
+productId,quantity,coupon,shipping,expectedStatus,expectedTotal
+basic,1,,pickup,200,35000
+basic,3,QA10,delivery,200,104500
+pro,2,QA10,pickup,200,135000
+basic,0,,pickup,422,
+missing,1,,pickup,404,
+sold-out,1,,pickup,409,
+basic,2,QA10,pickup,422,
+basic,1,NOPE,pickup,422,

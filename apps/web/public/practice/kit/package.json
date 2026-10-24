@@ -1,0 +1,5 @@
+{
+ "name":"qapath-practice-starter","private":true,"type":"module",
+ "scripts":{"test:unit":"node --test pricing.test.mjs","test":"playwright test","test:smoke":"playwright test --grep @smoke","test:api":"playwright test tests/api.spec.ts","report":"playwright show-report"},
+ "devDependencies":{"@playwright/test":"1.56.0","typescript":"5.9.3"}
+}

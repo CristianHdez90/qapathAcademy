@@ -18,6 +18,7 @@ import {PostgresAdministrationAdapter} from './infrastructure/adapters/postgres-
 import {CryptoAuthAdapter,SecureTokensAdapter} from './infrastructure/adapters/crypto-auth.adapter';
 import {DatabaseProvider} from './infrastructure/database.provider';
 import {CONTENT_REPOSITORY,IDENTITY_REPOSITORY,PROGRESS_REPOSITORY,USE_CASES,ADMIN_REPOSITORY} from './application/tokens';
+import {PracticeController} from './presentation/controllers/practice.controller';
 import {HealthController} from './presentation/controllers/health.controller';
 import {CatalogController} from './presentation/controllers/catalog.controller';
 import {QuizController} from './presentation/controllers/quiz.controller';
@@ -33,7 +34,7 @@ import {GeminiQaAdapter} from './infrastructure/adapters/gemini-qa.adapter';
 import {QaQuotaAdapter} from './infrastructure/adapters/qa-quota.adapter';
 import {QaConversationsAdapter} from './infrastructure/adapters/qa-conversations.adapter';
 @Module({
- controllers:[HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
+ controllers:[PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
  providers:[
   GeminiQaAdapter,QaQuotaAdapter,QaConversationsAdapter,
   DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,

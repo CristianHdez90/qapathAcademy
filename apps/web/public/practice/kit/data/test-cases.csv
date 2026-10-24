@@ -1,0 +1,3 @@
+id,requirement,preconditions,input,expected,observed,status,evidence
+TC-01,Total básico,Defecto desactivado,basic x 1,35000 COP,,,
+TC-02,Descuento sin envío,Cupón QA10,basic x 3 + delivery,104500 COP,,,

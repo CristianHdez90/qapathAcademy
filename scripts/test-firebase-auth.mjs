@@ -30,9 +30,9 @@ try{
  run('pnpm',['build'],{NODE_ENV:'production'});
  // Native Windows browsers share focus; reading tracking requires the active window.
  const workers=process.platform==='win32'?1:2;
- const specs=process.argv.includes('--assistant-only')?'tests/e2e/learning-ux.spec.ts tests/e2e/qa-history.spec.ts':'tests/e2e/academy.spec.ts tests/e2e/firebase-auth.spec.ts tests/e2e/learning-ux.spec.ts tests/e2e/qa-history.spec.ts';
+ const specs=process.argv.includes('--practice-only')?'tests/e2e/practical-exercises.spec.ts':process.argv.includes('--assistant-only')?'tests/e2e/learning-ux.spec.ts tests/e2e/qa-history.spec.ts':'tests/e2e/academy.spec.ts tests/e2e/firebase-auth.spec.ts tests/e2e/learning-ux.spec.ts tests/e2e/qa-history.spec.ts tests/e2e/practical-exercises.spec.ts';
  run('npx',['--yes','firebase-tools@15.34.1','emulators:exec','--config','firebase/auth-emulator.json','--only','auth','--project','demo-qapath-auth',
-  `node --test tests/firebase-auth-emulator.integration.mjs tests/qa-conversations.integration.mjs && pnpm --filter @qapath/web exec playwright test ${specs} --workers ${workers} --retries 0`],{NODE_ENV:'test'});
+  `node --test tests/firebase-auth-emulator.integration.mjs tests/qa-conversations.integration.mjs tests/practical-persistence.integration.mjs && pnpm --filter @qapath/web exec playwright test ${specs} --workers ${workers} --retries 0`],{NODE_ENV:'test'});
 }finally{
  if(created&&/^qapath_firebase_test_[0-9a-f]{12}$/.test(database))await admin.query(`DROP DATABASE "${database}" WITH (FORCE)`);
  await admin.end();
