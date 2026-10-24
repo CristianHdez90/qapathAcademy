@@ -10,7 +10,7 @@ function load(path,globals={},overrides={}){
  const source=readFileSync(new URL('../apps/api/src/'+path,import.meta.url),'utf8');
  const output=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.CommonJS,experimentalDecorators:true}}).outputText;
  const module={exports:{}};
- new Script(output).runInContext(createContext({module,exports:module.exports,require:name=>overrides[name]??apiRequire(name),AbortSignal,...globals}));
+ new Script(output).runInContext(createContext({module,exports:module.exports,require:name=>overrides[name]??apiRequire(name),AbortSignal,console:{warn:()=>{}},...globals}));
  return module.exports;
 }
 const domain=load('application/qa-assistant.ts');
@@ -76,4 +76,29 @@ test('quota persists reservations transactionally and rolls back rejected reques
   assert.ok(calls[1].text.includes('pg_advisory_xact_lock'));
   assert.equal(released,true);
  }
+});
+
+test('Gemini diagnostics distinguish key restrictions, missing model, disabled API and unsupported generation parameters',async()=>{
+ for(const [status,error,code] of [
+  [403,{status:'PERMISSION_DENIED',details:[{reason:'API_KEY_SERVICE_BLOCKED'}]},'API_KEY_SERVICE_BLOCKED'],
+  [400,{status:'INVALID_ARGUMENT',message:'API key not valid. PRIVATE_KEY'},'API_KEY_INVALID'],
+  [403,{message:'Your API key was reported as leaked. PRIVATE_KEY'},'API_KEY_BLOCKED'],
+  [404,{status:'NOT_FOUND',message:'PRIVATE_MODEL_DATA'},'NOT_FOUND'],
+  [403,{details:[{reason:'SERVICE_DISABLED'}]},'SERVICE_DISABLED'],
+  [400,{message:'thinkingBudget is not supported PRIVATE_INPUT'},'GENERATION_CONFIG_UNSUPPORTED'],
+  [403,{message:'PRIVATE_DATA',details:[{reason:'PRIVATE_SECRET'}]},'HTTP_403'],
+ ]){
+  const adapter=ai(async()=>({ok:false,status,json:async()=>({error})}));
+  await assert.rejects(adapter.answer(input),e=>e.status===503&&e.message.includes(`[${code}]`)&&!e.message.includes('PRIVATE'));
+ }
+});
+
+test('Gemini diagnostic logs contain only an enumerated code and HTTP status',async()=>{
+ const logs=[];
+ const {GeminiQaAdapter}=load('infrastructure/adapters/gemini-qa.adapter.ts',{
+  process:{env:{QA_AI_ENABLED:'true',GEMINI_API_KEY:'PRIVATE_KEY'}},console:{warn:m=>logs.push(m)},
+  fetch:async()=>({ok:false,status:403,json:async()=>({error:{status:'PRIVATE_STATUS',message:'PRIVATE_PROMPT PRIVATE_KEY',details:[{reason:'PRIVATE_REASON'}]}})}),
+ },{'../../application/qa-assistant':domain});
+ await assert.rejects(new GeminiQaAdapter().answer(input));
+ assert.deepEqual(logs,['QaAI operation=generateContent status=403 code=HTTP_403']);
 });
