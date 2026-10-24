@@ -20,3 +20,28 @@ test('marca lecturas y mantiene progreso en el navegador',async({page})=>{
  const reading=page.getByLabel('He estudiado esta clase');await reading.check();
  await page.reload();await expect(reading).toBeChecked();
 });
+
+test('espera la sesión antes de permitir cambios de progreso',async({page})=>{
+ let releaseSession!:()=>void;
+ const sessionPending=new Promise<void>(resolve=>{releaseSession=resolve});
+ await page.route('**/api/v1/auth/me',async route=>{
+  await sessionPending;
+  await route.fulfill({status:401,json:{message:'No autenticado'}});
+ });
+ try {
+  await page.goto('/study/1');
+  const reading=page.getByLabel('He estudiado esta clase');
+  await expect(reading).toBeDisabled();
+  releaseSession();
+  await reading.check();
+  await expect.poll(()=>page.evaluate(()=>{
+   const saved=JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}');
+   return saved.read;
+  })).toEqual([1]);
+  await page.reload();
+  await expect(reading).toBeEnabled();
+  await expect(reading).toBeChecked();
+ } finally {
+  releaseSession();
+ }
+});

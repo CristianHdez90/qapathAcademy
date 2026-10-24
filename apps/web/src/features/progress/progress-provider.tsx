@@ -43,6 +43,7 @@ function SessionProgressProvider({children}:{children:ReactNode}){
   return()=>{alive=false;if(notesTimer.current)clearTimeout(notesTimer.current)};
  },[loading,userId,role,repository]);
  const send=useCallback((cmd:ProgressCommand)=>{
+  if(!ready)return;
   if(user?.role!=='STUDENT'){
    if(user)return;
    switch(cmd.type){
@@ -60,7 +61,7 @@ function SessionProgressProvider({children}:{children:ReactNode}){
    const saved=await remoteProgress('PATCH',cmd);
    setState(old=>cmd.type==='note'&&old.notes[String(cmd.week)]!==cmd.text?{...saved,notes:{...saved.notes,[String(cmd.week)]:old.notes[String(cmd.week)]}}:saved);
   }).catch(e=>setSyncError(e instanceof Error?e.message:'Error de sincronización'));
- },[user,command]);
+ },[user,command,ready]);
  const toggle=useCallback((key:Collection,value:number|string)=>send({type:'toggle',key,value} as ProgressCommand),[send]);
  const saveNote=useCallback((week:number,note:string)=>{
   if(user?.role!=='STUDENT'){send({type:'note',week,text:note});return;}

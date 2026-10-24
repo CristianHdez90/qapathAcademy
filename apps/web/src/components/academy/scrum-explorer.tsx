@@ -5,7 +5,7 @@ import {Quiz} from './quiz';
 import {useProgress} from '@/features/progress/progress-provider';
 import type {ScrumData} from '@qapath/contracts';
 export function ScrumExplorer({data}:{data:ScrumData}){
- const [role,setRole]=useState('qa');const [step,setStep]=useState(0);const [event,setEvent]=useState('planning');const {state,toggleScrumIntro}=useProgress();
+ const [role,setRole]=useState('qa');const [step,setStep]=useState(0);const [event,setEvent]=useState('planning');const {state,ready,toggleScrumIntro}=useProgress();
  const activeRole=data.roles.find(r=>r.id===role)||data.roles[0];const activeStep=data.steps[step];const activeEvent=data.events.find(e=>e.id===event)||data.events[0];
  return <><div className="page-heading"><div><p className="eyebrow">CLASE 00 · EL CONTEXTO DEL QA</p><h1>Así trabaja un equipo Scrum</h1><p className="page-description">Descubre cómo personas de distintas especialidades convierten una necesidad del usuario en un incremento usable y verificado.</p></div><span className="pill">Introducción · 60–90 min</span></div>
  <div className="scrum-callout"><strong>SCRUM ≠ JERARQUÍA</strong><p>La Guía Scrum establece tres responsabilidades: Product Owner, Developers y Scrum Master. QA y desarrollo son especialidades que pueden formar parte de Developers; los usuarios finales aportan contexto y feedback.</p></div>
@@ -19,6 +19,6 @@ export function ScrumExplorer({data}:{data:ScrumData}){
  <div className="section-head compact"><div><p className="eyebrow">03 / INSPECCIÓN Y ADAPTACIÓN</p><h2>Los eventos de Scrum</h2><p>Aprende cómo el equipo organiza, inspecciona y mejora el trabajo durante cada Sprint.</p></div></div>
  <div className="role-tabs">{data.events.map(e=><button key={e.id} className={event===e.id?'role-tab current':'role-tab'} onClick={()=>setEvent(e.id)}>{e.title}</button>)}</div><div className="event-panel"><div><p className="eyebrow">EVENTO SCRUM</p><h3>{activeEvent.title}</h3><p>{activeEvent.detail}</p></div><div className="event-meta"><span>TIEMPO</span><b>{activeEvent.time}</b><span>PARTICIPAN</span><b>{activeEvent.people}</b><span>PROPÓSITO</span><b>{activeEvent.goal}</b></div></div>
  <Quiz moduleId="scrum" questions={data.questions}/>
- <div className="complete-callout"><div><h3>¿Terminaste esta clase introductoria?</h3><p>Registra tu avance para continuar con Fundamentos del Testing.</p></div><label><input type="checkbox" checked={state.scrumIntro} onChange={toggleScrumIntro}/> {state.scrumIntro?'✓ Estudiada':'Marcar como estudiada'}</label></div>
+ <div className="complete-callout"><div><h3>¿Terminaste esta clase introductoria?</h3><p>Registra tu avance para continuar con Fundamentos del Testing.</p></div><label><input type="checkbox" disabled={!ready} checked={state.scrumIntro} onChange={toggleScrumIntro}/> {state.scrumIntro?'✓ Estudiada':'Marcar como estudiada'}</label></div>
  </>;
 }
