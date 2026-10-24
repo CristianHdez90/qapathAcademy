@@ -5,6 +5,7 @@ import {usePathname} from 'next/navigation';
 import {useEffect,useRef,useState} from 'react';
 import {useAuth,AuthApiError} from '@/features/auth/auth-provider';
 import './qa-assistant.css';
+import {studySuggestions} from './study-suggestions';
 
 type Message={role:'user'|'assistant';content:string};
 const suggestions=[['Casos de prueba','Ayúdame a diseñar casos de prueba para un formulario de inicio de sesión.'],['Reportar un bug','Enséñame a escribir un reporte de bug claro, con un ejemplo.'],['Playwright','Explícame cómo automatizar una prueba de login con Playwright y TypeScript.'],['Pruebas de API','¿Qué debo validar al probar una API REST?']];
@@ -64,6 +65,7 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
     <div className="qa-intro"><span className="qa-intro-label">ENCUENTRA EL SIGUIENTE PASO</span><h3>Pequeña aliada.<br/>Grandes pruebas.</h3><p>Diseñemos mejores pruebas, investiguemos bugs y automaticemos con criterio.</p></div>
     {!signedIn?<div className="qa-signin"><p>{authLoading?'Comprobando tu sesión…':'Inicia sesión para conversar conmigo y practicar QA.'}</p>{!authLoading&&<Link className="button button-primary" href="/login" onClick={close}>Iniciar sesión ↗</Link>}</div>:<>
      {messages.length===0&&<div className="qa-suggestions">{suggestions.map(([label,prompt])=><button key={label} onClick={()=>void send(prompt)} disabled={busy}>{label}<span aria-hidden="true">↗</span></button>)}</div>}
+     <details className="qa-study-topics"><summary>Explorar módulos y temas de estudio</summary><div>{studySuggestions.map(group=><details key={group.title} className="qa-study-group"><summary>{group.title}</summary><div className="qa-suggestions">{group.questions.map(([label,prompt])=><button key={label} type="button" disabled={busy} onClick={()=>void send(prompt)}>{label}<span aria-hidden="true">↗</span></button>)}</div></details>)}</div></details>
      <div className="qa-transcript" role="log" aria-label="Conversación con Lía QA" aria-live="polite" aria-relevant="additions">{messages.map((message,i)=><article className={`qa-message qa-message-${message.role}`} key={i}><b>{message.role==='user'?'Tú':'Lía QA'}</b><div><Answer text={message.content}/></div></article>)}</div>
      {busy&&<p className="qa-thinking" role="status"><span/> Preparando tu respuesta…</p>}
      {error&&<p className="qa-chat-error" role="alert">{error}</p>}
