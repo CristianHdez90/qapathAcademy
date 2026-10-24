@@ -31,6 +31,7 @@ test('espera la sesión antes de permitir cambios de progreso',async({page})=>{
  });
  try {
   await page.goto('/study/1');
+  await page.locator('#deliverables > summary').click();
   await expect(page.getByRole('button',{name:'Enviar evidencia'}).first()).toBeDisabled();
   expect(await page.locator('[data-reading-recorded="true"]').count()).toBe(0);
   releaseSession();

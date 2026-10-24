@@ -6,6 +6,7 @@ import {useEffect,useRef,useState} from 'react';
 import {useAuth,AuthApiError} from '@/features/auth/auth-provider';
 import './qa-assistant.css';
 import {studySuggestions} from './study-suggestions';
+import {ASK_LIA_EVENT} from './ask-lia';
 
 type Message={role:'user'|'assistant';content:string};
 const suggestions=[['Casos de prueba','Ayúdame a diseñar casos de prueba para un formulario de inicio de sesión.'],['Reportar un bug','Enséñame a escribir un reporte de bug claro, con un ejemplo.'],['Playwright','Explícame cómo automatizar una prueba de login con Playwright y TypeScript.'],['Pruebas de API','¿Qué debo validar al probar una API REST?']];
@@ -32,8 +33,29 @@ export function QaAssistant(){
 function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:boolean}){
  const path=usePathname();
  const [open,setOpen]=useState(false),[messages,setMessages]=useState<Message[]>([]),[draft,setDraft]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
+ const [obscuresFocus,setObscuresFocus]=useState(false);
  const trigger=useRef<HTMLButtonElement>(null),input=useRef<HTMLTextAreaElement>(null),bottom=useRef<HTMLDivElement>(null),pending=useRef<AbortController|null>(null);
- const close=()=>{setOpen(false);trigger.current?.focus()};
+ const returnFocus=useRef<HTMLElement|null>(null);
+ const close=()=>{setOpen(false);(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus()};
+ useEffect(()=>{
+  const inspect=()=>{
+   const focused=document.activeElement,button=trigger.current;
+   if(!(focused instanceof HTMLElement)||!button||focused.closest('.qa-helper')){setObscuresFocus(false);return;}
+   const a=focused.getBoundingClientRect(),b=button.getBoundingClientRect();
+   setObscuresFocus(a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top);
+  };
+  document.addEventListener('focusin',inspect);window.addEventListener('resize',inspect);
+  return()=>{document.removeEventListener('focusin',inspect);window.removeEventListener('resize',inspect)};
+ },[]);
+ useEffect(()=>{
+  const ask=(event:Event)=>{
+   const prompt=(event as CustomEvent<{prompt?:unknown}>).detail?.prompt;
+   if(typeof prompt!=='string'||!prompt.trim()||prompt.length>2000)return;
+   returnFocus.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
+   setDraft(prompt);setOpen(true);requestAnimationFrame(()=>input.current?.focus());
+  };
+  window.addEventListener(ASK_LIA_EVENT,ask);return()=>window.removeEventListener(ASK_LIA_EVENT,ask);
+ },[]);
  useEffect(()=>()=>pending.current?.abort(),[]);
  useEffect(()=>{if(open&&signedIn)input.current?.focus()},[open,signedIn]);
  useEffect(()=>{if(open)bottom.current?.scrollIntoView({block:'nearest'})},[messages,busy,open,error]);
@@ -58,8 +80,8 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
    }
   }finally{clearTimeout(timer);if(pending.current===controller){pending.current=null;setBusy(false)}}
  }
- return <div className="qa-helper">
-  {open&&<section className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();close()}}}>
+ return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')}>
+  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="Lía QA, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();close()}}}>
    <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>Lía QA <span>IA</span></h2><p>Tu mentora de QA Engineer</p></div><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente">×</button></header>
    <div className="qa-chat-body">
     <div className="qa-intro"><span className="qa-intro-label">ENCUENTRA EL SIGUIENTE PASO</span><h3>Pequeña aliada.<br/>Grandes pruebas.</h3><p>Diseñemos mejores pruebas, investiguemos bugs y automaticemos con criterio.</p></div>
@@ -78,6 +100,6 @@ function AssistantChat({signedIn,authLoading}:{signedIn:boolean;authLoading:bool
     <small>Tu consulta se envía a Google Gemini.</small>
    </form>}
   </section>}
-  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente Lía QA':'Abrir asistente Lía QA'} aria-expanded={open} onClick={()=>open?close():setOpen(true)}><Ladybug/></button>
+  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente Lía QA':'Abrir asistente Lía QA'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>
  </div>;
 }

@@ -29,13 +29,14 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  const content=createRequire(resolve(__dirname,'../../../../package.json'));
  const catalog=content('./libs/content/src/data/catalog.json') as {weeks:{id:number;tasks:string[]}[];quizzes:Record<string,{correct:number}[]>};
  const guides=content('./libs/content/src/data/study-guides.json') as Record<string,{question:{correct:number}}>;
- const progress=async()=>(await (await page.request.get('/api/v1/me/progress')).json()).data;
+ const progress=async()=>(await (await page.request.get('/api/v1/me/progress',{maxRetries:1})).json()).data;
  expect((await progress()).weeks).toEqual([]);
  expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'toggle',key:'weeks',value:1}})).status()).toBe(400);
  const evidence='Documenté los escenarios positivos y negativos, resultados observados y riesgos con datos ficticios.';
  const tasks=catalog.weeks.find(w=>w.id===1)!.tasks;
+ await page.locator('#deliverables > summary').click();
  for(const title of tasks){
-  const card=page.locator('.study-aside .learning-evidence').filter({has:page.getByText(title,{exact:true})});
+  const card=page.locator('#deliverables .learning-evidence').filter({has:page.getByText(title,{exact:true})});
   await card.getByRole('textbox').fill(evidence);await card.getByRole('button',{name:'Enviar evidencia'}).click();
   await expect(card.getByText(/Evidencia entregada/)).toBeVisible();
  }

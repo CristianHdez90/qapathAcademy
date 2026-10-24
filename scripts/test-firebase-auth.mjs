@@ -29,7 +29,7 @@ try{
  run('pnpm',['db:migrate']);
  run('pnpm',['build'],{NODE_ENV:'production'});
  run('npx',['--yes','firebase-tools@15.34.1','emulators:exec','--config','firebase/auth-emulator.json','--only','auth','--project','demo-qapath-auth',
-  'node --test tests/firebase-auth-emulator.integration.mjs && pnpm --filter @qapath/web exec playwright test tests/e2e/academy.spec.ts tests/e2e/firebase-auth.spec.ts --workers 2 --retries 0'],{NODE_ENV:'test'});
+  'node --test tests/firebase-auth-emulator.integration.mjs && pnpm --filter @qapath/web exec playwright test tests/e2e/academy.spec.ts tests/e2e/firebase-auth.spec.ts tests/e2e/learning-ux.spec.ts --workers 2 --retries 0'],{NODE_ENV:'test'});
 }finally{
  if(created&&/^qapath_firebase_test_[0-9a-f]{12}$/.test(database))await admin.query(`DROP DATABASE "${database}" WITH (FORCE)`);
  await admin.end();
