@@ -1,0 +1,7 @@
+Bug,Estado anterior,Estado nuevo,Responsable,Fecha,Acción o motivo,Evidencia,Caso asociado
+BUG-01,,Nuevo,,,Descripción reproducible y evidencia del fallo,,TC-02
+BUG-01,Nuevo,En análisis,,,Confirmar reproducibilidad y acordar severidad y prioridad,,TC-02
+BUG-01,En análisis,Asignado,,,Asignar responsable de la corrección,,TC-02
+BUG-01,Asignado,En corrección,,,Implementar la corrección,,TC-02
+BUG-01,En corrección,Listo para retest,,,Identificar versión corregida,,TC-02
+BUG-01,Listo para retest,Cerrado o Reabierto,,,Cerrar si pasa o reabrir con evidencia si persiste; registrar solo el estado real,,TC-02

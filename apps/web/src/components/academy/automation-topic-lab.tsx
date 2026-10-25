@@ -1,0 +1,27 @@
+'use client';
+import {useRef,useState} from 'react';
+import {basicScenario,runBrowserScenario} from '@/features/practice/runtime/browser-scenario';
+import type {PracticeRun} from './practice-execution';
+export function AutomationTopicLab({week,initial,onResult}:{week:number;initial?:PracticeRun;onResult:(run:PracticeRun)=>void}){
+ let prior:Record<string,unknown>={};try{prior=JSON.parse(initial?.mode==='topic'?initial.source:'{}')}catch{}
+ const frame=useRef<HTMLIFrameElement>(null);const [kind,setKind]=useState(typeof prior.kind==='string'?prior.kind:'label'),[name,setName]=useState(typeof prior.name==='string'?prior.name:'Cantidad'),[count,setCount]=useState(typeof prior.count==='string'?prior.count:'1'),[output,setOutput]=useState(''),[busy,setBusy]=useState(false);
+ const [datasets,setDatasets]=useState(week===18&&initial?.mode==='topic'?initial.source:'[{"quantity":"1","coupon":"","shipping":"pickup","expected":"35000 COP"},{"quantity":"3","coupon":"QA10","shipping":"delivery","expected":"104500 COP"}]');
+ const execute=async()=>{setBusy(true);let text='',ok=true;
+  try{const doc=frame.current?.contentDocument;if(!doc?.querySelector('[aria-label="Cotizador QA Store"]'))throw Error('Espera a que cargue la aplicación de prueba.');
+   if(week===14){const scope=doc.querySelector('[aria-label="Cotizador QA Store"]')!;
+    const matches=kind==='css'?Array.from(scope.querySelectorAll(name)):Array.from(scope.querySelectorAll(kind==='role'?'button':'input,select')).filter(el=>kind==='role'?el.textContent?.trim()===name:(el.getAttribute('aria-label')||el.closest('label')?.textContent?.trim())===name);
+    ok=matches.length===Number(count);text=`Estrategia: ${kind}\nValor: ${name}\nCoincidencias esperadas: ${count}\nCoincidencias obtenidas: ${matches.length}\n${matches.length===1?'Locator inequívoco en el cotizador.':matches.length===0?'El locator no encuentra el control. Revisa nombre, rol o alcance.':'Locator ambiguo: acota al formulario o al control correcto.'}\n${matches.map(el=>el.tagName+' · '+el.outerHTML.slice(0,250)).join('\n')}`;
+   }else{const parsed:unknown=JSON.parse(datasets);if(!Array.isArray(parsed)||parsed.length<2||parsed.length>4)throw Error('Introduce de 2 a 4 conjuntos de datos.');const lines:string[]=[];
+    for(const [i,item] of parsed.entries()){
+     if(!item||!['quantity','coupon','shipping','expected'].every(k=>typeof item[k]==='string')||!['pickup','delivery'].includes(item.shipping))throw Error('Cada conjunto requiere quantity, coupon, shipping y expected de texto.');
+     if(!frame.current)throw Error('Vista no disponible.');
+     const view=frame.current;await new Promise<void>((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('La nueva vista no cargó.')),10000);view.onload=()=>{clearTimeout(timeout);resolve()};view.src='/practice?dataset='+i+'&run='+Date.now()});
+     const deadline=Date.now()+5000;while(!view.contentDocument?.querySelector('[aria-label="Cotizador QA Store"]')&&Date.now()<deadline)await new Promise(r=>setTimeout(r,50));
+     const result=await runBrowserScenario(view,{...basicScenario,...item});if(!result.ok)ok=false;lines.push(`Dataset ${i+1} · formulario nuevo · ${result.ok?'Aprobado':'Fallido'}\n${result.output}`);
+    }text=lines.join('\n\n')+'\nCada conjunto se ejecutó en una vista nueva, sin heredar los campos del anterior. Este laboratorio comprueba datos y aislamiento; las fixtures de Playwright se implementan con el kit.';
+   }
+  }catch(error){ok=false;text=error instanceof Error?error.message:'No se pudo ejecutar la actividad.'}
+  setOutput(text);setBusy(false);onResult({mode:'topic',source:week===14?JSON.stringify({kind,name,count}):datasets,config:basicScenario,endpoint:'',method:'',expectedStatus:0,at:new Date().toISOString(),ok,output:text.slice(0,2500)});
+ };
+ return <div className="execution-workspace"><h2>{week===14?'Locators · inspecciona controles reales':'Fixtures · ejecuta datos aislados'}</h2><p>{week===14?'Configura una estrategia y comprueba cuántos controles encuentra dentro del cotizador. Compara un locator semántico con CSS.':'Edita los conjuntos de datos; cada uno se ejecuta en una vista nueva de la aplicación. Compara sus resultados para detectar contaminación de estado.'}</p>{week===14?<div className="execution-controls"><label>Estrategia<select aria-label="Estrategia del locator" value={kind} onChange={e=>setKind(e.target.value)}><option value="label">Etiqueta</option><option value="role">Rol button y nombre</option><option value="css">Selector CSS</option></select></label><label>Nombre o selector<input aria-label="Nombre del locator" value={name} onChange={e=>setName(e.target.value)}/></label><label>Coincidencias esperadas<input aria-label="Coincidencias esperadas" type="number" min={0} value={count} onChange={e=>setCount(e.target.value)}/></label></div>:<label>Conjuntos de datos JSON<textarea className="execution-editor" aria-label="Datos de las fixtures" maxLength={3000} value={datasets} onChange={e=>setDatasets(e.target.value)}/></label>}<div className="execution-preview"><iframe ref={frame} src="/practice" title="Aplicación para locators y fixtures"/></div><button className="button button-primary" disabled={busy} onClick={()=>void execute()}>{busy?'Ejecutando…':week===14?'Inspeccionar locator':'Ejecutar datasets aislados'}</button>{output&&<pre className="execution-output" aria-label="Resultado de automatización temática">{output}</pre>}</div>;
+}

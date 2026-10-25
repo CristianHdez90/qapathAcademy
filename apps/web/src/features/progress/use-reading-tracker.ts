@@ -13,18 +13,24 @@ export function useReadingTracker(week:number){
  useEffect(()=>{
   if(!ready||!root.current)return;
   if(trackedWeek.current!==week){elapsed.current.clear();queued.current.clear();trackedWeek.current=week;}
-  const visible=new Set<number>(),sent=new Set([...(saved||[]),...queued.current]);
+  const visible=new Set<HTMLElement>(),sent=new Set([...(saved||[]),...queued.current]);
   const observer=new IntersectionObserver(entries=>{for(const entry of entries){
-   const index=Number((entry.target as HTMLElement).dataset.readingSection);
-   if(entry.isIntersecting&&entry.intersectionRatio>=0.15)visible.add(index);else visible.delete(index);
-  }},{threshold:[0,0.15]});
+   const section=entry.target as HTMLElement;
+   if(entry.isIntersecting)visible.add(section);else visible.delete(section);
+  }},{threshold:0});
   root.current.querySelectorAll('[data-reading-section]').forEach(section=>observer.observe(section));
   let last=performance.now();
   const timer=setInterval(()=>{
    const now=performance.now(),delta=Math.min(now-last,500);last=now;
    if(document.visibilityState!=='visible'||!document.hasFocus())return;
-   for(const section of visible){
+   for(const element of visible){
+    const section=Number(element.dataset.readingSection);
     if(sent.has(section))continue;
+    // Long chapters cannot expose 15% of their total height on a small screen.
+    // Measure against the smaller of chapter and viewport, retaining the dwell time.
+    const rect=element.getBoundingClientRect();
+    const shown=Math.max(0,Math.min(rect.bottom,window.innerHeight)-Math.max(rect.top,0));
+    if(rect.width<=0||rect.right<=0||rect.left>=window.innerWidth||shown<Math.min(rect.height,window.innerHeight)*.15)continue;
     const time=(elapsed.current.get(section)||0)+delta;elapsed.current.set(section,time);
     if(time>=READING_SECTION_SECONDS*1000){sent.add(section);queued.current.add(section);void recordLearning({type:'reading-section',week,section});}
    }

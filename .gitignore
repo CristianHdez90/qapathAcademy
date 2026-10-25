@@ -20,6 +20,7 @@ node_modules/
 *.tsbuildinfo
 
 .local-mailbox/
+apps/web/public/practice/runtime/
 **/.local-mailbox/
 
 # Firebase / Google credentials: never version service-account keys

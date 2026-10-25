@@ -4,7 +4,7 @@ import './practical-exercise.css';
 type Product={id:string;name:string;price:number;available:boolean};
 type Quote={subtotal:number;discount:number;shipping:number;total:number};
 const statusCodes=[200,201,202,204,400,401,403,404,409,422,429,500,503];
-export function PracticePlayground({embedded=false}:{embedded?:boolean}){
+export function PracticePlayground({embedded=false,postman=false}:{embedded?:boolean;postman?:boolean}){
  const Title=embedded?'h2':'h1';
  const [products,setProducts]=useState<Product[]>([]),[catalogError,setCatalogError]=useState('');
  const [productId,setProductId]=useState('basic'),[quantity,setQuantity]=useState('1'),[coupon,setCoupon]=useState(''),[shipping,setShipping]=useState('pickup'),[defect,setDefect]=useState(false);
@@ -29,7 +29,7 @@ export function PracticePlayground({embedded=false}:{embedded?:boolean}){
  }
  return <div className="practice-playground"><div className="page-heading"><div><p className="eyebrow">LABORATORIO DE EJECUCIÓN</p><Title>QA Store · entorno de práctica</Title><p className="page-description">Ejecuta escenarios, compara resultados y reúne evidencia desde fundamentos hasta automatización.</p></div></div>
   <p className="practice-banner">Todos los productos, roles y tokens de este entorno son ficticios. Las cotizaciones no crean pedidos, no cobran dinero y no modifican usuarios ni progreso. Los códigos de error del simulador son intencionales.</p>
-  <div className="practice-links"><button type="button" className="button button-primary" onClick={()=>void downloadPostman()}>↓ Colección de Postman</button><a className="button button-outline" href="/practice/qapath-practice-kit.zip" download>↓ Kit completo de prácticas</a></div>
+  <div className="practice-links">{postman&&<button type="button" className="button button-primary" onClick={()=>void downloadPostman()}>↓ Colección de Postman</button>}<a className="button button-outline" href="/practice/qapath-practice-kit.zip" download>↓ Kit completo de prácticas</a></div>
   <div className="practice-grid"><section className="practice-card" aria-label="Cotizador QA Store"><h2>Cotizador para tus pruebas</h2><ul className="practice-rules"><li>Cantidad: entero entre 1 y 5.</li><li>QA10: 10 % de descuento si el subtotal es de al menos 100000 COP.</li><li>Recogida: 0 COP. Envío: 10000 COP. El descuento excluye el envío.</li></ul>
    {catalogError&&<p role="alert" className="feedback bad">{catalogError}</p>}
    <form noValidate className="practice-form" onSubmit={event=>{event.preventDefault();void calculate()}}><label>Producto ficticio<select aria-label="Producto ficticio" value={productId} onChange={e=>setProductId(e.target.value)}>{products.length?products.map(p=><option key={p.id} value={p.id}>{p.name} · {p.price} COP{p.available?'':' · Sin cupos'}</option>):<option value="basic">Curso básico · 35000 COP</option>}</select></label>
@@ -38,7 +38,7 @@ export function PracticePlayground({embedded=false}:{embedded?:boolean}){
    {quoteError&&<p role="alert" className="feedback bad">{quoteError}</p>}
    {quote&&<div role="status"><p>Total mostrado en la interfaz</p><p className="practice-total" data-testid="quote-total">{quote.total-(defect&&quote.shipping===10000&&quote.discount>0?1000:0)} COP</p><details><summary>Ver respuesta real de la API</summary><pre className="code-block">{JSON.stringify(quote,null,2)}</pre></details></div>}
   </section>
-  <section className="practice-card" aria-label="Explorador HTTP"><h2>Explorador HTTP</h2><p>Primero ejecuta aquí; después reproduce la solicitud y sus aserciones en Postman. Un 401 no es lo mismo que un 403.</p>
+  <section className="practice-card" aria-label="Explorador HTTP"><h2>Explorador HTTP</h2><p>{postman?'Primero ejecuta aquí; después reproduce la solicitud y sus aserciones en Postman. Un 401 no es lo mismo que un 403.':'Ejecuta solicitudes controladas y compara el estado, las cabeceras y el cuerpo de la respuesta.'}</p>
    <form className="practice-form" onSubmit={event=>{event.preventDefault();void run()}}><label>Escenario<select aria-label="Escenario" value={mode} onChange={e=>setMode(e.target.value)}><option value="status">Código HTTP controlado</option><option value="access">Autorización ficticia</option></select></label>
     {mode==='status'?<label>Código esperado<select aria-label="Código esperado" value={code} onChange={e=>setCode(e.target.value)}>{statusCodes.map(status=><option key={status} value={status}>{status}</option>)}</select></label>:<><label>Token de demostración<select aria-label="Token de demostración" value={token} onChange={e=>setToken(e.target.value)}><option value="none">Sin token</option><option value="demo-reader">demo-reader (lectura)</option><option value="demo-admin">demo-admin (lectura y escritura)</option></select></label><label>Permiso solicitado<select aria-label="Permiso solicitado" value={scope} onChange={e=>setScope(e.target.value)}><option value="read">read</option><option value="write">write</option></select></label></>}
     <button className="button button-primary" disabled={running}>{running?'Ejecutando…':'Ejecutar solicitud HTTP'}</button></form>

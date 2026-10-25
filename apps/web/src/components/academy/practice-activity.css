@@ -14,3 +14,15 @@
 .activity-section summary{cursor:pointer;color:#8ce3cb;line-height:1.7}
 .activity-lab[open]>summary{margin-bottom:24px}
 .activity-saved{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;max-height:360px;overflow:auto;line-height:1.8}
+.laboratory-evidence{margin-top:24px;padding-top:20px;border-top:1px solid #36556b}
+.laboratory-evidence>p{color:#bcd0e2;font-size:14px;line-height:1.8}
+.case-matrix{margin-top:24px;padding-top:20px;border-top:1px solid #36556b}
+.case-matrix-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin:24px 0}
+.case-matrix fieldset{min-width:0;margin:0;padding:16px;border:1px solid #42637a;border-radius:10px}
+.case-matrix legend{padding:0 8px;color:#8ce3cb;font-weight:700}
+.case-matrix label{display:grid;gap:8px;margin:14px 0;color:#dbeaf5;font-size:14px}
+.case-matrix textarea,.case-matrix select{width:100%;box-sizing:border-box;min-width:0;padding:10px;color:#dfebf8;background:#0b192c;border:1px solid #42637a;border-radius:8px;font:inherit}
+.case-matrix textarea{min-height:75px;resize:vertical}
+.case-matrix details p{font-size:14px;line-height:1.8;color:#bcd0e2}
+.practice-files li p{margin:4px 0 16px}
+@media(max-width:650px){.case-matrix-cards{grid-template-columns:minmax(0,1fr)}}

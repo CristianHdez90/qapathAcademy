@@ -8,7 +8,7 @@ test('lesson opens its specific activity and preserves week-specific evidence',a
  await page.goto('/study/1#practical-exercise');
  await expect(page.getByRole('heading',{name:'Mentalidad QA y ciclo de vida del software',exact:true})).toBeVisible();
  await expect(page.getByRole('link',{name:'Abrir actividad de la semana 1',exact:false})).toHaveAttribute('href','/practice/1');
- await page.goto('/practice/1');
+ await page.goto('/practice/1');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
  await expect(page.getByRole('heading',{name:'Escenarios Gherkin y registro de ejecución'})).toBeVisible();
  await page.getByLabel('Escenarios de prueba · Given / When / Then',{exact:true}).fill('Scenario: Cotización básica\nGiven cantidad 1 sin cupón\nWhen solicito cotizar\nThen el total es 35000 COP');
  await page.getByLabel('Resultado esperado por escenario',{exact:true}).fill('Para cantidad 1 con recogida, total esperado de 35000 COP.');
@@ -17,7 +17,7 @@ test('lesson opens its specific activity and preserves week-specific evidence',a
  await page.getByRole('button',{name:'Guardar evidencia de esta actividad',exact:true}).click();
  await expect(page.getByText('✓ Guardado en este navegador',{exact:true})).toBeVisible();
  await page.reload();await expect(page.getByLabel('Resultado obtenido (observado), estado, fecha y evidencia',{exact:true})).toHaveValue(observed);
- await page.goto('/practice/5');await expect(page.getByRole('heading',{name:'Reporte de bug reproducible',exact:true})).toBeVisible();
+ await page.goto('/practice/5');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();await expect(page.getByRole('heading',{name:'Reporte de bug reproducible',exact:true})).toBeVisible();
  await expect(page.getByLabel('Título y descripción del error',{exact:true})).toHaveValue('');
  await expect(page.getByLabel('Resultado esperado',{exact:true})).toBeVisible();await expect(page.getByLabel('Resultado obtenido (observado)',{exact:true})).toBeVisible();
  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}'));
@@ -25,7 +25,7 @@ test('lesson opens its specific activity and preserves week-specific evidence',a
 });
 
 test('SQL and delivery activities have their own tools, and mobile form fits',async({page},testInfo)=>{
- await page.goto('/practice/8');
+ await page.goto('/practice/8');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
  await expect(page.getByRole('heading',{name:'Consultas SQL y entrega con Git',exact:true})).toBeVisible();
  await expect(page.getByLabel('Consultas SQL ejecutadas en la base local de práctica',{exact:true})).toBeVisible();
  await expect(page.getByRole('region',{name:'Cotizador QA Store'})).toHaveCount(0);
@@ -33,7 +33,7 @@ test('SQL and delivery activities have their own tools, and mobile form fits',as
  await page.getByRole('heading',{name:'Consultas SQL y entrega con Git',exact:true}).scrollIntoViewIfNeeded();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:testInfo.outputPath('practice-sql-mobile.png')});
- await page.goto('/practice/24');await expect(page.getByRole('heading',{name:'Entrega profesional y demo',exact:true})).toBeVisible();
+ await page.goto('/practice/24');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();await expect(page.getByRole('heading',{name:'Entrega profesional y demo',exact:true})).toBeVisible();
  const response=await page.goto('/practice/25');expect(response?.status()).toBe(404);
 });
 
@@ -42,4 +42,41 @@ test('all 24 activity routes expose the matching workspace',async({request})=>{
   const response=await request.get(`/practice/${week}`);expect(response.status(),`week ${week}`).toBe(200);
   expect(await response.text()).toContain(activityProfiles[week].workspace);
  }
+});
+
+test('case matrix saves with its activity and exports expected and observed separately',async({page})=>{
+ await page.goto('/practice/1');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
+ await page.getByLabel('Caso 1 · Título',{exact:true}).fill('TC-01 Cotización con recogida');
+ await page.getByLabel('Caso 1 · Precondiciones',{exact:true}).fill('Producto básico disponible; defecto desactivado.');
+ await page.getByLabel('Caso 1 · Pasos · Given / When / Then',{exact:true}).fill('Given cantidad 1; When cotizo; Then total 35000 COP.');
+ await page.getByLabel('Caso 1 · Resultado esperado',{exact:true}).fill('35000 COP');
+ await page.getByLabel('Caso 1 · Resultado obtenido (observado)',{exact:true}).fill('35000 COP observado al ejecutar en entorno local.');
+ await page.getByLabel('Caso 1 · Estado',{exact:true}).selectOption('Aprobado');
+ await page.getByRole('button',{name:'Guardar evidencia de esta actividad',exact:true}).click();
+ await expect(page.getByText('✓ Guardado en este navegador',{exact:true})).toBeVisible();
+ await page.reload();await expect(page.getByLabel('Caso 1 · Resultado esperado',{exact:true})).toHaveValue('35000 COP');
+ await expect(page.getByLabel('Caso 1 · Estado',{exact:true})).toHaveValue('Aprobado');
+ const pending=page.waitForEvent('download');await page.getByRole('button',{name:'Descargar matriz CSV',exact:true}).click();
+ expect((await pending).suggestedFilename()).toBe('matriz-casos-ejecucion.csv');
+ await page.setViewportSize({width:320,height:740});await page.getByLabel('Caso 1 · Título',{exact:true}).scrollIntoViewIfNeeded();
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await page.goto('/practice/2');await expect(page.getByLabel('Caso 1 · Título',{exact:true})).toHaveValue('');
+});
+
+test('Postman, SQL and first Playwright file remain available in the matching activity',async({page,request})=>{
+ for(const [week,label,path] of [[7,'Colección Postman conservada','/practice/kit/qapath.postman_collection.json'],[8,'SQL ejecutable Q1–Q9','/practice/kit/data/training.sql'],[13,'Primer test Playwright sin abstracciones','/practice/kit/tests/first-quote.spec.ts']] as const){
+  await page.goto(`/practice/${week}`);await expect(page.getByRole('link',{name:label,exact:false})).toHaveAttribute('href',path);
+  const response=await request.get(path);expect(response.status()).toBe(200);
+ }
+});
+
+test('Postman practice is only shown in the tools module',async({page})=>{
+ for(const week of [1,4,19,23,24]){
+  await page.goto(`/practice/${week}`);
+  await expect(page.locator('body')).not.toContainText('Postman');
+  await expect(page.getByRole('button',{name:'Colección de Postman',exact:false})).toHaveCount(0);
+ }
+ await page.goto('/practice/7');
+ await expect(page.locator('.activity-lab')).toHaveAttribute('open','');
+ await expect(page.getByRole('button',{name:'Colección de Postman',exact:false})).toBeVisible();
 });

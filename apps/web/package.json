@@ -3,30 +3,33 @@
   "private": true,
   "version": "6.0.0",
   "scripts": {
-    "dev": "next dev --port 3000",
-    "build": "next build",
+    "dev": "node scripts/prepare-practice-runtime.mjs && next dev --port 3000",
+    "build": "node scripts/prepare-practice-runtime.mjs && next build",
     "start": "next start --port 3000",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "next": "^16.3.6",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "@electric-sql/pglite": "^0.5.11",
+    "@isomorphic-git/lightning-fs": "^4.10.3",
     "@qapath/contracts": "workspace:*",
     "@qapath/progress": "workspace:*",
-    "qrcode.react": "^4.2.0"
+    "isomorphic-git": "^1.44.4",
+    "next": "^16.3.6",
+    "qrcode.react": "^4.2.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22.15.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
-    "@playwright/test": "^1.56.0",
-    "@tailwindcss/postcss": "^4.1.0",
-    "tailwindcss": "^4.1.0",
-    "typescript": "^5.9.0",
     "eslint": "^9.0.0",
-    "eslint-config-next": "^16.3.6"
+    "eslint-config-next": "^16.3.6",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0"
   }
 }

@@ -1,0 +1,5 @@
+ID,Título,Precondiciones,Pasos Given When Then,Resultado esperado,Resultado obtenido (observado),Estado,Fecha,Evidencia,Bug relacionado
+TC-01,Transferencia con saldo correcto,Saldo 200; defecto desactivado,Given saldo 200; When transfiero 50; Then saldo 150,150,,No ejecutado,,,
+TC-02,Transferencia con defecto intencional,Saldo 200; defecto activo,Given saldo 200; When transfiero 50; Then saldo 150,150,,No ejecutado,,,
+TC-03,Frontera mínima de contraseña,Regla entre 8 y 20 caracteres con un dígito,Given clave de 8 caracteres con dígito; When valido; Then se acepta,Válida,,No ejecutado,,,
+TC-04,Completar título,Completar precondiciones,Given ...; When ...; Then ...,Completar antes de ejecutar,,No ejecutado,,,

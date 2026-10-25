@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import {PracticeFiles} from './practice-files';
 import type {PracticalExercise} from '@qapath/contracts';
 import {LearningDisclosure} from './learning-disclosure';
 import {LearningEvidence} from './learning-evidence';
@@ -14,7 +15,7 @@ export function PracticalExercisePanel({week,exercise}:{week:number;exercise:Pra
    <h3>Antes de comenzar</h3><ul className="bullet-list">{exercise.setup.map(item=><li key={item}>{item}</li>)}</ul>
    <h3>Ejecuta y compara</h3><ol className="practical-steps">{exercise.steps.map((step,i)=><li key={i}><p><strong>{step.action}</strong></p><p className="practical-expected"><b>Resultado esperado:</b> {step.expected}</p></li>)}</ol>
    {exercise.starter&&<><h3>Archivo de apoyo · {exercise.starter.filename}</h3><pre className="code-block"><code>{exercise.starter.code}</code></pre><button type="button" className="button button-outline" onClick={()=>downloadText(exercise.starter!.filename,exercise.starter!.code)}>↓ Descargar archivo de apoyo</button></>}
-   <h3>Entregables</h3><ul className="bullet-list">{exercise.deliverables.map(item=><li key={item}>{item}</li>)}</ul>
+   <PracticeFiles exercise={exercise}/><h3>Entregables</h3><ul className="bullet-list">{exercise.deliverables.map(item=><li key={item}>{item}</li>)}</ul>
    <h3>Criterios de calidad</h3><ul className="bullet-list">{exercise.rubric.map(item=><li key={item}>{item}</li>)}</ul>
    <LearningEvidence kind="exercise" id={String(week)} title={`Ejercicio práctico: ${exercise.title}`}/>
    <p className="hint">La evidencia documenta tu trabajo; la plataforma no certifica automáticamente ejecuciones hechas en Postman, tu terminal o un repositorio externo.</p>

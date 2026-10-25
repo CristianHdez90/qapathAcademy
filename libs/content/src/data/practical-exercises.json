@@ -1,296 +1,444 @@
 {
   "1": {
-    "title": "Tu primera sesión QA: escenarios de prueba en Gherkin",
-    "objective": "Diseñar escenarios de prueba en Gherkin con Given, When y Then; comparar el resultado esperado con el resultado obtenido (observado) al ejecutar un cotizador real de entrenamiento.",
+    "title": "Mentalidad QA: transferencia, defecto y fallo",
+    "objective": "Ejecutar una transferencia bancaria de entrenamiento, distinguir error, defecto y fallo, y documentar casos con esperado y obtenido.",
     "minutes": 35,
     "tools": [
-      "Navegador",
-      "Plantilla CSV"
+      "Laboratorio de transferencia",
+      "Matriz de casos"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Lee las reglas del cotizador y registra precio, cantidades permitidas y costo de envío.",
-        "expected": "El curso básico vale 35000 COP, admite enteros de 1 a 5 y el envío vale 10000 COP."
+        "action": "Configura saldo inicial 200, importe 50 y saldo esperado 150. Ejecuta la actividad del tema.",
+        "expected": "La implementación correcta devuelve 150 y el caso se aprueba."
       },
       {
-        "action": "Antes de ejecutar, escribe cuatro escenarios de prueba en Gherkin. Usa Scenario para el nombre, Given para el contexto y los datos, When para la acción y Then para el resultado esperado. Registra el resultado obtenido (observado), el estado y la fecha por separado después de ejecutar.",
-        "expected": "Ejemplo:\nScenario: Cotización básica con recogida\nGiven el curso básico cuesta 35000 COP y selecciono cantidad 1, sin cupón y con recogida\nWhen solicito la cotización\nThen el total debe ser 35000 COP\nEl Then expresa lo esperado según la regla; el resultado obtenido se registra como evidencia de la ejecución."
+        "action": "Activa Mantener defecto de transferencia y vuelve a ejecutar sin modificar el esperado.",
+        "expected": "La implementación defectuosa resta 5 y devuelve 195: el caso falla; se distingue el código defectuoso del saldo incorrecto observado."
       },
       {
-        "action": "Cotiza curso básico, cantidad 1, sin cupón y con recogida. Anota el esperado antes de pulsar Cotizar.",
-        "expected": "La interfaz y la API muestran 35000 COP."
+        "action": "Completa cuatro casos en la matriz con título, precondiciones, pasos Given/When/Then, resultado esperado y resultado obtenido.",
+        "expected": "El esperado se define antes de ejecutar; cada registro incluye estado y evidencia de su ejecución."
       },
       {
-        "action": "Repite con cantidad 3, cupón QA10 y envío. Abre la respuesta real de la API.",
-        "expected": "Subtotal 105000, descuento 10500, envío 10000 y total 104500 COP."
-      },
-      {
-        "action": "Intenta cantidad 0 y compara la validación con las reglas.",
-        "expected": "La petición devuelve 422 y no se presenta un total válido."
-      },
-      {
-        "action": "Ejecuta el cuarto escenario con cantidad 6, fuera del máximo permitido, y registra el resultado obtenido (observado).",
-        "expected": "La petición devuelve 422 y no se presenta un total válido porque el máximo es 5 unidades."
-      },
-      {
-        "action": "Escribe qué evidencias pedirías a desarrollo y producto antes de reportar un bug.",
-        "expected": "El informe distingue hechos observados de suposiciones y no inventa defectos."
+        "action": "Desactiva el defecto, repite el caso y explica qué documentarías en el reporte del bug.",
+        "expected": "El retest devuelve 150; el reporte enlaza el caso, los pasos, el esperado 150 y el obtenido 195 de la ejecución fallida."
       }
     ],
     "deliverables": [
-      "Cuatro escenarios de prueba escritos en Gherkin con Scenario, Given, When y Then, acompañados de una matriz de ejecución con ID del escenario, resultado esperado, resultado obtenido (observado), estado y fecha.",
-      "Captura de un caso válido y uno inválido; conclusión de 5 líneas."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "Cada escenario de prueba usa Given para el contexto, When para la acción y Then para un resultado esperado verificable; el resultado obtenido (observado) se registra por separado.",
-      "Los cálculos se explican con números y moneda.",
-      "Se distingue un error de entrada esperado de un defecto.",
-      "La evidencia permite repetir el caso."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 1",
+        "href": "/practice/kit/guides/week-01.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "2": {
-    "title": "Prioriza pruebas con una matriz de riesgos",
-    "objective": "Elegir qué probar primero según probabilidad, impacto y alcance, sin confundir tipo con nivel de prueba.",
+    "title": "Riesgos, prioridad y niveles de prueba",
+    "objective": "Configurar probabilidad e impacto, calcular exposición y distinguir el nivel de prueba para una interacción entre servicios.",
     "minutes": 40,
     "tools": [
-      "Navegador",
-      "Hoja de cálculo"
+      "Matriz de riesgos",
+      "Clasificador de niveles"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Lista 6 riesgos: total incorrecto, cupón inválido, cantidad fuera de rango, producto agotado, error HTTP y teclado.",
-        "expected": "Cada riesgo tiene impacto y probabilidad entre 1 y 5; exposición = impacto × probabilidad."
+        "action": "Asigna probabilidad 4 e impacto 5 al cobro incorrecto; probabilidad 3 e impacto 2 al nombre de perfil.",
+        "expected": "Las exposiciones calculadas son 20 y 6; el cobro se prioriza primero."
       },
       {
-        "action": "Prioriza tres escenarios y ejecútalos en QA Store.",
-        "expected": "Se ejecutan primero los riesgos más altos; el total con QA10 y envío debe ser 104500 COP."
+        "action": "Cambia las puntuaciones y ejecuta para comprobar cómo cambia el orden; justifica cada puntuación.",
+        "expected": "La clasificación depende del producto probabilidad por impacto, con valores enteros entre 1 y 5."
       },
       {
-        "action": "Clasifica una prueba unitaria de cálculo, una API de cotización y una prueba UI completa.",
-        "expected": "Se distingue nivel de prueba de objetivo funcional, seguridad o accesibilidad."
+        "action": "Elige el nivel para probar la colaboración entre dos servicios y ejecuta la comprobación.",
+        "expected": "Integración corresponde a esa colaboración; elegir otro nivel produce feedback para revisar la clasificación."
       },
       {
-        "action": "Diseña smoke de 3 casos y regresión de 8; explica qué omitirías con 15 minutos.",
-        "expected": "La selección tiene una justificación ligada al riesgo y registra lo no cubierto."
+        "action": "Relaciona los riesgos con casos y registra la cobertura pendiente en tu matriz y evidencia.",
+        "expected": "La prioridad está justificada y no se confunde nivel de prueba con objetivo o técnica."
       }
     ],
     "deliverables": [
-      "Matriz de 6 riesgos, puntuaciones y orden.",
-      "Resultado de tres ejecuciones y propuesta smoke/regresión."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "No se equipara smoke con un nivel de prueba.",
-      "Los riesgos y casos se pueden trazar.",
-      "Se explican límites de cobertura."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 2",
+        "href": "/practice/kit/guides/week-02.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "3": {
-    "title": "Historia de usuario verificable para descuentos",
-    "objective": "Transformar reglas del cotizador en criterios de aceptación ejecutables y trazables.",
+    "title": "Historia, Gherkin y criterios ejecutables",
+    "objective": "Construir una historia y un criterio Given/When/Then, variar condiciones de una cuenta ficticia y contrastar predicción con resultado.",
     "minutes": 45,
     "tools": [
-      "QA Store",
+      "Constructor de historia",
+      "Ejecutor de reglas de acceso",
       "Gherkin"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Redacta una HU de comprador que aplica QA10 sin descontar el envío.",
-        "expected": "La HU identifica actor, necesidad y beneficio; no describe solo botones."
+        "action": "Completa Como, Quiero, Para y los campos Given, When y Then con una expectativa observable.",
+        "expected": "La historia expresa actor, necesidad y beneficio; el criterio describe un comportamiento verificable."
       },
       {
-        "action": "Escribe 6 criterios Given/When/Then incluyendo mínimo, cupón inválido y cupón vacío.",
-        "expected": "QA10 solo aplica desde subtotal 100000; vacío permite cotizar y el envío nunca recibe descuento."
+        "action": "Marca cuenta activa y credencial válida, predice permitir y ejecuta la actividad.",
+        "expected": "La regla de acceso de entrenamiento permite entrar; conserva el escenario y el resultado en la evidencia."
       },
       {
-        "action": "Ejecuta basic × 2 con QA10 y basic × 3 con QA10 y envío.",
-        "expected": "El primer caso responde 422; el segundo totaliza 104500 COP."
+        "action": "Desmarca cada condición por separado y después ambas; cambia la predicción antes de ejecutar.",
+        "expected": "Las tres variantes rechazan el acceso. Un resultado distinto de tu predicción produce una comprobación fallida."
       },
       {
-        "action": "Relaciona cada criterio con al menos un caso y registra dudas para refinamiento.",
-        "expected": "Hay identificadores HU-01, AC-01 y TC-01; una duda no se presenta como regla confirmada."
+        "action": "Revisa si el texto del Then corresponde a los datos usados y enlaza historia, criterio y caso.",
+        "expected": "La herramienta ejecuta la regla; la claridad del criterio se revisa con pensamiento QA y no se da por válida solo por contener texto."
       }
     ],
     "deliverables": [
-      "HU, 6 criterios y matriz criterio/caso.",
-      "Dos evidencias de ejecución."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "Los criterios son observables y no ambiguos.",
-      "Se cubren alternativas negativas.",
-      "Los datos coinciden con las reglas publicadas."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 3",
+        "href": "/practice/kit/guides/week-03.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "4": {
-    "title": "Particiones, límites y tablas de decisión",
-    "objective": "Construir un conjunto pequeño de pruebas con cobertura explicable.",
+    "title": "Particiones y fronteras de una contraseña",
+    "objective": "Diseñar y ejecutar casos de longitud y presencia de dígitos para un validador de contraseñas ficticias.",
     "minutes": 50,
     "tools": [
-      "QA Store",
-      "CSV"
+      "Validador de reglas",
+      "Generador de fronteras",
+      "Matriz de casos"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Diseña particiones para quantity: negativo, cero, 1–5, mayor que 5, fracción y texto.",
-        "expected": "Los enteros 1 y 5 son válidos; 0, 6 y 1.5 producen 422. Texto en el JSON es un error de tipo 400."
+        "action": "Introduce una contraseña ficticia de ocho caracteres con dígito, predice válido y ejecuta.",
+        "expected": "La regla acepta entre 8 y 20 caracteres con al menos un dígito."
       },
       {
-        "action": "Ejecuta límites 0, 1, 5 y 6 y añade 1.5 por Postman.",
-        "expected": "1 y 5 devuelven 200; los otros valores numéricos reciben 422."
+        "action": "Prueba longitudes 7, 8, 20 y 21 con el generador de fronteras.",
+        "expected": "7 y 21 se rechazan; 8 y 20 se aceptan cuando contienen un dígito."
       },
       {
-        "action": "Construye una tabla: cupón vacío/QA10/otro × subtotal bajo/suficiente.",
-        "expected": "Vacío funciona; QA10 bajo 100000 y cupones desconocidos reciben 422."
+        "action": "Prueba una cadena de longitud válida sin dígitos y otra vacía; registra el esperado antes de ejecutar.",
+        "expected": "Las dos entradas se rechazan por la condición incumplida, sin cambiar el esperado para ajustar el resultado."
       },
       {
-        "action": "Comprueba 99999, 100000 y 100001 con la función local quote({price, quantity:1, coupon:\"QA10\"}).",
-        "expected": "99999 se rechaza; 100000 y 100001 se aceptan. El fixture local admite price para ensayar el límite exacto, la API tiene precios fijos."
+        "action": "Completa una tabla de decisión para longitud válida y presencia de dígito y registra las particiones cubiertas.",
+        "expected": "Solo la combinación de longitud válida y dígito permite aceptar la contraseña."
       }
     ],
     "deliverables": [
-      "Tabla de particiones, casos de borde y tabla de decisión.",
-      "Resultado de 10 escenarios, incluyendo diferencia entre tipo y regla."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "Cada caso tiene objetivo único y esperado explícito.",
-      "No se afirma haber probado precios arbitrarios en la API.",
-      "Se documentan redondeos."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
-    "starter": {
-      "filename": "pricing.mjs",
-      "language": "javascript",
-      "code": "export function quote({price=35000,quantity,coupon='',shipping='pickup'}){\n if(!Number.isInteger(quantity)||quantity<1||quantity>5)throw new RangeError('Cantidad entre 1 y 5');\n if(!['pickup','delivery'].includes(shipping))throw new RangeError('Envío inválido');\n if(coupon!==''&&coupon!=='QA10')throw new RangeError('Cupón inválido');\n const subtotal=price*quantity;\n if(coupon==='QA10'&&subtotal<100000)throw new RangeError('Subtotal insuficiente');\n const discount=coupon==='QA10'?Math.round(subtotal*0.1):0;\n return {subtotal,discount,shipping:shipping==='delivery'?10000:0,total:subtotal-discount+(shipping==='delivery'?10000:0)};\n}\n"
-    },
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 4",
+        "href": "/practice/kit/guides/week-04.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "5": {
-    "title": "Investiga un defecto reproducible de cálculo",
-    "objective": "Detectar una diferencia UI/API, escribir el bug y diseñar su retest.",
+    "title": "Reporte, triage y ciclo de vida del bug",
+    "objective": "Completar un reporte reproducible y recorrer asignación, corrección, retest, reapertura y cierre con evidencia.",
     "minutes": 45,
     "tools": [
-      "QA Store",
-      "DevTools"
+      "Reporte de bug",
+      "Tablero de estados",
+      "Retest de transferencia"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Activa Activar defecto de cálculo, elige básico × 3, QA10 y envío, y cotiza.",
-        "expected": "La variante defectuosa muestra 103500 COP aunque el esperado es 104500 COP."
+        "action": "Completa título, precondiciones, pasos, esperado 150 y obtenido 195 del defecto de transferencia. Reporta el bug.",
+        "expected": "El bug pasa de Sin reportar a Nuevo y conserva los datos para reproducirlo."
       },
       {
-        "action": "Abre la respuesta real y compara subtotal, descuento, envío y total con la interfaz.",
-        "expected": "La API mantiene 104500 COP; el defecto está en la presentación de esta variante de entrenamiento."
+        "action": "Realiza triage, asigna un responsable, inicia la corrección y marca listo para retest.",
+        "expected": "El historial contiene cada transición, responsable, fecha y motivo; no se salta directamente al cierre."
       },
       {
-        "action": "Escribe BUG-01 con título, precondiciones, pasos, esperado/obtenido, severidad y evidencia.",
-        "expected": "Otro estudiante puede reproducirlo; no se usan datos personales."
+        "action": "Mantén el defecto activo y ejecuta el retest.",
+        "expected": "La transferencia sigue devolviendo 195 frente a 150; el estado cambia a Reabierto."
       },
       {
-        "action": "Desactiva el defecto y repite; ejecuta también un caso sin cupón.",
-        "expected": "El retest muestra 104500 y la regresión sin cupón da 115000 COP."
+        "action": "Inicia otra corrección, marca listo para retest, desactiva el defecto y vuelve a ejecutar.",
+        "expected": "El resultado es 150 y el bug se cierra con evidencia; añade regresión de otros importes en tu matriz."
       }
     ],
     "deliverables": [
-      "Bug reproducible con dos capturas y petición/respuesta.",
-      "Retest y regresión vinculados a BUG-01."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "Severidad se justifica; prioridad se propone, no se impone.",
-      "Se diferencia defecto de UI de contrato API.",
-      "Se registra ambiente y versión/fecha."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 5",
+        "href": "/practice/kit/guides/week-05.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "6": {
-    "title": "Simula el trabajo QA de un Sprint",
-    "objective": "Convertir prácticas ejecutadas en una estrategia, acuerdos de equipo e informe de salida.",
+    "title": "Sprint QA: DoD, ejecución y cierre",
+    "objective": "Configurar alcance, resultados y bloqueos de un Sprint y comunicar métricas con sus denominadores y riesgos pendientes.",
     "minutes": 50,
     "tools": [
-      "Tablero Scrum",
-      "QA Store"
+      "Tablero de Sprint",
+      "Definition of Done",
+      "Informe de ejecución"
     ],
     "setup": [
-      "Abre el entorno QA Store con el enlace de esta práctica. Usa solo los productos ficticios.",
-      "Descarga el kit y abre README.md; crea una carpeta para tus evidencias."
+      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
+      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
     ],
     "steps": [
       {
-        "action": "Crea un Sprint Goal sobre la cotización confiable y reparte las tareas entre Product Owner, Developers y Scrum Master.",
-        "expected": "Se distinguen responsabilidades de Scrum de especialidades técnicas; QA puede formar parte de Developers."
+        "action": "Define Sprint Goal y configura 25 planificados, 17 aprobados, 2 fallidos y 1 bloqueado sin ejecutar.",
+        "expected": "Hay 19 ejecutados y quedan 5 no ejecutados adicionales; el bloqueado no se cuenta como ejecutado."
       },
       {
-        "action": "Define Definition of Done y selecciona 8 pruebas basadas en riesgos.",
-        "expected": "La DoD incluye revisión, pruebas y evidencias, no solamente el estado de un ticket."
+        "action": "Ejecuta el informe y explica los denominadores de ejecución y aprobación.",
+        "expected": "Ejecución 19/25 = 76 %; aprobación 17/19 ≈ 89 %. El informe identifica la convención empleada."
       },
       {
-        "action": "Ejecuta 6 pruebas, simula una bloqueada y deja una pendiente, sin inventar aprobaciones.",
-        "expected": "El informe separa ejecutadas, aprobadas, fallidas, bloqueadas y no ejecutadas."
+        "action": "Modifica resultados y verifica que no se acepten sumas que superen lo planificado.",
+        "expected": "La herramienta rechaza datos inconsistentes en vez de producir métricas engañosas."
       },
       {
-        "action": "Presenta resultados en Review y dos mejoras para Retrospective.",
-        "expected": "Se informa cobertura y riesgo residual; no se equipara 100 % de casos ejecutados con ausencia de defectos."
+        "action": "Revisa la Definition of Done y redacta el cierre de Review y una mejora para Retrospective.",
+        "expected": "El cierre informa fallos, bloqueos y riesgos; revisar DoD no convierte automáticamente un incremento en listo para liberar."
       }
     ],
     "deliverables": [
-      "Mini estrategia, tablero de trabajo y DoD.",
-      "Informe con denominadores de métricas y decisión de liberación justificada."
+      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
+      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
     ],
     "rubric": [
-      "Se mantiene trazabilidad requisito/caso/defecto.",
-      "Las ceremonias tienen propósito distinto.",
-      "Las métricas no esconden casos bloqueados."
+      "La actividad usa los conceptos y herramientas de esta semana.",
+      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
+      "Se mantiene separado el resultado esperado del obtenido."
     ],
     "links": [
       [
         "ISTQB · Fundamentos",
         "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 6",
+        "href": "/practice/kit/guides/week-06.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      }
     ]
   },
   "7": {
@@ -299,13 +447,20 @@
     "minutes": 65,
     "tools": [
       "Postman",
-      "Explorador HTTP"
+      "Explorador HTTP",
+      "PostgreSQL en navegador",
+      "Git aislado"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar solicitudes HTTP reales al sandbox. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Descarga la colección desde el entorno de práctica; ya incluye el baseUrl de la página actual.",
       "Importa el JSON en Postman. Abre Scripts → Post-response para revisar los tests. Los tokens demo-reader y demo-admin son públicos y solo sirven en este simulador."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura solicitudes HTTP reales al sandbox y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La solicitud devuelve estado, cabeceras y cuerpo; el estado obtenido se compara con el esperado configurado."
+      },
       {
         "action": "Ejecuta la carpeta Códigos HTTP y registra status, headers y cuerpo.",
         "expected": "Se reproducen 200, 201, 202, 204, 400, 401, 403, 404, 409, 422, 429, 500 y 503. El 204 no contiene cuerpo; no se llama a json() en ese caso."
@@ -325,6 +480,18 @@
       {
         "action": "Importa data/quote-cases.csv y ejecuta solo la carpeta Datos del runner.",
         "expected": "Cada fila controla sus datos y expectedStatus; los totales se verifican únicamente para respuestas 200."
+      },
+      {
+        "action": "Ejecuta manualmente cada solicitud en Postman antes del runner y exporta la colección con sus aserciones.",
+        "expected": "Hay evidencia de Send y del runner; se conservan los archivos Postman existentes, sus carpetas y los datos CSV."
+      },
+      {
+        "action": "En este mismo laboratorio, abre Base de datos SQL. Ejecuta SELECT, INNER JOIN y LEFT JOIN sobre clientes y pedidos ficticios.",
+        "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria."
+      },
+      {
+        "action": "Abre Comandos Git: ejecuta init, guarda caso.md, revisa status, añade el archivo, crea commit y consulta log.",
+        "expected": "Cada comando modifica o consulta un repositorio Git aislado, muestra su respuesta y explica para qué sirve. El commit devuelve un SHA real."
       }
     ],
     "deliverables": [
@@ -334,13 +501,36 @@
     "rubric": [
       "Se diferencia simulación de estado HTTP de un proceso persistente.",
       "401 y 403 tienen causas distintas.",
-      "No se usan tokens ni cuentas de producción."
+      "No se usan tokens ni cuentas de producción.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "Postman · Aserciones y scripts",
         "https://learning.postman.com/docs/tests-and-scripts/write-scripts/test-examples/"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 7",
+        "href": "/practice/kit/guides/week-07.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Colección Postman conservada",
+        "href": "/practice/kit/qapath.postman_collection.json",
+        "description": "Importa y ajusta baseUrl; para la URL actual usa la descarga del laboratorio QA Store."
+      },
+      {
+        "label": "Datos del runner Postman",
+        "href": "/practice/kit/data/quote-cases.csv",
+        "description": "Selecciona la carpeta Datos y ejecuta cada fila con su expectedStatus."
+      },
+      {
+        "label": "Consultas SQL de apoyo",
+        "href": "/practice/kit/data/training.sql",
+        "description": "Dataset y ejemplos SELECT, INNER JOIN, LEFT JOIN y agregaciones del módulo 03."
+      }
     ]
   },
   "8": {
@@ -353,10 +543,19 @@
       "DevTools"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar consultas SQL sobre PostgreSQL en memoria. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Usa una base PostgreSQL de práctica. Abre data/training.sql del kit; crea tablas TEMP y finaliza con ROLLBACK.",
       "Crea un repositorio propio y una rama practica/sql; no uses la base ni el repositorio de producción de la academia."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura consultas SQL sobre PostgreSQL en memoria y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La consulta inicial INNER JOIN devuelve tres pedidos: dos de Ana y uno de Sol; puedes editarla o elegir LEFT JOIN."
+      },
+      {
+        "action": "Ejecuta Q1 y Q2: SELECT de columnas, WHERE y ORDER BY. Anota las filas esperadas antes de consultar.",
+        "expected": "Q1 devuelve tres clientes; Q2 devuelve los pedidos pagados 3 (104500) y 1 (35000), ordenados por total descendente."
+      },
       {
         "action": "Ejecuta el archivo SQL completo y compara las agrupaciones por estado.",
         "expected": "paid tiene 2 pedidos y 139500 COP; pending tiene 1 y 75000 COP."
@@ -372,27 +571,49 @@
       {
         "action": "Añade consultas y evidencias con git diff, commit y una descripción de cambio.",
         "expected": "El diff contiene solo archivos de práctica; no aparecen .env, credenciales ni datos reales."
+      },
+      {
+        "action": "Ejecuta Q3–Q5: compara INNER JOIN con LEFT JOIN y encuentra clientes sin pedidos usando IS NULL.",
+        "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva cuatro filas, incluida Luis con pedido NULL; el anti-join devuelve solo Luis."
+      },
+      {
+        "action": "Ejecuta Q8 y Q9 y mueve el filtro paid de ON a WHERE en una copia de Q7. Explica COUNT(o.id), HAVING y EXISTS.",
+        "expected": "HAVING devuelve Ana con dos pedidos; EXISTS devuelve Ana y Sol. El filtro en WHERE elimina a Luis; en ON lo conserva con total cero."
       }
     ],
     "deliverables": [
       "3 consultas adicionales con su resultado esperado.",
-      "Diff y descripción tipo PR que explique qué validaste."
+      "Diff y descripción tipo PR que explique qué validaste.",
+      "Hoja Q1–Q9: consulta, resultado esperado, resultado obtenido y explicación de NULL y cardinalidad."
     ],
     "rubric": [
       "Se explica el tratamiento de NULL.",
       "Las consultas no alteran tablas permanentes.",
-      "El repositorio tiene instrucciones reproducibles."
+      "El repositorio tiene instrucciones reproducibles.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "training.sql",
       "language": "sql",
-      "code": "-- Ejecutar completo en PostgreSQL de práctica. No modifica las tablas de la academia.\nBEGIN;\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\nINSERT INTO qa_training_customers VALUES(1,'Ana Demo',true),(2,'Luis Demo',false),(3,'Sol Demo',true);\nINSERT INTO qa_training_orders VALUES(1,1,'paid',35000),(2,1,'pending',75000),(3,3,'paid',104500);\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n-- Esperado: paid -> 2 pedidos, 139500 COP; pending -> 1 pedido, 75000 COP.\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n-- Esperado: Ana Demo 35000; Luis Demo 0; Sol Demo 104500.\nROLLBACK;\n"
+      "code": "-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\n-- Tablas temporales y ROLLBACK; no usa tablas de la academia.\nBEGIN;\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\nINSERT INTO qa_training_customers VALUES(1,'Ana Demo',true),(2,'Luis Demo',false),(3,'Sol Demo',true);\nINSERT INTO qa_training_orders VALUES(1,1,'paid',35000),(2,1,'pending',75000),(3,3,'paid',104500);\n-- Q1 SELECT: tres clientes, ordenados 1,2,3.\nSELECT id,name,active FROM qa_training_customers ORDER BY id;\n-- Q2 WHERE + ORDER BY: pedidos pagados 3 (104500), 1 (35000).\nSELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\n-- Q3 INNER JOIN: tres filas: pedido 1 Ana, 2 Ana, 3 Sol.\nSELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\n-- Q4 LEFT JOIN: cuatro filas; Luis aparece con pedido NULL.\nSELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\n-- Q5 Clientes sin pedidos: solo Luis (id 2). IS NULL, nunca = NULL.\nSELECT c.id,c.name FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\n-- Q6 GROUP BY: paid -> 2, 139500; pending -> 1, 75000.\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n-- Q7 Filtro en ON conserva al cliente sin pagos: Ana 35000, Luis 0, Sol 104500.\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n-- Q8 HAVING: solo Ana, 2 pedidos. COUNT(o.id) no cuenta el NULL de Luis.\nSELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\n-- Q9 EXISTS: clientes con algún pago: Ana y Sol.\nSELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\nROLLBACK;\n-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué fila desaparece.\n-- Entrega consulta, esperado previo, filas obtenidas y explicación de la diferencia.\n"
     },
     "links": [
       [
         "PostgreSQL · Consultas",
         "https://www.postgresql.org/docs/current/tutorial-select.html"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 8",
+        "href": "/practice/kit/guides/week-08.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "SQL ejecutable Q1–Q9",
+        "href": "/practice/kit/data/training.sql",
+        "description": "SELECT, WHERE, ORDER BY, INNER y LEFT JOIN, IS NULL, GROUP BY, HAVING y EXISTS en tablas temporales."
+      }
     ]
   },
   "9": {
@@ -404,10 +625,15 @@
       "node:test"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura código y aserciones en el editor aislado y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El editor ejecuta las aserciones y muestra su salida o el error real; conserva el código al guardar la evidencia."
+      },
       {
         "action": "Ejecuta npm run test:unit y revisa pricing.mjs antes de modificarlo.",
         "expected": "Las pruebas iniciales pasan; el resultado con básico × 3, QA10 y envío es 104500."
@@ -423,6 +649,10 @@
       {
         "action": "Introduce descuento sobre el envío, observa el fallo y corrige la implementación.",
         "expected": "La prueba detecta 103500 en vez de 104500 y vuelve a pasar tras la corrección."
+      },
+      {
+        "action": "Relaciona cada prueba de la función con una partición de cantidad o una regla de cupón y registra el fallo de la mutación.",
+        "expected": "La tabla entrada–esperado–obtenido enlaza cada regla con una aserción ejecutada en node:test."
       }
     ],
     "deliverables": [
@@ -432,7 +662,8 @@
     "rubric": [
       "Los tests son independientes y deterministas.",
       "Se comprueba comportamiento observable.",
-      "No se reemplazan aserciones por console.log."
+      "No se reemplazan aserciones por console.log.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "pricing.mjs",
@@ -444,6 +675,13 @@
         "MDN · JavaScript",
         "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 9",
+        "href": "/practice/kit/guides/week-09.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "10": {
@@ -455,10 +693,15 @@
       "JSON"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura código y aserciones en el editor aislado y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El editor ejecuta las aserciones y muestra su salida o el error real; conserva el código al guardar la evidencia."
+      },
       {
         "action": "Lee data/results.json y calcula passed, failed, blocked y total con reduce.",
         "expected": "Hay 6 casos: 3 passed, 2 failed y 1 blocked."
@@ -474,6 +717,10 @@
       {
         "action": "Genera summary.json y añade asserts para totales, tasa y lista de defectos.",
         "expected": "Un resultado con estado desconocido se rechaza en vez de contarse como aprobado."
+      },
+      {
+        "action": "Añade casos para reporte vacío, un estado desconocido y resultados desordenados; compara el JSON antes y después.",
+        "expected": "El reporte vacío evita división por cero, el estado desconocido se rechaza y el arreglo original no cambia."
       }
     ],
     "deliverables": [
@@ -483,13 +730,21 @@
     "rubric": [
       "Se usan datos, no contadores escritos a mano.",
       "Los denominadores se explican.",
-      "No se muta el fixture original."
+      "No se muta el fixture original.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "MDN · JavaScript",
         "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 10",
+        "href": "/practice/kit/guides/week-10.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "11": {
@@ -501,10 +756,15 @@
       "Node.js"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura código y aserciones en el editor aislado y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El editor ejecuta las aserciones y muestra su salida o el error real; conserva el código al guardar la evidencia."
+      },
       {
         "action": "Crea QuoteInput, QuoteResult y ApiResult<T> con una unión success/error.",
         "expected": "TypeScript obliga a comprobar la rama antes de leer data.total."
@@ -520,6 +780,10 @@
       {
         "action": "Separa una clase cliente del cálculo y prueba su resultado con datos ficticios.",
         "expected": "No se mezcla presentación con transporte y el contrato válido contiene currency COP."
+      },
+      {
+        "action": "Diseña una tabla de contratos válidos e inválidos y ejecuta la validación de runtime con cada objeto.",
+        "expected": "Se rechazan total ausente, total de tipo texto y moneda no acordada sin depender únicamente de un cast."
       }
     ],
     "deliverables": [
@@ -529,13 +793,21 @@
     "rubric": [
       "No se usa any para esconder errores.",
       "Se distingue chequeo estático de validación runtime.",
-      "Los errores son parte del contrato."
+      "Los errores son parte del contrato.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "TypeScript · Manual",
         "https://www.typescriptlang.org/docs/handbook/intro.html"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 11",
+        "href": "/practice/kit/guides/week-11.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "12": {
@@ -548,10 +820,15 @@
       "AbortController"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura código y aserciones en el editor aislado y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El editor ejecuta las aserciones y muestra su salida o el error real; conserva el código al guardar la evidencia."
+      },
       {
         "action": "Consulta products con fetch y comprueba response.ok antes de leer el contrato.",
         "expected": "200 se procesa como éxito con 3 productos; fetch no lanza automáticamente por un 404."
@@ -567,6 +844,10 @@
       {
         "action": "Usa try/finally para limpiar el timer y un test con fetch mock para un rechazo de red.",
         "expected": "Error HTTP, timeout y error de red tienen resultados verificables diferentes."
+      },
+      {
+        "action": "Construye una matriz con éxito, HTTP 404, HTTP 503, error de red y cancelación mediante fetch inyectado.",
+        "expected": "Cada escenario tiene una aserción y una causa identificable; el timer se limpia aunque la promesa falle."
       }
     ],
     "deliverables": [
@@ -576,13 +857,21 @@
     "rubric": [
       "No se reintenta indefinidamente.",
       "Los timers se limpian.",
-      "No se registran secretos en mensajes."
+      "No se registran secretos en mensajes.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "MDN · JavaScript",
         "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 12",
+        "href": "/practice/kit/guides/week-12.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "13": {
@@ -594,12 +883,25 @@
       "TypeScript"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
+      {
+        "action": "Crea tests/first-quote.spec.ts con test, expect y page. Identifica Given, When y Then en el código inicial sin usar Page Objects todavía.",
+        "expected": "El primer test navega a /practice, llena cuatro controles y comprueba el total 35000 COP mediante una aserción con await."
+      },
+      {
+        "action": "Ejecuta npx playwright test tests/first-quote.spec.ts --project=chromium y después --headed para observarlo.",
+        "expected": "El runner ejecuta el archivo creado y muestra el resultado; el reporte conserva contexto si la aserción falla."
+      },
       {
         "action": "Ejecuta npm test -- --project=chromium tests/ui.spec.ts.",
         "expected": "La cotización mínima muestra 35000 COP y la de descuento/envío 104500 COP."
@@ -624,18 +926,31 @@
     "rubric": [
       "No se automatizan cuentas reales.",
       "Las aserciones usan await.",
-      "El script falla cuando el resultado es incorrecto."
+      "El script falla cuando el resultado es incorrecto.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
-      "filename": "ui.spec.ts",
+      "filename": "first-quote.spec.ts",
       "language": "typescript",
-      "code": "import {test,expect} from '../fixtures/training';\ntest('cotización mínima @smoke',async({quotePage})=>{await quotePage.calculate('1');await quotePage.expectTotal('35000 COP')});\ntest('total con descuento y envío',async({quotePage})=>{await quotePage.calculate('3','QA10','delivery');await quotePage.expectTotal('104500 COP')});\ntest('validación de cantidad',async({quotePage,page})=>{await quotePage.calculate('0');await expect(page.getByRole('region',{name:'Cotizador QA Store'}).getByRole('alert')).toContainText('Cantidad')});\n"
+      "code": "import {test,expect} from '@playwright/test';\n// En el kit: BASE_URL se define en playwright.config.ts.\ntest('TC-01 cotización básica con recogida',async({page})=>{\n // Given: producto basic, cantidad 1, sin cupón, recogida.\n await page.goto('/practice');\n await page.getByLabel('Producto ficticio').selectOption('basic');\n await page.getByLabel('Cantidad',{exact:true}).fill('1');\n await page.getByLabel('Cupón',{exact:true}).fill('');\n await page.getByLabel('Envío',{exact:true}).selectOption('pickup');\n // When: solicito una cotización.\n await page.getByRole('button',{name:'Cotizar',exact:true}).click();\n // Then: el total esperado es 35000 COP.\n await expect(page.getByTestId('quote-total')).toHaveText('35000 COP');\n});\n"
     },
     "links": [
       [
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 13",
+        "href": "/practice/kit/guides/week-13.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Primer test Playwright sin abstracciones",
+        "href": "/practice/kit/tests/first-quote.spec.ts",
+        "description": "Copia en tests del kit y ejecuta desde su terminal con BASE_URL configurada."
+      }
     ]
   },
   "14": {
@@ -647,12 +962,17 @@
       "DevTools"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Busca selectores por posición o clase en un spec de prueba y reemplázalos con getByLabel/getByRole.",
         "expected": "Los controles Producto ficticio, Cantidad, Cupón, Envío y Cotizar se identifican sin depender del orden."
@@ -668,6 +988,10 @@
       {
         "action": "Cambia un envoltorio visual o tamaño de ventana y repite las pruebas.",
         "expected": "La prueba sigue operando; no se utilizan sleeps fijos para sincronizar."
+      },
+      {
+        "action": "Compara dos locators del mismo control: uno por clase y otro por rol; modifica un envoltorio en un fixture local.",
+        "expected": "La evidencia explica qué selector conserva intención y cómo se resuelve una coincidencia múltiple sin first arbitrario."
       }
     ],
     "deliverables": [
@@ -677,7 +1001,8 @@
     "rubric": [
       "No se usan nth ni clases CSS como primera opción.",
       "Las aserciones esperan estado observable.",
-      "No se declara conformidad WCAG completa con esta revisión limitada."
+      "No se declara conformidad WCAG completa con esta revisión limitada.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "ui.spec.ts",
@@ -689,6 +1014,13 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 14",
+        "href": "/practice/kit/guides/week-14.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "15": {
@@ -700,12 +1032,17 @@
       "QA Store"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El modo defectuoso permite detectar la diferencia: esperado 104500 COP y obtenido 103500 COP. Desactívalo para el retest."
+      },
       {
         "action": "Añade un caso que active el defecto del cotizador y espere el total correcto 104500.",
         "expected": "La prueba falla mostrando 103500; es una variante con defecto intencional."
@@ -721,6 +1058,10 @@
       {
         "action": "Desactiva el defecto, repite y registra retest/regresión.",
         "expected": "La suite queda verde sin aumentar timeouts ni borrar la aserción."
+      },
+      {
+        "action": "Vincula el fallo automatizado con TC-02 y BUG-01, adjuntando el trace y la respuesta HTTP.",
+        "expected": "El reporte separa el total correcto de API (104500) del mostrado en modo defectuoso (103500)."
       }
     ],
     "deliverables": [
@@ -730,7 +1071,8 @@
     "rubric": [
       "Se preserva una aserción que detecta el bug.",
       "La evidencia separa UI y API.",
-      "Se documenta cómo reproducir el modo defectuoso."
+      "Se documenta cómo reproducir el modo defectuoso.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "ui.spec.ts",
@@ -742,6 +1084,13 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 15",
+        "href": "/practice/kit/guides/week-15.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "16": {
@@ -754,12 +1103,17 @@
       "WebKit"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Revisa los projects del kit y ejecuta npm run test:smoke.",
         "expected": "Los casos @smoke se ejecutan en Chromium, Firefox y WebKit."
@@ -775,6 +1129,10 @@
       {
         "action": "Explica qué evidencia conservarás cuando falla solo un navegador.",
         "expected": "Reporte, navegador, versión, viewport, trace y pasos reproducibles."
+      },
+      {
+        "action": "Registra cada combinación caso–navegador–viewport con esperado, obtenido y estado propio.",
+        "expected": "Un navegador no ejecutado queda pendiente; tres ejecuciones del mismo caso no se presentan como tres requisitos."
       }
     ],
     "deliverables": [
@@ -784,7 +1142,8 @@
     "rubric": [
       "Se explican decisiones de cobertura.",
       "La suite no depende de estado compartido.",
-      "No se marca passed un navegador que no se ejecutó."
+      "No se marca passed un navegador que no se ejecutó.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "playwright.config.ts",
@@ -796,6 +1155,13 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 16",
+        "href": "/practice/kit/guides/week-16.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "17": {
@@ -807,12 +1173,17 @@
       "Page Object Model"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Revisa pages/QuotePage.ts y localiza qué pertenece a navegación, interacción y aserción.",
         "expected": "Los nombres describen comportamientos de negocio; el test conserva el escenario visible."
@@ -828,6 +1199,10 @@
       {
         "action": "Explica por qué no creaste una clase base genérica con decenas de métodos.",
         "expected": "Se favorece composición, legibilidad y responsabilidades pequeñas."
+      },
+      {
+        "action": "Refactoriza el test básico first-quote.spec.ts a QuotePage y compara la legibilidad y los selectores duplicados.",
+        "expected": "El refactor conserva las aserciones de negocio y la capacidad de detectar el defecto de cálculo."
       }
     ],
     "deliverables": [
@@ -837,7 +1212,8 @@
     "rubric": [
       "El test sigue mostrando qué se valida.",
       "No hay page global mutable.",
-      "El refactor conserva la capacidad de detectar fallos."
+      "El refactor conserva la capacidad de detectar fallos.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "QuotePage.ts",
@@ -849,6 +1225,18 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 17",
+        "href": "/practice/kit/guides/week-17.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Primer test Playwright sin abstracciones",
+        "href": "/practice/kit/tests/first-quote.spec.ts",
+        "description": "Copia en tests del kit y ejecuta desde su terminal con BASE_URL configurada."
+      }
     ]
   },
   "18": {
@@ -860,12 +1248,17 @@
       "Datos sintéticos"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Inspecciona fixtures/training.ts y crea una fixture de datos de cotización.",
         "expected": "Cada test recibe datos propios y un QuotePage asociado a su Page."
@@ -881,6 +1274,10 @@
       {
         "action": "Documenta cómo aislarías cuentas y storageState en un sistema real.",
         "expected": "No se presenta demo-reader como una sesión real ni se publica un storageState con credenciales."
+      },
+      {
+        "action": "Diseña un experimento con dos casos que cambien cupón y cantidad en paralelo y compara sus resultados.",
+        "expected": "Cada caso mantiene datos y contexto propios; se explica el alcance test frente a worker sin depender del orden."
       }
     ],
     "deliverables": [
@@ -890,7 +1287,8 @@
     "rubric": [
       "Se distingue fixture de test de fixture de worker.",
       "Los datos personales se sustituyen por ficticios.",
-      "No se arreglan carreras imponiendo orden de ejecución."
+      "No se arreglan carreras imponiendo orden de ejecución.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "training.ts",
@@ -902,23 +1300,35 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 18",
+        "href": "/practice/kit/guides/week-18.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "19": {
     "title": "Automatización API basada en contrato y datos",
-    "objective": "Transformar la colección de Postman en pruebas API independientes con aserciones de negocio.",
+    "objective": "Implementar pruebas API independientes con Playwright, contratos explícitos y aserciones de negocio.",
     "minutes": 75,
     "tools": [
       "Playwright APIRequestContext",
       "JSON"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar contratos API mediante solicitudes HTTP. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura contratos API mediante solicitudes HTTP y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La solicitud devuelve estado, cabeceras y cuerpo; el estado obtenido se compara con el esperado configurado."
+      },
       {
         "action": "Ejecuta npm run test:api -- --project=chromium.",
         "expected": "Se verifican catálogo, total y códigos HTTP del simulador."
@@ -932,18 +1342,23 @@
         "expected": "Cada fila produce su esperado; un mensaje de error no pasa por tener un status dentro de cualquier 4xx."
       },
       {
-        "action": "Añade las tres variantes de access y relaciona la matriz Postman/spec.",
+        "action": "Añade las tres variantes de access y relaciona cada caso de autorización con su spec de Playwright.",
         "expected": "Sin token 401, reader/write 403 y admin/write 200. No se requiere identidad real."
+      },
+      {
+        "action": "Traza cada caso de la matriz de contratos a una prueba request de Playwright con datos y resultado del reporte.",
+        "expected": "La matriz identifica equivalencias y nuevos riesgos; un status correcto no reemplaza las aserciones de contrato."
       }
     ],
     "deliverables": [
       "Suite API con 8 o más escenarios propios y contrato explícito.",
-      "Matriz de equivalencia con Postman y reporte."
+      "Matriz de contrato, caso y spec de Playwright con su reporte."
     ],
     "rubric": [
       "No se duplican requests sin variar cobertura.",
       "Se valida tipo y valor de campos de negocio.",
-      "Se distingue servicio stateless de un CRUD persistente."
+      "Se distingue servicio stateless de un CRUD persistente.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "api.spec.ts",
@@ -955,6 +1370,13 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 19",
+        "href": "/practice/kit/guides/week-19.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "20": {
@@ -966,12 +1388,17 @@
       "Arquitectura de pruebas"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La respuesta simulada 503 aparece como error en la interfaz; desactiva la simulación y espera 35000 COP para comprobar recuperación."
+      },
       {
         "action": "Ejecuta tests/network.spec.ts para simular 503 en quotes.",
         "expected": "La UI informa el error y no muestra un total de éxito."
@@ -987,6 +1414,10 @@
       {
         "action": "Separa pruebas con mocks de las de integración real y registra sus límites.",
         "expected": "Un mock verde no se reporta como evidencia de disponibilidad del backend real."
+      },
+      {
+        "action": "Agrega un fallo de transporte con route.abort y compáralo con el 503 HTTP simulado y con la recuperación real.",
+        "expected": "El reporte distingue falta de respuesta de una respuesta HTTP de error y no atribuye disponibilidad al mock."
       }
     ],
     "deliverables": [
@@ -996,7 +1427,8 @@
     "rubric": [
       "Los mocks se limitan a la ruta exacta.",
       "Se prueba la recuperación.",
-      "No se desactiva seguridad para hacer pasar el test."
+      "No se desactiva seguridad para hacer pasar el test.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "network.spec.ts",
@@ -1008,6 +1440,13 @@
         "Playwright · Aserciones",
         "https://playwright.dev/docs/test-assertions"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 20",
+        "href": "/practice/kit/guides/week-20.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "21": {
@@ -1019,6 +1458,7 @@
       "Playwright"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1026,6 +1466,10 @@
       "Ejecuta npm install y versiona package-lock.json del kit en un repositorio de práctica. Configura la variable QA_BASE_URL con el entorno de entrenamiento. No publiques secretos."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado."
+      },
       {
         "action": "Copia .github/workflows/qa.yml a tu repositorio y revisa cada paso.",
         "expected": "Node 22, npm ci, tests unitarios, instalación de browsers y suite se ejecutan en ese orden."
@@ -1041,6 +1485,10 @@
       {
         "action": "Corrige el esperado y repite; registra el enlace a ambas ejecuciones.",
         "expected": "Hay evidencia roja/verde y no se usó continue-on-error para esconder el fallo."
+      },
+      {
+        "action": "Relaciona el commit del PR, el resultado rojo, el cambio de corrección y el resultado verde con sus artefactos.",
+        "expected": "El informe permite revisar el fallo original y confirmar que la corrección no ocultó la aserción ni el exit code."
       }
     ],
     "deliverables": [
@@ -1050,7 +1498,8 @@
     "rubric": [
       "La instalación es reproducible con lockfile.",
       "Se conserva el código de salida de los tests.",
-      "No se publican cookies ni tokens reales."
+      "No se publican cookies ni tokens reales.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "qa.yml",
@@ -1062,6 +1511,13 @@
         "GitHub Actions · Node.js",
         "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 21",
+        "href": "/practice/kit/guides/week-21.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "22": {
@@ -1073,12 +1529,17 @@
       "Reportes"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado."
+      },
       {
         "action": "Repite smoke 10 veces en Chromium con --repeat-each=10 y conserva cada resultado.",
         "expected": "Se informa primera ejecución, duración y fallos; si no hay flakiness observada, se declara."
@@ -1094,6 +1555,10 @@
       {
         "action": "Propón un cambio, repite la medición y compara evidencia antes/después.",
         "expected": "La conclusión indica tamaño de muestra y límites; no declara una mejora no medida."
+      },
+      {
+        "action": "Clasifica cada fallo observado por datos, sincronización, producto o ambiente y asigna una acción de seguimiento.",
+        "expected": "Las hipótesis se sustentan en traces y ejecuciones; si no se reprodujo la intermitencia, se declara el límite."
       }
     ],
     "deliverables": [
@@ -1103,7 +1568,8 @@
     "rubric": [
       "Los retries no borran el primer fallo.",
       "Se distingue causa de correlación.",
-      "El reporte mantiene fallos y casos bloqueados."
+      "El reporte mantiene fallos y casos bloqueados.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
       "filename": "playwright.config.ts",
@@ -1115,25 +1581,36 @@
         "GitHub Actions · Node.js",
         "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 22",
+        "href": "/practice/kit/guides/week-22.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      }
     ]
   },
   "23": {
     "title": "Proyecto QA integrador trazable",
-    "objective": "Reunir análisis, pruebas manuales, Postman, SQL y automatización en una entrega coherente.",
+    "objective": "Reunir análisis, pruebas manuales, SQL y automatización UI/API con Playwright en una entrega coherente.",
     "minutes": 120,
     "tools": [
       "QA Store",
-      "Postman",
       "Playwright",
       "SQL"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
       "Las pruebas usan exclusivamente /practice y /api/v1/practice. No uses cuentas ni endpoints reales de usuarios."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Elige 5 riesgos del cotizador y crea una matriz HU/criterio/caso/spec/evidencia.",
         "expected": "Cada riesgo tiene al menos una validación y se explican límites del sandbox."
@@ -1149,22 +1626,64 @@
       {
         "action": "Ejecuta el pipeline y presenta una decisión de liberación basada en riesgo.",
         "expected": "Se adjuntan reportes reales y se señalan casos no automatizados y limitaciones."
+      },
+      {
+        "action": "Entrega la matriz de casos, historial de BUG-01, pruebas API de Playwright ejecutadas, resultados Q1–Q9 y un spec UI propio.",
+        "expected": "Cada herramienta aporta evidencia acorde a su objetivo; los fixtures SQL no se presentan como datos persistidos por el sandbox."
       }
     ],
     "deliverables": [
-      "Repositorio con tests, datos, colección y matriz trazable.",
+      "Repositorio con tests UI/API, datos y matriz trazable.",
       "Informe de calidad y enlace al pipeline."
     ],
     "rubric": [
       "La cantidad de tests no reemplaza cobertura.",
       "Se puede reproducir sin secretos.",
-      "No hay resultados inventados ni credenciales de producción."
+      "No hay resultados inventados ni credenciales de producción.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "GitHub Actions · Node.js",
         "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 23",
+        "href": "/practice/kit/guides/week-23.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      },
+      {
+        "label": "SQL ejecutable Q1–Q9",
+        "href": "/practice/kit/data/training.sql",
+        "description": "SELECT, WHERE, ORDER BY, INNER y LEFT JOIN, IS NULL, GROUP BY, HAVING y EXISTS en tablas temporales."
+      },
+      {
+        "label": "Primer test Playwright sin abstracciones",
+        "href": "/practice/kit/tests/first-quote.spec.ts",
+        "description": "Copia en tests del kit y ejecuta desde su terminal con BASE_URL configurada."
+      }
     ]
   },
   "24": {
@@ -1177,6 +1696,7 @@
       "Reportes"
     ],
     "setup": [
+      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1184,6 +1704,10 @@
       "Prepara una copia limpia del repositorio de práctica y revisa su contenido antes de hacerlo público."
     ],
     "steps": [
+      {
+        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
+        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+      },
       {
         "action": "Instala desde una carpeta limpia con npm ci y ejecuta smoke.",
         "expected": "Las instrucciones funcionan usando el lockfile y la variable BASE_URL documentada."
@@ -1199,6 +1723,10 @@
       {
         "action": "Revisa historial Git, artifacts y archivos antes de publicar y prepara una mejora siguiente.",
         "expected": "No hay .env, contraseñas, storageState real ni datos personales; README incluye arquitectura y próximos pasos."
+      },
+      {
+        "action": "Presenta un caso fallido, su reporte de bug, el historial y el retest, junto a consultas SQL y pruebas UI/API de Playwright.",
+        "expected": "La demo distingue evidencia obtenida, expectativas, limitaciones y estado real de los defectos."
       }
     ],
     "deliverables": [
@@ -1208,13 +1736,51 @@
     "rubric": [
       "La demo es repetible y no depende de cuentas privadas.",
       "Se justifican decisiones con evidencia.",
-      "El portafolio comunica el alcance real sin exagerarlo."
+      "El portafolio comunica el alcance real sin exagerarlo.",
+      "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "links": [
       [
         "GitHub Actions · Node.js",
         "https://docs.github.com/en/actions/tutorials/build-and-test-code/nodejs"
       ]
+    ],
+    "files": [
+      {
+        "label": "Guía específica de la semana 24",
+        "href": "/practice/kit/guides/week-24.md",
+        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+      },
+      {
+        "label": "Matriz de casos y ejecución",
+        "href": "/practice/templates/case-matrix.csv",
+        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
+      },
+      {
+        "label": "Guía Caso → Bug y retest",
+        "href": "/practice/templates/case-and-bug-guide.md",
+        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
+      },
+      {
+        "label": "Historial del ciclo de vida del bug",
+        "href": "/practice/templates/bug-lifecycle.csv",
+        "description": "Registra transición, responsable, fecha y evidencia."
+      },
+      {
+        "label": "Plantilla de reporte de bug",
+        "href": "/practice/templates/bug-report.md",
+        "description": "Describe el defecto y enlázalo con el caso fallido."
+      },
+      {
+        "label": "SQL ejecutable Q1–Q9",
+        "href": "/practice/kit/data/training.sql",
+        "description": "SELECT, WHERE, ORDER BY, INNER y LEFT JOIN, IS NULL, GROUP BY, HAVING y EXISTS en tablas temporales."
+      },
+      {
+        "label": "Primer test Playwright sin abstracciones",
+        "href": "/practice/kit/tests/first-quote.spec.ts",
+        "description": "Copia en tests del kit y ejecuta desde su terminal con BASE_URL configurada."
+      }
     ]
   }
 }

@@ -7,8 +7,8 @@ test('dashboard, navegación y contenido de estudio',async({page})=>{
  await expect(page.getByRole('heading',{name:/Tu ruta, paso a paso/})).toBeVisible();
  await page.getByRole('link',{name:/Fundamentos del Testing/}).first().click();
  await expect(page.getByRole('heading',{name:/Fundamentos del Testing/})).toBeVisible();
- await page.getByRole('link',{name:/Mentalidad QA y ciclo de vida/}).click();
- await expect(page.getByRole('heading',{name:/Mentalidad QA y ciclo de vida/})).toBeVisible();
+ await page.getByRole('link',{name:/Mentalidad QA y ciclo de vida del software/}).click();
+ await expect(page.getByRole('heading',{name:/Mentalidad QA y ciclo de vida del software/})).toBeVisible();
 });
 test('API permite lectura de módulos y calificación',async({request})=>{
  const modules=await request.get('/api/v1/modules');expect(modules.ok()).toBeTruthy();

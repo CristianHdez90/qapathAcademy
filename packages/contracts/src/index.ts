@@ -13,13 +13,19 @@ export type PublicQuestion = Pick<Question, 'q'|'a'>;
 export type PracticalExercise={
  title:string;objective:string;minutes:number;tools:string[];setup:string[];
  steps:{action:string;expected:string}[];deliverables:string[];rubric:string[];
- starter?:{filename:string;language:string;code:string};links:string[][];
+ starter?:{filename:string;language:string;code:string};
+ files?:{label:string;href:string;description:string}[];links:string[][];
+};
+export type ReadingConcept = {
+ id:string;title:string;description:string;
+ example?:{context:string;action:string;result:string};
+ demonstration?:{steps:string[];icons?:string[]};
 };
 export type StudyGuide = {
   exercise?:PracticalExercise;
   duration: number; level: string; summary: string;
-  sections: {title:string;body:string;points:string[]}[];
-  example: {title:string;context:string;steps:string[];code?:string;language?:string};
+  sections: {title:string;body:string;points:string[];concepts?:ReadingConcept[]}[];
+  example: {title:string;context:string;steps:string[];code?:string;language?:string;concepts?:ReadingConcept[]};
   activity:string; answer:string; pitfall:string;
   question:{q:string;options:string[];correct:number;why:string};
   links: string[][];

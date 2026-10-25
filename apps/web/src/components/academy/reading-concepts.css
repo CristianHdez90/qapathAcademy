@@ -1,0 +1,11 @@
+.reading-concepts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0;min-width:0}
+.reading-concept{padding:20px;border:1px solid #35576b;border-radius:13px;background:linear-gradient(135deg,#152e3d,#132237);min-width:0}
+.reading-concept dt{display:flex;align-items:center;gap:12px;margin:0 0 13px}
+.reading-concept-icon{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;background:#59d9b817;border:1px solid #65cbb342;border-radius:12px;color:#80ebce}
+.reading-concept-icon svg{width:25px;height:25px}
+.reading-concept-title{font-weight:750;font-size:16px;line-height:1.4;margin:0;color:#edf6ff;letter-spacing:-.2px}
+.reading-concept dd{margin:0;font-size:14px;line-height:1.8;color:#bbcfdf;overflow-wrap:anywhere}
+.reading-concept-qc .reading-concept-icon,.reading-concept-verification .reading-concept-icon{color:#97caff;background:#75b4f414;border-color:#75b4f440}
+.reading-concept-testing .reading-concept-icon,.reading-concept-validation .reading-concept-icon{color:#c8b6ff;background:#ae91f214;border-color:#ae91f240}
+.reading-concept-error .reading-concept-icon,.reading-concept-failure .reading-concept-icon{color:#f2cb88;background:#f2cb8812;border-color:#f2cb8833}
+@media(max-width:650px){.reading-concepts{grid-template-columns:minmax(0,1fr)}.reading-concept{padding:18px}}

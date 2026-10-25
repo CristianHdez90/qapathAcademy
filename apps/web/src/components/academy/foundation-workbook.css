@@ -1,0 +1,22 @@
+.foundation-workbook{min-width:0}
+.foundation-workbook p,.foundation-workbook li{line-height:1.8;color:#c2d4e4;font-size:14px}
+.foundation-story,.foundation-design{padding:20px;border:1px solid #3c5d73;border-radius:12px;margin:20px 0;background:#0d1d30;min-width:0}
+.foundation-workbook h3{color:#a2efda}
+.foundation-workbook code{overflow-wrap:anywhere;white-space:pre-wrap}
+.foundation-example{padding:14px 0;border-top:1px solid #36556b}
+.foundation-table-scroll{width:100%;max-width:100%;overflow:auto;border:1px solid #45657b;border-radius:10px;margin-top:20px;max-height:720px}
+.foundation-table-scroll:focus-visible{outline:2px solid #78e8cd;outline-offset:3px}
+.foundation-workbook table{border-collapse:separate;border-spacing:0;width:100%;min-width:2400px;font-size:13px}
+.foundation-workbook caption{text-align:left;padding:14px;background:#162c40;color:#cae4f4}
+.foundation-workbook th,.foundation-workbook td{padding:12px;vertical-align:top;border-bottom:1px solid #36556b;border-right:1px solid #36556b}
+.foundation-workbook thead th{position:sticky;top:0;background:#1a354b;color:#a8efdc;z-index:1;text-align:left}
+.foundation-workbook tbody th{position:sticky;left:0;background:#10283c;color:#a8efdc;z-index:1}
+.foundation-workbook td{min-width:160px}
+.foundation-workbook textarea,.foundation-workbook select,.foundation-workbook td input{box-sizing:border-box;width:100%;min-width:150px;min-height:44px;padding:10px;background:#081a2d;color:#e4eff9;border:1px solid #45657b;border-radius:7px;font:inherit}
+.foundation-workbook textarea{min-height:140px;resize:vertical}
+.foundation-workbook textarea[readonly]{background:#142a3c}
+.foundation-row-actions{display:grid;gap:10px}
+.foundation-notice{white-space:pre-wrap}
+.foundation-coverage{font-weight:700;color:#9be8d1!important}
+.foundation-errors{border-left:3px solid #dfaa82;padding:12px 12px 12px 30px}
+.foundation-checklist{padding-left:20px}
