@@ -14,9 +14,9 @@ test('all practices expose only four main sections in the requested order',async
  }
 });
 test('matrix and evidence remain available inside the first section',async({page})=>{
- await page.goto('/practice/1');const lab=page.locator('.activity-lab');
+ await page.goto('/practice/4');const lab=page.locator('.activity-lab');
  await lab.getByRole('button',{name:'Ejecutar actividad del tema',exact:true}).click();
- await expect(lab.getByLabel('Resultado de la actividad del tema')).toContainText('Resultado obtenido: 150');
+ await expect(lab.getByLabel('Resultado de la actividad del tema')).toContainText('Regla: entre 8 y 20 caracteres');
  await expect(lab.getByLabel('Caso 1 · Título',{exact:true})).toBeVisible();
  await lab.getByText('Guardar y revisar evidencia',{exact:true}).click();
  await lab.getByRole('button',{name:'Guardar evidencia de esta actividad',exact:true}).click();

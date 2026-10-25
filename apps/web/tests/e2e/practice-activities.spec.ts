@@ -9,17 +9,23 @@ test('lesson opens its specific activity and preserves week-specific evidence',a
  await expect(page.getByRole('heading',{name:'Mentalidad QA y ciclo de vida del software',exact:true})).toBeVisible();
  await expect(page.getByRole('link',{name:'Abrir actividad de la semana 1',exact:false})).toHaveAttribute('href','/practice/1');
  await page.goto('/practice/1');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
- await expect(page.getByRole('heading',{name:'Escenarios Gherkin y registro de ejecución'})).toBeVisible();
- await page.getByLabel('Escenarios de prueba · Given / When / Then',{exact:true}).fill('Scenario: Cotización básica\nGiven cantidad 1 sin cupón\nWhen solicito cotizar\nThen el total es 35000 COP');
- await page.getByLabel('Resultado esperado por escenario',{exact:true}).fill('Para cantidad 1 con recogida, total esperado de 35000 COP.');
- const observed='Resultado obtenido 35000 COP, estado Passed, fecha 2026-10-24; captura en evidencia local.';
- await page.getByLabel('Resultado obtenido (observado), estado, fecha y evidencia',{exact:true}).fill(observed);
- await page.getByRole('button',{name:'Guardar evidencia de esta actividad',exact:true}).click();
- await expect(page.getByText('✓ Guardado en este navegador',{exact:true})).toBeVisible();
- await page.reload();await expect(page.getByLabel('Resultado obtenido (observado), estado, fecha y evidencia',{exact:true})).toHaveValue(observed);
- await page.goto('/practice/5');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();await expect(page.getByRole('heading',{name:'Reporte de bug reproducible',exact:true})).toBeVisible();
- await expect(page.getByLabel('Título y descripción del error',{exact:true})).toHaveValue('');
- await expect(page.getByLabel('Resultado esperado',{exact:true})).toBeVisible();await expect(page.getByLabel('Resultado obtenido (observado)',{exact:true})).toBeVisible();
+ const wizard=page.locator('.foundation-evidence-wizard');
+ await expect(wizard.getByRole('heading',{name:'Tu misión QA: de los casos a la evidencia',exact:true})).toBeVisible();
+ await wizard.getByRole('button',{name:'Continuar: explicar mis hallazgos',exact:true}).click();
+ await wizard.getByRole('textbox').fill('Reviso CA-01 mediante una partición de equivalencia válida.');
+ await wizard.getByRole('button',{name:'Siguiente pregunta →',exact:true}).click();
+ await wizard.getByRole('textbox').fill('Antes de ejecutar defino el saldo esperado según la HU.');
+ await wizard.getByRole('button',{name:'Siguiente pregunta →',exact:true}).click();
+ const observed='Documentaré cualquier diferencia con datos y pasos para reproducirla.';
+ await wizard.getByRole('textbox').fill(observed);
+ await wizard.getByRole('button',{name:'Revisar mi entrega →',exact:true}).click();
+ await wizard.getByRole('button',{name:'Guardar evidencia de esta actividad',exact:true}).click();
+ await expect(wizard.getByText('✓ Guardado en este navegador',{exact:true})).toBeVisible();
+ await page.reload();await wizard.locator('summary').first().click();await wizard.getByRole('button',{name:'Continuar: explicar mis hallazgos',exact:true}).click();await wizard.getByRole('button',{name:'3. Bugs y retest',exact:true}).click();
+ await expect(wizard.getByRole('textbox')).toHaveValue(observed);
+ await page.goto('/practice/5');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();await expect(page.getByRole('heading',{name:'Tu bitácora del bug: del hallazgo al cierre',exact:true})).toBeVisible();
+ await page.locator('.bug-evidence-wizard').getByRole('button',{name:'Continuar: explicar mis decisiones',exact:true}).click();await expect(page.getByLabel('Título y descripción del error',{exact:true})).toHaveValue('');
+
  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}'));
  expect(JSON.parse(stored.evidence['exercise:1']).fields[2]).toBe(observed);expect(stored.evidence['exercise:5']).toBeUndefined();
 });
@@ -45,7 +51,7 @@ test('all 24 activity routes expose the matching workspace',async({request})=>{
 });
 
 test('case matrix saves with its activity and exports expected and observed separately',async({page})=>{
- await page.goto('/practice/1');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
+ await page.goto('/practice/6');await page.getByText('Guardar y revisar evidencia',{exact:true}).click();
  await page.getByLabel('Caso 1 · Título',{exact:true}).fill('TC-01 Cotización con recogida');
  await page.getByLabel('Caso 1 · Precondiciones',{exact:true}).fill('Producto básico disponible; defecto desactivado.');
  await page.getByLabel('Caso 1 · Pasos · Given / When / Then',{exact:true}).fill('Given cantidad 1; When cotizo; Then total 35000 COP.');
@@ -60,7 +66,7 @@ test('case matrix saves with its activity and exports expected and observed sepa
  expect((await pending).suggestedFilename()).toBe('matriz-casos-ejecucion.csv');
  await page.setViewportSize({width:320,height:740});await page.getByLabel('Caso 1 · Título',{exact:true}).scrollIntoViewIfNeeded();
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
- await page.goto('/practice/2');await expect(page.getByLabel('Caso 1 · Título',{exact:true})).toHaveValue('');
+ await page.goto('/practice/3');await expect(page.getByLabel('Caso 1 · Título',{exact:true})).toHaveCount(0);
 });
 
 test('Postman, SQL and first Playwright file remain available in the matching activity',async({page,request})=>{

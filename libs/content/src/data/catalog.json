@@ -51,13 +51,13 @@
     {
       "id": "herramientas",
       "number": "03",
-      "title": "API, SQL, Git y herramientas",
+      "title": "HTTP, REST, Postman, DevTools y SQL",
       "range": "Semanas 7–8",
       "icon": "terminal",
       "track": "QA TÉCNICO",
       "color": "#74b6ff",
-      "summary": "Comprueba servicios, inspecciona datos y versiona tus entregables.",
-      "outcome": "Validas API REST, consultas una base de datos y usas Git.",
+      "summary": "Comprueba servicios HTTP, valida datos e investiga la ejecución con DevTools.",
+      "outcome": "Validas API REST con Postman, consultas SQL e investigas peticiones y errores del navegador.",
       "weeks": [
         7,
         8
@@ -66,7 +66,8 @@
         "HTTP / REST",
         "Postman",
         "SQL",
-        "Git / DevTools"
+        "JOIN y agregaciones",
+        "DevTools"
       ],
       "project": "Colección Postman de 15 pruebas y 10 consultas SQL.",
       "minutes": 120
@@ -74,13 +75,13 @@
     {
       "id": "typescript",
       "number": "04",
-      "title": "JavaScript + TypeScript",
+      "title": "JavaScript, TypeScript y Git",
       "range": "Semanas 9–12",
       "icon": "code",
       "track": "PROGRAMACIÓN",
       "color": "#b195ff",
-      "summary": "Aprende la lógica necesaria para construir automatizaciones mantenibles.",
-      "outcome": "Creas funciones, objetos tipados y manejas operaciones asíncronas.",
+      "summary": "Programa pruebas y conserva entregas revisables con Git.",
+      "outcome": "Creas lógica tipada y asíncrona y versionas tus cambios con Git.",
       "weeks": [
         9,
         10,
@@ -91,10 +92,11 @@
         "JavaScript",
         "TypeScript",
         "POO",
-        "async / await"
+        "async / await",
+        "Git"
       ],
       "project": "Miniaplicación que procesa y valida datos JSON.",
-      "minutes": 150
+      "minutes": 190
     },
     {
       "id": "playwright",
@@ -299,53 +301,57 @@
     {
       "id": 7,
       "module": "herramientas",
-      "title": "HTTP, REST y pruebas API con Postman",
-      "goal": "Validar endpoints y reglas de negocio de un servicio.",
+      "title": "HTTP, REST y pruebas API con Postman y DevTools",
+      "goal": "Validar servicios HTTP e investigar peticiones y respuestas con Postman y DevTools.",
       "topics": [
         "Métodos HTTP y códigos de respuesta",
         "Headers, auth, body y JSON",
         "Colecciones, ambientes y variables",
-        "Aserciones y pruebas negativas"
+        "Aserciones y pruebas negativas",
+        "Network, Console y Application de DevTools"
       ],
       "tasks": [
         "Crear 15 pruebas sobre una API de práctica",
-        "Validar status, estructura, campos y errores"
+        "Validar status, estructura, campos y errores",
+        "Investigar una diferencia entre respuesta API e interfaz"
       ],
-      "evidence": "Colección Postman exportada"
+      "evidence": "Colección Postman exportada y diagnóstico con DevTools"
     },
     {
       "id": 8,
       "module": "herramientas",
-      "title": "SQL, DevTools y Git",
-      "goal": "Seguir datos del frontend a backend y versionar trabajo.",
+      "title": "SQL para validar datos",
+      "goal": "Verificar datos, relaciones y agregaciones con consultas SQL.",
       "topics": [
-        "SELECT, WHERE, JOIN y GROUP BY",
-        "Network / Console de DevTools",
-        "Commits, ramas, pull requests",
-        "Repositorio y archivo README"
+        "SELECT, WHERE y ORDER BY",
+        "INNER JOIN y LEFT JOIN",
+        "NULL, GROUP BY y HAVING",
+        "Subconsultas y EXISTS"
       ],
       "tasks": [
         "Escribir 10 consultas SQL",
-        "Publicar un repositorio con casos y colección"
+        "Comparar resultados y explicar NULL y cardinalidad"
       ],
-      "evidence": "Repositorio documentado + consultas SQL"
+      "evidence": "Consultas SQL con resultados esperados y obtenidos"
     },
     {
       "id": 9,
       "module": "typescript",
-      "title": "JavaScript: lógica fundamental",
-      "goal": "Resolver problemas básicos sin frameworks.",
+      "title": "JavaScript y Git",
+      "goal": "Programar lógica comprobable y versionar el trabajo.",
       "topics": [
         "Variables y tipos primitivos",
         "Condicionales y ciclos",
         "Funciones y alcance",
-        "Operadores y manejo de errores"
+        "Operadores y manejo de errores",
+        "Git: ramas, commits, revisión y README"
       ],
       "tasks": [
         "Implementar validador de contraseña",
-        "Crear función de cálculo de descuento"
+        "Crear función de cálculo de descuento",
+        "Versionar el archivo de práctica y consultar su historial"
       ],
-      "evidence": "Archivo JS con tests de funciones"
+      "evidence": "Código con aserciones e historial Git"
     },
     {
       "id": 10,
@@ -836,14 +842,24 @@
         "why": "WHERE restringe las filas devueltas."
       },
       {
-        "q": "¿Para qué sirve Git?",
+        "q": "¿Qué conserva un LEFT JOIN desde clientes hacia pedidos?",
         "a": [
-          "Versionar cambios",
-          "Hacer consultas SQL",
-          "Crear locators"
+          "Solo clientes con pedidos",
+          "Todos los clientes, incluso sin pedidos",
+          "Solo pedidos pagados"
+        ],
+        "correct": 1,
+        "why": "Las columnas del pedido quedan en NULL cuando no existe coincidencia."
+      },
+      {
+        "q": "¿Qué permite comparar Network en DevTools?",
+        "a": [
+          "La petición y respuesta reales con lo mostrado por la interfaz",
+          "El historial de commits",
+          "Solo las reglas de CSS"
         ],
         "correct": 0,
-        "why": "Git permite mantener historial y colaborar en ramas."
+        "why": "Network permite revisar método, ruta, payload, status, headers y cuerpo para investigar diferencias con la interfaz."
       }
     ],
     "typescript": [
@@ -876,6 +892,16 @@
         ],
         "correct": 0,
         "why": "map devuelve un nuevo array con los elementos transformados."
+      },
+      {
+        "q": "¿Para qué sirve Git?",
+        "a": [
+          "Versionar cambios",
+          "Hacer consultas SQL",
+          "Crear locators"
+        ],
+        "correct": 0,
+        "why": "Git permite mantener historial y colaborar en ramas."
       }
     ],
     "playwright": [

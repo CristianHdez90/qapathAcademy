@@ -1,3 +1,4 @@
+import {foundationExamples,caseFingerprint} from '@qapath/progress';
 import {studyReading} from './helpers/learning';
 import {test,expect} from '@playwright/test';
 import {randomUUID,randomBytes,scryptSync} from 'node:crypto';
@@ -32,22 +33,12 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  const progress=async()=>(await (await page.request.get('/api/v1/me/progress',{maxRetries:1})).json()).data;
  expect((await progress()).weeks).toEqual([]);
  expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'toggle',key:'weeks',value:1}})).status()).toBe(400);
- const evidence='Documenté los escenarios positivos y negativos, resultados observados y riesgos con datos ficticios.';
- const tasks=catalog.weeks.find(w=>w.id===1)!.tasks;
- await page.locator('#deliverables > summary').click();
- for(const title of tasks){
-  const card=page.locator('#deliverables .learning-evidence').filter({has:page.getByText(title,{exact:true})});
-  await card.getByRole('textbox').fill(evidence);await card.getByRole('button',{name:'Enviar evidencia'}).click();
-  await expect(card.getByText(/Evidencia entregada/)).toBeVisible();
- }
- await page.locator('.options').first().getByRole('button').nth(guides['1'].question.correct).click();
+ const caseMatrix=foundationExamples.map((example,i)=>{const row={id:`TC-${i+1}`,exampleId:example.id,criterion:example.criterion,title:example.technique,preconditions:'Cuenta de entrenamiento preparada',data:JSON.stringify(example.data),steps:example.steps.map((step,i)=>`${i+1}. ${step}`).join('\n'),expected:example.expected,observed:example.expected,status:'Aprobado',bug:''};return {...row,execution:{fingerprint:caseFingerprint(row),obtained:row.observed}}});
+ expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'submit-evidence',kind:'exercise',id:'1',text:JSON.stringify({week:1,completion:'validated',caseMatrix})}})).ok()).toBeTruthy();
+ await page.getByLabel('Ir a un apartado').selectOption('self-check');await page.locator('.options').first().getByRole('button').nth(guides['1'].question.correct).click();
  await expect.poll(async()=>(await progress()).lessonChecks).toContain(1);
  expect((await progress()).weeks).toEqual([]);
  await page.goto('/modules/fundamentos');
- for(const card of await page.locator('.lab-card .learning-evidence').all()){
-  await card.getByRole('textbox').fill(evidence);await card.getByRole('button',{name:'Enviar evidencia'}).click();
-  await expect(card.getByText(/Evidencia entregada/)).toBeVisible();
- }
  for(const [i,question] of catalog.quizzes.fundamentos.entries())await page.locator('.question').nth(i).getByRole('radio').nth(question.correct).check();
  await page.getByRole('button',{name:/Calificar respuestas/}).click();
  await expect.poll(async()=>(await progress()).weeks).toEqual([1]);

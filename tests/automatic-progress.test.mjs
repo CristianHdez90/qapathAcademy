@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
+import {validatedPractice} from './helpers/practice-evidence.mjs';
 const require=createRequire(import.meta.url);
 const {emptyProgress,applyProgressCommand,fromUnknown,weekRequirements,QUIZ_PASS_PERCENT}=require('../libs/progress/dist/index.js');
 const {progressCommandSchema}=require('../packages/contracts/dist/index.js');
@@ -17,7 +18,7 @@ test('completion rules match all 24 lessons and their module labs, task count an
  }
 });
 
-test('week completion requires reading, submitted tasks, passed lesson check, labs and passed module quiz',()=>{
+test('week completion requires reading, validated practice, self-check and module quiz; legacy labs are not required',()=>{
  let state=emptyProgress();const rule=weekRequirements(1);
  const record=command=>{state=applyProgressCommand(state,command)};
  for(let section=0;section<rule.sections;section++)record({type:'reading-section',week:1,section});
@@ -27,6 +28,7 @@ test('week completion requires reading, submitted tasks, passed lesson check, la
  for(let i=0;i<rule.tasks;i++)record({type:'submit-evidence',kind:'task',id:`1:${i}`,text:evidence});
  record({type:'grade',moduleId:rule.module,score:QUIZ_PASS_PERCENT-1});
  for(const id of rule.labs)record({type:'submit-evidence',kind:'lab',id,text:evidence});
+ record({type:'submit-evidence',kind:'exercise',id:'1',text:validatedPractice(1)});
  assert.deepEqual(state.weeks,[]);
  record({type:'grade',moduleId:rule.module,score:QUIZ_PASS_PERCENT});assert.deepEqual(state.weeks,[1]);
  record({type:'grade',moduleId:rule.module,score:10});assert.deepEqual(state.weeks,[1]);

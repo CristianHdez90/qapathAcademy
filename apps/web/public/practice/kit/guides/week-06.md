@@ -1,39 +1,25 @@
 # Semana 6 · Sprint QA: DoD, ejecución y cierre
 
-Configurar alcance, resultados y bloqueos de un Sprint y comunicar métricas con sus denominadores y riesgos pendientes.
+## Prepara tu actividad
+- Abre la misión interactiva. Es una simulación local con datos ficticios.
+- Conserva este kit como alternativa. Guarda o descarga la bitácora desde la plataforma.
 
-Herramientas: Tablero de Sprint, Definition of Done, Informe de ejecución
+## 1. Planifica con el equipo
+Define un Sprint Goal que explique el valor de las transferencias. Relaciona objetivo y plan con Planning; inspección y adaptación del plan diario con Daily; resultados y adaptaciones del producto con Review; calidad y efectividad con Retrospective.
 
-## Preparación
+## 2. Interpreta el tablero
+Punto de partida: 25 planificados, 17 aprobados, 2 fallidos y 1 bloqueado sin ejecutar.
+- Ejecutados = aprobados + fallidos = 19.
+- Ejecución = 19 / 25 = 76 %.
+- Aprobación sobre ejecutados = 17 / 19 ≈ 89 % (redondeada).
+- Quedan 5 adicionales sin ejecutar; el bloqueado tampoco se ejecutó.
+Predice y comprueba. Cambia las cantidades para explorar. No se aceptan sumas superiores a lo planificado. Con cero ejecutados la aprobación no aplica: escribe na.
 
-- Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.
-- Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad.
+## 3. Prepara el cierre
+La DoD específica de esta simulación exige ejecutar y aprobar las pruebas previstas y conservar evidencia. Con los datos iniciales hay pendientes. El porcentaje por sí solo no decide una liberación.
+En Review comunica resultados y adaptaciones con el equipo y stakeholders. Para Retrospective elige una mejora del proceso que no oculte resultados.
 
-## Ejecución
+## Guarda tu evidencia
+Revisa los datos adjuntos, agrega reflexiones opcionales y guarda un borrador o descarga el informe. Para completar el recorrido resuelve los tres pasos, pulsa Validar mi Sprint y después Finalizar práctica. Cambiar datos invalida la validación previa hasta comprobarlos de nuevo.
 
-1. Define Sprint Goal y configura 25 planificados, 17 aprobados, 2 fallidos y 1 bloqueado sin ejecutar.
-   Resultado esperado: Hay 19 ejecutados y quedan 5 no ejecutados adicionales; el bloqueado no se cuenta como ejecutado.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
-
-2. Ejecuta el informe y explica los denominadores de ejecución y aprobación.
-   Resultado esperado: Ejecución 19/25 = 76 %; aprobación 17/19 ≈ 89 %. El informe identifica la convención empleada.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
-
-3. Modifica resultados y verifica que no se acepten sumas que superen lo planificado.
-   Resultado esperado: La herramienta rechaza datos inconsistentes en vez de producir métricas engañosas.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
-
-4. Revisa la Definition of Done y redacta el cierre de Review y una mejora para Retrospective.
-   Resultado esperado: El cierre informa fallos, bloqueos y riesgos; revisar DoD no convierte automáticamente un incremento en listo para liberar.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
-
-## Entregables
-
-- Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.
-- Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos.
-
-## Criterios
-
-- La actividad usa los conceptos y herramientas de esta semana.
-- Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.
-- Se mantiene separado el resultado esperado del obtenido.
+Referencia: [Scrum Guide](https://scrumguides.org/scrum-guide.html).

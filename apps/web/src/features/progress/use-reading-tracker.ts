@@ -1,18 +1,20 @@
 'use client';
 import {useEffect,useRef} from 'react';
 import {READING_SECTION_SECONDS} from '@qapath/progress';
+import {addReadingExposure,chapterWasTraversed} from './reading-coverage';
 import {useProgress} from './progress-provider';
 
 /** Records visible chapters and the guided example, never a manual completion flag. */
 export function useReadingTracker(week:number){
  const root=useRef<HTMLDivElement>(null);
+ const exposure=useRef(new Map<number,[number,number][]>());
  const elapsed=useRef(new Map<number,number>());
  const trackedWeek=useRef(week),queued=useRef(new Set<number>());
  const {ready,state,recordLearning}=useProgress();
  const saved=state.readingSections[String(week)];
  useEffect(()=>{
   if(!ready||!root.current)return;
-  if(trackedWeek.current!==week){elapsed.current.clear();queued.current.clear();trackedWeek.current=week;}
+  if(trackedWeek.current!==week){elapsed.current.clear();exposure.current.clear();queued.current.clear();trackedWeek.current=week;}
   const visible=new Set<HTMLElement>(),sent=new Set([...(saved||[]),...queued.current]);
   const observer=new IntersectionObserver(entries=>{for(const entry of entries){
    const section=entry.target as HTMLElement;
@@ -22,7 +24,7 @@ export function useReadingTracker(week:number){
   let last=performance.now();
   const timer=setInterval(()=>{
    const now=performance.now(),delta=Math.min(now-last,500);last=now;
-   if(document.visibilityState!=='visible'||!document.hasFocus())return;
+   if(document.visibilityState!=='visible'||!document.hasFocus()||document.querySelector('dialog[open]'))return;
    for(const element of visible){
     const section=Number(element.dataset.readingSection);
     if(sent.has(section))continue;
@@ -31,8 +33,9 @@ export function useReadingTracker(week:number){
     const rect=element.getBoundingClientRect();
     const shown=Math.max(0,Math.min(rect.bottom,window.innerHeight)-Math.max(rect.top,0));
     if(rect.width<=0||rect.right<=0||rect.left>=window.innerWidth||shown<Math.min(rect.height,window.innerHeight)*.15)continue;
+    const ranges=addReadingExposure(exposure.current.get(section)||[],rect.top,rect.bottom,rect.height,window.innerHeight);exposure.current.set(section,ranges);
     const time=(elapsed.current.get(section)||0)+delta;elapsed.current.set(section,time);
-    if(time>=READING_SECTION_SECONDS*1000){sent.add(section);queued.current.add(section);void recordLearning({type:'reading-section',week,section});}
+    if(time>=READING_SECTION_SECONDS*1000&&chapterWasTraversed(ranges)){sent.add(section);queued.current.add(section);void recordLearning({type:'reading-section',week,section});}
    }
   },250);
   return()=>{clearInterval(timer);observer.disconnect()};

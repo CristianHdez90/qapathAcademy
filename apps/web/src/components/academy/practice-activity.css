@@ -26,3 +26,5 @@
 .case-matrix details p{font-size:14px;line-height:1.8;color:#bcd0e2}
 .practice-files li p{margin:4px 0 16px}
 @media(max-width:650px){.case-matrix-cards{grid-template-columns:minmax(0,1fr)}}
+.practice-activity{grid-template-columns:minmax(0,1fr)}
+.practice-activity>header>.pill{max-width:100%;white-space:normal;line-height:1.6}

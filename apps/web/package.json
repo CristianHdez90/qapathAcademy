@@ -3,8 +3,8 @@
   "private": true,
   "version": "6.0.0",
   "scripts": {
-    "dev": "node scripts/prepare-practice-runtime.mjs && next dev --port 3000",
-    "build": "node scripts/prepare-practice-runtime.mjs && next build",
+    "dev": "node scripts/prepare-learning-navigation.mjs && node scripts/prepare-practice-runtime.mjs && next dev --port 3000",
+    "build": "node scripts/prepare-learning-navigation.mjs && node scripts/prepare-practice-runtime.mjs && next build",
     "start": "next start --port 3000",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",

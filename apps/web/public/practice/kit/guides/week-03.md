@@ -1,39 +1,28 @@
-# Semana 3 · Historia, Gherkin y criterios ejecutables
+# Semana 3 · Historia de usuario BDD y Gherkin
 
-Construir una historia y un criterio Given/When/Then, variar condiciones de una cuenta ficticia y contrastar predicción con resultado.
+Analizar una HU, distinguir contexto, acción y resultado, construir un escenario con opciones y validar su coherencia con los criterios de aceptación.
 
-Herramientas: Constructor de historia, Ejecutor de reglas de acceso, Gherkin
+## Historia de usuario
 
-## Preparación
+**Como** cliente registrado,  
+**Quiero** acceder a mis pedidos con mi cuenta,  
+**Para** consultar mis compras de forma segura.
 
-- Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.
-- Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad.
+## De la HU al escenario
 
-## Ejecución
+1. Revisa la historia de usuario y separa actor, necesidad y beneficio de los escenarios que ejemplifican sus criterios.
+   Resultado esperado: Como, Quiero y Para describen la HU; Given, When y Then describen un ejemplo de comportamiento.
 
-1. Completa Como, Quiero, Para y los campos Given, When y Then con una expectativa observable.
-   Resultado esperado: La historia expresa actor, necesidad y beneficio; el criterio describe un comportamiento verificable.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+2. Abre la explicación del .feature: Feature agrupa la funcionalidad y Scenario identifica un comportamiento; Given establece contexto, When ejecuta la acción y Then expresa la salida observable.
+   Resultado esperado: Un archivo UTF-8 con Feature: y Scenario:, seguido de pasos Given, When y Then sin dos puntos.
 
-2. Marca cuenta activa y credencial válida, predice permitir y ejecuta la actividad.
-   Resultado esperado: La regla de acceso de entrenamiento permite entrar; conserva el escenario y el resultado en la evidencia.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+3. Sigue las cuatro piezas del constructor: título, Given, When y Then. Usa Siguiente paso y las pistas, observa el .feature y ejecuta para revisar roles, acciones y resultados.
+   Resultado esperado: El validador diferencia errores de rol, acciones fuera de la HU, resultados ambiguos y contradicciones con CA-01, CA-02 o CA-03.
 
-3. Desmarca cada condición por separado y después ambas; cambia la predicción antes de ejecutar.
-   Resultado esperado: Las tres variantes rechazan el acceso. Un resultado distinto de tu predicción produce una comprobación fallida.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+4. Construye una variante de acceso permitido y otra de acceso rechazado por credenciales incorrectas o cuenta inactiva.
+   Resultado esperado: Un rechazo del acceso puede ser un escenario correcto cuando ese es el comportamiento esperado por la HU.
 
-4. Revisa si el texto del Then corresponde a los datos usados y enlaza historia, criterio y caso.
-   Resultado esperado: La herramienta ejecuta la regla; la claridad del criterio se revisa con pensamiento QA y no se da por válida solo por contener texto.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+5. Descarga tu .feature después de validarlo. En la bitácora revisa el escenario ejecutado, explica tus decisiones con las preguntas y guarda el borrador o descarga el informe. Pulsa Finalizar práctica para completar el recorrido con un escenario válido.
+   Resultado esperado: El escenario se conserva en su archivo y en la evidencia; ejecutarlo con Cucumber requiere implementar sus step definitions.
 
-## Entregables
-
-- Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.
-- Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos.
-
-## Criterios
-
-- La actividad usa los conceptos y herramientas de esta semana.
-- Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.
-- Se mantiene separado el resultado esperado del obtenido.
+Consulta ../features/acceso-mis-pedidos.feature y la referencia oficial https://cucumber.io/docs/gherkin/reference/. El laboratorio valida opciones contra una regla local; no ejecuta Cucumber ni un acceso real.

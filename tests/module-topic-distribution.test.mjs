@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+const c=JSON.parse(readFileSync(new URL('../libs/content/src/data/catalog.json',import.meta.url))),g=JSON.parse(readFileSync(new URL('../libs/content/src/data/study-guides.json',import.meta.url))),p=JSON.parse(readFileSync(new URL('../libs/content/src/data/practical-exercises.json',import.meta.url)));
+test('module three contains API and SQL while module three owns DevTools and module four owns Git readings practice and questions',()=>{
+ assert.equal(c.modules.length,8);assert.equal(c.weeks.length,24);for(const id of [7,8]){assert.doesNotMatch(JSON.stringify([g[id],p[id]]),/\bGit\b|\bgit\b/);}
+ assert.doesNotMatch(JSON.stringify(c.quizzes.herramientas),/Git/);assert.match(JSON.stringify(c.quizzes.herramientas),/DevTools/);assert.match(JSON.stringify(c.quizzes.typescript),/Git/);assert.doesNotMatch(JSON.stringify(c.quizzes.typescript),/DevTools/);assert.equal(g[9].sections.length,4);assert.equal(g[7].sections.length,4);assert.equal(g[8].sections.length,3);assert.doesNotMatch(JSON.stringify([g[8],p[8]]),/DevTools/);assert.match(JSON.stringify(p[7]),/DevTools/);assert.doesNotMatch(JSON.stringify(p[9]),/DevTools/);assert.match(JSON.stringify(p[9]),/Git/);assert.equal(c.weeks.find(w=>w.id===9).module,'typescript');
+});

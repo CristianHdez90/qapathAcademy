@@ -1,39 +1,36 @@
 # Semana 5 · Reporte, triage y ciclo de vida del bug
 
-Completar un reporte reproducible y recorrer asignación, corrección, retest, reapertura y cierre con evidencia.
+Abre /practice/5. Es una misión local de entrenamiento: no transfiere dinero ni crea tickets externos.
 
-Herramientas: Reporte de bug, Tablero de estados, Retest de transferencia
+## 1. Reproduce el fallo
 
-## Preparación
+Saldo inicial 200, transferencia de 50. Pulsa Reproducir fallo: el esperado es 150 y el obtenido es 195. La operación que resta 5 es el defecto; el saldo incorrecto visible es el fallo observable.
 
-- Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.
-- Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad.
+## 2. Arma un reporte reproducible
 
-## Ejecución
+- Resumen: título concreto y descripción del error.
+- Reproducción: entorno/versión, precondiciones y al menos tres acciones numeradas, una por línea.
+- Clasificación: severidad según impacto y prioridad según urgencia.
 
-1. Completa título, precondiciones, pasos, esperado 150 y obtenido 195 del defecto de transferencia. Reporta el bug.
-   Resultado esperado: El bug pasa de Sin reportar a Nuevo y conserva los datos para reproducirlo.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+El esperado y el obtenido se incorporan automáticamente desde la reproducción. Las pistas orientan; no rellenan los campos. Después de reportarlo, el reporte queda disponible para consulta y las nuevas acciones se registran en el historial.
 
-2. Realiza triage, asigna un responsable, inicia la corrección y marca listo para retest.
-   Resultado esperado: El historial contiene cada transición, responsable, fecha y motivo; no se salta directamente al cierre.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+## 3. Sigue el ciclo
 
-3. Mantén el defecto activo y ejecuta el retest.
-   Resultado esperado: La transferencia sigue devolviendo 195 frente a 150; el estado cambia a Reabierto.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+1. Reportar bug → Nuevo.
+2. Realizar triage → En análisis.
+3. Seleccionar equipo y asignar corrección → Asignado.
+4. Iniciar corrección → En corrección.
+5. Marcar listo para retest → Listo para retest.
+6. Ejecutar retest de la versión inicial → obtiene 195 en vez de 150; Reabierto.
+7. Iniciar corrección y aplicar la corrección simulada: saldo − importe.
+8. Entregar v2 y ejecutar retest → obtiene 150; Verificado.
+9. Elegir otro importe, predecir su saldo y comprobar regresión.
+10. Cerrar bug con evidencia → Cerrado.
 
-4. Inicia otra corrección, marca listo para retest, desactiva el defecto y vuelve a ejecutar.
-   Resultado esperado: El resultado es 150 y el bug se cierra con evidencia; añade regresión de otros importes en tu matriz.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+En la primera entrega el fallo persiste deliberadamente para aprender la reapertura. El retest repite los datos originales; la regresión comprueba otro importe después de corregir.
 
-## Entregables
+## Tu evidencia
 
-- Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.
-- Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos.
+La bitácora muestra el reporte, el historial, los dos retests y la regresión. Las reflexiones son opcionales y se pueden guardar como borrador. Descarga el informe Markdown para conservar tu trabajo.
 
-## Criterios
-
-- La actividad usa los conceptos y herramientas de esta semana.
-- Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.
-- Se mantiene separado el resultado esperado del obtenido.
+Reportar, asignar o guardar un borrador no completa el recorrido. Cierra la misión y pulsa Finalizar práctica. Esta actividad no utiliza una matriz de casos de prueba.

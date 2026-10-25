@@ -1,39 +1,34 @@
 # Semana 4 · Particiones y fronteras de una contraseña
 
-Diseñar y ejecutar casos de longitud y presencia de dígitos para un validador de contraseñas ficticias.
+Abre /practice/4. La regla de entrenamiento acepta entre 8 y 20 caracteres, ambos incluidos, y al menos un dígito de 0 a 9. No mide la seguridad de contraseñas.
 
-Herramientas: Validador de reglas, Generador de fronteras, Matriz de casos
+## Prepara, predice y ejecuta
 
-## Preparación
+1. Elige un desafío y lee qué condición debes aislar.
+2. Pulsa Preparar dato de este desafío o escribe letras y dígitos ficticios. Observa longitud y presencia de dígito.
+3. Predice Aceptar o Rechazar antes de ejecutar.
+4. Pulsa Ejecutar mi predicción. Compara esperado y obtenido; revisa la explicación y reintenta si es necesario.
 
-- Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.
-- Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad.
+## Siete desafíos
 
-## Ejecución
+- 7 caracteres con dígito: justo por debajo del mínimo; se rechaza.
+- 8 caracteres con dígito: mínimo incluido; se acepta.
+- 20 caracteres con dígito: máximo incluido; se acepta.
+- 21 caracteres con dígito: justo por encima del máximo; se rechaza.
+- 12 caracteres con dígito: representante interior de la partición válida; se acepta.
+- 12 letras sin dígito: longitud válida, pero falta un dígito; se rechaza.
+- Entrada vacía: no cumple ninguna de las dos condiciones; se rechaza.
 
-1. Introduce una contraseña ficticia de ocho caracteres con dígito, predice válido y ejecuta.
-   Resultado esperado: La regla acepta entre 8 y 20 caracteres con al menos un dígito.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+Las fronteras muestran dónde cambia el comportamiento. Las particiones agrupan entradas con condiciones comunes. Para estudiar una regla, mantén las demás condiciones controladas.
 
-2. Prueba longitudes 7, 8, 20 y 21 con el generador de fronteras.
-   Resultado esperado: 7 y 21 se rechazan; 8 y 20 se aceptan cuando contienen un dígito.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+## Interpreta el resultado
 
-3. Prueba una cadena de longitud válida sin dígitos y otra vacía; registra el esperado antes de ejecutar.
-   Resultado esperado: Las dos entradas se rechazan por la condición incumplida, sin cambiar el esperado para ajustar el resultado.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+Un rechazo esperado puede ser una prueba exitosa. Una predicción equivocada no demuestra un bug: revisa el requisito antes de reportarlo.
 
-4. Completa una tabla de decisión para longitud válida y presencia de dígito y registra las particiones cubiertas.
-   Resultado esperado: Solo la combinación de longitud válida y dígito permite aceptar la contraseña.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+Cada desafío cuenta cuando el dato corresponde a su objetivo y la predicción coincide con el validador. Reintentar sustituye su última ejecución. Editar sin ejecutar no cambia la evidencia.
 
-## Entregables
+## Guarda tu bitácora
 
-- Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.
-- Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos.
+En Guardar y revisar evidencia revisa los experimentos, explica las particiones y fronteras y previsualiza el informe. Los datos, predicciones, resultados y fechas se adjuntan automáticamente. Las pistas no rellenan las respuestas.
 
-## Criterios
-
-- La actividad usa los conceptos y herramientas de esta semana.
-- Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.
-- Se mantiene separado el resultado esperado del obtenido.
+Guarda borradores para continuar después o descarga tu informe Markdown. Al cubrir los siete desafíos, pulsa Finalizar práctica para completar la etapa del recorrido. Esta actividad no utiliza una matriz de casos de prueba.

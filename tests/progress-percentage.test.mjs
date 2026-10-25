@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
+import {validatedPractice} from './helpers/practice-evidence.mjs';
 const require=createRequire(import.meta.url);
 const {emptyProgress,progressPercentage,applyProgressCommand,weekRequirements,fromUnknown}=require('../libs/progress/dist/index.js');
 const evidence='Documenté casos de prueba, resultados observados y evidencias de ejecución para validar este reto.';
@@ -10,15 +11,14 @@ test('partial activities advance module and route before a week is complete',()=
  assert.equal(progressPercentage(state),0);
  assert.equal(progressPercentage(state,[1,2]),0);
  state=applyProgressCommand(state,{type:'reading-section',week:1,section:0});
- assert.equal(progressPercentage(state,[1,2]),2.5);
- assert.equal(progressPercentage(state),0.2);
+ assert.equal(progressPercentage(state,[1,2]),3.1);
+ assert.equal(progressPercentage(state),0.3);
  assert.deepEqual(state.weeks,[]);
  assert.equal(progressPercentage(state,[3,4]),0);
  const commands=[
   ...Array.from({length:rule.sections-1},(_,i)=>({type:'reading-section',week:1,section:i+1})),
-  ...Array.from({length:rule.tasks},(_,i)=>({type:'submit-evidence',kind:'task',id:`1:${i}`,text:evidence})),
+  {type:'submit-evidence',kind:'exercise',id:'1',text:validatedPractice(1)},
   {type:'lesson-answer',week:1,answer:rule.answer},
-  ...rule.labs.map(id=>({type:'submit-evidence',kind:'lab',id,text:evidence})),
   {type:'grade',moduleId:rule.module,score:70},
  ];
  let previous=progressPercentage(state,[1]);
@@ -33,7 +33,7 @@ test('partial activities advance module and route before a week is complete',()=
 
 test('repeated, unknown, manual and non-completion records do not inflate percentages',()=>{
  const state={...emptyProgress(),weeks:[1,2],read:[1],tasks:['1:0'],labs:['l1'],notes:{1:'Texto'},final:[1],quizzes:{fundamentos:69,unknown:100},readingSections:{1:[0,0,999],99:[0]},evidence:{'task:1:0':'breve','task:1:99':evidence}};
- assert.equal(progressPercentage(state,[1,2,2,99]),2.5);
+ assert.equal(progressPercentage(state,[1,2,2,99]),3.1);
  assert.equal(progressPercentage(state,[]),0);
  assert.equal(progressPercentage(state,0),0);
  assert.equal(progressPercentage(state,[99]),0);
@@ -44,8 +44,7 @@ test('100 percent requires every activity across the full route',()=>{
  for(let week=1;week<=24;week++){
   const rule=weekRequirements(week);
   for(let section=0;section<rule.sections;section++)state=applyProgressCommand(state,{type:'reading-section',week,section});
-  for(let i=0;i<rule.tasks;i++)state=applyProgressCommand(state,{type:'submit-evidence',kind:'task',id:`${week}:${i}`,text:evidence});
-  for(const id of rule.labs)state=applyProgressCommand(state,{type:'submit-evidence',kind:'lab',id,text:evidence});
+  state=applyProgressCommand(state,{type:'submit-evidence',kind:'exercise',id:String(week),text:validatedPractice(week)});
   state=applyProgressCommand(state,{type:'grade',moduleId:rule.module,score:70});
   assert.ok(progressPercentage(state)<100);
   state=applyProgressCommand(state,{type:'lesson-answer',week,answer:rule.answer});
@@ -71,5 +70,5 @@ test('module card shows partial percentage even with zero completed weeks',async
  const module=require('../libs/content/src/data/catalog.json').modules.find(m=>m.id==='fundamentos');
  const progress=applyProgressCommand(emptyProgress(),{type:'reading-section',week:1,section:0});
  const html=renderToStaticMarkup(React.createElement(ModuleCard,{module,progress,complete:0}));
- assert.match(html,/2\.5%/);assert.match(html,/width:2\.5%/);assert.match(html,/0 \/ 2 semanas completadas/);assert.match(html,/En curso/);
+ assert.match(html,/3\.1%/);assert.match(html,/width:3\.1%/);assert.match(html,/0 \/ 2 semanas completadas/);assert.match(html,/En curso/);
 });

@@ -1,13 +1,13 @@
 type ActivityProfile={workspace:string;fields:string[];lab:boolean};
 export const activityProfiles:Record<number,ActivityProfile>={
- 1:{workspace:'Escenarios Gherkin y registro de ejecución',fields:['Escenarios de prueba · Given / When / Then','Resultado esperado por escenario','Resultado obtenido (observado), estado, fecha y evidencia'],lab:true},
+ 1:{workspace:'De la HU a la evidencia de pruebas',fields:['Análisis de la HU y técnicas utilizadas','Comparación de resultados y hallazgos','Bugs, retest y conclusión de la práctica'],lab:true},
  2:{workspace:'Análisis de riesgo',fields:['Riesgos y criterios de probabilidad e impacto','Exposición, orden y justificación','Mitigación, pruebas ejecutadas y riesgo residual'],lab:true},
- 3:{workspace:'Historia de usuario y aceptación',fields:['Historia, actor y necesidad','Criterios de aceptación en Gherkin','Preguntas, ejemplos y evidencias de validación'],lab:true},
- 4:{workspace:'Diseño de casos de prueba',fields:['Particiones y límites con datos','Tabla de decisión y escenarios Gherkin','Resultado esperado y obtenido por caso'],lab:true},
+ 3:{workspace:'Bitácora de HU y Gherkin',fields:['De la HU al criterio de aceptación','Contexto, acción y resultado observable','Resultados de validación y mejoras'],lab:true},
+ 4:{workspace:'Bitácora de particiones y fronteras',fields:['Particiones y reglas aisladas','Fronteras y cambios de comportamiento','Comparación de resultados y conclusión'],lab:true},
  5:{workspace:'Reporte de bug reproducible',fields:['Título y descripción del error','Entorno, versión y precondiciones','Pasos para reproducirlo y datos','Resultado esperado','Resultado obtenido (observado)','Severidad, prioridad y evidencia'],lab:true},
  6:{workspace:'Tablero QA de Sprint',fields:['Objetivo, historias y Definition of Done','Plan de pruebas y participación en eventos','Resultados, impedimentos y retrospectiva'],lab:true},
- 7:{workspace:'Validación API con Postman',fields:['Métodos, endpoints y datos de la colección','Status code esperado, obtenido y aserciones','Resultados del runner y evidencia'],lab:true},
- 8:{workspace:'Consultas SQL y entrega con Git',fields:['Consultas SQL ejecutadas en la base local de práctica','Filas y agregaciones esperadas y obtenidas','Rama, commit, diferencias y evidencias'],lab:false},
+ 7:{workspace:'Bitácora Postman, DevTools y SQL',fields:['Solicitudes HTTP y aserciones','Consultas SQL y resultados','Diagnóstico DevTools, entrega Postman y conclusiones'],lab:true},
+ 8:{workspace:'Consultas y validación SQL',fields:['Consultas SQL ejecutadas en la base local de práctica','Filas y agregaciones esperadas y obtenidas','Conclusiones, NULL y cardinalidad'],lab:false},
  9:{workspace:'Pruebas unitarias de lógica de negocio',fields:['Funciones y casos unitarios implementados','Entradas, límites y aserciones','Comando, salida y evidencia de ejecución local'],lab:false},
  10:{workspace:'Transformación de resultados JSON',fields:['Transformación de arrays y JSON','Reporte calculado y valores esperados','Comprobaciones y salida obtenida'],lab:false},
  11:{workspace:'Contratos TypeScript',fields:['Tipos e interfaces de éxito y error','Validaciones de datos y nulabilidad','Comando de compilación y evidencia'],lab:false},

@@ -73,8 +73,8 @@ export const learningRules=[
  {
   "week": 7,
   "module": "herramientas",
-  "sections": 4,
-  "tasks": 2,
+  "sections": 5,
+  "tasks": 3,
   "labs": [
    "l4",
    "l5"
@@ -97,8 +97,8 @@ export const learningRules=[
  {
   "week": 9,
   "module": "typescript",
-  "sections": 4,
-  "tasks": 2,
+  "sections": 5,
+  "tasks": 3,
   "labs": [
    "l6"
   ],

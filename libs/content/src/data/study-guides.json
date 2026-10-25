@@ -2153,9 +2153,9 @@
     ]
   },
   "7": {
-    "duration": 35,
+    "duration": 50,
     "level": "QA Técnico",
-    "summary": "Un QA de API valida contratos, datos y reglas de negocio incluso cuando la interfaz todavía no existe.",
+    "summary": "Un QA de API valida contratos, datos y reglas de negocio incluso cuando la interfaz todavía no existe. Investiga la ejecución con Network, Console y Application de DevTools.",
     "sections": [
       {
         "title": "Piezas de una petición HTTP",
@@ -2344,6 +2344,61 @@
             }
           }
         ]
+      },
+      {
+        "title": "Herramientas de desarrollo (DevTools)",
+        "body": "Network permite identificar petición, respuesta, estado, headers y tiempos. Console muestra errores de JS y logs. Application permite revisar cookies, storage y otros estados del navegador. No copies credenciales o tokens en informes compartidos.",
+        "points": [
+          "Filtra Fetch/XHR para aislar llamadas API.",
+          "Compara request payload y response body con el criterio de aceptación.",
+          "Registra ID de correlación cuando exista."
+        ],
+        "concepts": [
+          {
+            "id": "w7-s3-c0",
+            "title": "Network como evidencia",
+            "description": "Network permite relacionar una acción con petición, estado, headers, cuerpo y tiempos. Capturar una respuesta sin saber qué la generó limita el diagnóstico.",
+            "example": {
+              "context": "El botón Cotizar muestra un importe inesperado.",
+              "action": "Filtra Fetch/XHR, reproduce una sola acción y compara el payload y la respuesta con la regla.",
+              "result": "Se puede distinguir si el importe ya venía incorrecto de la API o cambió en la UI."
+            },
+            "demonstration": {
+              "steps": [
+                "Reproducir acción",
+                "Inspeccionar solicitud",
+                "Comparar respuesta y UI"
+              ],
+              "icons": [
+                "play",
+                "search",
+                "compare"
+              ]
+            }
+          },
+          {
+            "id": "w7-s3-c1",
+            "title": "Console y estado del navegador",
+            "description": "Console ayuda a investigar errores de JavaScript; Application permite revisar cookies y almacenamiento. Estas evidencias pueden contener datos sensibles.",
+            "example": {
+              "context": "Una pantalla no actualiza el usuario después de cerrar sesión.",
+              "action": "Revisa errores y estado local relevante, ocultando tokens antes de compartir capturas.",
+              "result": "El diagnóstico aporta contexto sin publicar credenciales ni contenido innecesario."
+            },
+            "demonstration": {
+              "steps": [
+                "Observar error",
+                "Examinar estado",
+                "Compartir evidencia depurada"
+              ],
+              "icons": [
+                "warning",
+                "layers",
+                "shield"
+              ]
+            }
+          }
+        ]
       }
     ],
     "example": {
@@ -2448,7 +2503,7 @@
         }
       ]
     },
-    "activity": "Crea una colección de 15 validaciones para una API de práctica: métodos, estado, estructura, autenticación y escenarios negativos.",
+    "activity": "Crea una colección de 15 validaciones para una API de práctica: métodos, estado, estructura, autenticación y escenarios negativos. Investiga una cotización con Network y Console y compara la respuesta con la interfaz.",
     "answer": "Una propuesta: 4 casos positivos, 4 de validación, 3 de autenticación, 2 de no encontrado y 2 de reglas de negocio. Ajusta según el contrato real.",
     "pitfall": "Dar por correcta una API solo porque devuelve 200; un body incorrecto también representa fallo.",
     "question": {
@@ -2475,7 +2530,7 @@
   "8": {
     "duration": 35,
     "level": "QA Técnico",
-    "summary": "SQL, DevTools y Git permiten investigar, comprobar datos y mantener trazabilidad técnica.",
+    "summary": "Comprueba datos con SELECT, relaciones JOIN, NULL, agregaciones y subconsultas.",
     "sections": [
       {
         "title": "Consultas SQL esenciales",
@@ -2534,31 +2589,31 @@
         ]
       },
       {
-        "title": "Herramientas de desarrollo (DevTools)",
-        "body": "Network permite identificar petición, respuesta, estado, headers y tiempos. Console muestra errores de JS y logs. Application permite revisar cookies, storage y otros estados del navegador. No copies credenciales o tokens en informes compartidos.",
+        "title": "NULL y cardinalidad en relaciones",
+        "body": "Un LEFT JOIN conserva filas sin coincidencias. Las columnas de la derecha contienen NULL y COUNT(columna) no cuenta esos NULL. El número de filas depende de la cardinalidad, no solo de cuántos clientes existen.",
         "points": [
-          "Filtra Fetch/XHR para aislar llamadas API.",
-          "Compara request payload y response body con el criterio de aceptación.",
-          "Registra ID de correlación cuando exista."
+          "Usa IS NULL para detectar ausencia de relación.",
+          "Revisa si los filtros pertenecen a ON o WHERE.",
+          "Compara COUNT(*) con COUNT(o.id)."
         ],
         "concepts": [
           {
             "id": "w8-s1-c0",
-            "title": "Network como evidencia",
-            "description": "Network permite relacionar una acción con petición, estado, headers, cuerpo y tiempos. Capturar una respuesta sin saber qué la generó limita el diagnóstico.",
+            "title": "Clientes sin pedidos",
+            "description": "LEFT JOIN permite encontrar clientes sin pedidos. Usa IS NULL sobre la clave del pedido y explica por qué un INNER JOIN no muestra esos clientes.",
             "example": {
-              "context": "El botón Cotizar muestra un importe inesperado.",
-              "action": "Filtra Fetch/XHR, reproduce una sola acción y compara el payload y la respuesta con la regla.",
-              "result": "Se puede distinguir si el importe ya venía incorrecto de la API o cambió en la UI."
+              "context": "El conjunto de práctica tiene tres clientes; Luis Demo no tiene pedidos registrados.",
+              "action": "Relaciona clientes y pedidos y filtra por o.id IS NULL para identificar la ausencia de pedido.",
+              "result": "Solo Luis aparece en el resultado; la consulta no inventa un pedido de importe cero."
             },
             "demonstration": {
               "steps": [
-                "Reproducir acción",
-                "Inspeccionar solicitud",
-                "Comparar respuesta y UI"
+                "Relacionar tablas",
+                "Detectar NULL",
+                "Contrastar el cliente"
               ],
               "icons": [
-                "play",
+                "link",
                 "search",
                 "compare"
               ]
@@ -2566,79 +2621,78 @@
           },
           {
             "id": "w8-s1-c1",
-            "title": "Console y estado del navegador",
-            "description": "Console ayuda a investigar errores de JavaScript; Application permite revisar cookies y almacenamiento. Estas evidencias pueden contener datos sensibles.",
+            "title": "Evitar conteos engañosos",
+            "description": "COUNT(*) cuenta filas del resultado; COUNT(o.id) cuenta identificadores no nulos. Una fila conservada por LEFT JOIN no implica que exista un pedido.",
             "example": {
-              "context": "Una pantalla no actualiza el usuario después de cerrar sesión.",
-              "action": "Revisa errores y estado local relevante, ocultando tokens antes de compartir capturas.",
-              "result": "El diagnóstico aporta contexto sin publicar credenciales ni contenido innecesario."
+              "context": "El LEFT JOIN conserva una fila para Luis aunque su identificador de pedido es NULL.",
+              "action": "Agrupa por cliente y compara COUNT(*) con COUNT(o.id) usando la misma relación.",
+              "result": "El conteo de pedidos de Luis es cero al contar su identificador, no la fila conservada."
             },
             "demonstration": {
               "steps": [
-                "Observar error",
-                "Examinar estado",
-                "Compartir evidencia depurada"
+                "Elegir la entidad",
+                "Comparar conteos",
+                "Explicar la diferencia"
               ],
               "icons": [
-                "warning",
-                "layers",
-                "shield"
+                "target",
+                "calculator",
+                "message"
               ]
             }
           }
         ]
       },
       {
-        "title": "Git como respaldo del trabajo QA",
-        "body": "Un repositorio preserva historia de cambios y facilita revisiones. Flujo típico: clonar, crear rama, realizar cambios, git add, git commit, push y pull request. Agrega un README que explique cómo reproducir pruebas y qué archivos no se deben subir.",
+        "title": "Agregaciones y comprobaciones SQL",
+        "body": "GROUP BY reúne filas, HAVING filtra grupos y EXISTS comprueba la existencia de una relación. Antes de ejecutar, establece las filas y totales esperados. Documenta diferencias sin alterar datos para forzar un resultado.",
         "points": [
-          "git status: cambios pendientes.",
-          "git switch -c qa/login: rama de trabajo.",
-          "git add . && git commit -m \"test: casos login\": captura el cambio.",
-          "Nunca publiques .env con secretos ni evidencia sensible."
+          "Los pedidos paid suman 139500 COP en el conjunto del kit.",
+          "HAVING COUNT(o.id) > 1 identifica a Ana con dos pedidos.",
+          "EXISTS devuelve clientes con al menos un pedido que cumpla el filtro."
         ],
         "concepts": [
           {
             "id": "w8-s2-c0",
-            "title": "Rama, commit y revisión",
-            "description": "Git conserva cambios y permite revisar una entrega. Preparar archivos y confirmar un commit son pasos diferentes; el contenido debe revisarse antes de publicarlo.",
+            "title": "Filtrar grupos con HAVING",
+            "description": "WHERE filtra filas antes de agrupar y HAVING filtra los grupos calculados. Elegir la etapa incorrecta puede cambiar las cantidades y ocultar relaciones relevantes.",
             "example": {
-              "context": "Se añaden casos de prueba para un checkout en un repositorio propio.",
-              "action": "Crea una rama, revisa git status y el diff, prepara los archivos y crea un commit descriptivo.",
-              "result": "La revisión puede identificar exactamente qué cambió y cómo ejecutar sus comprobaciones."
+              "context": "Ana tiene dos pedidos en los datos de entrenamiento y Sol tiene un pedido registrado.",
+              "action": "Agrupa pedidos por cliente y aplica HAVING COUNT(o.id) > 1 para localizar clientes recurrentes.",
+              "result": "Solo Ana cumple la condición; el conteo representa pedidos y no clientes duplicados."
             },
             "demonstration": {
               "steps": [
-                "Crear rama",
-                "Revisar y confirmar cambios",
-                "Solicitar revisión"
+                "Agrupar por cliente",
+                "Contar pedidos",
+                "Filtrar el grupo"
               ],
               "icons": [
-                "workflow",
-                "checklist",
-                "message"
+                "layers",
+                "calculator",
+                "search"
               ]
             }
           },
           {
             "id": "w8-s2-c1",
-            "title": "Repositorio reproducible y limpio",
-            "description": "El README y las exclusiones del repositorio forman parte de la entrega. Historial de código no significa almacenar cualquier archivo generado o secreto.",
+            "title": "Existencia y resultados esperados",
+            "description": "EXISTS expresa si hay al menos una fila relacionada. Contrasta el resultado con los datos base y no confundas existencia de un pago con el total acumulado de pagos.",
             "example": {
-              "context": "El proyecto contiene .env, reportes locales y datos de autenticación.",
-              "action": "Configura exclusiones y documenta variables con valores de ejemplo, sin subir secretos.",
-              "result": "Otra persona entiende la configuración sin recibir credenciales reales en el repositorio."
+              "context": "Ana y Sol tienen pedidos pagados, mientras Luis no tiene pedidos en el conjunto de práctica.",
+              "action": "Busca clientes para los que exista un pedido con status paid y compara los identificadores obtenidos.",
+              "result": "La consulta devuelve Ana y Sol sin multiplicar clientes por el número de sus pedidos."
             },
             "demonstration": {
               "steps": [
-                "Identificar configuración sensible",
-                "Excluir secretos",
-                "Documentar ejecución"
+                "Definir la condición",
+                "Consultar existencia",
+                "Comparar identificadores"
               ],
               "icons": [
-                "search",
-                "shield",
-                "file"
+                "target",
+                "code",
+                "check"
               ]
             }
           }
@@ -2724,7 +2778,7 @@
         }
       ]
     },
-    "activity": "Escribe 10 consultas que combinen filtros, JOIN, conteo y suma; guarda también la explicación y un commit de Git.",
+    "activity": "Escribe 10 consultas que combinen filtros, JOIN, conteo y suma; guarda los resultados esperados y obtenidos con su explicación.",
     "answer": "Cada consulta debe responder una pregunta específica. Por ejemplo: ¿cuántas órdenes pagadas existen? ¿hay pedidos huérfanos? ¿cuál es el total por cliente?",
     "pitfall": "Usar una consulta SQL que cambia datos en producción solo para comprobar un resultado.",
     "question": {
@@ -2741,17 +2795,13 @@
       [
         "SQLBolt – aprendizaje SQL",
         "https://sqlbolt.com/"
-      ],
-      [
-        "Git – documentación oficial",
-        "https://git-scm.com/doc"
       ]
     ]
   },
   "9": {
-    "duration": 35,
+    "duration": 50,
     "level": "JavaScript",
-    "summary": "Aprende a expresar reglas de negocio con variables, decisiones, iteraciones y funciones comprobables.",
+    "summary": "Aprende a expresar reglas de negocio con variables, decisiones, iteraciones y funciones comprobables. Conserva cambios revisables en Git.",
     "sections": [
       {
         "title": "Variables y datos",
@@ -2919,6 +2969,62 @@
             }
           }
         ]
+      },
+      {
+        "title": "Git como respaldo del trabajo QA",
+        "body": "Un repositorio preserva historia de cambios y facilita revisiones. Flujo típico: clonar, crear rama, realizar cambios, git add, git commit, push y pull request. Agrega un README que explique cómo reproducir pruebas y qué archivos no se deben subir.",
+        "points": [
+          "git status: cambios pendientes.",
+          "git switch -c qa/login: rama de trabajo.",
+          "git add . && git commit -m \"test: casos login\": captura el cambio.",
+          "Nunca publiques .env con secretos ni evidencia sensible."
+        ],
+        "concepts": [
+          {
+            "id": "w9-s3-c0",
+            "title": "Rama, commit y revisión",
+            "description": "Git conserva cambios y permite revisar una entrega. Preparar archivos y confirmar un commit son pasos diferentes; el contenido debe revisarse antes de publicarlo.",
+            "example": {
+              "context": "Se añaden casos de prueba para un checkout en un repositorio propio.",
+              "action": "Crea una rama, revisa git status y el diff, prepara los archivos y crea un commit descriptivo.",
+              "result": "La revisión puede identificar exactamente qué cambió y cómo ejecutar sus comprobaciones."
+            },
+            "demonstration": {
+              "steps": [
+                "Crear rama",
+                "Revisar y confirmar cambios",
+                "Solicitar revisión"
+              ],
+              "icons": [
+                "workflow",
+                "checklist",
+                "message"
+              ]
+            }
+          },
+          {
+            "id": "w9-s3-c1",
+            "title": "Repositorio reproducible y limpio",
+            "description": "El README y las exclusiones del repositorio forman parte de la entrega. Historial de código no significa almacenar cualquier archivo generado o secreto.",
+            "example": {
+              "context": "El proyecto contiene .env, reportes locales y datos de autenticación.",
+              "action": "Configura exclusiones y documenta variables con valores de ejemplo, sin subir secretos.",
+              "result": "Otra persona entiende la configuración sin recibir credenciales reales en el repositorio."
+            },
+            "demonstration": {
+              "steps": [
+                "Identificar configuración sensible",
+                "Excluir secretos",
+                "Documentar ejecución"
+              ],
+              "icons": [
+                "search",
+                "shield",
+                "file"
+              ]
+            }
+          }
+        ]
       }
     ],
     "example": {
@@ -3000,7 +3106,7 @@
         }
       ]
     },
-    "activity": "Implementa funciones para calcular descuentos y validar claves; realiza pruebas con entrada vacía, valores límite y tipo incorrecto.",
+    "activity": "Implementa funciones para calcular descuentos y validar claves; realiza pruebas con entrada vacía, valores límite y tipo incorrecto. Versiona el código con status, add, commit y log.",
     "answer": "Organiza el validador como una función pura que retorne booleano. Para descuento, define por escrito si el límite es inclusivo y qué ocurre con precios negativos.",
     "pitfall": "Automatizar con grabaciones antes de poder entender una condición o leer un error en consola.",
     "question": {
@@ -3017,6 +3123,10 @@
       [
         "MDN – Guía de JavaScript",
         "https://developer.mozilla.org/es/docs/Web/JavaScript/Guide"
+      ],
+      [
+        "Git – documentación oficial",
+        "https://git-scm.com/doc"
       ]
     ]
   },

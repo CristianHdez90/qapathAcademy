@@ -1,0 +1,364 @@
+[
+  {
+    "id": "fundamentos",
+    "number": "01",
+    "title": "Fundamentos del Testing",
+    "weeks": [
+      {
+        "id": 1,
+        "title": "Mentalidad QA y ciclo de vida del software",
+        "chapters": [
+          "QA, QC y testing: conceptos diferentes",
+          "Cómo se relacionan SDLC y STLC",
+          "Los siete principios del testing"
+        ],
+        "guided": "Caso guiado · saldo bancario incorrecto"
+      },
+      {
+        "id": 2,
+        "title": "Niveles, tipos y gestión de riesgos",
+        "chapters": [
+          "Niveles de prueba",
+          "Tipos y objetivos de pruebas",
+          "Priorización basada en riesgos"
+        ],
+        "guided": "Caso guiado · priorizar cinco funcionalidades"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l1",
+        "title": "Detective de defectos"
+      }
+    ]
+  },
+  {
+    "id": "manual",
+    "number": "02",
+    "title": "QA Manual profesional",
+    "weeks": [
+      {
+        "id": 3,
+        "title": "Historias de usuario y criterios de aceptación",
+        "chapters": [
+          "Estructura de una historia de usuario",
+          "Criterios de aceptación comprobables",
+          "Revisión temprana y refinamiento"
+        ],
+        "guided": "Ejemplo trabajado · acceso a una plataforma"
+      },
+      {
+        "id": 4,
+        "title": "Técnicas de diseño de pruebas",
+        "chapters": [
+          "Partición de equivalencia",
+          "Análisis de valores límite",
+          "Tablas de decisión y transiciones"
+        ],
+        "guided": "Tabla de decisión · inicio de sesión"
+      },
+      {
+        "id": 5,
+        "title": "Ejecución, defectos y evidencias",
+        "chapters": [
+          "Anatomía de un buen caso de prueba",
+          "Ciclo de vida del defecto",
+          "Evidencias y trazabilidad"
+        ],
+        "guided": "Bug escrito correctamente"
+      },
+      {
+        "id": 6,
+        "title": "Agile QA y estrategia de pruebas",
+        "chapters": [
+          "QA dentro de Scrum",
+          "Diseña una estrategia ligera",
+          "Métricas para decidir"
+        ],
+        "guided": "Informe de cierre de sprint"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l2",
+        "title": "Matriz de pruebas de login"
+      },
+      {
+        "id": "l3",
+        "title": "Reporta un bug como profesional"
+      }
+    ]
+  },
+  {
+    "id": "herramientas",
+    "number": "03",
+    "title": "HTTP, REST, Postman, DevTools y SQL",
+    "weeks": [
+      {
+        "id": 7,
+        "title": "HTTP, REST y pruebas API con Postman y DevTools",
+        "chapters": [
+          "Piezas de una petición HTTP",
+          "Casos positivos y negativos de API",
+          "Validaciones automatizadas en Postman",
+          "Herramientas de desarrollo (DevTools)"
+        ],
+        "guided": "Script de Postman para validar respuesta"
+      },
+      {
+        "id": 8,
+        "title": "SQL para validar datos",
+        "chapters": [
+          "Consultas SQL esenciales",
+          "NULL y cardinalidad en relaciones",
+          "Agregaciones y comprobaciones SQL"
+        ],
+        "guided": "SQL guiado · contar órdenes por estado"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l4",
+        "title": "Colección Postman con validaciones"
+      },
+      {
+        "id": "l5",
+        "title": "Rastrea un dato con SQL"
+      }
+    ]
+  },
+  {
+    "id": "typescript",
+    "number": "04",
+    "title": "JavaScript, TypeScript y Git",
+    "weeks": [
+      {
+        "id": 9,
+        "title": "JavaScript y Git",
+        "chapters": [
+          "Variables y datos",
+          "Condiciones y ciclos",
+          "Funciones pequeñas, fáciles de probar",
+          "Git como respaldo del trabajo QA"
+        ],
+        "guided": "Validador de contraseña"
+      },
+      {
+        "id": 10,
+        "title": "Objetos, arrays y JSON",
+        "chapters": [
+          "Objetos y arreglos",
+          "map, filter, find y reduce",
+          "JSON y operaciones seguras"
+        ],
+        "guided": "Calcular subtotal desde JSON"
+      },
+      {
+        "id": 11,
+        "title": "TypeScript y POO",
+        "chapters": [
+          "¿Qué añade TypeScript?",
+          "Interfaces, opcionales y nulabilidad",
+          "Generics y tipos reutilizables"
+        ],
+        "guided": "Modelar un resultado API"
+      },
+      {
+        "id": 12,
+        "title": "Asincronía y calidad de código",
+        "chapters": [
+          "Promesas y await",
+          "Manejo de fallos asíncronos",
+          "Clases y módulos para organizar el código"
+        ],
+        "guided": "Consultar un servicio con control de error"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l6",
+        "title": "Validador TypeScript"
+      }
+    ]
+  },
+  {
+    "id": "playwright",
+    "number": "05",
+    "title": "Automatización con Playwright",
+    "weeks": [
+      {
+        "id": 13,
+        "title": "Primer proyecto Playwright",
+        "chapters": [
+          "Instalación y arquitectura básica",
+          "Estructura de una prueba y aserciones",
+          "Primer ciclo de depuración"
+        ],
+        "guided": "Primera prueba con SauceDemo"
+      },
+      {
+        "id": 14,
+        "title": "Locators y assertions robustos",
+        "chapters": [
+          "Locators basados en intención de usuario",
+          "Auto-waiting y reintentos automáticos",
+          "Locators estrictos y debugging"
+        ],
+        "guided": "Esperar un mensaje de confirmación"
+      },
+      {
+        "id": 15,
+        "title": "Flujos reales y debugging",
+        "chapters": [
+          "Iframes, pestañas y formularios",
+          "Observabilidad de errores",
+          "Diseñar un E2E de valor"
+        ],
+        "guided": "Abrir una pestaña nueva de forma segura"
+      },
+      {
+        "id": 16,
+        "title": "Configuración y pruebas multiplataforma",
+        "chapters": [
+          "playwright.config.ts",
+          "Cross-browser con sentido",
+          "Test isolation y retries"
+        ],
+        "guided": "Configuración multiplataforma"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l7",
+        "title": "Automatiza el login"
+      },
+      {
+        "id": "l8",
+        "title": "Checkout E2E"
+      }
+    ]
+  },
+  {
+    "id": "arquitectura",
+    "number": "06",
+    "title": "Framework y automatización API",
+    "weeks": [
+      {
+        "id": 17,
+        "title": "Page Object Model y modularidad",
+        "chapters": [
+          "Qué resuelve Page Object Model",
+          "Principios de diseño aplicados",
+          "Cuándo considerar Screenplay"
+        ],
+        "guided": "Separación entre Page Object y test"
+      },
+      {
+        "id": 18,
+        "title": "Fixtures y datos de prueba",
+        "chapters": [
+          "Concepto de fixture",
+          "Estado autenticado y datos",
+          "Setup, teardown y diseño de datos"
+        ],
+        "guided": "Fixture propia para usuario de práctica"
+      },
+      {
+        "id": 19,
+        "title": "Automatización API con Playwright",
+        "chapters": [
+          "APIRequestContext en Playwright",
+          "Separar contratos de comportamiento",
+          "API como herramienta de preparación de UI"
+        ],
+        "guided": "Prueba API sencilla con request"
+      },
+      {
+        "id": 20,
+        "title": "Mocks, ambientes y arquitectura avanzada",
+        "chapters": [
+          "Intercepción y mocking de red",
+          "Configuración por ambientes",
+          "Elegir abstracciones avanzadas"
+        ],
+        "guided": "Mock controlado de catálogo"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l9",
+        "title": "Refactor con POM y fixtures"
+      },
+      {
+        "id": "l10",
+        "title": "API + UI en una misma prueba"
+      }
+    ]
+  },
+  {
+    "id": "cicd",
+    "number": "07",
+    "title": "CI/CD y calidad de la suite",
+    "weeks": [
+      {
+        "id": 21,
+        "title": "Pipeline QA con GitHub Actions",
+        "chapters": [
+          "Conceptos de integración continua",
+          "Workflow para Playwright",
+          "Diagnóstico y seguridad en CI"
+        ],
+        "guided": "Workflow mínimo GitHub Actions"
+      },
+      {
+        "id": 22,
+        "title": "Estabilidad, métricas y ejecución eficiente",
+        "chapters": [
+          "Qué es un test flaky",
+          "Paralelización y sharding",
+          "Métricas que aportan valor"
+        ],
+        "guided": "Investigar un flaky login"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l11",
+        "title": "Pipeline GitHub Actions"
+      }
+    ]
+  },
+  {
+    "id": "portafolio",
+    "number": "08",
+    "title": "Proyecto final y portafolio",
+    "weeks": [
+      {
+        "id": 23,
+        "title": "Proyecto E2E integrador",
+        "chapters": [
+          "Definir un alcance realizable",
+          "Matriz de trazabilidad",
+          "Diseñar una combinación UI + API"
+        ],
+        "guided": "Plan de proyecto integrador"
+      },
+      {
+        "id": 24,
+        "title": "Portafolio y presentación técnica",
+        "chapters": [
+          "README reproducible",
+          "Presentar decisiones de calidad",
+          "Evaluación final del nivel QA Automation"
+        ],
+        "guided": "Guion de demostración de cinco minutos"
+      }
+    ],
+    "labs": [
+      {
+        "id": "l12",
+        "title": "Demo de tu framework"
+      }
+    ]
+  }
+]

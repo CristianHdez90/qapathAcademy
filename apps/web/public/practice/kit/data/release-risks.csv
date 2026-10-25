@@ -1,0 +1,4 @@
+Riesgo,Probabilidad inicial,Impacto inicial,Exposición inicial,Mitigación propuesta
+Cobro duplicado,4,5,20,Idempotencia y revisión de reintentos
+Venta sin existencias,3,4,12,Reserva atómica y pruebas de concurrencia
+Nombre de perfil incorrecto,3,2,6,Invalidación de caché y comprobación de actualización

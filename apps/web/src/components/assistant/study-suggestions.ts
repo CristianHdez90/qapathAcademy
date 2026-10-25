@@ -20,12 +20,14 @@ export const studySuggestions=[
   ['Ciclo de vida de un bug','Explícame el ciclo de vida de un defecto, severidad y prioridad, con un reporte de bug de ejemplo.'],
   ['Estrategia y riesgos','¿Cómo diseño una estrategia de pruebas basada en riesgos y priorizo qué probar durante un sprint?'],
  ]},
- {title:'03 · API, SQL, Git y herramientas',questions:[
+ {title:'03 · HTTP, REST, Postman, DevTools y SQL',questions:[
+  ['Investigar con DevTools','Enséñame a investigar un fallo comparando petición y respuesta en Network, errores en Console y estado en Application.'],
   ['API con Postman','Diseña pruebas positivas y negativas para una API REST y muestra aserciones de ejemplo en Postman.'],
   ['SQL para QA','Enséñame a validar datos con SELECT, JOIN, GROUP BY y consultas SQL de solo lectura usando datos ficticios.'],
-  ['Git y DevTools','Explícame un flujo de Git para QA y cómo investigar un fallo con las pestañas Network y Console de DevTools.'],
  ]},
- {title:'04 · JavaScript + TypeScript',questions:[
+ {title:'04 · JavaScript, TypeScript y Git',questions:[
+  ['Git para QA','Explícame un flujo de Git para QA con ramas, commits y revisión de cambios.'],
+
   ['JavaScript para testing','Explícame funciones, arreglos y objetos de JavaScript con ejercicios orientados a pruebas.'],
   ['Tipos y contratos','Enséñame interfaces, tipos y nulabilidad en TypeScript con ejemplos de respuestas de una API.'],
   ['Async y await','Explícame promesas, async/await y manejo de errores aplicados a pruebas automatizadas.'],

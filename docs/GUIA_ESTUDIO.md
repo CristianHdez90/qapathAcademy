@@ -1596,579 +1596,303 @@ C. Se hicieron muchas pruebas
 ---
 
 
-# Semana 07 — HTTP, REST y pruebas API con Postman
+# Semana 07 — HTTP, REST y pruebas API con Postman y DevTools
 
-Módulo: API, SQL, Git y herramientas · Tiempo de lectura: 35 min
+Módulo: HTTP, REST, Postman, DevTools y SQL · Tiempo de lectura: 50 min
 
-> Un QA de API valida contratos, datos y reglas de negocio incluso cuando la interfaz todavía no existe.
+> Un QA de API valida contratos, datos y reglas de negocio incluso cuando la interfaz todavía no existe. Investiga la ejecución con Network, Console y Application de DevTools.
 
-## 1. Piezas de una petición HTTP
+## Piezas de una petición HTTP
 
 Una petición incluye método, URL, headers y opcionalmente body. Una respuesta incluye estado, headers y cuerpo. GET consulta recursos; POST suele crear o iniciar operaciones; PUT suele reemplazar; PATCH modifica parcialmente; DELETE solicita eliminación. Los contratos concretos dependen de la API.
-
-### Petición y respuesta HTTP
-
-Una petición combina método, URL, headers y a veces cuerpo; la respuesta tiene estado, headers y contenido. Se evalúan según el contrato del endpoint.
-
-**Ejemplo aplicado**
-
-- Situación: Una API de práctica acepta cotizaciones mediante POST.
-- Qué hace QA: Envía producto, cantidad y envío como JSON y revisa estado, Content-Type y estructura del cuerpo.
-- Resultado: La evaluación diferencia lo enviado de lo respondido y puede localizar una discrepancia contractual.
-
-Secuencia: Preparar solicitud → Enviar petición → Inspeccionar respuesta
-
-### Estado HTTP y resultado de negocio
-
-Un código 2xx no demuestra por sí mismo que las reglas se cumplan. Los errores 4xx y 5xx requieren interpretar el contexto y el diseño de la API.
-
-**Ejemplo aplicado**
-
-- Situación: La API responde 200, pero el total no coincide con subtotal, descuento y envío.
-- Qué hace QA: Comprueba tanto el código como la relación entre los importes del JSON.
-- Resultado: La prueba identifica un problema funcional aunque el transporte indique éxito.
-
-Secuencia: Comprobar estado → Validar contenido → Comparar regla de negocio
-
-### Método según contrato
-
-GET, POST, PUT, PATCH y DELETE expresan intenciones diferentes. El contrato define su comportamiento concreto y los efectos que deben comprobarse.
-
-**Ejemplo aplicado**
-
-- Situación: Un recurso permite actualizar solo el correo mediante PATCH.
-- Qué hace QA: Envía el cambio parcial y comprueba que los demás campos permanecen según el contrato.
-- Resultado: La prueba evalúa el efecto esperado sin asumir que actualizar equivale a reemplazar todo el recurso.
-
-Secuencia: Consultar contrato → Elegir método → Verificar efecto
 
 - 2xx: éxito según el método y contrato.
 - 4xx: problema atribuible a la solicitud (400, 401, 403, 404, 409, 422...).
 - 5xx: fallo de servidor o intermediario; investiga contexto.
 - No basta validar código 200: comprueba campos y reglas.
 
-## 2. Casos positivos y negativos de API
+### Petición y respuesta HTTP
+
+Una petición combina método, URL, headers y a veces cuerpo; la respuesta tiene estado, headers y contenido. Se evalúan según el contrato del endpoint.
+
+Ejemplo: Una API de práctica acepta cotizaciones mediante POST. Envía producto, cantidad y envío como JSON y revisa estado, Content-Type y estructura del cuerpo. La evaluación diferencia lo enviado de lo respondido y puede localizar una discrepancia contractual.
+
+### Estado HTTP y resultado de negocio
+
+Un código 2xx no demuestra por sí mismo que las reglas se cumplan. Los errores 4xx y 5xx requieren interpretar el contexto y el diseño de la API.
+
+Ejemplo: La API responde 200, pero el total no coincide con subtotal, descuento y envío. Comprueba tanto el código como la relación entre los importes del JSON. La prueba identifica un problema funcional aunque el transporte indique éxito.
+
+### Método según contrato
+
+GET, POST, PUT, PATCH y DELETE expresan intenciones diferentes. El contrato define su comportamiento concreto y los efectos que deben comprobarse.
+
+Ejemplo: Un recurso permite actualizar solo el correo mediante PATCH. Envía el cambio parcial y comprueba que los demás campos permanecen según el contrato. La prueba evalúa el efecto esperado sin asumir que actualizar equivale a reemplazar todo el recurso.
+
+## Casos positivos y negativos de API
 
 Prueba payload válido, propiedades faltantes, tipos incorrectos, límites, acceso sin token, recurso inexistente, duplicados e idempotencia cuando corresponda. Verifica schema, estructura de errores, correlación y datos persistidos.
-
-### Datos válidos e inválidos
-
-Las pruebas API incluyen propiedades ausentes, tipos incorrectos, límites, duplicados y recursos inexistentes. Cada respuesta esperada debe estar respaldada por el contrato.
-
-**Ejemplo aplicado**
-
-- Situación: Cantidad admite enteros de 1 a 5 en el cotizador de entrenamiento.
-- Qué hace QA: Prueba 1, 5, 0, 6 y un texto; registra el estado y error esperado para cada condición.
-- Resultado: Se distingue validación de rango, tipo y presencia sin suponer que todas las APIs usan el mismo código.
-
-Secuencia: Modelar entradas → Enviar casos positivos y negativos → Comparar contrato
-
-### Autenticación y autorización
-
-La identidad y los permisos son controles distintos. Los códigos y mensajes concretos dependen de la API; no deben filtrarse secretos en colecciones compartidas.
-
-**Ejemplo aplicado**
-
-- Situación: El sandbox ofrece un lector que no puede ejecutar una operación de escritura.
-- Qué hace QA: Compara la petición sin credencial con la petición del lector a una acción restringida.
-- Resultado: Se pueden distinguir el rechazo por identidad y el rechazo por permisos según el diseño documentado.
-
-Secuencia: Preparar identidad → Solicitar acción → Evaluar permisos
 
 - 401: no autenticado; 403: autenticado pero sin permisos, según el diseño.
 - Evita suponer que cada API usa los mismos mensajes o 422 ante validación.
 - Usa colecciones de Postman y variables de ambiente sin compartir secretos.
 
-## 3. Validaciones automatizadas en Postman
+### Datos válidos e inválidos
+
+Las pruebas API incluyen propiedades ausentes, tipos incorrectos, límites, duplicados y recursos inexistentes. Cada respuesta esperada debe estar respaldada por el contrato.
+
+Ejemplo: Cantidad admite enteros de 1 a 5 en el cotizador de entrenamiento. Prueba 1, 5, 0, 6 y un texto; registra el estado y error esperado para cada condición. Se distingue validación de rango, tipo y presencia sin suponer que todas las APIs usan el mismo código.
+
+### Autenticación y autorización
+
+La identidad y los permisos son controles distintos. Los códigos y mensajes concretos dependen de la API; no deben filtrarse secretos en colecciones compartidas.
+
+Ejemplo: El sandbox ofrece un lector que no puede ejecutar una operación de escritura. Compara la petición sin credencial con la petición del lector a una acción restringida. Se pueden distinguir el rechazo por identidad y el rechazo por permisos según el diseño documentado.
+
+## Validaciones automatizadas en Postman
 
 En scripts post-response puedes inspeccionar el código y el JSON. Aísla los datos en ambientes y documenta el orden de ejecución cuando una prueba crea información que otra consume.
-
-### Aserciones post-response
-
-Los scripts de Postman evalúan la respuesta recibida. Una comprobación de estado se complementa con tipos, campos y relaciones de negocio relevantes.
-
-**Ejemplo aplicado**
-
-- Situación: Un endpoint de ejemplo promete id numérico y estado 200.
-- Qué hace QA: Añade pm.test para el código y para comprobar que id existe y es un número.
-- Resultado: El runner muestra qué comprobación falló, incluso si el estado fue correcto.
-
-Secuencia: Recibir respuesta → Ejecutar aserciones → Revisar resultados
-
-### Datos y orden de ejecución
-
-Las variables y datos del ambiente facilitan reutilizar una colección. Si hay dependencias entre peticiones, deben documentarse y prepararse de forma controlada.
-
-**Ejemplo aplicado**
-
-- Situación: Una petición crea un recurso y otra necesita su identificador.
-- Qué hace QA: Guarda el ID en el alcance adecuado y define preparación y limpieza sin compartir credenciales.
-- Resultado: La colección se puede ejecutar con datos conocidos y sin depender de residuos anteriores.
-
-Secuencia: Preparar datos → Relacionar solicitudes → Limpiar recursos
 
 - Comprueba tipos y campos obligatorios.
 - Prueba negativas y límites, no solo happy path.
 - No confíes en servicios de práctica para datos sensibles.
 
-## Ejemplo trabajado: Script de Postman para validar respuesta
+### Aserciones post-response
+
+Los scripts de Postman evalúan la respuesta recibida. Una comprobación de estado se complementa con tipos, campos y relaciones de negocio relevantes.
+
+Ejemplo: Un endpoint de ejemplo promete id numérico y estado 200. Añade pm.test para el código y para comprobar que id existe y es un número. El runner muestra qué comprobación falló, incluso si el estado fue correcto.
+
+### Datos y orden de ejecución
+
+Las variables y datos del ambiente facilitan reutilizar una colección. Si hay dependencias entre peticiones, deben documentarse y prepararse de forma controlada.
+
+Ejemplo: Una petición crea un recurso y otra necesita su identificador. Guarda el ID en el alcance adecuado y define preparación y limpieza sin compartir credenciales. La colección se puede ejecutar con datos conocidos y sin depender de residuos anteriores.
+
+## Herramientas de desarrollo (DevTools)
+
+Network permite identificar petición, respuesta, estado, headers y tiempos. Console muestra errores de JS y logs. Application permite revisar cookies, storage y otros estados del navegador. No copies credenciales o tokens en informes compartidos.
+
+- Filtra Fetch/XHR para aislar llamadas API.
+- Compara request payload y response body con el criterio de aceptación.
+- Registra ID de correlación cuando exista.
+
+### Network como evidencia
+
+Network permite relacionar una acción con petición, estado, headers, cuerpo y tiempos. Capturar una respuesta sin saber qué la generó limita el diagnóstico.
+
+Ejemplo: El botón Cotizar muestra un importe inesperado. Filtra Fetch/XHR, reproduce una sola acción y compara el payload y la respuesta con la regla. Se puede distinguir si el importe ya venía incorrecto de la API o cambió en la UI.
+
+### Console y estado del navegador
+
+Console ayuda a investigar errores de JavaScript; Application permite revisar cookies y almacenamiento. Estas evidencias pueden contener datos sensibles.
+
+Ejemplo: Una pantalla no actualiza el usuario después de cerrar sesión. Revisa errores y estado local relevante, ocultando tokens antes de compartir capturas. El diagnóstico aporta contexto sin publicar credenciales ni contenido innecesario.
+
+## Práctica guiada · Script de Postman para validar respuesta
 
 Ejemplo para un endpoint que promete HTTP 200 y un objeto con propiedad id numérica.
 
-### Paso 1 · Preparar el GET
+Enviar petición GET desde Postman.
+Abrir Scripts → Post-response.
+Agregar aserciones de estado y contenido.
+Adaptar atributos a un contrato real y documentar lo esperado.
 
-Enviar petición GET desde Postman. La URL, el método y el ambiente forman parte del caso; usa un servicio autorizado con un contrato conocido.
+## Reto de aprendizaje
 
-**Ejemplo aplicado**
-
-- Situación: Ejemplo para un endpoint que promete HTTP 200 y un objeto con propiedad id numérica.
-- Qué hace QA: Configura el GET del recurso de práctica y revisa la petición antes de enviarla.
-- Resultado: La respuesta corresponde al recurso y al ambiente que pretende comprobar el escenario.
-
-Secuencia: Elegir el recurso → Configurar el GET → Enviar la petición
-
-### Paso 2 · Ubicar Post-response
-
-Abrir Scripts → Post-response. Las aserciones deben ejecutarse después de recibir la respuesta que van a evaluar.
-
-**Ejemplo aplicado**
-
-- Situación: Ejemplo para un endpoint que promete HTTP 200 y un objeto con propiedad id numérica.
-- Qué hace QA: Abre Scripts y selecciona Post-response de esa petición, sin colocar las comprobaciones en la preparación.
-- Resultado: El script tiene acceso a la respuesta recién obtenida del endpoint.
-
-Secuencia: Seleccionar la petición → Abrir Scripts → Elegir Post-response
-
-### Paso 3 · Comprobar estado y contenido
-
-Agregar aserciones de estado y contenido. Un HTTP 200 no garantiza que el objeto tenga el identificador esperado ni el tipo acordado.
-
-**Ejemplo aplicado**
-
-- Situación: Ejemplo para un endpoint que promete HTTP 200 y un objeto con propiedad id numérica.
-- Qué hace QA: Agrega una prueba de status 200 y otra que compruebe la presencia y el tipo numérico de id.
-- Resultado: Los resultados distinguen errores del protocolo de diferencias en el cuerpo.
-
-Secuencia: Validar el status → Leer el JSON → Verificar el identificador
-
-### Paso 4 · Adaptar al contrato real
-
-Adaptar atributos a un contrato real y documentar lo esperado. El ejemplo es un punto de partida y sus expectativas deben corresponder al endpoint elegido.
-
-**Ejemplo aplicado**
-
-- Situación: Ejemplo para un endpoint que promete HTTP 200 y un objeto con propiedad id numérica.
-- Qué hace QA: Revisa qué status y campos promete el servicio y documenta los resultados esperados de esa versión.
-- Resultado: La colección detecta diferencias reales del contrato y no falla por expectativas copiadas sin análisis.
-
-Secuencia: Consultar el contrato → Ajustar las aserciones → Registrar lo esperado
-
-```javascript
-pm.test("Responde 200", () => {
-  pm.response.to.have.status(200);
-});
-pm.test("Incluye identificador numérico", () => {
-  const body = pm.response.json();
-  pm.expect(body).to.have.property("id");
-  pm.expect(body.id).to.be.a("number");
-});
-```
-
-## Ejercicio de aplicación
-
-Crea una colección de 15 validaciones para una API de práctica: métodos, estado, estructura, autenticación y escenarios negativos.
-
-### Respuesta orientativa
-
-Una propuesta: 4 casos positivos, 4 de validación, 3 de autenticación, 2 de no encontrado y 2 de reglas de negocio. Ajusta según el contrato real.
-
-### Error frecuente
-
-Dar por correcta una API solo porque devuelve 200; un body incorrecto también representa fallo.
+Crea una colección de 15 validaciones para una API de práctica: métodos, estado, estructura, autenticación y escenarios negativos. Investiga una cotización con Network y Console y compara la respuesta con la interfaz.
 
 ## Autoevaluación
 
-**¿Qué aporta una comprobación adicional al código HTTP?**
+¿Qué aporta una comprobación adicional al código HTTP?
 
-A. Verificar campos JSON y reglas del contrato
-B. Eliminar el entorno de pruebas
-C. Reemplazar toda prueba negativa
+# Semana 08 — SQL para validar datos
 
-**Respuesta:** A. Un estado exitoso puede acompañarse de datos o reglas incorrectos.
+Módulo: HTTP, REST, Postman, DevTools y SQL · Tiempo de lectura: 35 min
 
-## Lecturas adicionales
+> Comprueba datos con SELECT, relaciones JOIN, NULL, agregaciones y subconsultas.
 
-- [Postman Learning Center](https://learning.postman.com/)
-- [MDN – códigos de estado HTTP](https://developer.mozilla.org/es/docs/Web/HTTP/Status)
-
----
-
-
-# Semana 08 — SQL, DevTools y Git
-
-Módulo: API, SQL, Git y herramientas · Tiempo de lectura: 35 min
-
-> SQL, DevTools y Git permiten investigar, comprobar datos y mantener trazabilidad técnica.
-
-## 1. Consultas SQL esenciales
+## Consultas SQL esenciales
 
 SELECT elige columnas, WHERE filtra filas, JOIN combina relaciones y GROUP BY agrega resultados. En QA se usan para preparar/verificar datos y rastrear una operación. Trabaja preferentemente en ambientes de prueba y evita modificar información sin autorización.
-
-### SELECT, filtros y agregaciones
-
-SELECT y WHERE permiten revisar filas concretas; GROUP BY combina filas para calcular medidas como COUNT y SUM. Los resultados necesitan un esperado conocido.
-
-**Ejemplo aplicado**
-
-- Situación: En una base de práctica existen dos pedidos paid por un total de 139500 COP.
-- Qué hace QA: Agrupa pedidos por estado y compara cantidad e importe con los datos de la actividad.
-- Resultado: La consulta confirma o refuta los valores esperados sin modificar registros de producción.
-
-Secuencia: Definir esperado → Consultar y agrupar → Comparar resultados
-
-### Relaciones con JOIN
-
-INNER JOIN conserva coincidencias de ambas tablas; LEFT JOIN conserva las filas de la izquierda aunque no tengan coincidencia. Elegir mal el JOIN puede ocultar datos relevantes.
-
-**Ejemplo aplicado**
-
-- Situación: Se buscan pedidos que no tienen cliente relacionado en un conjunto de prueba.
-- Qué hace QA: Usa LEFT JOIN y revisa las filas sin identificador del lado cliente.
-- Resultado: La consulta permite investigar relaciones ausentes que un INNER JOIN habría excluido.
-
-Secuencia: Identificar relación → Elegir JOIN → Revisar coincidencias
 
 - SELECT id, estado FROM pedidos WHERE estado = 'PENDIENTE';
 - INNER JOIN combina coincidencias en ambas tablas.
 - LEFT JOIN conserva las filas de la tabla izquierda incluso sin coincidencia.
 - COUNT y SUM ofrecen controles de integridad básicos.
 
-## 2. Herramientas de desarrollo (DevTools)
+### SELECT, filtros y agregaciones
 
-Network permite identificar petición, respuesta, estado, headers y tiempos. Console muestra errores de JS y logs. Application permite revisar cookies, storage y otros estados del navegador. No copies credenciales o tokens en informes compartidos.
+SELECT y WHERE permiten revisar filas concretas; GROUP BY combina filas para calcular medidas como COUNT y SUM. Los resultados necesitan un esperado conocido.
 
-### Network como evidencia
+Ejemplo: En una base de práctica existen dos pedidos paid por un total de 139500 COP. Agrupa pedidos por estado y compara cantidad e importe con los datos de la actividad. La consulta confirma o refuta los valores esperados sin modificar registros de producción.
 
-Network permite relacionar una acción con petición, estado, headers, cuerpo y tiempos. Capturar una respuesta sin saber qué la generó limita el diagnóstico.
+### Relaciones con JOIN
 
-**Ejemplo aplicado**
+INNER JOIN conserva coincidencias de ambas tablas; LEFT JOIN conserva las filas de la izquierda aunque no tengan coincidencia. Elegir mal el JOIN puede ocultar datos relevantes.
 
-- Situación: El botón Cotizar muestra un importe inesperado.
-- Qué hace QA: Filtra Fetch/XHR, reproduce una sola acción y compara el payload y la respuesta con la regla.
-- Resultado: Se puede distinguir si el importe ya venía incorrecto de la API o cambió en la UI.
+Ejemplo: Se buscan pedidos que no tienen cliente relacionado en un conjunto de prueba. Usa LEFT JOIN y revisa las filas sin identificador del lado cliente. La consulta permite investigar relaciones ausentes que un INNER JOIN habría excluido.
 
-Secuencia: Reproducir acción → Inspeccionar solicitud → Comparar respuesta y UI
+## NULL y cardinalidad en relaciones
 
-### Console y estado del navegador
+Un LEFT JOIN conserva filas sin coincidencias. Las columnas de la derecha contienen NULL y COUNT(columna) no cuenta esos NULL. El número de filas depende de la cardinalidad, no solo de cuántos clientes existen.
 
-Console ayuda a investigar errores de JavaScript; Application permite revisar cookies y almacenamiento. Estas evidencias pueden contener datos sensibles.
+- Usa IS NULL para detectar ausencia de relación.
+- Revisa si los filtros pertenecen a ON o WHERE.
+- Compara COUNT(*) con COUNT(o.id).
 
-**Ejemplo aplicado**
+### Clientes sin pedidos
 
-- Situación: Una pantalla no actualiza el usuario después de cerrar sesión.
-- Qué hace QA: Revisa errores y estado local relevante, ocultando tokens antes de compartir capturas.
-- Resultado: El diagnóstico aporta contexto sin publicar credenciales ni contenido innecesario.
+LEFT JOIN permite encontrar clientes sin pedidos. Usa IS NULL sobre la clave del pedido y explica por qué un INNER JOIN no muestra esos clientes.
 
-Secuencia: Observar error → Examinar estado → Compartir evidencia depurada
+Ejemplo: El conjunto de práctica tiene tres clientes; Luis Demo no tiene pedidos registrados. Relaciona clientes y pedidos y filtra por o.id IS NULL para identificar la ausencia de pedido. Solo Luis aparece en el resultado; la consulta no inventa un pedido de importe cero.
 
-- Filtra Fetch/XHR para aislar llamadas API.
-- Compara request payload y response body con el criterio de aceptación.
-- Registra ID de correlación cuando exista.
+### Evitar conteos engañosos
 
-## 3. Git como respaldo del trabajo QA
+COUNT(*) cuenta filas del resultado; COUNT(o.id) cuenta identificadores no nulos. Una fila conservada por LEFT JOIN no implica que exista un pedido.
 
-Un repositorio preserva historia de cambios y facilita revisiones. Flujo típico: clonar, crear rama, realizar cambios, git add, git commit, push y pull request. Agrega un README que explique cómo reproducir pruebas y qué archivos no se deben subir.
+Ejemplo: El LEFT JOIN conserva una fila para Luis aunque su identificador de pedido es NULL. Agrupa por cliente y compara COUNT(*) con COUNT(o.id) usando la misma relación. El conteo de pedidos de Luis es cero al contar su identificador, no la fila conservada.
 
-### Rama, commit y revisión
+## Agregaciones y comprobaciones SQL
 
-Git conserva cambios y permite revisar una entrega. Preparar archivos y confirmar un commit son pasos diferentes; el contenido debe revisarse antes de publicarlo.
+GROUP BY reúne filas, HAVING filtra grupos y EXISTS comprueba la existencia de una relación. Antes de ejecutar, establece las filas y totales esperados. Documenta diferencias sin alterar datos para forzar un resultado.
 
-**Ejemplo aplicado**
+- Los pedidos paid suman 139500 COP en el conjunto del kit.
+- HAVING COUNT(o.id) > 1 identifica a Ana con dos pedidos.
+- EXISTS devuelve clientes con al menos un pedido que cumpla el filtro.
 
-- Situación: Se añaden casos de prueba para un checkout en un repositorio propio.
-- Qué hace QA: Crea una rama, revisa git status y el diff, prepara los archivos y crea un commit descriptivo.
-- Resultado: La revisión puede identificar exactamente qué cambió y cómo ejecutar sus comprobaciones.
+### Filtrar grupos con HAVING
 
-Secuencia: Crear rama → Revisar y confirmar cambios → Solicitar revisión
+WHERE filtra filas antes de agrupar y HAVING filtra los grupos calculados. Elegir la etapa incorrecta puede cambiar las cantidades y ocultar relaciones relevantes.
 
-### Repositorio reproducible y limpio
+Ejemplo: Ana tiene dos pedidos en los datos de entrenamiento y Sol tiene un pedido registrado. Agrupa pedidos por cliente y aplica HAVING COUNT(o.id) > 1 para localizar clientes recurrentes. Solo Ana cumple la condición; el conteo representa pedidos y no clientes duplicados.
 
-El README y las exclusiones del repositorio forman parte de la entrega. Historial de código no significa almacenar cualquier archivo generado o secreto.
+### Existencia y resultados esperados
 
-**Ejemplo aplicado**
+EXISTS expresa si hay al menos una fila relacionada. Contrasta el resultado con los datos base y no confundas existencia de un pago con el total acumulado de pagos.
 
-- Situación: El proyecto contiene .env, reportes locales y datos de autenticación.
-- Qué hace QA: Configura exclusiones y documenta variables con valores de ejemplo, sin subir secretos.
-- Resultado: Otra persona entiende la configuración sin recibir credenciales reales en el repositorio.
+Ejemplo: Ana y Sol tienen pedidos pagados, mientras Luis no tiene pedidos en el conjunto de práctica. Busca clientes para los que exista un pedido con status paid y compara los identificadores obtenidos. La consulta devuelve Ana y Sol sin multiplicar clientes por el número de sus pedidos.
 
-Secuencia: Identificar configuración sensible → Excluir secretos → Documentar ejecución
-
-- git status: cambios pendientes.
-- git switch -c qa/login: rama de trabajo.
-- git add . && git commit -m "test: casos login": captura el cambio.
-- Nunca publiques .env con secretos ni evidencia sensible.
-
-## Ejemplo trabajado: SQL guiado · contar órdenes por estado
+## Práctica guiada · SQL guiado · contar órdenes por estado
 
 Tablas hipotéticas: pedidos(id, cliente_id, estado, total) y clientes(id, nombre).
 
-### Paso 1 · Relacionar pedidos y clientes
+Verifica pedidos con cliente existente mediante JOIN.
+Cuenta pedidos por estado con GROUP BY.
+Investiga órdenes duplicadas antes de reportar un bug.
 
-Verifica pedidos con cliente existente mediante JOIN. El INNER JOIN incluye solo pedidos cuyo cliente coincide; por sí solo no demuestra que no existan huérfanos.
+## Reto de aprendizaje
 
-**Ejemplo aplicado**
-
-- Situación: Tablas hipotéticas: pedidos(id, cliente_id, estado, total) y clientes(id, nombre).
-- Qué hace QA: Relaciona p.cliente_id con c.id y utiliza una consulta complementaria si necesitas detectar pedidos sin cliente.
-- Resultado: El resultado agrupado incluye coincidencias válidas y el análisis reconoce qué filas dejó fuera.
-
-Secuencia: Relacionar las claves → Examinar las coincidencias → Revisar posibles exclusiones
-
-### Paso 2 · Agrupar por estado
-
-Cuenta pedidos por estado con GROUP BY. Cada fila del resultado representa un grupo, no un pedido individual; las sumas deben respetar esa granularidad.
-
-**Ejemplo aplicado**
-
-- Situación: Tablas hipotéticas: pedidos(id, cliente_id, estado, total) y clientes(id, nombre).
-- Qué hace QA: Agrupa por estado, cuenta los pedidos y suma el total, contrastando un grupo con datos conocidos.
-- Resultado: La cantidad y el valor corresponden a los pedidos del estado revisado.
-
-Secuencia: Seleccionar el estado → Contar y sumar → Contrastar el grupo
-
-### Paso 3 · Investigar duplicados
-
-Investiga órdenes duplicadas antes de reportar un bug. Un JOIN con relaciones inesperadas puede multiplicar filas; verifica la identidad antes de reportar un defecto del producto.
-
-**Ejemplo aplicado**
-
-- Situación: Tablas hipotéticas: pedidos(id, cliente_id, estado, total) y clientes(id, nombre).
-- Qué hace QA: Compara conteos por id de pedido y revisa la cardinalidad de las relaciones que participan en la consulta.
-- Resultado: El informe distingue un pedido duplicado de una consulta que repite la misma entidad.
-
-Secuencia: Contar por identificador → Revisar las relaciones → Documentar la causa
-
-```sql
-SELECT p.estado, COUNT(*) AS cantidad, SUM(p.total) AS valor
-FROM pedidos AS p
-INNER JOIN clientes AS c ON c.id = p.cliente_id
-GROUP BY p.estado
-ORDER BY cantidad DESC;
-```
-
-## Ejercicio de aplicación
-
-Escribe 10 consultas que combinen filtros, JOIN, conteo y suma; guarda también la explicación y un commit de Git.
-
-### Respuesta orientativa
-
-Cada consulta debe responder una pregunta específica. Por ejemplo: ¿cuántas órdenes pagadas existen? ¿hay pedidos huérfanos? ¿cuál es el total por cliente?
-
-### Error frecuente
-
-Usar una consulta SQL que cambia datos en producción solo para comprobar un resultado.
+Escribe 10 consultas que combinen filtros, JOIN, conteo y suma; guarda los resultados esperados y obtenidos con su explicación.
 
 ## Autoevaluación
 
-**¿Qué logra un LEFT JOIN?**
+¿Qué logra un LEFT JOIN?
 
-A. Eliminar filas sin relación
-B. Conservar filas de la tabla izquierda aunque no exista coincidencia
-C. Ordenar los resultados
+# Semana 09 — JavaScript y Git
 
-**Respuesta:** B. Permite detectar registros sin contraparte y hacer validaciones de integridad.
+Módulo: JavaScript, TypeScript y Git · Tiempo de lectura: 50 min
 
-## Lecturas adicionales
+> Aprende a expresar reglas de negocio con variables, decisiones, iteraciones y funciones comprobables. Conserva cambios revisables en Git.
 
-- [SQLBolt – aprendizaje SQL](https://sqlbolt.com/)
-- [Git – documentación oficial](https://git-scm.com/doc)
-
----
-
-
-# Semana 09 — JavaScript: lógica fundamental
-
-Módulo: JavaScript + TypeScript · Tiempo de lectura: 35 min
-
-> Aprende a expresar reglas de negocio con variables, decisiones, iteraciones y funciones comprobables.
-
-## 1. Variables y datos
+## Variables y datos
 
 JavaScript trabaja con valores primitivos como string, number, boolean, null y undefined. Usa const cuando no reasignas la variable y let cuando sí lo haces. Evita var en código moderno. Compara valores con === para no depender de coerciones implícitas.
-
-### Tipos y comparación estricta
-
-Un dato recibido de un formulario puede ser texto aunque represente una cantidad. Comprueba su tipo y evita que una conversión implícita oculte errores de entrada.
-
-**Ejemplo aplicado**
-
-- Situación: Un carrito recibe la cantidad "3" desde un campo y el precio 20 desde el catálogo.
-- Qué hace QA: Convierte la cantidad de forma explícita, valida que sea finita y compara los resultados con ===.
-- Resultado: El subtotal es 60; una entrada no numérica se rechaza antes de calcular el cobro.
-
-Secuencia: Inspeccionar el dato → Validar la conversión → Comprobar el subtotal
-
-### const y let según la intención
-
-const impide reasignar la variable, pero no vuelve inmutable el objeto. Usa let cuando el algoritmo necesita cambiar el valor y limita su alcance para evitar estados accidentales.
-
-**Ejemplo aplicado**
-
-- Situación: La prueba conserva un precio base de 100 y recorre tres cantidades para calcular sus totales.
-- Qué hace QA: Declara el precio con const y crea los datos de cada iteración sin modificar el objeto compartido.
-- Resultado: Cada caso comienza con el mismo precio y no depende del orden de ejecución de los demás.
-
-Secuencia: Fijar el dato base → Crear cada variante → Comparar ejecuciones
 
 - const correo = "qa@ejemplo.com";
 - const intentos = 3;
 - const activo = true;
 - Number.isFinite(valor) ayuda a validar números reales.
 
-## 2. Condiciones y ciclos
+### Tipos y comparación estricta
+
+Un dato recibido de un formulario puede ser texto aunque represente una cantidad. Comprueba su tipo y evita que una conversión implícita oculte errores de entrada.
+
+Ejemplo: Un carrito recibe la cantidad "3" desde un campo y el precio 20 desde el catálogo. Convierte la cantidad de forma explícita, valida que sea finita y compara los resultados con ===. El subtotal es 60; una entrada no numérica se rechaza antes de calcular el cobro.
+
+### const y let según la intención
+
+const impide reasignar la variable, pero no vuelve inmutable el objeto. Usa let cuando el algoritmo necesita cambiar el valor y limita su alcance para evitar estados accidentales.
+
+Ejemplo: La prueba conserva un precio base de 100 y recorre tres cantidades para calcular sus totales. Declara el precio con const y crea los datos de cada iteración sin modificar el objeto compartido. Cada caso comienza con el mismo precio y no depende del orden de ejecución de los demás.
+
+## Condiciones y ciclos
 
 if/else, switch y los operadores lógicos permiten decidir qué hacer. for, for...of y while recorren datos. En pruebas, los criterios de aceptación se pueden trasladar a condiciones concretas y luego evaluar con diferentes entradas.
-
-### Condiciones de negocio verificables
-
-Una condición combina reglas concretas. Antes de escribir if o switch, identifica qué combinaciones permiten y cuáles impiden la operación; así puedes diseñar pruebas que ejerciten cada decisión.
-
-**Ejemplo aplicado**
-
-- Situación: El descuento exige un cliente activo y una compra de al menos 100.
-- Qué hace QA: Evalúa activo/inactivo con importes 99, 100 y 101; verifica ambos lados del operador &&.
-- Resultado: Solo un cliente activo con importe igual o superior a 100 obtiene el descuento.
-
-Secuencia: Enumerar combinaciones → Evaluar la condición → Contrastar el descuento
-
-### Recorrer datos sin perder casos
-
-Un ciclo aplica una operación a una colección. Elige una salida y un incremento claros y prueba también la colección vacía para detectar límites mal definidos o resultados incompletos.
-
-**Ejemplo aplicado**
-
-- Situación: El equipo debe validar cinco correos antes de cargar usuarios de prueba.
-- Qué hace QA: Recorre los cinco valores con for...of y conserva el resultado de cada uno, incluyendo un correo inválido.
-- Resultado: El informe contiene cinco resultados y no se detiene silenciosamente al encontrar el inválido.
-
-Secuencia: Preparar cinco entradas → Recorrer la colección → Contar los resultados
 
 - && exige que ambas condiciones sean verdaderas.
 - || permite que al menos una condición sea verdadera.
 - ! invierte un booleano.
 - Diseña primero entradas esperadas e inesperadas.
 
-## 3. Funciones pequeñas, fáciles de probar
+### Condiciones de negocio verificables
+
+Una condición combina reglas concretas. Antes de escribir if o switch, identifica qué combinaciones permiten y cuáles impiden la operación; así puedes diseñar pruebas que ejerciten cada decisión.
+
+Ejemplo: El descuento exige un cliente activo y una compra de al menos 100. Evalúa activo/inactivo con importes 99, 100 y 101; verifica ambos lados del operador &&. Solo un cliente activo con importe igual o superior a 100 obtiene el descuento.
+
+### Recorrer datos sin perder casos
+
+Un ciclo aplica una operación a una colección. Elige una salida y un incremento claros y prueba también la colección vacía para detectar límites mal definidos o resultados incompletos.
+
+Ejemplo: El equipo debe validar cinco correos antes de cargar usuarios de prueba. Recorre los cinco valores con for...of y conserva el resultado de cada uno, incluyendo un correo inválido. El informe contiene cinco resultados y no se detiene silenciosamente al encontrar el inválido.
+
+## Funciones pequeñas, fáciles de probar
 
 Una función debe comunicar un propósito y devolver resultados previsibles. Evita que una función calcule descuentos, llame APIs y modifique UI al mismo tiempo: separar responsabilidades facilita depurar y automatizar.
-
-### Funciones con una responsabilidad
-
-Una función pequeña expresa una regla y devuelve un resultado sin depender de la interfaz. Separar el cálculo de las llamadas de red facilita encontrar si el fallo está en la regla o en la integración.
-
-**Ejemplo aplicado**
-
-- Situación: Una tienda aplica un descuento del 10 % a un producto de 200.
-- Qué hace QA: Extrae el cálculo a una función pura y comprueba que devuelve 180 sin modificar el precio original.
-- Resultado: El cálculo se puede probar sin abrir el navegador ni conectar con un servicio externo.
-
-Secuencia: Definir entradas y salida → Ejecutar el cálculo → Verificar sin interfaz
-
-### Probar límites y tipos inválidos
-
-Un validador debe establecer qué acepta y qué rechaza. Comprueba el tipo antes de acceder a propiedades y usa ejemplos en las fronteras para evitar excepciones o reglas demasiado permisivas.
-
-**Ejemplo aplicado**
-
-- Situación: Una contraseña debe tener entre 8 y 20 caracteres y al menos un dígito.
-- Qué hace QA: Prueba longitudes 7, 8, 20 y 21, una cadena sin dígitos y null antes de integrar el validador.
-- Resultado: Los límites válidos pasan y las entradas inválidas devuelven false de forma controlada.
-
-Secuencia: Seleccionar las fronteras → Ejecutar el validador → Comprobar cada retorno
 
 - Define nombre y parámetros claros.
 - Incluye retorno explícito para el resultado.
 - Prueba valores límite e inválidos.
 
-## Ejemplo trabajado: Validador de contraseña
+### Funciones con una responsabilidad
+
+Una función pequeña expresa una regla y devuelve un resultado sin depender de la interfaz. Separar el cálculo de las llamadas de red facilita encontrar si el fallo está en la regla o en la integración.
+
+Ejemplo: Una tienda aplica un descuento del 10 % a un producto de 200. Extrae el cálculo a una función pura y comprueba que devuelve 180 sin modificar el precio original. El cálculo se puede probar sin abrir el navegador ni conectar con un servicio externo.
+
+### Probar límites y tipos inválidos
+
+Un validador debe establecer qué acepta y qué rechaza. Comprueba el tipo antes de acceder a propiedades y usa ejemplos en las fronteras para evitar excepciones o reglas demasiado permisivas.
+
+Ejemplo: Una contraseña debe tener entre 8 y 20 caracteres y al menos un dígito. Prueba longitudes 7, 8, 20 y 21, una cadena sin dígitos y null antes de integrar el validador. Los límites válidos pasan y las entradas inválidas devuelven false de forma controlada.
+
+## Git como respaldo del trabajo QA
+
+Un repositorio preserva historia de cambios y facilita revisiones. Flujo típico: clonar, crear rama, realizar cambios, git add, git commit, push y pull request. Agrega un README que explique cómo reproducir pruebas y qué archivos no se deben subir.
+
+- git status: cambios pendientes.
+- git switch -c qa/login: rama de trabajo.
+- git add . && git commit -m "test: casos login": captura el cambio.
+- Nunca publiques .env con secretos ni evidencia sensible.
+
+### Rama, commit y revisión
+
+Git conserva cambios y permite revisar una entrega. Preparar archivos y confirmar un commit son pasos diferentes; el contenido debe revisarse antes de publicarlo.
+
+Ejemplo: Se añaden casos de prueba para un checkout en un repositorio propio. Crea una rama, revisa git status y el diff, prepara los archivos y crea un commit descriptivo. La revisión puede identificar exactamente qué cambió y cómo ejecutar sus comprobaciones.
+
+### Repositorio reproducible y limpio
+
+El README y las exclusiones del repositorio forman parte de la entrega. Historial de código no significa almacenar cualquier archivo generado o secreto.
+
+Ejemplo: El proyecto contiene .env, reportes locales y datos de autenticación. Configura exclusiones y documenta variables con valores de ejemplo, sin subir secretos. Otra persona entiende la configuración sin recibir credenciales reales en el repositorio.
+
+## Práctica guiada · Validador de contraseña
 
 La regla de ejemplo permite contraseñas de 8 a 20 caracteres con al menos un dígito.
 
-### Paso 1 · Comprobar el tipo
+Se valida el tipo antes de leer .length.
+Se separa validación de longitud y validación de dígito.
+Se comprueba el resultado con varios datos.
 
-Se valida el tipo antes de leer .length. Una entrada null no admite leer length; el tipo debe validarse antes de usar esa propiedad.
+## Reto de aprendizaje
 
-**Ejemplo aplicado**
-
-- Situación: La regla de ejemplo permite contraseñas de 8 a 20 caracteres con al menos un dígito.
-- Qué hace QA: Ejecuta el validador con null, un número y una cadena para revisar que solo la cadena llega a la regla de longitud.
-- Resultado: Los tipos inválidos devuelven false sin lanzar una excepción por acceder a length.
-
-Secuencia: Preparar tipos distintos → Comprobar typeof → Rechazar los inválidos
-
-### Paso 2 · Separar las reglas
-
-Se separa validación de longitud y validación de dígito. Cada condición aporta una restricción distinta y debe poder fallar de forma independiente.
-
-**Ejemplo aplicado**
-
-- Situación: La regla de ejemplo permite contraseñas de 8 a 20 caracteres con al menos un dígito.
-- Qué hace QA: Prueba una clave de longitud válida sin dígitos y otra con dígito pero fuera de la longitud permitida.
-- Resultado: Ninguna clave pasa por cumplir solo una parte de las condiciones acordadas.
-
-Secuencia: Validar la longitud → Buscar un dígito → Combinar las condiciones
-
-### Paso 3 · Verificar las fronteras
-
-Se comprueba el resultado con varios datos. Las dos aserciones del ejemplo no cubren por sí solas todas las fronteras ni las entradas inválidas.
-
-**Ejemplo aplicado**
-
-- Situación: La regla de ejemplo permite contraseñas de 8 a 20 caracteres con al menos un dígito.
-- Qué hace QA: Amplía los datos con longitudes 7, 8, 20 y 21 y compara cada retorno con la regla escrita.
-- Resultado: La tabla de resultados identifica si el validador acepta ambos extremos válidos y rechaza los externos.
-
-Secuencia: Elegir las fronteras → Ejecutar cada dato → Comparar cada retorno
-
-```javascript
-function claveValida(clave) {
-  if (typeof clave !== "string") return false;
-  return clave.length >= 8 &&
-    clave.length <= 20 &&
-    /\d/.test(clave);
-}
-console.assert(claveValida("clave1234") === true);
-console.assert(claveValida("corta") === false);
-```
-
-## Ejercicio de aplicación
-
-Implementa funciones para calcular descuentos y validar claves; realiza pruebas con entrada vacía, valores límite y tipo incorrecto.
-
-### Respuesta orientativa
-
-Organiza el validador como una función pura que retorne booleano. Para descuento, define por escrito si el límite es inclusivo y qué ocurre con precios negativos.
-
-### Error frecuente
-
-Automatizar con grabaciones antes de poder entender una condición o leer un error en consola.
+Implementa funciones para calcular descuentos y validar claves; realiza pruebas con entrada vacía, valores límite y tipo incorrecto. Versiona el código con status, add, commit y log.
 
 ## Autoevaluación
 
-**¿Qué comparación es preferible para evitar coerción de tipo?**
-
-A. ==
-B. ===
-C. =
-
-**Respuesta:** B. === compara valor y tipo sin conversión implícita.
-
-## Lecturas adicionales
-
-- [MDN – Guía de JavaScript](https://developer.mozilla.org/es/docs/Web/JavaScript/Guide)
-
----
-
+¿Qué comparación es preferible para evitar coerción de tipo?
 
 # Semana 10 — Objetos, arrays y JSON
 

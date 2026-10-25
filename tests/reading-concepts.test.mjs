@@ -21,7 +21,7 @@ test('all 24 weeks provide specific chapter and guided cards with valid step ico
  const allowed=new Set([...iconSource.matchAll(/^ (\w+):/gm)].map(match=>match[1]));
  const ids=new Set(),examples=new Set();let total=0;
  for(let week=1;week<=24;week++){
-  const guide=guides[week];assert.equal(guide.sections.length,3);
+  const guide=guides[week];assert.equal(guide.sections.length,[7,9].includes(week)?4:3);
   for(const section of guide.sections)assert.ok(section.concepts.length>=2,`${week}/${section.title}`);
   assert.ok(guide.example.concepts.length>=3,`guided example ${week}`);
   for(const c of [...guide.sections.flatMap(s=>s.concepts),...guide.example.concepts]){
@@ -34,5 +34,5 @@ test('all 24 weeks provide specific chapter and guided cards with valid step ico
   }
   if(week>2)guide.example.steps.forEach((step,i)=>assert.ok(guide.example.concepts[i].description.startsWith(step),`${week}/original guided step ${i}`));
  }
- assert.equal(total,262);
+ assert.equal(total,266);
 });

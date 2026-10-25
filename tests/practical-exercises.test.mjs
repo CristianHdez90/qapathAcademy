@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {readFileSync} from 'node:fs';
 import {Script,createContext} from 'node:vm';
+import {validatedPractice} from './helpers/practice-evidence.mjs';
 const require=createRequire(import.meta.url),ts=require('typescript');
 const exercises=JSON.parse(readFileSync(new URL('../libs/content/src/data/practical-exercises.json',import.meta.url)));
 const catalog=JSON.parse(readFileSync(new URL('../libs/content/src/data/catalog.json',import.meta.url)));
@@ -24,7 +25,7 @@ test('all 24 weeks get actionable additional practice with expected results and 
  assert.match(exercises[21].steps.map(s=>s.expected).join(' '),/npm ci/);
 });
 
-test('new evidence is isolated from existing requirements and preserves complete progress',()=>{
+test('narrative evidence stays a draft and cannot complete the practice requirement',()=>{
  const evidence='Ejecuté la colección de Postman y adjunté resultados, datos y conclusiones verificables.';
  let state=emptyProgress();
  for(let week=1;week<=24;week++){
@@ -33,9 +34,10 @@ test('new evidence is isolated from existing requirements and preserves complete
   for(let i=0;i<rule.tasks;i++)state=applyProgressCommand(state,{type:'submit-evidence',kind:'task',id:`${week}:${i}`,text:evidence});
   for(const id of rule.labs)state=applyProgressCommand(state,{type:'submit-evidence',kind:'lab',id,text:evidence});
   state=applyProgressCommand(state,{type:'lesson-answer',week,answer:rule.answer});state=applyProgressCommand(state,{type:'grade',moduleId:rule.module,score:70});
+  if(week!==7)state=applyProgressCommand(state,{type:'submit-evidence',kind:'exercise',id:String(week),text:validatedPractice(week)});
  }
  const before=JSON.stringify(state.weeks);state=applyProgressCommand(state,{type:'submit-evidence',kind:'exercise',id:'7',text:evidence});
- assert.equal(JSON.stringify(state.weeks),before);assert.equal(progressPercentage(state),100);
+ assert.equal(JSON.stringify(state.weeks),before);assert.ok(progressPercentage(state)<100);
  assert.equal(fromUnknown(state).evidence['exercise:7'],evidence);
  const cmd={type:'submit-evidence',kind:'exercise',id:'7',text:evidence};assert.equal(progressCommandSchema.safeParse(cmd).success,true);
  for(const id of ['0','25','01','task:7','<script>'])assert.throws(()=>applyProgressCommand(state,{...cmd,id}),/inválida/);

@@ -3,6 +3,7 @@ import type {Progress} from './progress';
 import {weekRequirements} from './automatic-completion';
 import {learningRules} from './learning-rules';
 import {assessFoundationEvidence} from './foundation-practice';
+import {practiceCompleted} from './practice-completion';
 export type ProgressCommand =
  |{type:'toggle';key:'weeks'|'read'|'tasks'|'labs'|'final';value:number|string}
  |{type:'note';week:number;text:string}
@@ -36,11 +37,15 @@ function applyCommand(current:Progress,command:ProgressCommand):Progress {
   }
   case 'submit-evidence': {
    const valid=command.kind==='certification'?/^ctfl-(chapter-[1-6]|mock)$/.test(command.id):command.kind==='exercise'?learningRules.some(r=>String(r.week)===command.id):command.kind==='task'?learningRules.some(r=>Array.from({length:r.tasks},(_,i)=>`${r.week}:${i}`).includes(command.id)):learningRules.some(r=>r.labs.some(id=>id===command.id));
-   const limit=command.kind==='exercise'&&command.id==='1'?32000:8000;
+   const limit=command.kind==='exercise'&&['1','5','7'].includes(command.id)?32000:8000;
    if(!valid||command.text.trim().length<40||command.text.length>limit)throw new Error(`Evidencia inválida: escribe entre 40 y ${limit} caracteres.`);
    if(command.kind==='exercise'&&command.id==='1'){
     let validated=false;try{validated=JSON.parse(command.text).completion==='validated'}catch{}
     if(validated&&!assessFoundationEvidence(command.text).complete)throw new Error('Completa y ejecuta al menos un caso por cada ejemplo de diseño antes de validar la práctica.');
+   }
+   if(command.kind==='exercise'){
+    let validated=false;try{validated=JSON.parse(command.text).completion==='validated'}catch{}
+    if(validated&&!practiceCompleted({[`exercise:${command.id}`]:command.text},Number(command.id)))throw new Error('Completa una ejecución correcta de esta actividad antes de finalizar la práctica.');
    }
    return {...state,evidence:{...state.evidence,[`${command.kind}:${command.id}`]:command.text.trim()}};
   }

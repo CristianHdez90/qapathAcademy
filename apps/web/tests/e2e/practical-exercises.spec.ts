@@ -24,21 +24,15 @@ test('Postman collection and CSV fixtures pass against the actual sandbox',async
  }}}
 });
 
-test('new exercises preserve original learning blocks and save evidence independently',async({page},testInfo)=>{
+test('compact practice entry preserves reading and directs execution to the activity',async({page},testInfo)=>{
  await page.route('**/api/v1/auth/me',r=>r.fulfill({status:401,json:{message:'No autenticado'}}));
  await page.goto('/modules/herramientas');
- await page.getByRole('link',{name:'Ejercicio · Semana 7',exact:false}).click();
+ await page.goto('/study/7#practical-exercise');
  const exercise=page.locator('#practical-exercise');await expect(exercise).toHaveAttribute('open','');
  await expect(exercise.getByRole('heading',{name:'Postman: contratos, códigos HTTP y autorización',exact:true})).toBeVisible();
  await expect(page.locator('#chapter-0')).toBeAttached();await expect(page.locator('.chapter-label').filter({hasText:'PRÁCTICA GUIADA'})).toBeAttached();
- await expect(page.locator('#practice')).toBeAttached();await expect(page.locator('#self-check .option')).toHaveCount(3);
- await expect(page.locator('#deliverables')).toBeAttached();
- const text='Ejecuté la colección de Postman con filas CSV, comparé status y totales y documenté los resultados observados.';
- await exercise.getByRole('textbox').fill(text);await exercise.getByRole('button',{name:'Enviar evidencia',exact:true}).click();
- await expect(exercise).toContainText('Evidencia de práctica adicional guardada');
- const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}'));
- expect(saved.evidence['exercise:7']).toBe(text);expect(saved.weeks).toEqual([]);
- await page.reload();await expect(page.locator('#practical-exercise')).toContainText('Evidencia de práctica adicional guardada');
+ await expect(page.locator('#practice')).toHaveCount(0);await expect(page.locator('#self-check .option')).toHaveCount(3);
+ await expect(page.locator('#deliverables')).toHaveCount(0);await expect(exercise.locator('textarea,form')).toHaveCount(0);await expect(exercise.getByRole('link',{name:'Abrir actividad de la semana 7',exact:false})).toHaveAttribute('href','/practice/7');
  for(const width of [1280,390,320]){
   await page.setViewportSize({width,height:900});expect(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),JSON.stringify(await page.evaluate(()=>({width:innerWidth,scrollWidth:document.documentElement.scrollWidth,overflow:[...document.querySelectorAll('body *')].filter(e=>e.getBoundingClientRect().right>innerWidth+1&&(!e.closest('.learning-stages,.lesson-outline')||e.matches('.learning-stages,.lesson-outline'))).slice(0,12).map(e=>({tag:e.tagName,class:String(e.className),right:e.getBoundingClientRect().right}))})))).toBe(false);
   if(width===390)await page.screenshot({path:testInfo.outputPath('practical-exercise-mobile.png')});

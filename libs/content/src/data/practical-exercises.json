@@ -1,32 +1,37 @@
 {
   "1": {
-    "title": "Mentalidad QA: transferencia, defecto y fallo",
-    "objective": "Ejecutar una transferencia bancaria de entrenamiento, distinguir error, defecto y fallo, y documentar casos con esperado y obtenido.",
-    "minutes": 35,
+    "title": "De la historia de usuario al diseño de casos de prueba",
+    "objective": "Analizar una HU con criterios y escenarios BDD, diseñar una matriz de casos con acciones secuenciales y ejecutar un caso por cada ejemplo de técnica.",
+    "minutes": 60,
     "tools": [
-      "Laboratorio de transferencia",
-      "Matriz de casos"
+      "HU y Gherkin",
+      "Técnicas de diseño",
+      "Matriz interactiva"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Lee HU-TR-01 y sus cuatro criterios de aceptación. Los escenarios Gherkin describen comportamiento; los pasos del caso son acciones numeradas.",
+      "Usa datos ficticios en el laboratorio. Puedes guardar borradores, agregar filas y descargar la matriz CSV o el kit de apoyo."
     ],
     "steps": [
       {
-        "action": "Configura saldo inicial 200, importe 50 y saldo esperado 150. Ejecuta la actividad del tema.",
-        "expected": "La implementación correcta devuelve 150 y el caso se aprueba."
+        "action": "Analiza la HU: identifica reglas, entradas, estados y resultados que permitan decidir si una transferencia es correcta.",
+        "expected": "Trazabilidad entre CA-01 a CA-04 y las condiciones que se deben probar."
       },
       {
-        "action": "Activa Mantener defecto de transferencia y vuelve a ejecutar sin modificar el esperado.",
-        "expected": "La implementación defectuosa resta 5 y devuelve 195: el caso falla; se distingue el código defectuoso del saldo incorrecto observado."
+        "action": "Revisa los cinco ejemplos: partición válida, partición inválida, valores límite, tabla de decisión y transición de estado.",
+        "expected": "Un objetivo de prueba y datos representativos por ejemplo; amplía los casos si necesitas más cobertura."
       },
       {
-        "action": "Completa cuatro casos en la matriz con título, precondiciones, pasos Given/When/Then, resultado esperado y resultado obtenido.",
-        "expected": "El esperado se define antes de ejecutar; cada registro incluye estado y evidencia de su ejecución."
+        "action": "Completa al menos un caso por cada ejemplo en la tabla: técnica, criterio, título, precondiciones, datos JSON, acciones numeradas y resultado esperado.",
+        "expected": "Cinco casos distintos como mínimo. Los pasos indican cómo preparar, ejecutar y comprobar; no son Given/When/Then."
       },
       {
-        "action": "Desactiva el defecto, repite el caso y explica qué documentarías en el reporte del bug.",
-        "expected": "El retest devuelve 150; el reporte enlaza el caso, los pasos, el esperado 150 y el obtenido 195 de la ejecución fallida."
+        "action": "Ejecuta los casos. Opcionalmente simula el defecto; si un caso falla, vincula un bug y repite después de desactivar el defecto.",
+        "expected": "El obtenido y el estado provienen de la ejecución. El reporte de bug conserva pasos, esperado y obtenido."
+      },
+      {
+        "action": "Pulsa Validar práctica cuando cada ejemplo tenga un caso completo y ejecutado.",
+        "expected": "Cobertura 5/5 y validación guardada; los borradores incompletos se pueden guardar sin completar la práctica."
       }
     ],
     "deliverables": [
@@ -45,6 +50,11 @@
       ]
     ],
     "files": [
+      {
+        "label": "HU y ejemplos de técnicas de diseño",
+        "href": "/practice/kit/guides/foundation-hu-design.md",
+        "description": "HU-TR-01, criterios y cinco ejemplos con datos, acciones y resultado esperado."
+      },
       {
         "label": "Guía específica de la semana 1",
         "href": "/practice/kit/guides/week-01.md",
@@ -73,43 +83,48 @@
     ]
   },
   "2": {
-    "title": "Riesgos, prioridad y niveles de prueba",
-    "objective": "Configurar probabilidad e impacto, calcular exposición y distinguir el nivel de prueba para una interacción entre servicios.",
+    "title": "Riesgos y niveles de prueba · misión de lanzamiento",
+    "objective": "Priorizar riesgos de una tienda antes del lanzamiento, explorar probabilidad e impacto y elegir niveles de prueba con retroalimentación inmediata.",
     "minutes": 40,
     "tools": [
-      "Matriz de riesgos",
-      "Clasificador de niveles"
+      "Mapa de exposición",
+      "Priorización de riesgos",
+      "Niveles de prueba"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Lee las tres situaciones de la tienda: cobro duplicado, venta sin existencias y nombre de perfil incorrecto. Son datos ficticios para aprender.",
+      "Explora los controles con ratón, tacto o teclado. El mapa y la lista de prioridades cambian al modificar tus estimaciones."
     ],
     "steps": [
       {
-        "action": "Asigna probabilidad 4 e impacto 5 al cobro incorrecto; probabilidad 3 e impacto 2 al nombre de perfil.",
-        "expected": "Las exposiciones calculadas son 20 y 6; el cobro se prioriza primero."
+        "action": "Explora las tres tarjetas y estima probabilidad e impacto de 1 a 5; justifica tu elección a partir de las consecuencias.",
+        "expected": "La exposición se actualiza como probabilidad × impacto. Al inicio: cobro duplicado 20, venta sin existencias 12 y perfil 6."
       },
       {
-        "action": "Cambia las puntuaciones y ejecuta para comprobar cómo cambia el orden; justifica cada puntuación.",
-        "expected": "La clasificación depende del producto probabilidad por impacto, con valores enteros entre 1 y 5."
+        "action": "Simula una mitigación en una tarjeta y observa cómo cambia su exposición residual y el orden de prioridad.",
+        "expected": "La simulación reduce dos puntos de probabilidad, con mínimo 1, y conserva el impacto. Es una estimación didáctica, no evidencia de eficacia real."
       },
       {
-        "action": "Elige el nivel para probar la colaboración entre dos servicios y ejecuta la comprobación.",
-        "expected": "Integración corresponde a esa colaboración; elegir otro nivel produce feedback para revisar la clasificación."
+        "action": "Asigna tus dos turnos de pruebas a los riesgos con mayor exposición actual.",
+        "expected": "La selección debe seguir las puntuaciones configuradas. En un empate en el corte, se admite cualquiera de los riesgos empatados."
       },
       {
-        "action": "Relaciona los riesgos con casos y registra la cobertura pendiente en tu matriz y evidencia.",
-        "expected": "La prioridad está justificada y no se confunde nivel de prueba con objetivo o técnica."
+        "action": "Elige un nivel para cada situación: función aislada, colaboración de servicios, producto completo y aceptación de negocio.",
+        "expected": "Se distinguen componente/unitaria, integración, sistema y aceptación por alcance y propósito."
+      },
+      {
+        "action": "Pulsa Validar mi estrategia, revisa las pistas y ajusta tus decisiones hasta resolver las cinco comprobaciones.",
+        "expected": "La práctica muestra decisiones acertadas y comentarios concretos. Guarda la última estrategia y sus conclusiones en la evidencia de esta actividad."
       }
     ],
     "deliverables": [
-      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
-      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
+      "Priorización de dos riesgos coherente con las estimaciones actuales.",
+      "Cuatro niveles de prueba seleccionados y estrategia validada, con justificación de riesgo y mitigación."
     ],
     "rubric": [
-      "La actividad usa los conceptos y herramientas de esta semana.",
-      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
-      "Se mantiene separado el resultado esperado del obtenido."
+      "Probabilidad e impacto tienen una justificación contextual.",
+      "La priorización considera la exposición actual y los empates.",
+      "El nivel de prueba se relaciona con alcance y propósito, no con una herramienta."
     ],
     "links": [
       [
@@ -121,101 +136,75 @@
       {
         "label": "Guía específica de la semana 2",
         "href": "/practice/kit/guides/week-02.md",
-        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+        "description": "Misión de lanzamiento, escalas didácticas, mitigación y niveles de prueba."
       },
       {
-        "label": "Matriz de casos y ejecución",
-        "href": "/practice/templates/case-matrix.csv",
-        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
-      },
-      {
-        "label": "Guía Caso → Bug y retest",
-        "href": "/practice/templates/case-and-bug-guide.md",
-        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
-      },
-      {
-        "label": "Historial del ciclo de vida del bug",
-        "href": "/practice/templates/bug-lifecycle.csv",
-        "description": "Registra transición, responsable, fecha y evidencia."
-      },
-      {
-        "label": "Plantilla de reporte de bug",
-        "href": "/practice/templates/bug-report.md",
-        "description": "Describe el defecto y enlázalo con el caso fallido."
+        "label": "Datos de riesgos del lanzamiento",
+        "href": "/practice/kit/data/release-risks.csv",
+        "description": "Tres situaciones, sus puntuaciones iniciales y medidas de mitigación para analizar riesgos."
       }
     ]
   },
   "3": {
-    "title": "Historia, Gherkin y criterios ejecutables",
-    "objective": "Construir una historia y un criterio Given/When/Then, variar condiciones de una cuenta ficticia y contrastar predicción con resultado.",
+    "title": "Historia de usuario BDD y escenarios Gherkin",
+    "objective": "Analizar una HU, distinguir contexto, acción y resultado, construir un escenario con opciones y validar su coherencia con los criterios de aceptación.",
     "minutes": 45,
     "tools": [
-      "Constructor de historia",
-      "Ejecutor de reglas de acceso",
-      "Gherkin"
+      "HU en BDD",
+      "Constructor Gherkin",
+      "Simulador de acceso"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Lee la HU-AC-01 en el bloque Como, Quiero y Para, y revisa sus tres criterios de aceptación.",
+      "Consulta el escenario de ejemplo y la explicación de Given, When y Then. Usa exclusivamente cuentas y credenciales ficticias del simulador."
     ],
     "steps": [
       {
-        "action": "Completa Como, Quiero, Para y los campos Given, When y Then con una expectativa observable.",
-        "expected": "La historia expresa actor, necesidad y beneficio; el criterio describe un comportamiento verificable."
+        "action": "Revisa la historia de usuario y separa actor, necesidad y beneficio de los escenarios que ejemplifican sus criterios.",
+        "expected": "Como, Quiero y Para describen la HU; Given, When y Then describen un ejemplo de comportamiento."
       },
       {
-        "action": "Marca cuenta activa y credencial válida, predice permitir y ejecuta la actividad.",
-        "expected": "La regla de acceso de entrenamiento permite entrar; conserva el escenario y el resultado en la evidencia."
+        "action": "Abre la explicación del .feature: Feature agrupa la funcionalidad y Scenario identifica un comportamiento; Given establece contexto, When ejecuta la acción y Then expresa la salida observable.",
+        "expected": "Un archivo UTF-8 con Feature: y Scenario:, seguido de pasos Given, When y Then sin dos puntos."
       },
       {
-        "action": "Desmarca cada condición por separado y después ambas; cambia la predicción antes de ejecutar.",
-        "expected": "Las tres variantes rechazan el acceso. Un resultado distinto de tu predicción produce una comprobación fallida."
+        "action": "Escribe el título del escenario y selecciona una frase en cada lista. Ejecuta y revisa la explicación si mezclas roles o eliges un resultado incoherente.",
+        "expected": "El validador diferencia errores de rol, acciones fuera de la HU, resultados ambiguos y contradicciones con CA-01, CA-02 o CA-03."
       },
       {
-        "action": "Revisa si el texto del Then corresponde a los datos usados y enlaza historia, criterio y caso.",
-        "expected": "La herramienta ejecuta la regla; la claridad del criterio se revisa con pensamiento QA y no se da por válida solo por contener texto."
+        "action": "Construye una variante de acceso permitido y otra de acceso rechazado por credenciales incorrectas o cuenta inactiva.",
+        "expected": "Un rechazo del acceso puede ser un escenario correcto cuando ese es el comportamiento esperado por la HU."
+      },
+      {
+        "action": "Descarga tu .feature después de validarlo y guarda la evidencia de esta actividad.",
+        "expected": "El escenario se conserva en su archivo y en la evidencia; ejecutarlo con Cucumber requiere implementar sus step definitions."
       }
     ],
     "deliverables": [
-      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
-      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
+      "Un escenario de acceso permitido y otro de rechazo coherentes con la HU.",
+      "Archivo .feature y evidencia de las validaciones, con explicación de Given, When y Then."
     ],
     "rubric": [
-      "La actividad usa los conceptos y herramientas de esta semana.",
-      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
-      "Se mantiene separado el resultado esperado del obtenido."
+      "La HU usa Como, Quiero y Para en líneas separadas.",
+      "El escenario distingue contexto, acción y resultado observable.",
+      "El Then coincide con el criterio de aceptación aplicable y con los datos ficticios."
     ],
     "links": [
       [
-        "ISTQB · Fundamentos",
-        "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
+        "Cucumber · Referencia de Gherkin",
+        "https://cucumber.io/docs/gherkin/reference/"
       ]
     ],
     "files": [
       {
         "label": "Guía específica de la semana 3",
         "href": "/practice/kit/guides/week-03.md",
-        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
+        "description": "HU, palabras clave y construcción guiada del archivo .feature."
       },
       {
-        "label": "Matriz de casos y ejecución",
-        "href": "/practice/templates/case-matrix.csv",
-        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
-      },
-      {
-        "label": "Guía Caso → Bug y retest",
-        "href": "/practice/templates/case-and-bug-guide.md",
-        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
-      },
-      {
-        "label": "Historial del ciclo de vida del bug",
-        "href": "/practice/templates/bug-lifecycle.csv",
-        "description": "Registra transición, responsable, fecha y evidencia."
-      },
-      {
-        "label": "Plantilla de reporte de bug",
-        "href": "/practice/templates/bug-report.md",
-        "description": "Describe el defecto y enlázalo con el caso fallido."
+        "label": "Ejemplo Gherkin · acceso a mis pedidos",
+        "href": "/practice/kit/features/acceso-mis-pedidos.feature",
+        "description": "HU y escenarios de éxito, credenciales incorrectas y cuenta inactiva. Requiere step definitions para automatizarse."
       }
     ]
   },
@@ -225,39 +214,39 @@
     "minutes": 50,
     "tools": [
       "Validador de reglas",
-      "Generador de fronteras",
-      "Matriz de casos"
+      "Explorador de fronteras",
+      "Bitácora de experimentos"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Abre el laboratorio de siete desafíos y revisa la regla: 8 a 20 caracteres, ambos incluidos, y al menos un dígito de 0 a 9.",
+      "Trabaja con letras y dígitos ficticios. Puedes usar Preparar dato para generar la entrada del desafío y editarla antes de ejecutar."
     ],
     "steps": [
       {
-        "action": "Introduce una contraseña ficticia de ocho caracteres con dígito, predice válido y ejecuta.",
-        "expected": "La regla acepta entre 8 y 20 caracteres con al menos un dígito."
+        "action": "Selecciona un desafío, identifica su técnica y prepara un dato que aísle la condición indicada.",
+        "expected": "La longitud y la presencia de dígitos corresponden al objetivo del desafío; no se mezclan condiciones sin necesidad."
       },
       {
-        "action": "Prueba longitudes 7, 8, 20 y 21 con el generador de fronteras.",
-        "expected": "7 y 21 se rechazan; 8 y 20 se aceptan cuando contienen un dígito."
+        "action": "Antes de ejecutar, predice aceptar o rechazar. Recorre las fronteras 7, 8, 20 y 21, el interior válido, la entrada sin dígitos y la vacía.",
+        "expected": "Cada predicción se compara con el comportamiento real del validador de entrenamiento para el dato elegido."
       },
       {
-        "action": "Prueba una cadena de longitud válida sin dígitos y otra vacía; registra el esperado antes de ejecutar.",
-        "expected": "Las dos entradas se rechazan por la condición incumplida, sin cambiar el esperado para ajustar el resultado."
+        "action": "Ejecuta cada experimento, lee la explicación y reintenta si la predicción o el dato no corresponden al desafío.",
+        "expected": "Los siete desafíos quedan cubiertos con datos adecuados y predicciones correctas. Un rechazo esperado también es una prueba exitosa."
       },
       {
-        "action": "Completa una tabla de decisión para longitud válida y presencia de dígito y registra las particiones cubiertas.",
-        "expected": "Solo la combinación de longitud válida y dígito permite aceptar la contraseña."
+        "action": "Revisa la bitácora, explica las particiones y fronteras, guarda tu evidencia y pulsa Finalizar práctica al cubrir los siete desafíos.",
+        "expected": "La evidencia contiene las ejecuciones y tu reflexión; el recorrido solo marca la práctica después de finalizar con la cobertura completa."
       }
     ],
     "deliverables": [
-      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
-      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
+      "Siete experimentos con dato ficticio, longitud, dígito, resultado esperado, obtenido y fecha.",
+      "Reflexión sobre particiones, fronteras y diferencias entre una predicción incorrecta y un bug."
     ],
     "rubric": [
-      "La actividad usa los conceptos y herramientas de esta semana.",
-      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
-      "Se mantiene separado el resultado esperado del obtenido."
+      "Cada dato ejercita la condición del desafío seleccionado.",
+      "Las cuatro fronteras y las tres particiones se ejecutan con predicciones correctas.",
+      "La conclusión utiliza resultados registrados, sin confundir rechazo esperado con fallo del producto."
     ],
     "links": [
       [
@@ -267,71 +256,55 @@
     ],
     "files": [
       {
-        "label": "Guía específica de la semana 4",
         "href": "/practice/kit/guides/week-04.md",
-        "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
-      },
-      {
-        "label": "Matriz de casos y ejecución",
-        "href": "/practice/templates/case-matrix.csv",
-        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
-      },
-      {
-        "label": "Guía Caso → Bug y retest",
-        "href": "/practice/templates/case-and-bug-guide.md",
-        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
-      },
-      {
-        "label": "Historial del ciclo de vida del bug",
-        "href": "/practice/templates/bug-lifecycle.csv",
-        "description": "Registra transición, responsable, fecha y evidencia."
-      },
-      {
-        "label": "Plantilla de reporte de bug",
-        "href": "/practice/templates/bug-report.md",
-        "description": "Describe el defecto y enlázalo con el caso fallido."
+        "label": "Guía específica de la semana 4",
+        "description": "Siete desafíos guiados, regla del validador, interpretación de resultados y bitácora de evidencia."
       }
     ]
   },
   "5": {
     "title": "Reporte, triage y ciclo de vida del bug",
-    "objective": "Completar un reporte reproducible y recorrer asignación, corrección, retest, reapertura y cierre con evidencia.",
+    "objective": "Reproducir un fallo de transferencia, redactar un reporte y conducirlo por triage, reapertura, retest, regresión y cierre con evidencia.",
     "minutes": 45,
     "tools": [
-      "Reporte de bug",
-      "Tablero de estados",
-      "Retest de transferencia"
+      "Reporte guiado de bug",
+      "Ciclo de vida",
+      "Retest y regresión"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Abre la misión guiada: reproduce una transferencia de 50 desde saldo 200 y compara el esperado con el obtenido.",
+      "Trabaja con los datos ficticios de entrenamiento. El reporte y la bitácora sustituyen la matriz de casos en esta actividad."
     ],
     "steps": [
       {
-        "action": "Completa título, precondiciones, pasos, esperado 150 y obtenido 195 del defecto de transferencia. Reporta el bug.",
-        "expected": "El bug pasa de Sin reportar a Nuevo y conserva los datos para reproducirlo."
+        "action": "Reproduce el fallo de transferencia y observa la diferencia entre saldo esperado 150 y obtenido 195.",
+        "expected": "La simulación registra la reproducción y permite distinguir el defecto de resta del fallo observable en el saldo."
       },
       {
-        "action": "Realiza triage, asigna un responsable, inicia la corrección y marca listo para retest.",
-        "expected": "El historial contiene cada transición, responsable, fecha y motivo; no se salta directamente al cierre."
+        "action": "Completa las tres partes del reporte: resumen, condiciones y pasos de reproducción, severidad y prioridad. Reporta el bug.",
+        "expected": "El reporte tiene datos concretos y al menos tres acciones numeradas; el esperado y el obtenido se adjuntan desde la reproducción."
       },
       {
-        "action": "Mantén el defecto activo y ejecuta el retest.",
-        "expected": "La transferencia sigue devolviendo 195 frente a 150; el estado cambia a Reabierto."
+        "action": "Realiza triage, elige el equipo responsable, inicia la corrección y entrega la versión inicial para retest.",
+        "expected": "Cada acción habilita la siguiente; la versión inicial conserva el fallo para practicar una reapertura justificada."
       },
       {
-        "action": "Inicia otra corrección, marca listo para retest, desactiva el defecto y vuelve a ejecutar.",
-        "expected": "El resultado es 150 y el bug se cierra con evidencia; añade regresión de otros importes en tu matriz."
+        "action": "Ejecuta el primer retest, reabre la corrección, aplica la corrección simulada y repite la transferencia original.",
+        "expected": "El primer retest obtiene 195 y pasa a Reabierto; el segundo obtiene 150 y pasa a Verificado con los mismos datos."
+      },
+      {
+        "action": "Predice el saldo para otro importe, ejecuta la regresión, cierra el bug, revisa la bitácora y pulsa Finalizar práctica.",
+        "expected": "El cierre y el avance solo se habilitan con un reporte válido, retest fallido y correcto, y una regresión comprobada."
       }
     ],
     "deliverables": [
-      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
-      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
+      "Reporte reproducible con título, descripción, entorno, precondiciones, pasos, esperado, obtenido, severidad y prioridad.",
+      "Historial de estados con fechas, responsable, retests y regresión, más una reflexión opcional."
     ],
     "rubric": [
-      "La actividad usa los conceptos y herramientas de esta semana.",
-      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
-      "Se mantiene separado el resultado esperado del obtenido."
+      "Los pasos permiten repetir el fallo desde las condiciones indicadas.",
+      "Se distinguen severidad e impacto de prioridad y urgencia.",
+      "La reapertura y el cierre se sustentan en resultados registrados, no en una afirmación de corrección."
     ],
     "links": [
       [
@@ -344,11 +317,6 @@
         "label": "Guía específica de la semana 5",
         "href": "/practice/kit/guides/week-05.md",
         "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
-      },
-      {
-        "label": "Matriz de casos y ejecución",
-        "href": "/practice/templates/case-matrix.csv",
-        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
       },
       {
         "label": "Guía Caso → Bug y retest",
@@ -377,40 +345,44 @@
       "Informe de ejecución"
     ],
     "setup": [
-      "Abre el laboratorio interactivo de esta semana y configura sus datos ficticios. No requiere instalar herramientas.",
-      "Conserva el kit de apoyo como alternativa y registra evidencias de ejecución en la matriz y el espacio de esta actividad."
+      "Abre la misión de Sprint: define un objetivo y relaciona cuatro situaciones con sus eventos de Scrum. Usa datos ficticios; no necesitas instalar herramientas.",
+      "Conserva el kit de apoyo y utiliza la bitácora guiada para guardar o descargar el tablero, las predicciones y tus reflexiones."
     ],
     "steps": [
       {
-        "action": "Define Sprint Goal y configura 25 planificados, 17 aprobados, 2 fallidos y 1 bloqueado sin ejecutar.",
-        "expected": "Hay 19 ejecutados y quedan 5 no ejecutados adicionales; el bloqueado no se cuenta como ejecutado."
+        "action": "Define un Sprint Goal que explique el valor de las transferencias y relaciona las situaciones con Planning, Daily, Review y Retrospective.",
+        "expected": "La planificación distingue el objetivo del Sprint, la adaptación diaria, la inspección del resultado y la mejora de la forma de trabajar."
       },
       {
-        "action": "Ejecuta el informe y explica los denominadores de ejecución y aprobación.",
-        "expected": "Ejecución 19/25 = 76 %; aprobación 17/19 ≈ 89 %. El informe identifica la convención empleada."
+        "action": "Explora el tablero inicial: 25 planificados, 17 aprobados, 2 fallidos y 1 bloqueado sin ejecutar. Predice ejecutados y aprobación.",
+        "expected": "Hay 19 ejecutados, 1 bloqueado y 5 adicionales sin ejecutar. Ejecución 19/25 = 76 %; aprobación 17/19 ≈ 89 %."
       },
       {
-        "action": "Modifica resultados y verifica que no se acepten sumas que superen lo planificado.",
-        "expected": "La herramienta rechaza datos inconsistentes en vez de producir métricas engañosas."
+        "action": "Comprueba tus métricas y cambia las cantidades para explorar otras distribuciones, incluidas sumas inconsistentes y cero ejecuciones.",
+        "expected": "Las sumas inválidas no generan porcentajes. Sin ejecuciones, la aprobación no aplica: escribe na en la predicción."
       },
       {
-        "action": "Revisa la Definition of Done y redacta el cierre de Review y una mejora para Retrospective.",
-        "expected": "El cierre informa fallos, bloqueos y riesgos; revisar DoD no convierte automáticamente un incremento en listo para liberar."
+        "action": "Contrasta el tablero con la DoD de entrenamiento y elige una mejora para Retrospective. Valida la misión.",
+        "expected": "El punto de partida tiene pendientes. No basta con revisar la DoD ni con tener un porcentaje alto para considerar el trabajo terminado."
+      },
+      {
+        "action": "Revisa la bitácora, agrega reflexiones opcionales y guarda o descarga tu trabajo. Pulsa Finalizar práctica después de validar.",
+        "expected": "La bitácora adjunta configuración, predicciones y resultados. Guardar un borrador no completa el recorrido; la misión validada permite finalizar."
       }
     ],
     "deliverables": [
-      "Casos o configuraciones ejecutados con resultado esperado, obtenido, estado y fecha.",
-      "Conclusión sobre el tema de la semana, errores encontrados y evidencia que permita reproducirlos."
+      "Tablero con objetivo, eventos elegidos, cantidades, predicciones y métricas calculadas.",
+      "Conclusión de DoD, acción de mejora y bitácora con fecha de validación y reflexiones opcionales."
     ],
     "rubric": [
-      "La actividad usa los conceptos y herramientas de esta semana.",
-      "Las conclusiones se sustentan en resultados ejecutados, sin inventar evidencia.",
-      "Se mantiene separado el resultado esperado del obtenido."
+      "Los eventos de Scrum se relacionan con su propósito.",
+      "Las métricas conservan sus denominadores y excluyen bloqueados sin ejecutar del total ejecutado.",
+      "El cierre comunica pendientes y diferencia Review de Retrospective."
     ],
     "links": [
       [
-        "ISTQB · Fundamentos",
-        "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/"
+        "Scrum Guide · Eventos y Definition of Done",
+        "https://scrumguides.org/scrum-guide.html"
       ]
     ],
     "files": [
@@ -420,46 +392,31 @@
         "description": "Preparación, ejecución, resultados esperados y entregables de esta actividad."
       },
       {
-        "label": "Matriz de casos y ejecución",
-        "href": "/practice/templates/case-matrix.csv",
-        "description": "Completa título, precondiciones, pasos, esperado, obtenido, estado, fecha y evidencia."
-      },
-      {
-        "label": "Guía Caso → Bug y retest",
-        "href": "/practice/templates/case-and-bug-guide.md",
-        "description": "Ejemplo reproducible y decisiones cuando un caso falla."
-      },
-      {
-        "label": "Historial del ciclo de vida del bug",
-        "href": "/practice/templates/bug-lifecycle.csv",
-        "description": "Registra transición, responsable, fecha y evidencia."
-      },
-      {
-        "label": "Plantilla de reporte de bug",
-        "href": "/practice/templates/bug-report.md",
-        "description": "Describe el defecto y enlázalo con el caso fallido."
+        "label": "Hoja de trabajo del Sprint QA",
+        "href": "/practice/kit/templates/sprint-qa.md",
+        "description": "Objetivo, eventos, métricas, Definition of Done, Review y acción de mejora."
       }
     ]
   },
   "7": {
-    "title": "Postman: contratos, códigos HTTP y autorización",
-    "objective": "Ejecutar solicitudes reales contra el sandbox y automatizar sus validaciones, más allá de comprobar 200.",
+    "title": "Postman y DevTools: contratos, HTTP y diagnóstico",
+    "objective": "Ejecutar solicitudes reales contra el sandbox y automatizar sus validaciones, más allá de comprobar 200. Investigar peticiones y respuestas con DevTools.",
     "minutes": 65,
     "tools": [
       "Postman",
       "Explorador HTTP",
       "PostgreSQL en navegador",
-      "Git aislado"
+      "DevTools"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar solicitudes HTTP reales al sandbox. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Abre la misión guiada y elige Postman y HTTP, Base de datos SQL. Cada herramienta tiene desafíos y pistas; puedes ejecutarlas directamente en la plataforma.",
       "Descarga la colección desde el entorno de práctica; ya incluye el baseUrl de la página actual.",
       "Importa el JSON en Postman. Abre Scripts → Post-response para revisar los tests. Los tokens demo-reader y demo-admin son públicos y solo sirven en este simulador."
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura solicitudes HTTP reales al sandbox y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La solicitud devuelve estado, cabeceras y cuerpo; el estado obtenido se compara con el esperado configurado."
+        "action": "En Postman y HTTP, prepara los desafíos de autorización, predice el status y pulsa Ejecutar solicitud HTTP. Revisa la comparación, headers y cuerpo.",
+        "expected": "La salida compara esperado y obtenido. Se comprueba cuerpo vacío en 204, WWW-Authenticate en 401 y Retry-After: 5 en 429 y 503."
       },
       {
         "action": "Ejecuta la carpeta Códigos HTTP y registra status, headers y cuerpo.",
@@ -490,13 +447,18 @@
         "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria."
       },
       {
-        "action": "Abre Comandos Git: ejecuta init, guarda caso.md, revisa status, añade el archivo, crea commit y consulta log.",
-        "expected": "Cada comando modifica o consulta un repositorio Git aislado, muestra su respuesta y explica para qué sirve. El commit devuelve un SHA real."
+        "action": "Abre Preparar mi evidencia, revisa la última ejecución de cada herramienta y agrega reflexiones o enlaces externos opcionales. Guarda o descarga la bitácora.",
+        "expected": "Cambiar de herramienta no borra los otros resultados. El informe identifica configuración, respuesta, fecha y estado; no inventa una ejecución externa de Postman."
+      },
+      {
+        "action": "Abre DevTools y reproduce la cotización ficticia. Compara Network, el mensaje de Console y el total mostrado por la interfaz.",
+        "expected": "La respuesta conserva 104500 COP; con el defecto de interfaz activado se muestran 103500. La diferencia se investiga sin atribuirla a la API."
       }
     ],
     "deliverables": [
       "Colección exportada y resultado del runner con datos.",
-      "Matriz endpoint/método/datos/status/aserciones y una evidencia de fallo corregido."
+      "Matriz endpoint/método/datos/status/aserciones y una evidencia de fallo corregido.",
+      "Diagnóstico de Network y Console con esperado y obtenido."
     ],
     "rubric": [
       "Se diferencia simulación de estado HTTP de un proceso persistente.",
@@ -534,18 +496,15 @@
     ]
   },
   "8": {
-    "title": "SQL y evidencia técnica con Git",
-    "objective": "Verificar datos con agregaciones y JOIN y dejar un cambio revisable.",
+    "title": "SQL: consultas, relaciones y resultados",
+    "objective": "Verificar datos con filtros, agregaciones, JOIN y subconsultas.",
     "minutes": 60,
     "tools": [
-      "PostgreSQL de práctica",
-      "Git",
-      "DevTools"
+      "PostgreSQL de práctica"
     ],
     "setup": [
       "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar consultas SQL sobre PostgreSQL en memoria. Puedes conservar también el trabajo externo con el kit de apoyo.",
-      "Usa una base PostgreSQL de práctica. Abre data/training.sql del kit; crea tablas TEMP y finaliza con ROLLBACK.",
-      "Crea un repositorio propio y una rama practica/sql; no uses la base ni el repositorio de producción de la academia."
+      "Usa una base PostgreSQL de práctica. Abre data/training.sql del kit; crea tablas TEMP y finaliza con ROLLBACK."
     ],
     "steps": [
       {
@@ -565,14 +524,6 @@
         "expected": "Ana Demo 35000, Luis Demo 0 y Sol Demo 104500. INNER JOIN excluye al cliente sin pago."
       },
       {
-        "action": "Inspecciona en Network la cotización con QA10 y envío. Exporta solo datos ficticios.",
-        "expected": "El JSON confirma total 104500 y se registra método, ruta, status y payload."
-      },
-      {
-        "action": "Añade consultas y evidencias con git diff, commit y una descripción de cambio.",
-        "expected": "El diff contiene solo archivos de práctica; no aparecen .env, credenciales ni datos reales."
-      },
-      {
         "action": "Ejecuta Q3–Q5: compara INNER JOIN con LEFT JOIN y encuentra clientes sin pedidos usando IS NULL.",
         "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva cuatro filas, incluida Luis con pedido NULL; el anti-join devuelve solo Luis."
       },
@@ -583,13 +534,11 @@
     ],
     "deliverables": [
       "3 consultas adicionales con su resultado esperado.",
-      "Diff y descripción tipo PR que explique qué validaste.",
       "Hoja Q1–Q9: consulta, resultado esperado, resultado obtenido y explicación de NULL y cardinalidad."
     ],
     "rubric": [
       "Se explica el tratamiento de NULL.",
       "Las consultas no alteran tablas permanentes.",
-      "El repositorio tiene instrucciones reproducibles.",
       "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
@@ -617,17 +566,19 @@
     ]
   },
   "9": {
-    "title": "Lógica de negocio con pruebas unitarias",
-    "objective": "Aplicar condicionales, validación y aritmética a una función de cotización.",
+    "title": "JavaScript y entrega con Git",
+    "objective": "Aplicar condicionales, validación y aritmética a una función de cotización y conservar cambios revisables con Git.",
     "minutes": 60,
     "tools": [
       "Node.js",
-      "node:test"
+      "node:test",
+      "Git aislado"
     ],
     "setup": [
       "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
-      "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia."
+      "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
+      "Git está en las pestañas de esta actividad. El repositorio de entrenamiento es independiente del proyecto de la academia."
     ],
     "steps": [
       {
@@ -653,11 +604,16 @@
       {
         "action": "Relaciona cada prueba de la función con una partición de cantidad o una regla de cupón y registra el fallo de la mutación.",
         "expected": "La tabla entrada–esperado–obtenido enlaza cada regla con una aserción ejecutada en node:test."
+      },
+      {
+        "action": "En Comandos Git inicializa el repositorio, guarda caso.md, revisa status, prepara con add, crea commit y consulta log.",
+        "expected": "El repositorio aislado conserva un commit con SHA y permite revisar el cambio sin publicar archivos ni secretos."
       }
     ],
     "deliverables": [
       "pricing.test.mjs ampliado y salida de node --test.",
-      "Explicación de una prueba que realmente detectó una mutación."
+      "Explicación de una prueba que realmente detectó una mutación.",
+      "Respuesta de Git con identificador del commit."
     ],
     "rubric": [
       "Los tests son independientes y deterministas.",

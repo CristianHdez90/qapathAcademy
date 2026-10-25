@@ -20,3 +20,5 @@
 .foundation-coverage{font-weight:700;color:#9be8d1!important}
 .foundation-errors{border-left:3px solid #dfaa82;padding:12px 12px 12px 30px}
 .foundation-checklist{padding-left:20px}
+.foundation-user-story{display:grid;gap:4px;margin:16px 0}.foundation-user-story p{margin:0}
+.foundation-reference td{background:#142a3a}.foundation-reference-value{white-space:pre-wrap;overflow-wrap:anywhere;min-width:160px}.foundation-reference small{display:block;margin-top:8px;color:#bdd2de;font-weight:400}.foundation-student-divider th{text-align:left;padding:16px;background:#184337!important}

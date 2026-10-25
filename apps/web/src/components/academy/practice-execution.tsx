@@ -3,8 +3,9 @@ import {useEffect,useRef,useState} from 'react';
 import {executeCode} from '@/features/practice/runtime/code-sandbox';
 import {basicScenario,runBrowserScenario,scenarioSpec,type ScenarioConfig} from '@/features/practice/runtime/browser-scenario';
 import {initialCode,runnerModes,sqlExamples,type RunnerMode} from '@/features/practice/runtime/runner-content';
+import type {ToolRuns,ToolMode} from '@/features/practice/tool-evidence';
 import './practice-execution.css';
-export type PracticeRun={mode:RunnerMode;source:string;config:ScenarioConfig;endpoint:string;method:string;expectedStatus:number;at:string;ok:boolean;output:string;settings?:{token:string;width:string;repeats:number;stage:string}};
+export type PracticeRun={mode:RunnerMode;source:string;config:ScenarioConfig;endpoint:string;method:string;expectedStatus:number;at:string;ok:boolean;output:string;toolRuns?:ToolRuns;toolKey?:ToolMode;settings?:{token:string;width:string;repeats:number;stage:string}};
 export function savedRun(text:string|undefined):PracticeRun|undefined{
  try{const run=JSON.parse(text||'{}').execution;if(run&&['scenario','http','sql','code','pipeline','git','topic'].includes(run.mode)&&typeof run.source==='string'&&run.source.length<=6000&&typeof run.output==='string'&&run.output.length<=2500&&typeof run.config?.quantity==='string')return run}catch{}
 }
