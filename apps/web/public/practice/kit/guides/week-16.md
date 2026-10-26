@@ -6,7 +6,7 @@ Herramientas: Chromium, Firefox, WebKit
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: sigue los cinco pasos del laboratorio de cobertura. Ejecuta TC-01 en escritorio y móvil, comprueba las etiquetas y prepara la matriz externa con el kit de apoyo.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -14,8 +14,8 @@ Herramientas: Chromium, Firefox, WebKit
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido.
+1. Diseña tu cobertura y pulsa Comenzar mis comprobaciones. Ejecuta TC-01 en escritorio y después en móvil; compara esperado, API, UI y desbordamiento horizontal.
+   Resultado esperado: Ambas vistas conservan 35000 COP y sus dimensiones observadas. Las filas de Chromium, Firefox y WebKit permanecen pendientes hasta ejecutarlas externamente.
    Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
 
 2. Revisa los projects del kit y ejecuta npm run test:smoke.

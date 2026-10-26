@@ -115,7 +115,7 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
  function newConversation(){setConversation(null);setMessages([]);setDraft('');setError('');setHistoryOpen(false);input.current?.focus()}
  async function send(text=draft){
   if(!text.trim()||busy||historyBusy||conversation?.archived||!signedIn)return;
-  // Keep the complete transcript on screen; bound only the context sent to Gemini.
+  // Keep the complete transcript on screen; bound only the context sent to the configured provider.
   const history=[...messages.slice(-4).map(m=>({...m,content:m.content.slice(0,3000)})),{role:'user' as const,content:text.trim()}];
   const fullHistory=[...messages,{role:'user' as const,content:text.trim()}];
   setMessages(fullHistory);setDraft('');setError('');setBusy(true);
@@ -167,7 +167,7 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
    {signedIn&&!historyOpen&&<form className="qa-composer" onSubmit={e=>{e.preventDefault();void send()}}>
     <label className="qa-sr-only" htmlFor="qa-question">Tu pregunta sobre QA</label><div><textarea id="qa-question" ref={input} placeholder="¿Qué vamos a probar hoy?" value={draft} maxLength={2000} rows={2} disabled={busy||historyBusy||conversation?.archived} onChange={e=>setDraft(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();void send()}}}/><button type="submit" disabled={busy||historyBusy||conversation?.archived||!draft.trim()} aria-label="Enviar pregunta">↑</button></div>
     <div className="qa-composer-meta"><span>IA · Revisa sus respuestas. No compartas datos sensibles.</span><span>{conversation?.archived?'Archivada · Restaura para continuar':busy?'Enviando…':conversation?'Guardada en tu cuenta':'Nueva conversación'}</span></div>
-    <small>Tu consulta se envía a Google Gemini.</small>
+    <small>Tu consulta se envía al proveedor de IA configurado por la academia: Groq o Google Gemini.</small>
    </form>}
   </section>}
   <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente MariBug':'Abrir asistente MariBug'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>

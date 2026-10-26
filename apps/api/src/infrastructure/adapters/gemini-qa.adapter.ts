@@ -45,15 +45,15 @@ export class GeminiQaAdapter {
   if(!/^[a-zA-Z0-9.-]+$/.test(model))throw new ServiceUnavailableException('El modelo de MariBug no es válido.');
   return {key,model};
  }
- async answer(input:QaChatInput){
-  const {key,model}=this.configuration();
+ async answer(input:QaChatInput,config?:{key:string;model:string;temperature:number;maxOutputTokens:number}){
+  const {key,model}=config||this.configuration();
   let response:Response;
   try{
    response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,{
     method:'POST',headers:{'Content-Type':'application/json','x-goog-api-key':key},signal:AbortSignal.timeout(25000),
     body:JSON.stringify({systemInstruction:{parts:[{text:QA_SYSTEM_PROMPT}]},
      contents:input.messages.map((m,i)=>({role:m.role==='assistant'?'model':'user',parts:[{text:i===input.messages.length-1&&input.page?`Página actual de la academia: ${input.page}\n\n${m.content}`:m.content}]})),
-     generationConfig:{temperature:0.4,maxOutputTokens:1600,
+     generationConfig:{temperature:config?.temperature??0.4,maxOutputTokens:config?.maxOutputTokens??1600,
       ...(/^gemini-2\.5-flash(?:-lite)?$/.test(model)?{thinkingConfig:{thinkingBudget:0}}:{}),
      },
     }),

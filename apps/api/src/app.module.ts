@@ -33,10 +33,14 @@ import {QaAssistantController} from './presentation/controllers/qa-assistant.con
 import {GeminiQaAdapter} from './infrastructure/adapters/gemini-qa.adapter';
 import {QaQuotaAdapter} from './infrastructure/adapters/qa-quota.adapter';
 import {QaConversationsAdapter} from './infrastructure/adapters/qa-conversations.adapter';
+import {AiSettingsController} from './presentation/controllers/ai-settings.controller';
+import {AiSettingsAdapter} from './infrastructure/adapters/ai-settings.adapter';
+import {GroqQaAdapter} from './infrastructure/adapters/groq-qa.adapter';
+import {QaAiAdapter} from './infrastructure/adapters/qa-ai.adapter';
 @Module({
- controllers:[PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
+ controllers:[AiSettingsController,PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
  providers:[
-  GeminiQaAdapter,QaQuotaAdapter,QaConversationsAdapter,
+  AiSettingsAdapter,GroqQaAdapter,QaAiAdapter,GeminiQaAdapter,QaQuotaAdapter,QaConversationsAdapter,
   DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,
   {provide:ADMIN_REPOSITORY,useExisting:PostgresAdministrationAdapter},
   {provide:ManageStudents,useFactory:(repo:AdministrationPort,crypto:CryptoAuthAdapter)=>new ManageStudents(repo,crypto),inject:[ADMIN_REPOSITORY,CryptoAuthAdapter]},

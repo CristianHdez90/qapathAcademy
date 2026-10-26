@@ -2,6 +2,7 @@
 import {useCallback,useEffect,useState} from 'react';
 import type {FormEvent} from 'react';
 import Link from 'next/link';
+import {AdminAiSettings} from './admin-ai-settings';
 import {useAuth} from '@/features/auth/auth-provider';
 
 type Student={id:string;email:string;role:'STUDENT';isActive:boolean;emailVerified:boolean;mustChangePassword:boolean;mfaEnabled:boolean;createdAt:string;updatedAt:string};
@@ -53,6 +54,7 @@ export function AdminDashboard(){
  return <div className="admin-layout">
   <div className="page-heading"><div><p className="eyebrow">ADMINISTRACIÓN · QAPath Academy</p><h1>Gestión de estudiantes</h1><p className="page-description">Cuentas, avance de aprendizaje y trazabilidad de cambios en PostgreSQL.</p></div><button className="button button-primary" onClick={()=>setShowForm(v=>!v)}>{showForm?'Cerrar formulario':'+ Crear estudiante'}</button></div>
   {error&&<div className="feedback bad" role="alert">{error}</div>}{message&&<div className="feedback good" role="status">{message}</div>}
+  <AdminAiSettings/>
   <div className="admin-stats" aria-label="Indicadores académicos">
    <article><small>Total estudiantes</small><strong>{summary?.students??'—'}</strong></article>
    <article><small>Cuentas activas</small><strong>{summary?.activeStudents??'—'}</strong></article>
