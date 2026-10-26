@@ -24,7 +24,7 @@ test('PostgreSQL executes joins on synthetic data and reports invalid SQL',async
 test('configured UI scenario acts on QA Store, detects defects and exports spec',async({page})=>{
  await page.goto('/practice/13');const preview=page.frameLocator('iframe[title="Vista de ejecución QA Store"]');await expect(preview.getByLabel('Producto ficticio')).toBeAttached();
  await page.getByLabel('Producto de la ejecución',{exact:true}).selectOption('pro');await page.getByLabel('Cantidad de la ejecución',{exact:true}).fill('2');await page.getByLabel('Esperado de la ejecución',{exact:true}).fill('150000 COP');await page.getByRole('button',{name:'Ejecutar práctica',exact:true}).click();await expect(page.getByLabel('Resultado de la ejecución')).toContainText('Resultado obtenido: 150000 COP');
- const download=page.waitForEvent('download');await page.getByRole('button',{name:'Descargar spec Playwright configurado'}).click();expect((await download).suggestedFilename()).toBe('configured-quote.spec.ts');
+ await page.getByText('Explora el spec Playwright generado · Given, When y Then',{exact:true}).click();const download=page.waitForEvent('download');await page.getByRole('button',{name:'Descargar first-quote.spec.ts',exact:true}).click();expect((await download).suggestedFilename()).toBe('first-quote.spec.ts');
  await page.getByLabel('Esperado de la ejecución',{exact:true}).fill('1 COP');await page.getByRole('button',{name:'Ejecutar práctica',exact:true}).click();await expect(page.getByText('La ejecución detectó un fallo. Revisa el esperado y el obtenido.',{exact:true})).toBeVisible();
  await page.setViewportSize({width:320,height:800});expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
 });

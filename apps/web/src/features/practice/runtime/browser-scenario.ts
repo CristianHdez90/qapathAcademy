@@ -9,6 +9,11 @@ export async function runBrowserScenario(frame:HTMLIFrameElement,config:Scenario
  const set=async(label:string,value:string)=>{
   const control=controls().find(el=>(el.getAttribute('aria-label')||el.closest('label')?.textContent||'').startsWith(label));
   if(!control)throw new Error('Control no encontrado: '+label);
+  if(control.tagName==='SELECT'){
+   const deadline=Date.now()+5000;
+   while(!Array.from((control as HTMLSelectElement).options).some(option=>option.value===value)&&Date.now()<deadline)await delay(50);
+   if(!Array.from((control as HTMLSelectElement).options).some(option=>option.value===value))throw new Error('Opción no disponible en '+label+': '+value+'. Espera al catálogo y vuelve a intentar.');
+  }
   const setter=Object.getOwnPropertyDescriptor(Object.getPrototypeOf(control),'value')?.set;
   setter?.call(control,value);control.dispatchEvent(new Event('input',{bubbles:true}));control.dispatchEvent(new Event('change',{bubbles:true}));await delay(50);
  };
