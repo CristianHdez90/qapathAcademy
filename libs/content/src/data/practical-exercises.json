@@ -444,7 +444,7 @@
       },
       {
         "action": "En este mismo laboratorio, abre Base de datos SQL. Ejecuta SELECT, INNER JOIN y LEFT JOIN sobre clientes y pedidos ficticios.",
-        "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria."
+        "expected": "INNER JOIN devuelve doce pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria."
       },
       {
         "action": "Abre Preparar mi evidencia, revisa la última ejecución de cada herramienta y agrega reflexiones o enlaces externos opcionales. Guarda o descarga la bitácora.",
@@ -503,33 +503,33 @@
       "PostgreSQL de práctica"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar consultas SQL sobre PostgreSQL en memoria. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "En el laboratorio integrado, recorre cuatro misiones SQL: filtrar pagos, relacionar pedidos y clientes, encontrar clientes sin pedidos y agrupar resultados. Abre la pista de diagrama y registros, completa el editor y ejecuta para comprobar cada objetivo. Conserva el kit para trabajar también en tu herramienta.",
       "Usa una base PostgreSQL de práctica. Abre data/training.sql del kit; crea tablas TEMP y finaliza con ROLLBACK."
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura consultas SQL sobre PostgreSQL en memoria y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La consulta inicial INNER JOIN devuelve tres pedidos: dos de Ana y uno de Sol; puedes editarla o elegir LEFT JOIN."
+        "action": "Resuelve las cuatro misiones del laboratorio: Sigue los pagos, Pon nombre a cada pedido, Encuentra a quienes faltan y Descubre clientes recurrentes. Consulta las pistas y compara las tablas antes de guardar.",
+        "expected": "Cada misión se comprueba únicamente cuando las columnas, filas y valores obtenidos coinciden con su objetivo. La bitácora conserva la última ejecución por misión y la consulta libre por separado."
       },
       {
         "action": "Ejecuta Q1 y Q2: SELECT de columnas, WHERE y ORDER BY. Anota las filas esperadas antes de consultar.",
-        "expected": "Q1 devuelve tres clientes; Q2 devuelve los pedidos pagados 3 (104500) y 1 (35000), ordenados por total descendente."
+        "expected": "Q1 devuelve ocho clientes; Q2 devuelve seis pedidos pagados, ordenados por total descendente."
       },
       {
         "action": "Ejecuta el archivo SQL completo y compara las agrupaciones por estado.",
-        "expected": "paid tiene 2 pedidos y 139500 COP; pending tiene 1 y 75000 COP."
+        "expected": "paid tiene 6 pedidos y 419500 COP; pending tiene 3 y 170000 COP."
       },
       {
         "action": "Usa LEFT JOIN para incluir clientes sin pedidos pagados; compara con INNER JOIN.",
-        "expected": "Ana Demo 35000, Luis Demo 0 y Sol Demo 104500. INNER JOIN excluye al cliente sin pago."
+        "expected": "Ana Demo 35000, Luis Demo 0, Sol Demo 204500, Diego Demo 0, Mía Demo 70000, Leo Demo 110000, Sara Demo 0 y Eva Demo 0. INNER JOIN excluye a clientes sin pago."
       },
       {
         "action": "Ejecuta Q3–Q5: compara INNER JOIN con LEFT JOIN y encuentra clientes sin pedidos usando IS NULL.",
-        "expected": "INNER JOIN devuelve tres pedidos; LEFT JOIN conserva cuatro filas, incluida Luis con pedido NULL; el anti-join devuelve solo Luis."
+        "expected": "INNER JOIN devuelve doce pedidos; LEFT JOIN conserva catorce filas, incluidos Luis y Eva con pedido NULL; el anti-join devuelve a Luis y Eva."
       },
       {
         "action": "Ejecuta Q8 y Q9 y mueve el filtro paid de ON a WHERE en una copia de Q7. Explica COUNT(o.id), HAVING y EXISTS.",
-        "expected": "HAVING devuelve Ana con dos pedidos; EXISTS devuelve Ana y Sol. El filtro en WHERE elimina a Luis; en ON lo conserva con total cero."
+        "expected": "HAVING devuelve Ana con tres pedidos, y Sol, Diego, Mía y Leo con dos. EXISTS devuelve Ana, Sol, Mía y Leo. El filtro en WHERE excluye a clientes sin pagos; en ON los conserva con total cero."
       }
     ],
     "deliverables": [
@@ -544,7 +544,7 @@
     "starter": {
       "filename": "training.sql",
       "language": "sql",
-      "code": "-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\n-- Tablas temporales y ROLLBACK; no usa tablas de la academia.\nBEGIN;\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\nINSERT INTO qa_training_customers VALUES(1,'Ana Demo',true),(2,'Luis Demo',false),(3,'Sol Demo',true);\nINSERT INTO qa_training_orders VALUES(1,1,'paid',35000),(2,1,'pending',75000),(3,3,'paid',104500);\n-- Q1 SELECT: tres clientes, ordenados 1,2,3.\nSELECT id,name,active FROM qa_training_customers ORDER BY id;\n-- Q2 WHERE + ORDER BY: pedidos pagados 3 (104500), 1 (35000).\nSELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\n-- Q3 INNER JOIN: tres filas: pedido 1 Ana, 2 Ana, 3 Sol.\nSELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\n-- Q4 LEFT JOIN: cuatro filas; Luis aparece con pedido NULL.\nSELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\n-- Q5 Clientes sin pedidos: solo Luis (id 2). IS NULL, nunca = NULL.\nSELECT c.id,c.name FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\n-- Q6 GROUP BY: paid -> 2, 139500; pending -> 1, 75000.\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n-- Q7 Filtro en ON conserva al cliente sin pagos: Ana 35000, Luis 0, Sol 104500.\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n-- Q8 HAVING: solo Ana, 2 pedidos. COUNT(o.id) no cuenta el NULL de Luis.\nSELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\n-- Q9 EXISTS: clientes con algún pago: Ana y Sol.\nSELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\nROLLBACK;\n-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué fila desaparece.\n-- Entrega consulta, esperado previo, filas obtenidas y explicación de la diferencia.\n"
+      "code": "-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\n-- Datos ficticios. Tablas temporales y ROLLBACK; no usa tablas de la academia.\n-- Generado desde training-data.json mediante scripts/generate-sql-training.mjs.\nBEGIN;\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\nINSERT INTO qa_training_customers VALUES\n(1,'Ana Demo',true),\n(2,'Luis Demo',false),\n(3,'Sol Demo',true),\n(4,'Diego Demo',true),\n(5,'Mía Demo',true),\n(6,'Leo Demo',false),\n(7,'Sara Demo',true),\n(8,'Eva Demo',true);\nCREATE TEMP TABLE qa_training_products(id integer PRIMARY KEY, name text, price integer, active boolean);\nINSERT INTO qa_training_products VALUES\n(1,'Curso básico QA',35000,true),\n(2,'Curso profesional QA',75000,true),\n(3,'Curso SQL',50000,true),\n(4,'Licencia de práctica',10000,false),\n(5,'Taller DevTools',20000,true),\n(6,'Kit API',29500,true);\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\nINSERT INTO qa_training_orders VALUES\n(1,1,'paid',35000),\n(2,1,'pending',75000),\n(3,3,'paid',104500),\n(4,4,'pending',50000),\n(5,5,'paid',70000),\n(6,1,'cancelled',10000),\n(7,6,'paid',75000),\n(8,4,'shipped',29500),\n(9,7,'refunded',20000),\n(10,3,'paid',100000),\n(11,5,'pending',45000),\n(12,6,'paid',35000);\nCREATE TEMP TABLE qa_training_order_items(id integer PRIMARY KEY, order_id integer REFERENCES qa_training_orders(id), product_id integer REFERENCES qa_training_products(id), quantity integer, unit_price integer);\nINSERT INTO qa_training_order_items VALUES\n(1,1,1,1,35000),\n(2,2,2,1,75000),\n(3,3,2,1,75000),\n(4,3,6,1,29500),\n(5,4,3,1,50000),\n(6,5,1,2,35000),\n(7,6,4,1,10000),\n(8,7,2,1,75000),\n(9,8,6,1,29500),\n(10,9,5,1,20000),\n(11,10,3,2,50000),\n(12,11,1,1,35000),\n(13,11,4,1,10000),\n(14,12,1,1,35000);\n-- Q1 SELECT: ocho clientes.\nSELECT id,name,active FROM qa_training_customers ORDER BY id;\n-- Q2 WHERE + ORDER BY: seis pedidos pagados.\nSELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\n-- Q3 INNER JOIN: doce pedidos con sus clientes.\nSELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\n-- Q4 LEFT JOIN: catorce filas; Luis y Eva tienen pedido NULL.\nSELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\n-- Q5 Clientes sin pedidos: Luis y Eva. IS NULL, nunca = NULL.\nSELECT c.id,c.name FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\n-- Q6 GROUP BY: suma y cantidad por estado.\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n-- Q7 Filtro en ON conserva a clientes sin pagos, con total 0.\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n-- Q8 HAVING: clientes con más de un pedido. COUNT(o.id) no cuenta NULL.\nSELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\n-- Q9 EXISTS: clientes con algún pago.\nSELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\n-- Q10 Tres tablas: detalle con nombre del producto y subtotal por línea.\nSELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\nINNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;\n-- Q11 Conciliación: ninguna fila si los totales son correctos.\nSELECT o.id,o.total,sum(i.quantity*i.unit_price) AS calculated_total\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\nGROUP BY o.id,o.total HAVING o.total<>sum(i.quantity*i.unit_price);\nROLLBACK;\n-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué clientes desaparecen.\n-- Entrega consulta, resultado esperado, resultado obtenido y explicación de la diferencia.\n"
     },
     "links": [
       [
@@ -575,15 +575,15 @@
       "Git aislado"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar código y aserciones en el editor aislado. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "En el laboratorio integrado elige un experimento JavaScript, ejecuta sus aserciones y revisa la salida. Explora límites, el descuento incorrecto y el retest. En Comandos Git conserva un archivo mediante guardar, add y commit. La bitácora adjunta ambas herramientas por separado.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Git está en las pestañas de esta actividad. El repositorio de entrenamiento es independiente del proyecto de la academia."
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura código y aserciones en el editor aislado y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "El editor ejecuta las aserciones y muestra su salida o el error real; conserva el código al guardar la evidencia."
+        "action": "Elige un experimento JavaScript, revisa sus entradas y expectativas y pulsa Ejecutar práctica. Contrasta la salida real. Para una comprobación verificada debe ejecutarse al menos una aserción; console.log por sí solo no valida.",
+        "expected": "La prueba muestra el importe esperado y el obtenido, las aserciones o el error real. La bitácora conserva la última ejecución JavaScript y el fallo del experimento de descuento, si lo ejecutaste."
       },
       {
         "action": "Ejecuta npm run test:unit y revisa pricing.mjs antes de modificarlo.",

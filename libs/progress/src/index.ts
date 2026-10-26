@@ -9,3 +9,5 @@ export * from './domain/password-practice';
 export * from './domain/bug-practice';
 
 export * from './domain/sprint-practice';
+export * from './domain/sql-practice';
+export * from './domain/programming-practice';

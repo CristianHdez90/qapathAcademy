@@ -34,3 +34,13 @@ Aplicar condicionales, validación y aritmética a una función de cotización y
 - pricing.test.mjs ampliado y salida de node --test.
 - Explicación de una prueba que realmente detectó una mutación.
 - Respuesta de Git con identificador del commit.
+
+## Misión integrada: JavaScript y Git
+
+1. Elige Tu primera comprobación y ejecuta las aserciones. Después explora límites e inválidos.
+2. En Atrapa el descuento incorrecto, investiga la diferencia 103500 frente a 104500. Corrige la línea o carga Comprueba la corrección para ejecutar el retest. El fallo previo queda conservado.
+3. En Comandos Git, inicializa el repositorio, guarda caso.md, revisa status, prepara con add y crea un commit. Consulta log. Las marcas reflejan el estado real observado: guardar o seleccionar un comando no equivale a un commit.
+4. Revisa la bitácora: código, salida, fallo investigado y archivo/commit se adjuntan automáticamente. Guarda un borrador o descarga el informe.
+5. Para finalizar el nuevo recorrido, verifica una ejecución JavaScript con aserciones correctas y un archivo confirmado que coincida con el editor, con árbol limpio. Luego pulsa Finalizar práctica. Las prácticas completadas anteriormente se conservan.
+
+El código del navegador usa assert en un entorno aislado. Los archivos del kit permiten ejecutar node:test en tu equipo. El repositorio Git de la plataforma vive en este navegador; la evidencia puede sincronizarse con tu cuenta.

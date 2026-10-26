@@ -8,7 +8,11 @@ export const sqlExamples={
  'INNER JOIN':"SELECT o.id,c.name,o.total FROM qa_training_orders o INNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;",
  'LEFT JOIN':"SELECT c.name,o.id AS order_id FROM qa_training_customers c LEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;",
  'Sin pedidos':"SELECT c.name FROM qa_training_customers c LEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL;",
- 'GROUP BY y HAVING':"SELECT customer_id,COUNT(*) AS orders FROM qa_training_orders GROUP BY customer_id HAVING COUNT(*)>1;"
+ 'GROUP BY y HAVING':"SELECT customer_id,COUNT(*) AS orders FROM qa_training_orders GROUP BY customer_id HAVING COUNT(*)>1;",
+ 'Productos por pedido':"SELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id INNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;",
+ 'Ventas por producto':"SELECT p.name,SUM(i.quantity) AS units,SUM(i.quantity*i.unit_price) AS sales FROM qa_training_products p INNER JOIN qa_training_order_items i ON i.product_id=p.id INNER JOIN qa_training_orders o ON o.id=i.order_id WHERE o.status='paid' GROUP BY p.id,p.name ORDER BY sales DESC;",
+ 'Conciliar totales':"SELECT o.id,o.total,SUM(i.quantity*i.unit_price) AS calculated_total FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id GROUP BY o.id,o.total HAVING o.total<>SUM(i.quantity*i.unit_price);",
+ 'Consulta libre':"-- Escribe tu consulta usando las tablas y columnas de la pista.\nSELECT * FROM qa_training_products ORDER BY price DESC;"
 };
 export function initialCode(week:number){
  if(week===10)return `const results=[{id:'TC-01',status:'passed'},{id:'TC-02',status:'failed'},{id:'TC-03',status:'blocked'}];\nconst passed=results.filter(r=>r.status==='passed').length;\nassert(passed===1,'Una prueba aprobada');\nconsole.log({passed,total:results.length});`;

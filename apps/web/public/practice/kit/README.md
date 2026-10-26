@@ -51,7 +51,9 @@ Se incluyen ejemplos iniciales funcionales: amplíalos con los casos propios ped
 
 Ejecuta `data/training.sql` completo en PostgreSQL de práctica. Usa tablas TEMP con nombres qa_training_* y ROLLBACK; no son los usuarios ni pedidos de la academia. Los totales esperados aparecen como comentarios. No lo ejecutes en una base de negocio.
 
-Las consultas Q1–Q9 avanzan desde SELECT, WHERE y ORDER BY hasta INNER JOIN, LEFT JOIN, IS NULL, GROUP BY, HAVING y EXISTS. Antes de ejecutar cada consulta, escribe sus filas esperadas. Después registra el obtenido y explica la cardinalidad y el tratamiento de NULL. Compara el filtro de pagos en ON con el mismo filtro en WHERE.
+Las consultas Q1–Q9 avanzan desde SELECT, WHERE y ORDER BY hasta INNER JOIN, LEFT JOIN, IS NULL, GROUP BY, HAVING y EXISTS. Q10 relaciona pedidos, detalles y productos; Q11 concilia los totales de los pedidos. Antes de ejecutar cada consulta, escribe sus filas esperadas. Después registra el obtenido y explica la cardinalidad y el tratamiento de NULL. Compara el filtro de pagos en ON con el mismo filtro en WHERE.
+
+La base de práctica contiene 8 clientes, 12 pedidos, 6 productos y 14 líneas de detalle. `data/training-data.json` describe las columnas, claves, relaciones y registros que muestra la pista de la plataforma. Clientes → pedidos → detalle de pedidos ← productos son relaciones de uno a muchos. Luis y Eva no tienen pedidos. Los importes están en COP; los totales de pedidos coinciden con la suma de cantidad × precio unitario de sus líneas. En la plataforma cada ejecución restaura los datos iniciales; puedes escribir una consulta libre o modificar un ejemplo.
 
 ## Primera prueba Playwright (semana 13)
 

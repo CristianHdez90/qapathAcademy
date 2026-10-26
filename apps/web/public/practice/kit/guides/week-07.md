@@ -30,7 +30,7 @@ Ejecutar solicitudes reales contra el sandbox y automatizar sus validaciones, m�
    Resultado esperado: Hay evidencia de Send y del runner; se conservan los archivos Postman existentes, sus carpetas y los datos CSV.
 
 8. En este mismo laboratorio, abre Base de datos SQL. Ejecuta SELECT, INNER JOIN y LEFT JOIN sobre clientes y pedidos ficticios.
-   Resultado esperado: INNER JOIN devuelve tres pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria.
+   Resultado esperado: INNER JOIN devuelve doce pedidos; LEFT JOIN conserva a Luis aunque no tenga pedidos. La salida muestra filas reales del PostgreSQL en memoria.
 
 9. Abre Preparar mi evidencia, revisa la última ejecución de cada herramienta y agrega reflexiones o enlaces externos opcionales. Guarda o descarga la bitácora.
    Resultado esperado: Cambiar de herramienta no borra los otros resultados. El informe identifica configuración, respuesta, fecha y estado; no inventa una ejecución externa de Postman.

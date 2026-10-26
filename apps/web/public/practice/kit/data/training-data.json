@@ -1,0 +1,366 @@
+{
+  "tables": [
+    {
+      "name": "qa_training_customers",
+      "label": "Clientes",
+      "description": "Hay clientes activos e inactivos; Luis y Eva no tienen pedidos.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "active",
+          "type": "boolean"
+        }
+      ],
+      "rows": [
+        {
+          "id": 1,
+          "name": "Ana Demo",
+          "active": true
+        },
+        {
+          "id": 2,
+          "name": "Luis Demo",
+          "active": false
+        },
+        {
+          "id": 3,
+          "name": "Sol Demo",
+          "active": true
+        },
+        {
+          "id": 4,
+          "name": "Diego Demo",
+          "active": true
+        },
+        {
+          "id": 5,
+          "name": "Mía Demo",
+          "active": true
+        },
+        {
+          "id": 6,
+          "name": "Leo Demo",
+          "active": false
+        },
+        {
+          "id": 7,
+          "name": "Sara Demo",
+          "active": true
+        },
+        {
+          "id": 8,
+          "name": "Eva Demo",
+          "active": true
+        }
+      ]
+    },
+    {
+      "name": "qa_training_products",
+      "label": "Productos",
+      "description": "Catálogo con precios en COP y productos activos e inactivos.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true
+        },
+        {
+          "name": "name",
+          "type": "text"
+        },
+        {
+          "name": "price",
+          "type": "integer"
+        },
+        {
+          "name": "active",
+          "type": "boolean"
+        }
+      ],
+      "rows": [
+        {
+          "id": 1,
+          "name": "Curso básico QA",
+          "price": 35000,
+          "active": true
+        },
+        {
+          "id": 2,
+          "name": "Curso profesional QA",
+          "price": 75000,
+          "active": true
+        },
+        {
+          "id": 3,
+          "name": "Curso SQL",
+          "price": 50000,
+          "active": true
+        },
+        {
+          "id": 4,
+          "name": "Licencia de práctica",
+          "price": 10000,
+          "active": false
+        },
+        {
+          "id": 5,
+          "name": "Taller DevTools",
+          "price": 20000,
+          "active": true
+        },
+        {
+          "id": 6,
+          "name": "Kit API",
+          "price": 29500,
+          "active": true
+        }
+      ]
+    },
+    {
+      "name": "qa_training_orders",
+      "label": "Pedidos",
+      "description": "Importes en COP; estados paid, pending, cancelled, shipped y refunded.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true
+        },
+        {
+          "name": "customer_id",
+          "type": "integer",
+          "references": {
+            "table": "qa_training_customers",
+            "column": "id"
+          }
+        },
+        {
+          "name": "status",
+          "type": "text"
+        },
+        {
+          "name": "total",
+          "type": "integer"
+        }
+      ],
+      "rows": [
+        {
+          "id": 1,
+          "customer_id": 1,
+          "status": "paid",
+          "total": 35000
+        },
+        {
+          "id": 2,
+          "customer_id": 1,
+          "status": "pending",
+          "total": 75000
+        },
+        {
+          "id": 3,
+          "customer_id": 3,
+          "status": "paid",
+          "total": 104500
+        },
+        {
+          "id": 4,
+          "customer_id": 4,
+          "status": "pending",
+          "total": 50000
+        },
+        {
+          "id": 5,
+          "customer_id": 5,
+          "status": "paid",
+          "total": 70000
+        },
+        {
+          "id": 6,
+          "customer_id": 1,
+          "status": "cancelled",
+          "total": 10000
+        },
+        {
+          "id": 7,
+          "customer_id": 6,
+          "status": "paid",
+          "total": 75000
+        },
+        {
+          "id": 8,
+          "customer_id": 4,
+          "status": "shipped",
+          "total": 29500
+        },
+        {
+          "id": 9,
+          "customer_id": 7,
+          "status": "refunded",
+          "total": 20000
+        },
+        {
+          "id": 10,
+          "customer_id": 3,
+          "status": "paid",
+          "total": 100000
+        },
+        {
+          "id": 11,
+          "customer_id": 5,
+          "status": "pending",
+          "total": 45000
+        },
+        {
+          "id": 12,
+          "customer_id": 6,
+          "status": "paid",
+          "total": 35000
+        }
+      ]
+    },
+    {
+      "name": "qa_training_order_items",
+      "label": "Detalle de pedidos",
+      "description": "Cada fila es una línea del pedido: cantidad × precio unitario. Su suma coincide con el total del pedido.",
+      "columns": [
+        {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true
+        },
+        {
+          "name": "order_id",
+          "type": "integer",
+          "references": {
+            "table": "qa_training_orders",
+            "column": "id"
+          }
+        },
+        {
+          "name": "product_id",
+          "type": "integer",
+          "references": {
+            "table": "qa_training_products",
+            "column": "id"
+          }
+        },
+        {
+          "name": "quantity",
+          "type": "integer"
+        },
+        {
+          "name": "unit_price",
+          "type": "integer"
+        }
+      ],
+      "rows": [
+        {
+          "id": 1,
+          "order_id": 1,
+          "product_id": 1,
+          "quantity": 1,
+          "unit_price": 35000
+        },
+        {
+          "id": 2,
+          "order_id": 2,
+          "product_id": 2,
+          "quantity": 1,
+          "unit_price": 75000
+        },
+        {
+          "id": 3,
+          "order_id": 3,
+          "product_id": 2,
+          "quantity": 1,
+          "unit_price": 75000
+        },
+        {
+          "id": 4,
+          "order_id": 3,
+          "product_id": 6,
+          "quantity": 1,
+          "unit_price": 29500
+        },
+        {
+          "id": 5,
+          "order_id": 4,
+          "product_id": 3,
+          "quantity": 1,
+          "unit_price": 50000
+        },
+        {
+          "id": 6,
+          "order_id": 5,
+          "product_id": 1,
+          "quantity": 2,
+          "unit_price": 35000
+        },
+        {
+          "id": 7,
+          "order_id": 6,
+          "product_id": 4,
+          "quantity": 1,
+          "unit_price": 10000
+        },
+        {
+          "id": 8,
+          "order_id": 7,
+          "product_id": 2,
+          "quantity": 1,
+          "unit_price": 75000
+        },
+        {
+          "id": 9,
+          "order_id": 8,
+          "product_id": 6,
+          "quantity": 1,
+          "unit_price": 29500
+        },
+        {
+          "id": 10,
+          "order_id": 9,
+          "product_id": 5,
+          "quantity": 1,
+          "unit_price": 20000
+        },
+        {
+          "id": 11,
+          "order_id": 10,
+          "product_id": 3,
+          "quantity": 2,
+          "unit_price": 50000
+        },
+        {
+          "id": 12,
+          "order_id": 11,
+          "product_id": 1,
+          "quantity": 1,
+          "unit_price": 35000
+        },
+        {
+          "id": 13,
+          "order_id": 11,
+          "product_id": 4,
+          "quantity": 1,
+          "unit_price": 10000
+        },
+        {
+          "id": 14,
+          "order_id": 12,
+          "product_id": 1,
+          "quantity": 1,
+          "unit_price": 35000
+        }
+      ]
+    }
+  ]
+}

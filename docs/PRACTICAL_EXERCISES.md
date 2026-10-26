@@ -132,3 +132,33 @@ DevTools vuelve al módulo 03, en lectura y práctica de la semana 8, con su pre
 ## Ubicación final de DevTools
 
 DevTools se imparte en la semana 7 junto con Postman: lectura, práctica y evidencia independiente (execution.toolKey = devtools). La semana 8 queda dedicada a SQL. Git permanece en la semana 9 del módulo 04. La evaluación de DevTools sigue perteneciendo al módulo 03.
+
+## Respuesta manual del explorador HTTP
+
+En la semana 7, el campo «¿Qué resultado crees que se debe obtener?» comienza vacío y se limpia al cambiar de desafío o configuración. El estudiante escribe el código; la pista desplegable muestra su significado. Una respuesta vacía no ejecuta ni valida la solicitud. La comparación usa el valor escrito, oculta resultados de otra configuración y distingue prueba correcta de prueba fallida.
+
+## Pista SQL y datos relacionales
+
+El ejecutor SQL compartido muestra una pista desplegable con diagrama, PK/FK y registros seleccionables por tabla. La base incluye 8 clientes, 12 pedidos, 6 productos y 14 líneas de detalle, con clientes sin pedidos y cinco estados. Admite consultas libres y ejemplos de tres tablas, ventas por producto y conciliación de totales. Cada ejecución restaura la semilla inicial.
+
+`apps/web/public/practice/kit/data/training-data.json` define el esquema y los registros de la pista. Después de editarlo, ejecutar `node scripts/generate-sql-training.mjs` para actualizar training.sql y el código inicial de la semana 8; reconstruir el kit con `scripts/build-practice-kit.ps1`. La prueba `tests/sql-training.test.mjs` compara los datos de la pista con PostgreSQL, verifica referencias y concilia importes.
+
+## Investigación guiada de DevTools
+
+La semana 7 propone una misión de cuatro pasos: preparar los paneles nativos, reproducir una diferencia entre API e interfaz, validar una hipótesis y ejecutar el retest. Las tarjetas comparan regla de negocio, respuesta real y presentación de entrenamiento. Las pistas cambian según el paso; Network, Console y Application tienen explicaciones seleccionables. Se elimina el bloque duplicado de instrucciones de DevTools.
+
+La evidencia conserva reproducción, diagnóstico y retest. La investigación solo se valida si se reprodujo el defecto, se identificó la presentación como causa y el retest sin defecto devuelve 104500 COP tanto en API como en interfaz. Cambiar la hipótesis o la configuración invalida el retest. Los fallos de red y los importes inesperados no permiten avanzar. La plataforma no detecta si se abrieron los paneles nativos.
+
+## Semana 8 · detective de datos
+
+El laboratorio incorpora cuatro misiones SQL y un espacio libre. PostgreSQL ejecuta las consultas sobre la misma semilla de la pista; cada misión compara columnas, valores y cantidad de filas con su objetivo. El orden también se valida en el reto de pagos. Consultas con errores o resultados diferentes conservan evidencia, pero no marcan la misión como comprobada. Volver a ejecutar actualiza únicamente el registro de ese reto.
+
+La bitácora SQL tiene tres pasos: revisar las consultas y tablas, explicar hallazgos con pistas opcionales y guardar o descargar Markdown con tablas. `execution.sqlNotebook` conserva la última ejecución por misión y la última consulta libre. El nuevo laboratorio exige los cuatro objetivos para finalizar; los registros anteriores sin sqlNotebook mantienen su criterio de finalización. Guardar borrador no completa la práctica. El límite de evidencia de la semana 8 es 32000 caracteres en contrato, dominio y cliente. No requiere migración de base de datos.
+
+## Semana 9 · código, pruebas y entrega
+
+La misión integra experimentos de cotización, fronteras, descuento incorrecto y retest, además del editor libre. Todos se ejecutan en el sandbox JavaScript existente. Los borradores por experimento se conservan mientras se navega dentro de la actividad; la evidencia conserva la última ejecución de JavaScript, el fallo del experimento de descuento y el último resultado de Git por separado en `execution.programmingNotebook`.
+
+Git mantiene su repositorio real en LightningFS/isomorphic-git. Tras cada operación inspecciona HEAD, el archivo confirmado y statusMatrix; las marcas representan inicialización, archivo guardado, preparación y commit. Para comprobar la entrega, el archivo del editor debe coincidir con HEAD y con el archivo guardado, y el árbol debe estar limpio. Una selección de comando, git status o Guardar archivo no crean por sí solos esa evidencia.
+
+El nuevo recorrido exige JavaScript correcto con al menos una aserción ejecutada y una entrega Git verificada. El fallo intencional del experimento se conserva para comparar, pero no sustituye el retest. Los registros anteriores sin programmingNotebook conservan su finalización. La bitácora guía revisión, reflexión opcional y guardado/descarga. La evidencia de la semana 9 admite 32000 caracteres en cliente, contrato y dominio; no requiere migración de base de datos.
