@@ -4,7 +4,7 @@ import './code-editor.css';
 
 // Keep highlighting as text nodes: student input never becomes HTML.
 function highlight(source:string){
- const pattern=/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|\b(function|const|let|return|if|throw|new|for|of|try|catch|instanceof|true|false|async|await)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\s*\()|\b([A-Za-z_$][\w$]*)\b/g;
+ const pattern=/(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`)|\b(function|const|let|return|if|throw|new|for|of|try|catch|instanceof|true|false|async|await|interface|type|number|string|unknown|boolean|void|class|public|private|readonly|as|is|typeof|else|this)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_$][\w$]*)(?=\s*\()|\b([A-Za-z_$][\w$]*)\b/g;
  const tokens=[];let offset=0;for(const match of source.matchAll(pattern)){
   tokens.push(source.slice(offset,match.index));
   const kind=match[1]?'comment':match[2]?'string':match[3]?'keyword':match[4]?'number':match[5]?'function':'variable';

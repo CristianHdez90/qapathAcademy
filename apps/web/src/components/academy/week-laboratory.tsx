@@ -8,6 +8,7 @@ import {SprintLab} from './sprint-lab';
 import {BugLab} from './bug-lab';
 import {GherkinLab} from './gherkin-lab';
 import {TopicLab} from './topic-lab';
+import {TypeScriptLab} from './typescript-lab';
 import {JsonReportLab} from './json-report-lab';
 import {ProgrammingLab} from './programming-lab';
 import {AutomationTopicLab} from './automation-topic-lab';
@@ -22,7 +23,7 @@ export function WeekLaboratory({week,title,initial,onResult,children}:{week:numb
  const summary=week===7?'Laboratorio de apoyo para esta actividad · QA Store':`Laboratorio interactivo · ${title}`;
  const permitted=(mode:string)=>initial?.mode===mode?initial:undefined;
  return <details className="activity-section activity-lab" open><summary>{summary}</summary>
- {week===1?<p>Analiza la HU, diseña tus casos en la tabla y ejecútalos. Completa un caso por cada ejemplo para validar esta práctica.</p>:week===2?<RiskMissionLab initial={permitted('topic')} onResult={onResult}/>:week===3?<GherkinLab initial={permitted('topic')} onResult={onResult}/>:week===4?<PasswordLab initial={permitted('topic')} onResult={onResult}/>:week===5?<BugLab initial={permitted('topic')} onResult={onResult}/>:week===6?<SprintLab initial={permitted('topic')} onResult={onResult}/>:week===24?<TopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:week===7?<ToolsMissionLab initial={initial} onResult={onResult}/>:week===8?<SqlMissionLab initial={permitted('sql')} onResult={onResult}/>:week===9?<ProgrammingLab initial={initial} onResult={onResult}/>:week===10?<JsonReportLab initial={permitted('code')} onResult={onResult}/>:week===17?<PageObjectLab initial={permitted('topic')} onResult={onResult}/>:week===14||week===18?<AutomationTopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:<><p>{guidance[week]}</p><PracticeExecution week={week} initial={initial&&initial.mode!=='topic'&&initial.mode!=='git'?initial:undefined} onResult={onResult}/></>}
+ {week===1?<p>Analiza la HU, diseña tus casos en la tabla y ejecútalos. Completa un caso por cada ejemplo para validar esta práctica.</p>:week===2?<RiskMissionLab initial={permitted('topic')} onResult={onResult}/>:week===3?<GherkinLab initial={permitted('topic')} onResult={onResult}/>:week===4?<PasswordLab initial={permitted('topic')} onResult={onResult}/>:week===5?<BugLab initial={permitted('topic')} onResult={onResult}/>:week===6?<SprintLab initial={permitted('topic')} onResult={onResult}/>:week===24?<TopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:week===7?<ToolsMissionLab initial={initial} onResult={onResult}/>:week===8?<SqlMissionLab initial={permitted('sql')} onResult={onResult}/>:week===9?<ProgrammingLab initial={initial} onResult={onResult}/>:week===10?<JsonReportLab initial={permitted('code')} onResult={onResult}/>:week===11?<TypeScriptLab initial={permitted('code')} onResult={onResult}/>:week===17?<PageObjectLab initial={permitted('topic')} onResult={onResult}/>:week===14||week===18?<AutomationTopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:<><p>{guidance[week]}</p><PracticeExecution week={week} initial={initial&&initial.mode!=='topic'&&initial.mode!=='git'?initial:undefined} onResult={onResult}/></>}
  {children}
  </details>;
 }

@@ -10,7 +10,7 @@ import {SqlResultTable} from './sql-result-table';
 import {SqlTrainingHint} from './sql-training-hint';
 import {fitSqlOutput,readSqlResult,sqlCsv} from '@/features/practice/sql-result';
 import './practice-execution.css';
-export type PracticeRun={mode:RunnerMode;source:string;config:ScenarioConfig;endpoint:string;method:string;expectedStatus:number;at:string;ok:boolean;output:string;toolRuns?:ToolRuns;toolKey?:ToolMode;sqlNotebook?:{version:1;attempts:SqlAttempt[]};programmingNotebook?:ProgrammingNotebook;gitProof?:GitProof;settings?:{token:string;width:string;repeats:number;stage:string}};
+export type PracticeRun={mode:RunnerMode;source:string;config:ScenarioConfig;endpoint:string;method:string;expectedStatus:number;at:string;ok:boolean;output:string;toolRuns?:ToolRuns;toolKey?:ToolMode;sqlNotebook?:{version:1;attempts:SqlAttempt[]};programmingNotebook?:ProgrammingNotebook;gitProof?:GitProof;typescriptCheck?:{ok:boolean;output:string;at:string};settings?:{token:string;width:string;repeats:number;stage:string}};
 export function savedRun(text:string|undefined):PracticeRun|undefined{
  try{const run=JSON.parse(text||'{}').execution;if(run&&['scenario','http','sql','code','pipeline','git','topic'].includes(run.mode)&&typeof run.source==='string'&&run.source.length<=6000&&typeof run.output==='string'&&run.output.length<=2500&&typeof run.config?.quantity==='string')return run}catch{}
 }
