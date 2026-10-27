@@ -12,7 +12,7 @@ test('desktop tree reaches chapters and the single practice entry without labora
 });
 test('all 24 weeks and chapter links use real targets',async({page})=>{
  test.setTimeout(120000);
- for(const module of modules)for(const week of module.weeks){await page.goto(`/study/${week.id}#practical-exercise`);await expect(page.locator('#practical-exercise')).toHaveAttribute('open','');for(let i=0;i<week.chapters.length;i++)await expect(page.locator(`#chapter-${i}`)).toHaveCount(1);await expect(page.locator('#practice')).toHaveCount(0);await expect(page.locator('#self-check')).toHaveCount(1)}
+ for(const courseModule of modules)for(const week of courseModule.weeks){await page.goto(`/study/${week.id}#practical-exercise`);await expect(page.locator('#practical-exercise')).toHaveAttribute('open','');for(let i=0;i<week.chapters.length;i++)await expect(page.locator(`#chapter-${i}`)).toHaveCount(1);await expect(page.locator('#practice')).toHaveCount(0);await expect(page.locator('#self-check')).toHaveCount(1)}
 });
 test('mobile route dialog scrolls, closes on navigation and restores focus after Escape',async({page},testInfo)=>{
  await page.setViewportSize({width:375,height:700});await page.goto('/study/1');const trigger=page.getByRole('button',{name:'Ruta de 8 módulos',exact:true});await trigger.click();const dialog=page.getByRole('dialog',{name:'Tu ruta de aprendizaje'});await expect(dialog).toBeVisible();await expect(dialog.getByText('Semana 1',{exact:true})).toBeVisible();
