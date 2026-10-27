@@ -34,7 +34,7 @@ import {WeekLaboratory} from './week-laboratory';
 import {PracticeFiles} from './practice-files';
 import {savedRun,type PracticeRun} from './practice-execution';
 import {FoundationWorkbook,readFoundationCases} from './foundation-workbook';
-import {validateFoundationPractice,practiceCompleted,type FoundationCase} from '@qapath/progress';
+import {validateFoundationPractice,practiceCompleted,evidenceTextLimit,type FoundationCase} from '@qapath/progress';
 import './practice-activity.css';
 
 function savedFields(text:string|undefined,count:number):string[]{
@@ -55,7 +55,7 @@ export function PracticeActivity({week,exercise}:{week:number;exercise:Practical
  let previousBugExecution:unknown;try{if(week===5){const saved=JSON.parse(state.evidence['exercise:5']||'{}');previousBugExecution=saved.previousBugExecution;if(!previousBugExecution&&saved.execution){let current=false;try{current=JSON.parse(saved.execution.source).bugLabVersion===1}catch{}if(!current)previousBugExecution=saved.execution}}}catch{}
  let previousSprintExecution:unknown;try{if(week===6){const saved=JSON.parse(state.evidence['exercise:6']||'{}');previousSprintExecution=saved.previousSprintExecution;if(!previousSprintExecution&&saved.execution){let current=false;try{current=JSON.parse(saved.execution.source).sprintLabVersion===1}catch{}if(!current)previousSprintExecution=saved.execution}}}catch{}
  const evidence={...(execution?{execution}:{}),week,title:exercise.title,fieldNames:profile.fields,fields:values,...(week===1?{caseMatrix:foundationRows}:{}),...(Array.isArray(legacyMatrix)?{caseMatrix:legacyMatrix}:{}),...(previousBugExecution?{previousBugExecution}:{}),...(previousSprintExecution?{previousSprintExecution}:{}),completion:keepValidation?'validated':'draft'};
- const report=JSON.stringify(evidence),limit=week===1||week===5||week===7||week===8||week===9||week===23||week===24?32000:8000;
+ const report=JSON.stringify(evidence),limit=evidenceTextLimit('exercise',String(week));
  let validated=false;try{validated=week===1&&JSON.parse(state.evidence['exercise:1']||'{}').completion==='validated'&&foundationDraft===null}catch{}
  const foundationReport=week===1?JSON.stringify({...evidence,completion:validated&&validateFoundationPractice(foundationRows).complete?'validated':'draft'}):report;
  async function save(text:string){if(!ready||sending||!canRecord||text.length>limit)return false;setSending(true);try{const ok=await recordLearning({type:'submit-evidence',kind:'exercise',id:String(week),text});if(ok){setDraft(null);setFoundationDraft(null);setRunDraft(undefined)}return ok}finally{setSending(false)}}
