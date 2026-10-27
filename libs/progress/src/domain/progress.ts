@@ -1,6 +1,7 @@
 import {automaticCompletion,QUIZ_PASS_PERCENT} from './automatic-completion';
 import {learningRules} from './learning-rules';
 import {practiceCompleted} from './practice-completion';
+import {evidenceTextLimit} from './evidence-policy';
 /** Estado serializable versionado. Nunca incluye contraseñas ni identificadores personales. */
 export type Progress = {
   version:2;weeks:number[];read:number[];tasks:string[];labs:string[];
@@ -15,7 +16,14 @@ export function fromUnknown(value:unknown):Progress {
   const v=value as Record<string,unknown>;
   const nums=(key:string)=>Array.isArray(v[key])?(v[key] as unknown[]).filter((n):n is number=>Number.isInteger(n)&&typeof n==='number'&&n>=0&&n<=100):[];
   const objNums=(key:string)=>{const obj=v[key];if(!obj||typeof obj!=='object'||Array.isArray(obj))return {};return Object.fromEntries(Object.entries(obj).filter(([k,val])=>k.length<80&&typeof val==='number'&&Number.isFinite(val)&&val>=0&&val<=100));};
-  const objStrings=(key:string)=>{const obj=v[key];if(!obj||typeof obj!=='object'||Array.isArray(obj))return {};return Object.fromEntries(Object.entries(obj).filter(([k,val])=>k.length<80&&typeof val==='string'&&val.length<=(key==='evidence'&&['exercise:1','exercise:5','exercise:7','exercise:8','exercise:9'].includes(k)?32000:8000)));};
+  const objStrings=(key:string)=>{
+   const obj=v[key];if(!obj||typeof obj!=='object'||Array.isArray(obj))return {};
+   return Object.fromEntries(Object.entries(obj).filter(([k,val])=>{
+    const separator=k.indexOf(':');
+    const limit=key==='evidence'&&separator>=0?evidenceTextLimit(k.slice(0,separator),k.slice(separator+1)):8000;
+    return k.length<80&&typeof val==='string'&&val.length<=limit;
+   }));
+  };
   const readingSections:Record<string,number[]>={};
   if(v.readingSections&&typeof v.readingSections==='object')for(const [key,sections] of Object.entries(v.readingSections)){
    if(/^([1-9]|1[0-9]|2[0-4])$/.test(key)&&Array.isArray(sections))readingSections[key]=[...new Set(sections.filter((n):n is number=>Number.isInteger(n)&&n>=0&&n<20))];
