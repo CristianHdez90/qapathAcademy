@@ -6,7 +6,7 @@ Herramientas: QA Store, Playwright, SQL
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: recorre matriz de cinco riesgos, UI con BUG-01 y retest, ocho contratos API, consultas Q1–Q9 y decisión con suite local. El expediente conserva resultados y origen; Playwright y CI externos se documentan por separado.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -14,9 +14,8 @@ Herramientas: QA Store, Playwright, SQL
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+1. Relaciona riesgos con evidencia y ejecuta los desafíos del laboratorio.
+   Resultado esperado: base UI 35000 COP; BUG-01 obtiene 103500 frente a esperado 104500 y retest 104500. Ocho contratos API cubren 200/204/400/401/403/404/409/422. Q1–Q9 usan fixtures sintéticos independientes. Revisa suite local y justifica una entrega retenida o condicionada a evidencia externa.
 
 2. Elige 5 riesgos del cotizador y crea una matriz HU/criterio/caso/spec/evidencia.
    Resultado esperado: Cada riesgo tiene al menos una validación y se explican límites del sandbox.

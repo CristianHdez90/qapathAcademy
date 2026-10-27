@@ -7,7 +7,7 @@ import {PasswordLab} from './password-lab';
 import {SprintLab} from './sprint-lab';
 import {BugLab} from './bug-lab';
 import {GherkinLab} from './gherkin-lab';
-import {TopicLab} from './topic-lab';
+import {PresentationMissionLab} from './presentation-mission-lab';
 import {MatrixMissionLab} from './matrix-mission-lab';
 import {TraceMissionLab} from './trace-mission-lab';
 import {LocatorMissionLab} from './locator-mission-lab';
@@ -16,7 +16,12 @@ import {AsyncLab} from './async-lab';
 import {TypeScriptLab} from './typescript-lab';
 import {JsonReportLab} from './json-report-lab';
 import {ProgrammingLab} from './programming-lab';
-import {AutomationTopicLab} from './automation-topic-lab';
+import {ProjectMissionLab} from './project-mission-lab';
+import {FlakinessMissionLab} from './flakiness-mission-lab';
+import {PipelineMissionLab} from './pipeline-mission-lab';
+import {RecoveryMissionLab} from './recovery-mission-lab';
+import {ApiContractLab} from './api-contract-lab';
+import {FixtureMissionLab} from './fixture-mission-lab';
 import {PageObjectLab} from './page-object-lab';
 import {SqlMissionLab} from './sql-mission-lab';
 import './practice-execution.css';
@@ -28,7 +33,7 @@ export function WeekLaboratory({week,title,initial,onResult,children}:{week:numb
  const summary=week===7?'Laboratorio de apoyo para esta actividad · QA Store':`Laboratorio interactivo · ${title}`;
  const permitted=(mode:string)=>initial?.mode===mode?initial:undefined;
  return <details className="activity-section activity-lab" open><summary>{summary}</summary>
- {week===1?<p>Analiza la HU, diseña tus casos en la tabla y ejecútalos. Completa un caso por cada ejemplo para validar esta práctica.</p>:week===2?<RiskMissionLab initial={permitted('topic')} onResult={onResult}/>:week===3?<GherkinLab initial={permitted('topic')} onResult={onResult}/>:week===4?<PasswordLab initial={permitted('topic')} onResult={onResult}/>:week===5?<BugLab initial={permitted('topic')} onResult={onResult}/>:week===6?<SprintLab initial={permitted('topic')} onResult={onResult}/>:week===24?<TopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:week===7?<ToolsMissionLab initial={initial} onResult={onResult}/>:week===8?<SqlMissionLab initial={permitted('sql')} onResult={onResult}/>:week===9?<ProgrammingLab initial={initial} onResult={onResult}/>:week===10?<JsonReportLab initial={permitted('code')} onResult={onResult}/>:week===11?<TypeScriptLab initial={permitted('code')} onResult={onResult}/>:week===12?<AsyncLab initial={permitted('code')} onResult={onResult}/>:week===13?<FirstUiLab initial={permitted('scenario')} onResult={onResult}/>:week===17?<PageObjectLab initial={permitted('topic')} onResult={onResult}/>:week===14?<LocatorMissionLab initial={permitted('topic')} onResult={onResult}/>:week===16?<MatrixMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===15?<TraceMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===18?<AutomationTopicLab week={week} initial={permitted('topic')} onResult={onResult}/>:<><p>{guidance[week]}</p><PracticeExecution week={week} initial={initial&&initial.mode!=='topic'&&initial.mode!=='git'?initial:undefined} onResult={onResult}/></>}
+ {week===1?<p>Analiza la HU, diseña tus casos en la tabla y ejecútalos. Completa un caso por cada ejemplo para validar esta práctica.</p>:week===2?<RiskMissionLab initial={permitted('topic')} onResult={onResult}/>:week===3?<GherkinLab initial={permitted('topic')} onResult={onResult}/>:week===4?<PasswordLab initial={permitted('topic')} onResult={onResult}/>:week===5?<BugLab initial={permitted('topic')} onResult={onResult}/>:week===6?<SprintLab initial={permitted('topic')} onResult={onResult}/>:week===24?<PresentationMissionLab initial={permitted('topic')} onResult={onResult}/>:week===7?<ToolsMissionLab initial={initial} onResult={onResult}/>:week===8?<SqlMissionLab initial={permitted('sql')} onResult={onResult}/>:week===9?<ProgrammingLab initial={initial} onResult={onResult}/>:week===10?<JsonReportLab initial={permitted('code')} onResult={onResult}/>:week===11?<TypeScriptLab initial={permitted('code')} onResult={onResult}/>:week===12?<AsyncLab initial={permitted('code')} onResult={onResult}/>:week===13?<FirstUiLab initial={permitted('scenario')} onResult={onResult}/>:week===17?<PageObjectLab initial={permitted('topic')} onResult={onResult}/>:week===14?<LocatorMissionLab initial={permitted('topic')} onResult={onResult}/>:week===16?<MatrixMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===15?<TraceMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===23?<ProjectMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===22?<FlakinessMissionLab initial={permitted('pipeline')} onResult={onResult}/>:week===21?<PipelineMissionLab initial={permitted('pipeline')} onResult={onResult}/>:week===20?<RecoveryMissionLab initial={permitted('scenario')} onResult={onResult}/>:week===19?<ApiContractLab initial={permitted('http')} onResult={onResult}/>:week===18?<FixtureMissionLab initial={permitted('topic')} onResult={onResult}/>:<><p>{guidance[week]}</p><PracticeExecution week={week} initial={initial&&initial.mode!=='topic'&&initial.mode!=='git'?initial:undefined} onResult={onResult}/></>}
  {children}
  </details>;
 }

@@ -6,7 +6,7 @@ Herramientas: Playwright APIRequestContext, JSON
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar contratos API mediante solicitudes HTTP. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: sigue los cinco pasos de contratos API. Predice, ejecuta y comprueba diez escenarios con status, headers, tipos y valores de negocio. Conserva sus capturas y descarga datos y spec para repetirlos con Playwright.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -14,12 +14,12 @@ Herramientas: Playwright APIRequestContext, JSON
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura contratos API mediante solicitudes HTTP y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: La solicitud devuelve estado, cabeceras y cuerpo; el estado obtenido se compara con el esperado configurado.
+1. Selecciona el escenario, revisa método y datos, escribe tu predicción y ejecuta la solicitud. Completa catálogo, cotización, negativos, permisos y respuesta sin contenido.
+   Resultado esperado: Cada escenario cumple su contrato completo; un status correcto no aprueba un error distinto, un importe con tipo incorrecto ni un total equivocado.
    Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
 
-2. Ejecuta npm run test:api -- --project=chromium.
-   Resultado esperado: Se verifican catálogo, total y códigos HTTP del simulador.
+2. Descarga data/api-cases.training.ts y tests/api-contract.training.spec.ts. Cópialos en el kit y ejecuta npx playwright test tests/api-contract.training.spec.ts --project chromium.
+   Resultado esperado: Se ejecutan API-01 a API-10 con aserciones explícitas; el reporte externo conserva resultado por escenario.
    Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
 
 3. Añade pruebas de quotes para 400, 404, 409 y 422.
@@ -49,3 +49,9 @@ Herramientas: Playwright APIRequestContext, JSON
 - Se valida tipo y valor de campos de negocio.
 - Se distingue servicio stateless de un CRUD persistente.
 - La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones.
+
+## Recorrido integrado y trazabilidad
+
+Las predicciones no se rellenan automáticamente. El catálogo valida tipos, identificadores, precio y disponibilidad. La cotización comprueba tipos numéricos y el total esperado; los negativos requieren el error específico. Los tokens demo-reader y demo-admin son ficticios. La respuesta 204 se lee como texto vacío, sin parsear JSON.
+
+Cada captura conserva fecha, headers, status y cuerpo. Cambiar una predicción, payload, total o token invalida la comprobación de ese caso. El mapa API-01 a API-10 identifica el test equivalente en el archivo descargado. Los archivos .training no reemplazan los originales del kit y descargarlos no genera un reporte externo.

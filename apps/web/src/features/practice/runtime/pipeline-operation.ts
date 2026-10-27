@@ -1,0 +1,13 @@
+import {executeCode} from './code-sandbox';
+import {createFixtureView} from './fixture-operation';
+import {TrainingQuotePage} from './page-object-operation';
+import {basicScenario} from './browser-scenario';
+import type {PipelineRecord,PipelineStage} from '../pipeline-practice';
+export async function executePipeline(host:HTMLDivElement,expected:string,controller:AbortController,onStage:(name:string)=>void):Promise<PipelineRecord>{
+ const stages:PipelineStage[]=[],start=performance.now();
+ async function stage(name:PipelineStage['name'],action:()=>Promise<{ok:boolean;output:string}>){if(controller.signal.aborted)throw Error('Ejecución cancelada.');onStage(name);const begin=performance.now();let result;try{result=await action()}catch(error){result={ok:false,output:error instanceof Error?error.message:'No se pudo ejecutar la etapa.'}}if(controller.signal.aborted)throw Error('Ejecución cancelada.');stages.push({name,ms:Math.round(performance.now()-begin),ok:result.ok,output:result.output.slice(0,240)})}
+ await stage('unit',()=>executeCode("// Regla aislada del kit: una unidad básica cuesta 35000 COP.\nconst total = quantity => 35000 * quantity;\nassert(total(1) === 35000, 'Una unidad');\nassert(total(2) === 70000, 'Dos unidades');",false));
+ await stage('api',async()=>{const request=new AbortController(),abort=()=>request.abort(),timer=setTimeout(abort,10000);controller.signal.addEventListener('abort',abort,{once:true});try{const response=await fetch('/api/v1/practice/quotes',{method:'POST',credentials:'omit',signal:request.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({productId:'basic',quantity:1,coupon:'',shipping:'pickup'})}),body=await response.json(),d=body.data;return {ok:response.status===200&&body.sandbox===true&&d?.total===35000&&d.quantity===1&&d.currency==='COP',output:'HTTP '+response.status+' · Total API: '+String(d?.total)+' · Cantidad: '+String(d?.quantity)+' · Moneda: '+String(d?.currency)}}finally{clearTimeout(timer);controller.signal.removeEventListener('abort',abort)}});
+ await stage('ui',async()=>{const view=await createFixtureView(host,controller),child=new AbortController(),cancel=()=>child.abort();controller.signal.addEventListener('abort',cancel,{once:true});try{const r=await new TrainingQuotePage(view.frame,child).quote({...basicScenario,mock:false,defect:false});return {ok:r.status===200&&r.kind==='total'&&r.obtained===expected,output:'HTTP '+r.status+' · Obtenido: '+r.obtained+' · Esperado: '+expected}}finally{controller.signal.removeEventListener('abort',cancel)}});
+ return {at:new Date().toISOString(),expected,stages,ms:Math.round(performance.now()-start)};
+}

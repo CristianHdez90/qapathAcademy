@@ -1,0 +1,8 @@
+import {createFixtureView} from './fixture-operation';
+import {TrainingQuotePage} from './page-object-operation';
+import {basicScenario} from './browser-scenario';
+import {executeApiContract} from './api-contract-operation';
+import {apiCases} from '../api-contract-practice';
+import {projectApiBook,projectApiKeys,type ProjectApi,type ProjectUi} from '../project-practice';
+export async function executeProjectUi(host:HTMLDivElement,key:ProjectUi['key'],controller:AbortController):Promise<ProjectUi>{const view=await createFixtureView(host,controller),child=new AbortController(),cancel=()=>child.abort();controller.signal.addEventListener('abort',cancel,{once:true});try{const data=key==='base'?basicScenario:{...basicScenario,quantity:'3',coupon:'QA10',shipping:'delivery',defect:key==='bug'};const r=await new TrainingQuotePage(view.frame,child).quote(data);return {key,status:r.status,value:r.obtained.slice(0,120),at:r.at}}finally{controller.signal.removeEventListener('abort',cancel)}}
+export async function executeProjectApi(controller:AbortController,onRows:(rows:ProjectApi[])=>void){const rows:ProjectApi[]=[],book=projectApiBook();for(const key of projectApiKeys){if(controller.signal.aborted)throw Error('Ejecución cancelada.');const child=new AbortController(),cancel=()=>child.abort();controller.signal.addEventListener('abort',cancel,{once:true});try{const item=apiCases.find(c=>c.key===key)!,r=await executeApiContract(book,item,child);rows.push({key,status:r.status,body:r.body.slice(0,220),ct:r.ct.slice(0,60),tag:r.tag.slice(0,10),cut:r.cut||r.body.length>220,...(r.auth?{auth:r.auth.slice(0,80)}:{})});onRows([...rows])}finally{controller.signal.removeEventListener('abort',cancel)}}return rows}

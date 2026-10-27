@@ -6,7 +6,7 @@ Herramientas: GitHub Actions, Playwright
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: recorre cinco desafíos con progreso visible. Comprueba el workflow, ejecuta la base, provoca UI roja con esperado 34000 COP, corrige a 35000 COP y revisa las tres capturas. Son comprobaciones locales; el CI externo se documenta por separado.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -15,9 +15,8 @@ Herramientas: GitHub Actions, Playwright
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+1. Comprueba if: always() y conserva el código de salida. Ejecuta base, rojo y corrección en el laboratorio.
+   Resultado esperado: base y corrección pasan las tres etapas; rojo pasa unitarias y API y falla UI por esperado 34000 frente a obtenido 35000 COP. Revisa, descarga y guarda el informe local. No es un HTML report, trace ni artifact publicado.
 
 2. Copia .github/workflows/qa.yml a tu repositorio y revisa cada paso.
    Resultado esperado: Node 22, npm ci, tests unitarios, instalación de browsers y suite se ejecutan en ese orden.

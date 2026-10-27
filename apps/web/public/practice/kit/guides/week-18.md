@@ -6,7 +6,7 @@ Herramientas: Playwright fixtures, Datos sintéticos
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: sigue los cinco pasos de Fixtures y aislamiento. Prepara datos propios, observa contaminación, ejecuta ambos órdenes y lanza dos vistas separadas. Usa los archivos descargados para repetirlo con workers reales.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -14,8 +14,8 @@ Herramientas: Playwright fixtures, Datos sintéticos
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido.
+1. Reparte los alcances y prepara de dos a cuatro casos. Observa la contaminación controlada, ejecuta los casos en vistas nuevas y compara el orden original con el inverso.
+   Resultado esperado: Cada caso conserva su esperado en ambos órdenes y parte de un formulario limpio. Dos vistas diferentes no representan por sí solas BrowserContext ni workers de Playwright.
    Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
 
 2. Inspecciona fixtures/training.ts y crea una fixture de datos de cotización.
@@ -49,3 +49,9 @@ Herramientas: Playwright fixtures, Datos sintéticos
 - Los datos personales se sustituyen por ficticios.
 - No se arreglan carreras imponiendo orden de ejecución.
 - La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones.
+
+## Experimentos integrados y archivos nuevos
+
+El experimento compartido conserva QA10, delivery y un defecto de presentación intencional. El siguiente intento de una unidad recibe HTTP 422, en lugar de la cotización independiente de 35000 COP. Los experimentos aislados observan campos iniciales limpios y vistas distintas. Comparten origen, cookies y storage; no crean BrowserContext ni workers de Playwright.
+
+Descarga los cuatro archivos .training del último paso y cópialos en sus carpetas: pages, fixtures y tests. No reemplazan los archivos originales del kit. Ejecuta el nuevo spec con --workers=2 --repeat-each=3 y conserva reporte, comando y resultados reales.

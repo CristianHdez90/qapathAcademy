@@ -6,7 +6,7 @@ Herramientas: Repositorio, Demo, Reportes
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: recorre cinco desafíos: historia y README, cinco resultados UI/API, arquitectura, guion de 300 segundos y checklist manual. El cronómetro opcional guarda el tiempo real al pausar y guardar la evidencia; no inventa una demo de cinco minutos.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -15,9 +15,8 @@ Herramientas: Repositorio, Demo, Reportes
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+1. Prepara tu historia y ejecuta la demo integrada: caso válido, 401/403, BUG-01 y retest. Completa decisiones técnicas, guion y revisión de entrega.
+   Resultado esperado: base 35000 COP; bug 103500 frente a esperado 104500; retest 104500. Se conservan capturas y fechas, README, guion, checklist declarado y siguiente mejora. La revisión no ejecuta npm ci, no verifica enlaces y no publica el repositorio.
 
 2. Instala desde una carpeta limpia con npm ci y ejecuta smoke.
    Resultado esperado: Las instrucciones funcionan usando el lockfile y la variable BASE_URL documentada.

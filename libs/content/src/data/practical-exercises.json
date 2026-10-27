@@ -10,7 +10,7 @@
     ],
     "setup": [
       "Lee HU-TR-01 y sus cuatro criterios de aceptación. Los escenarios Gherkin describen comportamiento; los pasos del caso son acciones numeradas.",
-      "Usa datos ficticios en el laboratorio. Puedes guardar borradores, agregar filas y descargar la matriz CSV o el kit de apoyo."
+      "Trabaja con datos ficticios y un caso a la vez. Usa la guía y las sugerencias opcionales, consulta la matriz resumida y descarga el CSV completo o el kit. Los ejemplos REF no cuentan como entregas."
     ],
     "steps": [
       {
@@ -22,7 +22,7 @@
         "expected": "Un objetivo de prueba y datos representativos por ejemplo; amplía los casos si necesitas más cobertura."
       },
       {
-        "action": "Completa al menos un caso por cada ejemplo en la tabla: técnica, criterio, título, precondiciones, datos JSON, acciones numeradas y resultado esperado.",
+        "action": "Completa al menos un caso por técnica en el editor: criterio, título, precondiciones, datos JSON, acciones numeradas y esperado. Usa Anterior/Siguiente para revisar tus casos.",
         "expected": "Cinco casos distintos como mínimo. Los pasos indican cómo preparar, ejecutar y comprobar; no son Given/When/Then."
       },
       {
@@ -1129,7 +1129,7 @@
       "Page Object Model"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Opción integrada: sigue los cinco pasos de Page Objects: reparte responsabilidades, ejecuta tres casos, practica mantenimiento en el fixture local y compara defecto y retest. Descarga los archivos para repetirlo con el kit.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1137,8 +1137,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+        "action": "Configura clase y método en Construye y cotiza. Ejecuta el caso válido y los dos negativos; conserva esperado, obtenido y estado HTTP de cada uno.",
+        "expected": "El caso válido cumple su total; cupón inválido y sin cupos se comprueban con HTTP 422 y 409. Un 503 deja pendiente el objetivo."
       },
       {
         "action": "Revisa pages/QuotePage.ts y localiza qué pertenece a navegación, interacción y aserción.",
@@ -1172,9 +1172,9 @@
       "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
-      "filename": "QuotePage.ts",
+      "filename": "QuotePage.training.ts",
       "language": "typescript",
-      "code": "import {expect,type Page} from '@playwright/test';\nexport class QuotePage {\n constructor(readonly page:Page){}\n async open(){await this.page.goto('/practice')}\n async calculate(quantity:string,coupon='',shipping='pickup'){\n  await this.page.getByLabel('Producto ficticio').selectOption('basic');\n  await this.page.getByLabel('Cantidad').fill(quantity);\n  await this.page.getByLabel('Cupón').fill(coupon);\n  await this.page.getByLabel('Envío').selectOption(shipping);\n  await this.page.getByRole('button',{name:'Cotizar',exact:true}).click();\n }\n async expectTotal(value:string){await expect(this.page.getByTestId('quote-total')).toHaveText(value)}\n}\n"
+      "code": "import {type Page,type Locator} from '@playwright/test';\nexport type QuoteData={product?:'basic'|'pro'|'sold-out';quantity:string;coupon?:string;shipping?:'pickup'|'delivery';defect?:boolean};\n// Navegación y acciones de negocio. Las expectativas pertenecen al test.\nexport class QuotePage {\n readonly form:Locator;\n readonly total:Locator;\n readonly error:Locator;\n constructor(private readonly page:Page){\n  this.form=page.getByRole('region',{name:'Cotizador QA Store'});\n  this.total=this.form.getByTestId('quote-total');\n  this.error=this.form.getByRole('alert');\n }\n async open(){await this.page.goto('/practice#qa-store-quote');}\n async cotizar({product='basic',quantity,coupon='',shipping='pickup',defect=false}:QuoteData){\n  // Cada llamada establece todos los datos para evitar estado heredado.\n  await this.form.getByLabel('Producto ficticio',{exact:true}).selectOption(product);\n  await this.form.getByLabel('Cantidad',{exact:true}).fill(quantity);\n  await this.form.getByLabel('Cupón',{exact:true}).fill(coupon);\n  await this.form.getByLabel('Envío',{exact:true}).selectOption(shipping);\n  await this.form.getByLabel('Activar defecto de cálculo (solo práctica)',{exact:true}).setChecked(defect);\n  // Registra la respuesta antes del clic; el test decide que status espera.\n  const response=this.page.waitForResponse(value=>new URL(value.url()).pathname==='/api/v1/practice/quotes'&&value.request().method()==='POST');\n  await this.form.getByRole('button',{name:'Cotizar',exact:true}).click();\n  return response;\n }\n}\n"
     },
     "links": [
       [
@@ -1204,7 +1204,7 @@
       "Datos sintéticos"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Opción integrada: sigue los cinco pasos de Fixtures y aislamiento. Prepara datos propios, observa contaminación, ejecuta ambos órdenes y lanza dos vistas separadas. Usa los archivos descargados para repetirlo con workers reales.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1212,8 +1212,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+        "action": "Reparte los alcances y prepara de dos a cuatro casos. Observa la contaminación controlada, ejecuta los casos en vistas nuevas y compara el orden original con el inverso.",
+        "expected": "Cada caso conserva su esperado en ambos órdenes y parte de un formulario limpio. Dos vistas diferentes no representan por sí solas BrowserContext ni workers de Playwright."
       },
       {
         "action": "Inspecciona fixtures/training.ts y crea una fixture de datos de cotización.",
@@ -1247,9 +1247,9 @@
       "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
-      "filename": "training.ts",
+      "filename": "isolated-quote.training.ts",
       "language": "typescript",
-      "code": "import {test as base,expect} from '@playwright/test';\nimport {QuotePage} from '../pages/QuotePage';\nexport const test=base.extend<{quotePage:QuotePage}>({quotePage:async({page},provide)=>{const quotePage=new QuotePage(page);await quotePage.open();await provide(quotePage)}});\nexport {expect};\n"
+      "code": "import {test as base,expect} from '@playwright/test';\nimport {FixtureQuotePage,type QuoteData} from '../pages/FixtureQuotePage.training';\ntype TestFixtures={quotePage:FixtureQuotePage;quoteData:QuoteData};\ntype WorkerFixtures={catalog:Readonly<{unitPrice:number}>};\nexport const test=base.extend<TestFixtures,WorkerFixtures>({\n // Worker: solo lectura; nunca contiene Page ni datos mutables de un caso.\n catalog:[async({},use)=>{await use(Object.freeze({unitPrice:35000}));},{scope:'worker'}],\n // Test: un objeto nuevo para cada prueba.\n quoteData:async({catalog},use)=>{\n  if(catalog.unitPrice!==35000)throw new Error('Catálogo de entrenamiento inesperado');\n  await use({quantity:'1',coupon:'',shipping:'pickup',defect:false});\n },\n quotePage:async({page},use)=>{\n  const quote=new FixtureQuotePage(page);\n  await quote.open();\n  await use(quote);\n  // Playwright cierra su Page y contexto al terminar el test.\n }\n});\nexport {expect};\n"
     },
     "links": [
       [
@@ -1274,7 +1274,7 @@
       "JSON"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar contratos API mediante solicitudes HTTP. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Opción integrada: sigue los cinco pasos de contratos API. Predice, ejecuta y comprueba diez escenarios con status, headers, tipos y valores de negocio. Conserva sus capturas y descarga datos y spec para repetirlos con Playwright.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1282,12 +1282,12 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura contratos API mediante solicitudes HTTP y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La solicitud devuelve estado, cabeceras y cuerpo; el estado obtenido se compara con el esperado configurado."
+        "action": "Selecciona el escenario, revisa método y datos, escribe tu predicción y ejecuta la solicitud. Completa catálogo, cotización, negativos, permisos y respuesta sin contenido.",
+        "expected": "Cada escenario cumple su contrato completo; un status correcto no aprueba un error distinto, un importe con tipo incorrecto ni un total equivocado."
       },
       {
-        "action": "Ejecuta npm run test:api -- --project=chromium.",
-        "expected": "Se verifican catálogo, total y códigos HTTP del simulador."
+        "action": "Descarga data/api-cases.training.ts y tests/api-contract.training.spec.ts. Cópialos en el kit y ejecuta npx playwright test tests/api-contract.training.spec.ts --project chromium.",
+        "expected": "Se ejecutan API-01 a API-10 con aserciones explícitas; el reporte externo conserva resultado por escenario."
       },
       {
         "action": "Añade pruebas de quotes para 400, 404, 409 y 422.",
@@ -1317,9 +1317,9 @@
       "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
-      "filename": "api.spec.ts",
+      "filename": "api-contract.training.spec.ts",
       "language": "typescript",
-      "code": "import {test,expect} from '@playwright/test';\ntest('catálogo de práctica @smoke',async({request})=>{\n const response=await request.get('/api/v1/practice/products');expect(response.status()).toBe(200);\n const body=await response.json();expect(body.sandbox).toBe(true);expect(body.data).toHaveLength(3);\n});\ntest('el cupón excluye el costo de envío',async({request})=>{\n const response=await request.post('/api/v1/practice/quotes',{data:{productId:'basic',quantity:3,coupon:'QA10',shipping:'delivery'}});\n expect(response.status()).toBe(200);expect((await response.json()).data.total).toBe(104500);\n});\nfor(const code of [200,201,204,400,401,403,404,409,422,429,500,503])test(`HTTP ${code}`,async({request})=>{\n const response=await request.get(`/api/v1/practice/status/${code}`);expect(response.status()).toBe(code);\n if(code===204)expect(await response.text()).toBe('');else expect((await response.json()).sandbox).toBe(true);\n});\n"
+      "code": "// Descarga también data/api-cases.training.ts desde el laboratorio.\nimport {test,expect} from '@playwright/test';\nimport {apiCases} from '../data/api-cases.training';\nfor(const item of apiCases){\n test(item.id+' '+item.title,async({request})=>{\n  const response=await request.fetch(item.path,{\n   method:item.method,headers:{Accept:'application/json',...(item.method==='POST'?{'Content-Type':'application/json'}:{}),...(item.token?{Authorization:'Bearer '+item.token}:{})},\n   ...(item.method==='POST'?{data:JSON.stringify(item.data)}:{})\n  });\n  expect(response.status()).toBe(item.status);\n  expect(response.headers()['x-qapath-sandbox']).toBe('true');\n  // Una respuesta 204 no se interpreta como JSON.\n  if(item.kind==='empty'){expect(await response.text()).toBe('');return;}\n  expect(response.headers()['content-type']).toContain('application/json');\n  const body=await response.json();\n  expect(body.sandbox).toBe(true);\n  if(item.kind==='catalog'){\n   expect(Array.isArray(body.data)).toBe(true);\n   expect(body.data.length).toBeGreaterThanOrEqual(3);\n   for(const product of body.data){\n    expect(typeof product.id).toBe('string');expect(product.id.length).toBeGreaterThan(0);\n    expect(typeof product.name).toBe('string');expect(product.name.length).toBeGreaterThan(0);\n    expect(typeof product.price).toBe('number');expect(Number.isFinite(product.price)).toBe(true);expect(product.price).toBeGreaterThan(0);\n    expect(typeof product.available).toBe('boolean');\n   }\n   expect(new Set(body.data.map((product:{id:string})=>product.id)).size).toBe(body.data.length);\n   for(const id of ['basic','pro','sold-out'])expect(body.data.some((product:{id:string})=>product.id===id)).toBe(true);\n   expect(body.data.find((product:{id:string})=>product.id==='basic')).toMatchObject({price:35000,available:true});\n   expect(body.data.find((product:{id:string})=>product.id==='sold-out')).toMatchObject({available:false});\n  }else if(item.kind==='quote'){\n   const sent=item.data as {productId:string;quantity:number;coupon:string;shipping:string};\n   for(const field of ['quantity','subtotal','discount','shipping','total']){expect(typeof body.data[field]).toBe('number');expect(Number.isFinite(body.data[field])).toBe(true);}\n   expect(body.data).toMatchObject({productId:sent.productId,quantity:sent.quantity,currency:'COP'});\n   expect(['basic','pro']).toContain(sent.productId);expect(Number.isInteger(sent.quantity)).toBe(true);expect(sent.quantity).toBeGreaterThanOrEqual(1);expect(sent.quantity).toBeLessThanOrEqual(5);\n   expect(['pickup','delivery']).toContain(sent.shipping);expect(['','QA10']).toContain(sent.coupon||'');\n   const subtotal=(sent.productId==='basic'?35000:75000)*sent.quantity;\n   if(sent.coupon==='QA10')expect(subtotal).toBeGreaterThanOrEqual(100000);\n   const discount=sent.coupon==='QA10'?Math.round(subtotal*0.1):0;\n   const shipping=sent.shipping==='delivery'?10000:0;\n   expect(body.data.subtotal).toBe(subtotal);expect(body.data.discount).toBe(discount);expect(body.data.shipping).toBe(shipping);\n   expect(body.data.total).toBe(subtotal-discount+shipping);expect(body.data.total).toBe(item.total);\n  }else if(item.kind==='access'){\n   expect(body.data).toMatchObject({scope:'write',role:'admin'});\n  }else{\n   expect(typeof body.error).toBe('string');expect(body.error).toBe(item.error);\n   if(item.status===401)expect(response.headers()['www-authenticate']).toMatch(/^Bearer\\b/);\n  }\n });\n}\n"
     },
     "links": [
       [
@@ -1344,7 +1344,7 @@
       "Arquitectura de pruebas"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Opción integrada: sigue cinco pasos para delimitar mocks, comprobar una base real, distinguir HTTP 503, contrato incompleto y transporte, y validar recuperación real. Conserva las capturas y descarga los specs separados.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1352,16 +1352,16 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La respuesta simulada 503 aparece como error en la interfaz; desactiva la simulación y espera 35000 COP para comprobar recuperación."
+        "action": "Delimita la intercepción y comprueba una cotización real. Ejecuta las tres simulaciones y compara status, alerta, ausencia de total y limpieza de la intercepción.",
+        "expected": "HTTP 503 es una respuesta de error; un contrato 200 incompleto se rechaza; transporte no tiene status HTTP. Las simulaciones se identifican como locales y se retiran al terminar."
       },
       {
-        "action": "Ejecuta tests/network.spec.ts para simular 503 en quotes.",
+        "action": "Descarga los tres archivos network-*.training.spec.ts y cópialos en tests del kit. Ejecuta primero network-mocks.training.spec.ts con --project chromium --trace on.",
         "expected": "La UI informa el error y no muestra un total de éxito."
       },
       {
-        "action": "Retira el mock y pulsa Cotizar otra vez.",
-        "expected": "Se recupera la respuesta real y el total 35000 COP."
+        "action": "En Recupera y confirma, prepara un error en la vista actual, ejecuta la recuperación real y comprueba otra cotización de dos unidades.",
+        "expected": "La alerta desaparece y el backend real responde 35000 COP; la segunda cotización devuelve 70000 COP. Una simulación verde no demuestra disponibilidad del backend."
       },
       {
         "action": "Añade una variante con contrato incompleto y documenta cómo debe responder la interfaz.",
@@ -1387,9 +1387,9 @@
       "La evidencia identifica caso, herramienta, fecha/versión y resultado esperado frente al obtenido; no se inventan ejecuciones."
     ],
     "starter": {
-      "filename": "network.spec.ts",
+      "filename": "network-mocks.training.spec.ts",
       "language": "typescript",
-      "code": "import {test,expect} from '@playwright/test';\ntest('503 controlado y recuperación',async({page})=>{\n await page.route('**/api/v1/practice/quotes',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({sandbox:true,error:'Servicio de práctica temporalmente no disponible'})}));\n await page.goto('/practice');await page.getByRole('button',{name:'Cotizar',exact:true}).click();\n await expect(page.getByRole('region',{name:'Cotizador QA Store'}).getByRole('alert')).toContainText('temporalmente');\n await page.unroute('**/api/v1/practice/quotes');await page.getByRole('button',{name:'Cotizar',exact:true}).click();\n await expect(page.getByTestId('quote-total')).toHaveText('35000 COP');\n});\n"
+      "code": "import {test,expect,type Page,type Route} from '@playwright/test';\nconst matches=(url:URL)=>url.pathname==='/api/v1/practice/quotes';\nasync function open(page:Page){\n await page.goto('/practice#qa-store-quote');\n const form=page.getByRole('region',{name:'Cotizador QA Store'});\n await form.getByLabel('Producto ficticio').locator('option[value=\"pro\"]').waitFor({state:'attached'});\n return form;\n}\nasync function submit(page:Page,quantity='1'){\n const form=page.getByRole('region',{name:'Cotizador QA Store'});\n await form.getByLabel('Producto ficticio').selectOption('basic');\n await form.getByLabel('Cantidad',{exact:true}).fill(quantity);\n await form.getByLabel('Cupón',{exact:true}).fill('');\n await form.getByLabel('Envío',{exact:true}).selectOption('pickup');\n await form.getByLabel('Activar defecto de cálculo (solo práctica)').uncheck();\n await form.getByRole('button',{name:'Cotizar',exact:true}).click();\n return form;\n}\n\n// Estos tests prueban reacciones de UI con mocks, no disponibilidad del backend.\nfor(const mode of ['http','contract','transport'] as const){\n test('mock acotado '+mode,async({page})=>{\n  const form=await open(page);let received=false,mocked=0;\n  page.on('response',response=>{if(matches(new URL(response.url()))&&response.request().method()==='POST')received=true;});\n  const handler=async(route:Route)=>{\n   if(route.request().method()!=='POST'){await route.fallback();return;}\n   mocked++;if(mode==='transport'){await route.abort('failed');return;}\n   await route.fulfill({status:mode==='http'?503:200,contentType:'application/json',body:mode==='http'?JSON.stringify({sandbox:true,error:\"Servicio temporal simulado para entrenamiento.\"}):\"{\\n  \\\"sandbox\\\": true,\\n  \\\"data\\\": {\\n    \\\"subtotal\\\": 35000,\\n    \\\"total\\\": 35000\\n  }\\n}\"});\n  };\n  await page.route(matches,handler);\n  try{\n   await submit(page);\n   const alert=form.getByRole('alert');await expect(alert).toBeVisible();\n   if(mode==='http')await expect(alert).toContainText('HTTP 503: '+\"Servicio temporal simulado para entrenamiento.\");\n   if(mode==='contract')await expect(alert).toHaveText('Contrato de cotización inválido.');\n   expect(mocked).toBe(1);if(mode==='transport')expect(received).toBe(false);\n   await expect(form.getByTestId('quote-total')).toHaveCount(0);\n  }finally{await page.unroute(matches,handler);}\n });\n}\n"
     },
     "links": [
       [
@@ -1414,7 +1414,7 @@
       "Playwright"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Recorre cinco desafíos: configura el workflow, comprueba la base, provoca una aserción roja, corrige y revisa el informe. Se conservan las tres ejecuciones locales por separado.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1423,8 +1423,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado."
+        "action": "En el laboratorio comprueba if: always() y la conservación del código de salida. Ejecuta base, rojo con esperado 34000 COP y corrección con 35000 COP.",
+        "expected": "Unitarias y API pasan; UI detecta la expectativa incorrecta. El retest obtiene tres etapas aprobadas y conserva el fallo previo. Son ejecuciones locales, no jobs de GitHub Actions."
       },
       {
         "action": "Copia .github/workflows/qa.yml a tu repositorio y revisa cada paso.",
@@ -1485,7 +1485,7 @@
       "Reportes"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Recorre cinco desafíos: interpreta un ejemplo didáctico, mide tres repeticiones reales, plantea una hipótesis, repite y compara las muestras. Conserva primeros fallos, reintentos y bloqueados.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1493,8 +1493,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado."
+        "action": "Completa los cálculos del ejemplo didáctico y mide tres repeticiones reales de QA Store. Registra un plan, repite el mismo escenario y revisa la comparación.",
+        "expected": "Se conservan dos muestras independientes, sus intentos, tasas con denominadores y mediana inicial. Sin retries, recuperación no evaluada; sin fallos observados, se declara el límite sin inventar mejora."
       },
       {
         "action": "Repite smoke 10 veces en Chromium con --repeat-each=10 y conserva cada resultado.",
@@ -1556,7 +1556,7 @@
       "SQL"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Recorre cinco desafíos: matriz de cinco riesgos, base/BUG-01/retest UI, ocho contratos API, SQL Q1–Q9 y decisión con suite local. Conserva los reportes externos por separado.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1564,8 +1564,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+        "action": "Relaciona riesgos con casos y ejecuta el recorrido integrado: UI, API y Q1–Q9; cierra con una suite local y una decisión justificada.",
+        "expected": "La matriz refleja resultados registrados, BUG-01 conserva 103500 frente a 104500 COP y el retest obtiene 104500. API y fixtures SQL tienen orígenes distintos; CI y Playwright externos no se dan por ejecutados."
       },
       {
         "action": "Elige 5 riesgos del cotizador y crea una matriz HU/criterio/caso/spec/evidencia.",
@@ -1652,7 +1652,7 @@
       "Reportes"
     ],
     "setup": [
-      "Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar escenarios configurables sobre QA Store. Puedes conservar también el trabajo externo con el kit de apoyo.",
+      "Recorre cinco desafíos: historia para tu README, demo con cinco resultados UI/API, decisiones de arquitectura, guion previsto de 300 segundos y revisión manual de entrega. El cronómetro es opcional y conserva el tiempo real al pausar y guardar.",
       "Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.",
       "Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.",
       "Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.",
@@ -1661,8 +1661,8 @@
     ],
     "steps": [
       {
-        "action": "En el ejecutor de esta semana, configura escenarios configurables sobre QA Store y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.",
-        "expected": "La cotización por defecto responde 35000 COP; al cambiar datos o esperado se detectan diferencias y se registra el obtenido."
+        "action": "Prepara la historia, ejecuta caso válido/401/403/BUG-01/retest y completa decisiones, guion y revisión de entrega en el laboratorio.",
+        "expected": "Las capturas locales mantienen esperado, obtenido y fecha. Se descargan README, guion y expediente. El checklist es manual, los enlaces no se verifican automáticamente y revisar el guion no acredita un ensayo de cinco minutos."
       },
       {
         "action": "Instala desde una carpeta limpia con npm ci y ejecuta smoke.",

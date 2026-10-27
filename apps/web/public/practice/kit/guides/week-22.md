@@ -6,7 +6,7 @@ Herramientas: Playwright, Reportes
 
 ## Preparación
 
-- Opción integrada: usa «Configura y ejecuta en la plataforma» para practicar etapas unitarias, API y UI con repeticiones y métricas. Puedes conservar también el trabajo externo con el kit de apoyo.
+- Opción integrada: completa cinco desafíos, separa el ejemplo didáctico de dos muestras reales de tres repeticiones y conserva datos crudos. Un reintento no borra el primer fallo; las tasas excluyen bloqueados e informan su cantidad. La mediana usa los primeros intentos ejecutados e incluye preparación de la vista.
 - Extrae el kit, instala Node.js 22 o posterior y abre una terminal en esa carpeta.
 - Ejecuta npm install. No ejecutes scripts en el repositorio de producción de la academia.
 - Ejecuta npx playwright install chromium firefox webkit. Configura BASE_URL con la dirección de tu academia o el servidor local.
@@ -14,9 +14,8 @@ Herramientas: Playwright, Reportes
 
 ## Ejecución
 
-1. En el ejecutor de esta semana, configura etapas unitarias, API y UI con repeticiones y métricas y pulsa Ejecutar práctica. Compara la salida y guarda la evidencia con su fecha.
-   Resultado esperado: El informe muestra comprobaciones aprobadas, intentos y duración medidos en el navegador; las ejecuciones de CI externo se documentan por separado.
-   Resultado obtenido: completar después de ejecutar; incluir estado, fecha y evidencia.
+1. Comprueba las métricas del ejemplo, mide tres repeticiones reales, registra una hipótesis o plan y vuelve a medir con el mismo escenario y política.
+   Resultado esperado: dos muestras con primeros intentos, reintentos y bloqueados; tasas con denominadores y duración mediana inicial. Si no hubo fallos, se declara no observada. La propuesta no aplica una corrección al producto; no se atribuye causalidad a una variación de tiempo. Descarga datos e informe y guarda tu evidencia.
 
 2. Repite smoke 10 veces en Chromium con --repeat-each=10 y conserva cada resultado.
    Resultado esperado: Se informa primera ejecución, duración y fallos; si no hay flakiness observada, se declara.
