@@ -23,6 +23,12 @@ export interface AccountSecurityPort {
   claimMfaStep(userId:string,step:number):Promise<boolean>;
   claimRecoveryCode(userId:string,hash:string):Promise<boolean>;
   audit(userId:string,action:string):Promise<void>;
+  /** Reserva un enlace de restablecimiento MFA (anula los anteriores). false si se pidió hace menos de 60 s. */
+  createMfaReset(userId:string,tokenHash:string,expiresAt:Date):Promise<boolean>;
+  /** Consume el enlace y restablece MFA en la misma transacción. Devuelve el usuario afectado o null. */
+  consumeMfaReset(tokenHash:string):Promise<string|null>;
+  /** Restablecimiento administrativo: borra la credencial y los códigos, revoca sesiones y audita al actor. */
+  resetMfa(userId:string,actorUserId:string,reason:'ADMIN'):Promise<void>;
 }
 export interface TotpPort {
   createSecret():string;
@@ -33,7 +39,7 @@ export interface TotpPort {
   newRecoveryCodes():string[];
   hashRecoveryCode(code:string):string;
 }
-export interface VerificationMailer {sendVerification(email:string,token:string):Promise<void>}
+export interface VerificationMailer {sendVerification(email:string,token:string):Promise<void>;sendMfaReset?(email:string,token:string):Promise<void>}
 export class SecurityFlowError extends Error {constructor(message:string,readonly status:400|401|403|429|503=400){super(message);this.name='SecurityFlowError'}}
 export type SecureAuthDependencies={users:IdentityRepository;passwords:PasswordPort;sessions:SessionPort;tokens:TokenPort;security:AccountSecurityPort;totp:TotpPort;mailer:VerificationMailer;external?:ExternalIdentityPort};
 const DAY=86400000;
@@ -189,6 +195,29 @@ export class SecureAuthenticationService {
     if(!accepted){await this.d.security.recordChallengeFailure(challenge.id);throw new SecurityFlowError('Código inválido o utilizado.',401)}
     if(!await this.d.security.consumeChallenge(challenge.id))throw new SecurityFlowError('Desafío ya usado.',401);
     return this.session(user);
+  }
+  /** «¿Perdiste tu app?»: solo desde un desafío MFA_VERIFY vigente (la contraseña ya se comprobó). */
+  async requestMfaReset(challengeToken:string){
+    const {user}=await this.challenge(challengeToken);
+    if(this.stage(user)!=='MFA_VERIFY')throw new SecurityFlowError('Este desafío no requiere MFA.',403);
+    if(this.d.external||!this.d.mailer.sendMfaReset)throw new SecurityFlowError('El restablecimiento por correo no está disponible. Pide a un administrador que restablezca tu MFA.',503);
+    const token=this.d.tokens.issue();
+    if(await this.d.security.createMfaReset(user.id,this.d.tokens.hash(token),new Date(Date.now()+30*60000)))await this.d.mailer.sendMfaReset(user.email,token);
+    return {message:'Te enviamos un enlace al correo de la cuenta. Vence en 30 minutos y solo puede usarse una vez.'};
+  }
+  async confirmMfaReset(token:string){
+    if(!/^[A-Za-z0-9_-]{32,128}$/.test(token))throw new SecurityFlowError('Enlace inválido o vencido.');
+    const userId=await this.d.security.consumeMfaReset(this.d.tokens.hash(token));
+    if(!userId)throw new SecurityFlowError('Enlace inválido, usado o vencido.');
+    return {reset:true};
+  }
+  async resetMfaByAdmin(targetEmail:string,actorUserId:string){
+    let email:string;try{email=EmailAddress.create(targetEmail).value}catch{throw new SecurityFlowError('Correo inválido.')}
+    const target=await this.d.users.findByEmail(email);
+    if(!target)throw new SecurityFlowError('No existe una cuenta con ese correo.');
+    if(target.id===actorUserId)throw new SecurityFlowError('No puedes restablecer tu propio MFA desde Administración. Usa «¿Perdiste tu app?» al iniciar sesión.',403);
+    await this.d.security.resetMfa(target.id,actorUserId,'ADMIN');
+    return {reset:true,email:target.email,role:target.role};
   }
   private async sessionUser(token?:string){
     if(!token)throw new SecurityFlowError('Debes iniciar sesión.',401);
