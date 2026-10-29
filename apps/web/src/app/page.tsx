@@ -1,5 +1,3 @@
-// La API se consulta por request, no durante next build ni al generar páginas estáticas.
-export const dynamic='force-dynamic';
-import {academyApi} from '@/lib/academy-api';
-import {Dashboard} from '@/components/academy/dashboard';
-export default async function Home(){const modules=await academyApi.modules();return <Dashboard modules={modules} weeks={modules.flatMap(m=>m.weekDetails)}/>;}
+import {CourseCatalog} from '@/components/courses/course-catalog';
+import {loadPublishedAppearance} from '@/features/appearance/load-appearance';
+export default async function Page({searchParams}:{searchParams:Promise<{q?:string}>}){const {q}=await searchParams;const appearance=await loadPublishedAppearance();return <CourseCatalog initialSearch={typeof q==='string'?q.slice(0,120):''} appearance={appearance}/>}

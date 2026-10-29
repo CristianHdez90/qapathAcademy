@@ -3,6 +3,7 @@ import {useCallback,useEffect,useState} from 'react';
 import type {FormEvent} from 'react';
 import Link from 'next/link';
 import {AdminAiSettings} from './admin-ai-settings';
+import {AdminMfaReset} from './admin-mfa-reset';
 import {useAuth} from '@/features/auth/auth-provider';
 
 type Student={id:string;email:string;role:'STUDENT';isActive:boolean;emailVerified:boolean;mustChangePassword:boolean;mfaEnabled:boolean;createdAt:string;updatedAt:string};
@@ -52,9 +53,10 @@ export function AdminDashboard(){
  function changeStatus(){if(!selected)return;const active=!selected.student.isActive;if(!active&&!window.confirm('Desactivar esta cuenta revocará las sesiones del estudiante. ¿Continuar?'))return;void action(async()=>{await api(`/students/${selected.student.id}`,'PATCH',{isActive:active});await loadStudent(selected.student.id);await refresh();setMessage(active?'Cuenta activada.':'Cuenta desactivada y sesiones revocadas.');});}
  function rename(e:FormEvent){e.preventDefault();if(!selected)return;void action(async()=>{await api(`/students/${selected.student.id}`,'PATCH',{email:editEmail});await loadStudent(selected.student.id);await refresh();setMessage('Correo actualizado con registro de auditoría.');});}
  return <div className="admin-layout">
-  <div className="page-heading"><div><p className="eyebrow">ADMINISTRACIÓN · QAPath Academy</p><h1>Gestión de estudiantes</h1><p className="page-description">Cuentas, avance de aprendizaje y trazabilidad de cambios en PostgreSQL.</p></div><button className="button button-primary" onClick={()=>setShowForm(v=>!v)}>{showForm?'Cerrar formulario':'+ Crear estudiante'}</button></div>
+  <div className="page-heading"><div><p className="eyebrow">ADMINISTRACIÓN · QAPath Academy</p><h1>Gestión de estudiantes</h1><p className="page-description">Cuentas, avance de aprendizaje y trazabilidad de cambios en PostgreSQL.</p></div><div className="course-toolbar"><Link className="button button-outline" href="/admin/appearance">Apariencia del Home</Link><Link className="button button-outline" href="/admin/courses">Gestionar cursos</Link><button className="button button-primary" onClick={()=>setShowForm(v=>!v)}>{showForm?'Cerrar formulario':'+ Crear estudiante'}</button></div></div>
   {error&&<div className="feedback bad" role="alert">{error}</div>}{message&&<div className="feedback good" role="status">{message}</div>}
   <AdminAiSettings/>
+  <AdminMfaReset/>
   <div className="admin-stats" aria-label="Indicadores académicos">
    <article><small>Total estudiantes</small><strong>{summary?.students??'—'}</strong></article>
    <article><small>Cuentas activas</small><strong>{summary?.activeStudents??'—'}</strong></article>
