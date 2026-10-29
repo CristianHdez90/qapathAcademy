@@ -1,7 +1,7 @@
 export const CONTENT_REPOSITORY=Symbol('CONTENT_REPOSITORY');
 export const USE_CASES={
  listModules:Symbol('LIST_MODULES'),getModule:Symbol('GET_MODULE'),getLesson:Symbol('GET_LESSON'),
- getScrum:Symbol('GET_SCRUM'),gradeQuiz:Symbol('GRADE_QUIZ'),
+ getScrum:Symbol('GET_SCRUM'),gradeQuiz:Symbol('GRADE_QUIZ'),gradeFoundationCheck:Symbol('GRADE_FOUNDATION_CHECK'),
  listResources:Symbol('LIST_RESOURCES'),getProjectChecklist:Symbol('GET_PROJECT_CHECKLIST')
 } as const;
 

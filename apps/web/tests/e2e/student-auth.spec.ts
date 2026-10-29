@@ -14,11 +14,11 @@ test('registro → verificar correo → iniciar sesión → guardar progreso →
  await verifyEmail(page,email);
  await page.goto('/login');await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña').fill(password);
  await page.getByRole('button',{name:/Continuar/}).click();await expect(page).toHaveURL(/account/);
- await page.goto('/study/1');await studyReading(page);
+ await page.goto('/study/3');await studyReading(page);
  await expect.poll(async()=>{const response=await page.request.get('/api/v1/me/progress');return (await response.json()).data.read.includes(1)}).toBe(true);
  await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
  expect((await page.request.get('/api/v1/admin/status')).status()).toBe(403);
  await page.goto('/account');await page.getByRole('button',{name:'Cerrar sesión'}).click();await expect(page).toHaveURL(/login/);
  await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña').fill(password);
- await page.getByRole('button',{name:/Continuar/}).click();await page.goto('/study/1');await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
+ await page.getByRole('button',{name:/Continuar/}).click();await page.goto('/study/3');await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
 });

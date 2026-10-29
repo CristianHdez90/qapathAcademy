@@ -29,3 +29,5 @@ firebase-debug.log*
 **/*service-account*.json
 **/*serviceAccount*.json
 **/firebase-admin-key*.json
+
+Claude outputs/

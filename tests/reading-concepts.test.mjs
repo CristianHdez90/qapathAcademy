@@ -1,7 +1,33 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
 const guides=JSON.parse(readFileSync(new URL('../libs/content/src/data/study-guides.json',import.meta.url),'utf8'));
+
+test('all 266 rendered cards retain their examples without Así se aplica or animation controls',()=>{
+ const require=createRequire(import.meta.url),webRequire=createRequire(new URL('../apps/web/package.json',import.meta.url));
+ const ts=require('typescript'),React=webRequire('react'),{renderToStaticMarkup}=webRequire('react-dom/server');
+ const cache=new Map();
+ const load=name=>{
+  if(cache.has(name))return cache.get(name);
+  const module={exports:{}};
+  const source=readFileSync(new URL(`../apps/web/src/components/academy/${name}.tsx`,import.meta.url),'utf8');
+  const code=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText;
+  const localRequire=id=>id.endsWith('.css')?{}:id==='./concept-step-icon'?load('concept-step-icon'):webRequire(id);
+  new Function('require','module','exports',code)(localRequire,module,module.exports);cache.set(name,module.exports);return module.exports;
+ };
+ const {ReadingConcepts}=load('reading-concepts');let total=0;
+ for(const [week,guide] of Object.entries(guides)){
+  const concepts=[...guide.sections.flatMap(section=>section.concepts||[]),...(guide.example.concepts||[])];
+  const html=renderToStaticMarkup(React.createElement(ReadingConcepts,{concepts}));
+  assert.equal((html.match(/class="concept-example"/g)||[]).length,concepts.length,`examples week ${week}`);
+  assert.doesNotMatch(html,/class="concept-demo(?:[\s"])/);
+  assert.doesNotMatch(html,/Así se aplica|<button\b|data-motion=/);
+  for(const concept of concepts)assert.ok(html.includes(`reading-concept-${concept.id}`));
+  total+=concepts.length;
+ }
+ assert.equal(total,266);
+});
 test('all 48 foundation cards have specific examples and three explanatory steps',()=>{
  let count=0;const examples=new Set();
  for(const week of [1,2]){

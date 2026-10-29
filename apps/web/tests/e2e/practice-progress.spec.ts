@@ -1,8 +1,12 @@
 import {test,expect} from '@playwright/test';
 test.beforeEach(async({page})=>{await page.route('**/api/v1/auth/me',route=>route.fulfill({status:401,json:{message:'No autenticado'}}))});
-test('all weeks show a compact practice entry and four stages without laboratories',async({page},testInfo)=>{
+test('all weeks show a compact practice entry and their stages without laboratories',async({page},testInfo)=>{
  test.setTimeout(120000);
- for(let week=1;week<=24;week++){
+ for(const week of [1,2]){
+  await page.goto(`/study/${week}`);const stages=page.getByRole('navigation',{name:'Etapas de la semana'}).first();await expect(stages.getByRole('listitem')).toHaveCount(3);await expect(stages.getByRole('link',{name:'Práctica',exact:false})).toHaveAttribute('href',`/study/${week}?view=focused#practical-exercise`);
+  await page.goto(`/study/${week}#practical-exercise`);await expect(page.locator('[data-study-step]')).toHaveAttribute('data-study-step','practical-exercise');await expect(page.getByRole('link',{name:`Abrir actividad de la semana ${week}`,exact:false})).toHaveAttribute('href',`/practice/${week}`);
+ }
+ for(let week=3;week<=24;week++){
   await page.goto(`/study/${week}#practical-exercise`);const stages=page.getByRole('navigation',{name:'Etapas de la semana'});await expect(stages.getByRole('listitem')).toHaveCount(4);await expect(stages.getByRole('link',{name:'Práctica',exact:false})).toHaveAttribute('href',`/study/${week}#practical-exercise`);
   await expect(stages).toHaveAttribute('aria-busy','false',{timeout:15000});await expect(page.getByLabel('Ir a un apartado')).toHaveValue('practical-exercise',{timeout:15000});const panel=page.locator('#practical-exercise');await expect(panel).toBeVisible();await expect(panel.getByRole('link',{name:`Abrir actividad de la semana ${week}`,exact:false})).toHaveAttribute('href',`/practice/${week}`);await expect(panel.locator('textarea,table,form')).toHaveCount(0);await expect(panel.getByRole('heading',{name:'Antes de comenzar',exact:true})).toHaveCount(0);await expect(page.locator('#week-laboratories,#deliverables,#practice')).toHaveCount(0);await expect(page.getByLabel('Ir a un apartado').locator('option')).not.toContainText(['Laboratorio']);
  }

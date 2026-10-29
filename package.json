@@ -18,7 +18,9 @@
     "check": "pnpm run test && pnpm run typecheck && pnpm run lint && pnpm run build",
     "db:generate": "pnpm --filter @qapath/database db:generate",
     "db:migrate": "pnpm --filter @qapath/database db:migrate",
-    "db:create-admin": "pnpm --filter @qapath/database db:create-admin"
+    "db:create-admin": "pnpm --filter @qapath/database db:create-admin",
+    "db:reset-mfa": "pnpm --filter @qapath/database db:reset-mfa",
+    "mail:check": "pnpm --filter @qapath/api mail:check"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

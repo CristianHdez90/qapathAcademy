@@ -7,8 +7,8 @@ test('dashboard, navegación y contenido de estudio',async({page})=>{
  await expect(page.getByRole('heading',{name:/Tu ruta, paso a paso/})).toBeVisible();
  await page.getByRole('link',{name:/Fundamentos del Testing/}).first().click();
  await expect(page.getByRole('heading',{name:/Fundamentos del Testing/})).toBeVisible();
- await page.getByRole('link',{name:/Mentalidad QA y ciclo de vida del software/}).click();
- await expect(page.getByRole('heading',{name:/Mentalidad QA y ciclo de vida del software/})).toBeVisible();
+ await page.getByRole('link',{name:/Tipos, enfoques, niveles y pirámide de pruebas/}).click();
+ await expect(page.getByRole('heading',{name:/Tipos, enfoques, niveles y pirámide de pruebas/})).toBeVisible();
 });
 test('API permite lectura de módulos y calificación',async({request})=>{
  const modules=await request.get('/api/v1/modules');expect(modules.ok()).toBeTruthy();
@@ -17,7 +17,7 @@ test('API permite lectura de módulos y calificación',async({request})=>{
  expect(bad.status()).toBe(400);
 });
 test('marca lecturas y mantiene progreso en el navegador',async({page})=>{
- await page.goto('/study/1');
+ await page.goto('/study/3');
  await studyReading(page);
  await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
 });
@@ -30,7 +30,7 @@ test('espera la sesión antes de permitir cambios de progreso',async({page})=>{
   await route.fulfill({status:401,json:{message:'No autenticado'}});
  });
  try {
-  await page.goto('/study/1');
+  await page.goto('/study/3');
   await page.getByLabel('Ir a un apartado').selectOption('self-check');
   await expect(page.locator('#self-check .option').first()).toBeDisabled();
   expect(await page.locator('[data-reading-recorded="true"]').count()).toBe(0);

@@ -1,4 +1,5 @@
 export * from './schema';
+export * from './catalog-schema';
 export * from './client';
 
 // Mantener los operadores SQL y los tipos de tablas en una sola instancia de Drizzle.

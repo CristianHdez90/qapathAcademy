@@ -12,29 +12,41 @@ new Script(ts.transpileModule(readFileSync(new URL('../apps/web/src/features/pro
 const {learningSteps,nextLearningAction,learningModuleStatus}=module.exports;
 const evidence='Documenté resultados y riesgos de cada escenario con datos ficticios para validar el flujo.';
 
-test('next action follows the first missing requirement, then advances to the next week',()=>{
- let state=progress.emptyProgress();const record=cmd=>{state=progress.applyProgressCommand(state,cmd)};
- assert.equal(nextLearningAction(state,[1,2]).href,'/study/1#chapter-0');
- assert.equal(learningModuleStatus(state,[1,2]),'Sin iniciar');
- for(let section=0;section<4;section++)record({type:'reading-section',week:1,section});
- assert.equal(nextLearningAction(state,[1,2]).href,'/study/1#practical-exercise');
- assert.equal(learningModuleStatus(state,[1,2]),'En curso');
- for(let i=0;i<2;i++)record({type:'submit-evidence',kind:'task',id:`1:${i}`,text:evidence});
- assert.equal(nextLearningAction(state,[1,2]).href,'/study/1#practical-exercise');
- record({type:'submit-evidence',kind:'exercise',id:'1',text:validatedPractice(1)});
- assert.equal(nextLearningAction(state,[1,2]).href,'/study/1#self-check');
- record({type:'lesson-answer',week:1,answer:progress.weekRequirements(1).answer});
- assert.equal(nextLearningAction(state,[1,2]).href,'/modules/fundamentos#module-quiz');
- record({type:'grade',moduleId:'fundamentos',score:100});
- assert.equal(learningSteps(state,1).every(s=>s.done),true);
- assert.equal(learningSteps(state,1).length,4);
- assert.equal(nextLearningAction(state,[1]),null);
- assert.equal(nextLearningAction(state,[1,2]).week,2);
- assert.equal(learningModuleStatus(state,[1]),'Completado');
+test('legacy modules keep reading, practice, self-check and a closing test in their last week (D-10)',()=>{
+ let state=progress.emptyProgress();const record=cmd=>{state=progress.applyProgressCommand(state,cmd)};const rule=progress.weekRequirements(7);
+ assert.equal(nextLearningAction(state,[7,8]).href,'/study/7#chapter-0');
+ assert.equal(learningModuleStatus(state,[7,8]),'Sin iniciar');
+ for(let section=0;section<rule.sections;section++)record({type:'reading-section',week:7,section});
+ assert.equal(nextLearningAction(state,[7,8]).href,'/study/7#practical-exercise');
+ assert.equal(learningModuleStatus(state,[7,8]),'En curso');
+ record({type:'submit-evidence',kind:'exercise',id:'7',text:validatedPractice(7)});
+ assert.equal(nextLearningAction(state,[7,8]).href,'/study/7#self-check');
+ record({type:'lesson-answer',week:7,answer:rule.answer});
+ assert.equal(nextLearningAction(state,[7,8]).href,'/study/8#closing-test');
+ record({type:'grade',moduleId:'herramientas',score:100});
+ assert.equal(learningSteps(state,7).every(s=>s.done),true);
+ assert.equal(learningSteps(state,7).length,4);
+ assert.equal(nextLearningAction(state,[7]),null);
+ assert.equal(nextLearningAction(state,[7,8]).week,8);
+ assert.equal(learningModuleStatus(state,[7]),'Completado');
+ const partial=progress.applyProgressCommand(progress.emptyProgress(),{type:'reading-section',week:7,section:0});
+ assert.equal(nextLearningAction(partial,[7]).href,'/study/7#chapter-1');
+ assert.equal(learningSteps(partial,7)[0].detail,`1/${rule.sections} secciones`);
 });
 
-test('a partly viewed lesson recommends its next unread chapter rather than restarting',()=>{
- const state=progress.applyProgressCommand(progress.emptyProgress(),{type:'reading-section',week:1,section:0});
- assert.equal(nextLearningAction(state,[1]).href,'/study/1#chapter-1');
- assert.equal(learningSteps(state,1)[0].detail,'1/4 secciones');
+test('Fundamentos v2 steps follow cards, chapter minitests and practice without module quiz',()=>{
+ let state=progress.emptyProgress();const record=cmd=>{state=progress.applyProgressCommand(state,cmd)};const c01=progress.foundationRules[0];
+ assert.equal(learningSteps(state,1).map(s=>s.id).join(),'reading,checks,practice');
+ assert.equal(nextLearningAction(state,[1,2]).href,'/study/1#FND-W01-C01-T01');
+ assert.equal(learningModuleStatus(state,[1,2]),'Sin iniciar');
+ record({type:'foundation-card-read',cardId:c01.cards[0]});
+ assert.equal(learningModuleStatus(state,[1,2]),'En curso');
+ assert.equal(nextLearningAction(state,[1]).href,'/study/1#FND-W01-C01-T02');
+ assert.equal(learningSteps(state,1)[0].detail,'1/33 tarjetas leídas');
+ for(const card of c01.cards)record({type:'foundation-card-read',cardId:card});
+assert.equal(nextLearningAction(state,[1]).href,'/study/1#FND-W01-C02-T01');
+ assert.equal(learningSteps(state,1)[1].href,'/study/1#FND-W01-C01-T01');
+ for(const id of c01.checks)record({type:'foundation-check-passed',questionId:id});
+ assert.equal(learningSteps(state,1)[1].detail,'1/4 capítulos aprobados');
+ assert.ok(learningSteps(state,1).every(s=>!s.href.includes('module-quiz')&&!s.href.includes('self-check')));
 });

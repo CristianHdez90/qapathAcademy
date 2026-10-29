@@ -26,7 +26,7 @@ export class PostgresProgressAdapter implements StudentProgressPort {
  apply(userId:string,command:ProgressCommand){
   // No incluir notas ni datos potencialmente privados en los eventos.
   const details:Record<string,unknown>=command.type==='toggle'?{key:command.key,...(typeof command.value==='number'?{value:command.value}:{})}:
-   command.type==='note'||command.type==='lesson-answer'||command.type==='reading-section'?{week:command.week}:command.type==='submit-evidence'?{kind:command.kind,id:command.id}:command.type==='grade'?{moduleId:command.moduleId,score:command.score}:command.type==='scrum-grade'?{score:command.score}:{};
+   command.type==='note'||command.type==='lesson-answer'||command.type==='reading-section'?{week:command.week}:command.type==='submit-evidence'?{kind:command.kind,id:command.id}:command.type==='grade'?{moduleId:command.moduleId,score:command.score}:command.type==='foundation-card-read'?{cardId:command.cardId}:command.type==='foundation-check-passed'?{questionId:command.questionId}:command.type==='scrum-grade'?{score:command.score}:{};
   return this.transact(userId,s=>applyProgressCommand(s,command),command.type.toUpperCase(),details);
  }
  // Imported JSON cannot award completion, reading, assessment scores or submitted evidence.
