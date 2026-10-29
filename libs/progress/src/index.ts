@@ -4,6 +4,7 @@ export * from './domain/progress-repository';
 export * from './application/update-progress';
 export * from './domain/progress-commands';
 export * from './domain/automatic-completion';
+export * from './domain/foundation-rules';
 export * from './domain/foundation-practice';
 export * from './domain/practice-completion';
 export * from './domain/password-practice';

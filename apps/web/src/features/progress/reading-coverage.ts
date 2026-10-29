@@ -7,3 +7,4 @@ export function addReadingExposure(previous:readonly (readonly [number,number])[
  for(const [a,b] of sorted){const last=merged[merged.length-1];if(last&&a<=last[1])last[1]=Math.max(last[1],b);else merged.push([a,b])}return merged;
 }
 export function chapterWasTraversed(ranges:readonly (readonly [number,number])[]){return ranges.reduce((sum,[a,b])=>sum+b-a,0)>=.8&&ranges.some(([,end])=>end>=.98)}
+export function readingEligible(ranges:readonly (readonly [number,number])[],attentionMs:number,minimumMs:number){return attentionMs>=minimumMs&&chapterWasTraversed(ranges)}

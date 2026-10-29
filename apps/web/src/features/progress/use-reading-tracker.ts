@@ -1,4 +1,5 @@
 'use client';
+import {readingAuxiliaryIsOpen} from '@/features/study/concept-detail-state';
 import {useEffect,useRef} from 'react';
 import {READING_SECTION_SECONDS} from '@qapath/progress';
 import {addReadingExposure,chapterWasTraversed} from './reading-coverage';
@@ -24,7 +25,7 @@ export function useReadingTracker(week:number){
   let last=performance.now();
   const timer=setInterval(()=>{
    const now=performance.now(),delta=Math.min(now-last,500);last=now;
-   if(document.visibilityState!=='visible'||!document.hasFocus()||document.querySelector('dialog[open]'))return;
+   if(document.visibilityState!=='visible'||!document.hasFocus()||(document.querySelector('dialog[open]')||readingAuxiliaryIsOpen()))return;
    for(const element of visible){
     const section=Number(element.dataset.readingSection);
     if(sent.has(section))continue;

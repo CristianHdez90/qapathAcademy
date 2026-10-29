@@ -1,0 +1,21 @@
+/* Globos por estado: un panel bajo el flujo, sin cubrir el texto ni salir del viewport. */
+.state-balloons{max-width:82ch}
+.state-balloons-title{font-weight:700;margin:0 0 4px}
+.state-balloons-flow{list-style:none;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:0;margin:12px 0}
+.state-balloons-flow li{display:flex;align-items:center;gap:8px}
+.state-node{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 14px;border-radius:999px;border:1px solid #3d6a80;background:#0c1f2e;color:#e8f3fb;font:inherit;cursor:pointer}
+.state-node:focus-visible{outline:2px solid #7bcfff;outline-offset:3px}
+.state-balloons-flow li.is-open .state-node,.state-node[aria-expanded="true"]{border-color:#5dd8c2;background:#123a3a}
+.state-number{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#5dd8c2;color:#06202a;font-weight:700;font-size:13px}
+.state-arrow{color:#7d98ab}
+.state-balloon{border:1px solid #5dd8c2;border-radius:14px;background:#0c2430;padding:14px 18px;box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.state-balloon-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.state-balloon-label{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:#9fd8c7;margin:10px 0 4px}
+.state-balloon ul{margin:0 0 10px;padding-left:20px;line-height:1.6}
+.state-balloon dl{display:grid;gap:6px;margin:0}.state-balloon dt{font-size:12px;color:#7bcfff}.state-balloon dd{margin:0;color:#dbe8f2}
+.state-balloons-list{display:none}
+@media (prefers-reduced-motion:reduce){.state-balloons-flow,.state-balloon,.state-balloons-help{display:none!important}.state-balloons-list{display:grid;gap:10px;padding-left:20px}}
+.foundation-diagram{margin:0;max-width:100%}
+.foundation-diagram img{display:block;width:100%;height:auto;max-height:70vh;object-fit:contain;background:#0b1622;border:1px solid #2f5266;border-radius:12px;padding:8px}
+.foundation-diagram details{margin-top:10px}
+.foundation-diagram pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;background:#0c1f2e;border-radius:8px;padding:10px}

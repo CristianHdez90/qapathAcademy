@@ -1,0 +1,3 @@
+.concept-details-fallback strong{display:block;color:#b1f0dc;margin-bottom:4px}
+.step-detail-goal,.step-detail-evidence{background:#173d48;padding:12px;border-radius:8px}.step-detail-evidence{border-left:3px solid #80e0bb}.step-detail-caution{border-left:3px solid #e7ba78;padding-left:12px}
+.concept-details-fallback{padding:20px;border:1px solid #527689;border-radius:12px;margin-top:20px}.concept-details-fallback details{padding:14px 0;border-bottom:1px solid #527689}.concept-details-fallback summary{cursor:pointer}

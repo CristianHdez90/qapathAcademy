@@ -1,0 +1,9 @@
+.lesson-info .lesson-link{display:block}
+.lesson-info .lesson-link>span{font-size:10px;font-weight:800;color:#66e3be;letter-spacing:1.2px}
+.module-chapters{display:grid;gap:6px;margin:10px 0 0;padding-left:20px}
+.module-chapters li{font-size:13px;line-height:1.5}
+.module-chapters a{color:#d8e8f5}.module-chapters a:hover{color:#7be9c7}
+.module-chapters small{display:block;color:#8fa4bf;font-size:11px}
+
+.module-closing-test{margin:14px 0 0;font-size:13px;color:#a6b6cb}
+.course-module+.course-module{margin-top:36px;padding-top:12px;border-top:1px solid #293b56}

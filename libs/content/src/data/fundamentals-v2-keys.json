@@ -1,0 +1,554 @@
+{
+ "FND-W01-C01-T01-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "El error es la acción humana que lo originó (olvidar el bloqueo). Tú viste su consecuencia.",
+   "b": "Correcto. Es el comportamiento incorrecto observable al ejecutar; el defecto está en el código y el error fue humano.",
+   "c": "Una mejora de QA actúa sobre el proceso, por ejemplo con revisiones de concurrencia; no es lo que se observa."
+  }
+ },
+ "FND-W01-C01-T01-Q2": {
+  "correct": "b",
+  "feedback": {
+   "a": "Las pruebas muestran la presencia de defectos, no su ausencia (lo verás en el Capítulo 05).",
+   "b": "Correcto. La información vale para lo que probaste, no para todo el producto.",
+   "c": "Las revisiones encuentran defectos que la ejecución no ve, como ambigüedades."
+  }
+ },
+ "FND-W01-C01-T02-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Evalúa la regla RES-R3: qué debe hacer el sistema.",
+   "b": "Mide con qué rapidez lo hace: es no funcional (eficiencia de desempeño).",
+   "c": "Es una revisión basada en la estructura y sin ejecutar, no una evaluación del comportamiento."
+  }
+ },
+ "FND-W01-C01-T03-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "La reserva funciona igual; lo que cambia es cómo interactúa la persona con ella.",
+   "b": "Correcto. Es una característica no funcional del modelo 25010:2023, que antes se llamaba usabilidad.",
+   "c": "La mantenibilidad se refiere a modificar el producto, no a usarlo."
+  }
+ },
+ "FND-W01-C01-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Evalúa desempeño (no funcional) y se diseña desde la interfaz externa (caja negra): los dos ejes se combinan.",
+   "b": "No comprueba reglas de negocio, sino tiempos.",
+   "c": "No usa la estructura interna para diseñar el caso."
+  }
+ },
+ "FND-W01-C01-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Suele hacerla DEV, pero QA también puede diseñar casos desde la estructura: la responsabilidad es del equipo.",
+   "b": "Correcto. Cubrir la rama «ocupado → conflicto» verifica RES-R3 con un diseño basado en la estructura.",
+   "c": "La cobertura mide qué se ejecutó, no si todo es correcto."
+  }
+ },
+ "FND-W01-C01-T06-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Es una técnica basada en la experiencia (§4.4).",
+   "b": "Eso se parece al análisis de riesgo, no a esta técnica.",
+   "c": "Las pruebas exhaustivas son imposibles (Capítulo 05)."
+  }
+ },
+ "FND-W01-C01-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Encontraste un defecto en un requisito sin ejecutar nada.",
+   "b": "No se ejecutó software.",
+   "c": "La revisión es una actividad de testing (capítulo 3 del CTFL)."
+  }
+ },
+ "FND-W01-C01-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "No se ejecuta y se mira el interior.",
+   "b": "Correcto. Busca un defecto en el comportamiento esperado (RES-R3), usando la estructura y sin ejecutar.",
+   "c": "Sí es estática, pero mira el interior y la condición de carrera rompe una regla funcional."
+  }
+ },
+ "FND-W01-C02-T01-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Smoke dice para qué se ejecuta, no qué nivel ni qué técnica.",
+   "b": "Smoke no es un nivel ISTQB; los niveles son cinco y describen el objeto que se prueba.",
+   "c": "Smoke no dice cómo se diseñan los casos. La opción correcta es «El propósito de una ejecución rápida tras una build: comprobar que lo crítico funciona antes de seguir»: Cada término responde a una pregunta distinta: hasta dónde llega la prueba (alcance: E2E o aislada), para qué se ejecuta ahora (propósito: smoke o sanity), qué relación tiene con un cambio (confirmación o regresión), cómo se diseña y ejecuta (exploratoria o basada en casos) y quién o qué la ejecuta (manual o automatizada)."
+  }
+ },
+ "FND-W01-C02-T02-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "El CTFL v4.0.1 define cinco niveles; E2E describe alcance.",
+   "b": "Correcto. Alcance y nivel son ejes distintos.",
+   "c": "Puedes probar una sola función del sistema completo sin recorrer el flujo entero."
+  }
+ },
+ "FND-W01-C02-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Gastarías tiempo en una build que no es apta.",
+   "b": "La decisión es sobre la build, no sobre el sprint.",
+   "c": "Correcto. Ese es el propósito del smoke."
+  }
+ },
+ "FND-W01-C02-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. No es una categoría normativa rígida.",
+   "b": "El CTFL no lo define como nivel. La opción correcta es «Que es un término de práctica cuyo alcance se acuerda en cada equipo»: Una sanity es una comprobación rápida y acotada de que un cambio concreto parece razonable antes de dedicarle más esfuerzo.",
+   "c": "La regresión es amplia; la sanity es focalizada."
+  }
+ },
+ "FND-W01-C02-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Eso es parte de la regresión, con otro objetivo.",
+   "b": "Correcto. Es la prueba de confirmación.",
+   "c": "Es exploratoria y responde a otra pregunta."
+  }
+ },
+ "FND-W01-C02-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Sí sirve, pero responde a otra pregunta. La opción correcta es «Porque el arreglo pudo romper otras funciones, como cancelar o reprogramar»: La regresión confirma que un cambio no causó efectos adversos en lo que ya funcionaba (CTFL §2.2.3).",
+   "b": "La regresión se selecciona por riesgo e impacto.",
+   "c": "Correcto. Re-test y regresión tienen objetivos distintos."
+  }
+ },
+ "FND-W01-C02-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Sin misión ni notas no hay evidencia.",
+   "b": "No deja evidencia ni foco. La opción correcta es «Una misión, un tiempo acotado y notas de lo probado y hallado»: La prueba exploratoria diseña, ejecuta y aprende a la vez, guiada por una misión (charter) con tiempo acotado y notas.",
+   "c": "Entonces deja de ser exploratoria. La opción correcta es «Una misión, un tiempo acotado y notas de lo probado y hallado»: La prueba exploratoria diseña, ejecuta y aprende a la vez, guiada por una misión (charter) con tiempo acotado y notas."
+  }
+ },
+ "FND-W01-C02-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Es una valoración humana. La opción correcta es «La comprobación de conflicto por API, que se repetirá en cada build»: Manual o automatizada es la forma de ejecución, independiente del objetivo: hay pruebas funcionales y no funcionales en ambos modos.",
+   "b": "Correcto. Es repetitiva, estable y valiosa.",
+   "c": "Es inestable: el mantenimiento sería alto."
+  }
+ },
+ "FND-W01-C02-T09-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Es imposible y además falso. La opción correcta es «Qué no se probó y qué riesgo queda»: El riesgo combina la probabilidad de un problema y su impacto.",
+   "b": "La cantidad no informa del riesgo. La opción correcta es «Qué no se probó y qué riesgo queda»: El riesgo combina la probabilidad de un problema y su impacto.",
+   "c": "Correcto. Es la base de una decisión informada."
+  }
+ },
+ "FND-W01-C03-T01-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Es un tipo de prueba relacionado con cambios.",
+   "b": "Correcto. Es uno de los cinco niveles.",
+   "c": "Es un propósito de ejecución. La opción correcta es «Integración de componentes»: Un nivel agrupa actividades de prueba según el objeto: desde un componente hasta el sistema en su entorno, cada uno con sus objetivos y base de prueba."
+  }
+ },
+ "FND-W01-C03-T02-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Es una pieza aislada.",
+   "b": "No participa el sistema completo. La opción correcta es «De componente»: Las pruebas de componente prueban componentes aislados y suelen necesitar dobles de prueba.",
+   "c": "No la valida el negocio. La opción correcta es «De componente»: Las pruebas de componente prueban componentes aislados y suelen necesitar dobles de prueba."
+  }
+ },
+ "FND-W01-C03-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Ambos son parte de ReservaYa. La opción correcta es «Integración de componentes»: La integración de componentes prueba las interfaces e interacciones entre componentes del mismo sistema, por ejemplo un servicio y su repositorio de datos.",
+   "b": "Participan dos piezas. La opción correcta es «Integración de componentes»: La integración de componentes prueba las interfaces e interacciones entre componentes del mismo sistema, por ejemplo un servicio y su repositorio de datos.",
+   "c": "Correcto. Interfaces internas del mismo sistema."
+  }
+ },
+ "FND-W01-C03-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Es el sistema completo.",
+   "b": "Es de componente. La opción correcta es «Reservar, cancelar y ver el historial en la aplicación completa en QA»: Las pruebas de sistema evalúan el comportamiento y las capacidades del sistema completo, a menudo extremo a extremo, incluidas sus características no funcionales.",
+   "c": "Es de aceptación. La opción correcta es «Reservar, cancelar y ver el historial en la aplicación completa en QA»: Las pruebas de sistema evalúan el comportamiento y las capacidades del sistema completo, a menudo extremo a extremo, incluidas sus características no funcionales."
+  }
+ },
+ "FND-W01-C03-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "El proveedor no es parte del sistema. La opción correcta es «Integración de sistemas»: La integración de sistemas prueba las interfaces entre el sistema y otros sistemas o servicios externos, como un proveedor de notificaciones o de pagos.",
+   "b": "Correcto. Es una interfaz con un sistema externo.",
+   "c": "No valida la necesidad del usuario. La opción correcta es «Integración de sistemas»: La integración de sistemas prueba las interfaces entre el sistema y otros sistemas o servicios externos, como un proveedor de notificaciones o de pagos."
+  }
+ },
+ "FND-W01-C03-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Eso es sobre todo verificación. La opción correcta es «¿El producto resuelve la necesidad del negocio o del usuario?»: La aceptación valida que el sistema satisface las necesidades y está listo para usarse.",
+   "b": "Es una métrica de caja blanca. La opción correcta es «¿El producto resuelve la necesidad del negocio o del usuario?»: La aceptación valida que el sistema satisface las necesidades y está listo para usarse.",
+   "c": "Correcto. Es validación."
+  }
+ },
+ "FND-W01-C03-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Muchas introducciones agrupan las dos integraciones en un solo «nivel de integración».",
+   "b": "El CTFL enumera cinco. La opción correcta es «Reconocer que agrupa las dos integraciones y usar los cinco del CTFL v4.0.1»: Muchas introducciones agrupan las dos integraciones en un solo «nivel de integración».",
+   "c": "La simplificación es útil si se explica. La opción correcta es «Reconocer que agrupa las dos integraciones y usar los cinco del CTFL v4.0.1»: Muchas introducciones agrupan las dos integraciones en un solo «nivel de integración»."
+  }
+ },
+ "FND-W01-C03-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "QA también aporta casos. La opción correcta es «La calidad es responsabilidad de todo el equipo; los roles describen participaciones habituales»: No hay niveles «de DEV» ni «de QA».",
+   "b": "Correcto. No hay niveles «de DEV» ni «de QA».",
+   "c": "La lidera negocio con apoyo del equipo. La opción correcta es «La calidad es responsabilidad de todo el equipo; los roles describen participaciones habituales»: No hay niveles «de DEV» ni «de QA»."
+  }
+ },
+ "FND-W01-C04-T01-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Habla de forma, no de proporciones exactas.",
+   "b": "No hay proporciones obligatorias. La opción correcta es «Más pruebas pequeñas y rápidas y menos recorridos amplios»: Mike Cohn propuso la pirámide en «Succeeding with Agile» con capas de unidad, servicio e interfaz: muchas pruebas rápidas y aisladas abajo y pocas pruebas amplias arriba (CTFL §5.1.6).",
+   "c": "Se mantienen pocos y de alto valor. La opción correcta es «Más pruebas pequeñas y rápidas y menos recorridos amplios»: Mike Cohn propuso la pirámide en «Succeeding with Agile» con capas de unidad, servicio e interfaz: muchas pruebas rápidas y aisladas abajo y pocas pruebas amplias arriba (CTFL §5.1.6)."
+  }
+ },
+ "FND-W01-C04-T02-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Más lentitud y fragilidad. La opción correcta es «Moverlo a pruebas de componente y dejar como mucho un E2E representativo»: Las reglas puras, como no reservar en el pasado o los bloques de una hora, se prueban en la capa de componente: el feedback llega en segundos y los fallos son fáciles de diagnosticar.",
+   "b": "Correcto. Las reglas puras, como no reservar en el pasado o los bloques de una hora, se prueban en la capa de componente: el feedback llega en segundos y los fallos son fáciles de diagnosticar.",
+   "c": "Es una regla de negocio. La opción correcta es «Moverlo a pruebas de componente y dejar como mucho un E2E representativo»: Las reglas puras, como no reservar en el pasado o los bloques de una hora, se prueban en la capa de componente: el feedback llega en segundos y los fallos son fáciles de diagnosticar."
+  }
+ },
+ "FND-W01-C04-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Más lento y frágil. La opción correcta es «En la capa de servicio o API»: Las interacciones entre API, base de datos y proveedores se prueban en la capa de servicio o integración, por ejemplo con pruebas de contrato.",
+   "b": "No ejercita el contrato HTTP. La opción correcta es «En la capa de servicio o API»: Las interacciones entre API, base de datos y proveedores se prueban en la capa de servicio o integración, por ejemplo con pruebas de contrato.",
+   "c": "Correcto. Las interacciones entre API, base de datos y proveedores se prueban en la capa de servicio o integración, por ejemplo con pruebas de contrato."
+  }
+ },
+ "FND-W01-C04-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Es el valor principal.",
+   "b": "Se verifica de forma más barata. La opción correcta es «Reservar un turno de punta a punta»: Los E2E se reservan para los recorridos críticos del usuario: los que, si fallan, impiden el valor principal del producto.",
+   "c": "Va en la base de la pirámide. La opción correcta es «Reservar un turno de punta a punta»: Los E2E se reservan para los recorridos críticos del usuario: los que, si fallan, impiden el valor principal del producto."
+  }
+ },
+ "FND-W01-C04-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Es el patrón opuesto. La opción correcta es «Un feedback lento y fallos intermitentes difíciles de diagnosticar»: El cono de helado aparece cuando hay muchas pruebas manuales o E2E arriba y pocas abajo.",
+   "b": "Correcto. El cono de helado aparece cuando hay muchas pruebas manuales o E2E arriba y pocas abajo.",
+   "c": "No es el cono. La opción correcta es «Un feedback lento y fallos intermitentes difíciles de diagnosticar»: El cono de helado aparece cuando hay muchas pruebas manuales o E2E arriba y pocas abajo."
+  }
+ },
+ "FND-W01-C04-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "No hay correspondencia uno a uno. La opción correcta es «La pirámide orienta la automatización; los niveles describen qué objeto se prueba»: La pirámide es un modelo para la cartera de automatización; los niveles clasifican actividades según el objeto.",
+   "b": "Se complementan. La opción correcta es «La pirámide orienta la automatización; los niveles describen qué objeto se prueba»: La pirámide es un modelo para la cartera de automatización; los niveles clasifican actividades según el objeto.",
+   "c": "Correcto. La pirámide es un modelo para la cartera de automatización; los niveles clasifican actividades según el objeto."
+  }
+ },
+ "FND-W01-C04-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Los cuadrantes de prueba (CTFL §5.1.7) clasifican las pruebas según estén orientadas al negocio o a la tecnología y según apoyen al equipo o critiquen el producto.",
+   "b": "No lo dicen. La opción correcta es «Para revisar que la estrategia cubre distintas perspectivas: negocio, tecnología, apoyo y crítica»: Los cuadrantes de prueba (CTFL §5.1.7) clasifican las pruebas según estén orientadas al negocio o a la tecnología y según apoyen al equipo o critiquen el producto.",
+   "c": "Es un mapa complementario. La opción correcta es «Para revisar que la estrategia cubre distintas perspectivas: negocio, tecnología, apoyo y crítica»: Los cuadrantes de prueba (CTFL §5.1.7) clasifican las pruebas según estén orientadas al negocio o a la tecnología y según apoyen al equipo o critiquen el producto."
+  }
+ },
+ "FND-W01-C04-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Son lo más lento. La opción correcta es «Componente → integración o servicio → E2E críticos»: En cada PR se ejecutan primero las pruebas rápidas, luego las de integración y después los flujos críticos.",
+   "b": "Correcto. En cada PR se ejecutan primero las pruebas rápidas, luego las de integración y después los flujos críticos.",
+   "c": "El feedback llega tarde. La opción correcta es «Componente → integración o servicio → E2E críticos»: En cada PR se ejecutan primero las pruebas rápidas, luego las de integración y después los flujos críticos."
+  }
+ },
+ "FND-W02-C05-T01-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Las pruebas pueden mostrar que hay defectos, pero no pueden demostrar que no los hay.",
+   "b": "No se puede demostrar. La opción correcta es ««No encontramos fallos en los casos ejecutados.»»: Las pruebas pueden mostrar que hay defectos, pero no pueden demostrar que no los hay.",
+   "c": "Siempre queda riesgo residual. La opción correcta es ««No encontramos fallos en los casos ejecutados.»»: Las pruebas pueden mostrar que hay defectos, pero no pueden demostrar que no los hay."
+  }
+ },
+ "FND-W02-C05-T02-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Es inviable. La opción correcta es «Particiones y valores límite priorizados por riesgo»: Salvo en casos triviales no se puede probar todo.",
+   "b": "Correcto. Salvo en casos triviales no se puede probar todo.",
+   "c": "Es una regla crítica. La opción correcta es «Particiones y valores límite priorizados por riesgo»: Salvo en casos triviales no se puede probar todo."
+  }
+ },
+ "FND-W02-C05-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Llega tarde. La opción correcta es «Revisar la HU en el refinamiento»: Probar o revisar pronto, por ejemplo con pruebas estáticas en el refinamiento, encuentra defectos cuando corregirlos es más barato.",
+   "b": "Llega muy tarde. La opción correcta es «Revisar la HU en el refinamiento»: Probar o revisar pronto, por ejemplo con pruebas estáticas en el refinamiento, encuentra defectos cuando corregirlos es más barato.",
+   "c": "Correcto. Probar o revisar pronto, por ejemplo con pruebas estáticas en el refinamiento, encuentra defectos cuando corregirlos es más barato."
+  }
+ },
+ "FND-W02-C05-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Un número pequeño de componentes suele contener la mayoría de los defectos.",
+   "b": "Ignora la evidencia. La opción correcta es «Intensificar pruebas y revisiones en esa zona sin abandonar las demás»: Un número pequeño de componentes suele contener la mayoría de los defectos.",
+   "c": "Los otros módulos siguen teniendo riesgo."
+  }
+ },
+ "FND-W02-C05-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Perderías protección ante cambios. La opción correcta es «Revisarla y añadir casos y datos nuevos, sin eliminar la protección existente»: Si repites siempre las mismas pruebas con los mismos datos, dejan de encontrar defectos nuevos (tradicionalmente, «paradoja del pesticida»).",
+   "b": "Correcto. Si repites siempre las mismas pruebas con los mismos datos, dejan de encontrar defectos nuevos (tradicionalmente, «paradoja del pesticida»).",
+   "c": "Se desgasta. La opción correcta es «Revisarla y añadir casos y datos nuevos, sin eliminar la protección existente»: Si repites siempre las mismas pruebas con los mismos datos, dejan de encontrar defectos nuevos (tradicionalmente, «paradoja del pesticida»)."
+  }
+ },
+ "FND-W02-C05-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Ignora el contexto. La opción correcta es «Adaptar técnicas y rigor al dominio, al riesgo y al equipo»: No se prueba igual una aplicación de reservas, un videojuego o un dispositivo médico.",
+   "b": "Ignora el contexto. La opción correcta es «Adaptar técnicas y rigor al dominio, al riesgo y al equipo»: No se prueba igual una aplicación de reservas, un videojuego o un dispositivo médico.",
+   "c": "Correcto. No se prueba igual una aplicación de reservas, un videojuego o un dispositivo médico."
+  }
+ },
+ "FND-W02-C05-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Un producto sin fallos detectados puede no servir a sus usuarios.",
+   "b": "No es el caso. La opción correcta es «La falacia de la ausencia de defectos»: Un producto sin fallos detectados puede no servir a sus usuarios.",
+   "c": "No es el caso. La opción correcta es «La falacia de la ausencia de defectos»: Un producto sin fallos detectados puede no servir a sus usuarios."
+  }
+ },
+ "FND-W02-C05-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "No son una secuencia. La opción correcta es «Como criterios para justificar decisiones de prueba en cada momento del sprint»: Los principios no son una secuencia, sino criterios para decidir en cada actividad del sprint: refinamiento, desarrollo y antes de liberar.",
+   "b": "Correcto. Los principios no son una secuencia, sino criterios para decidir en cada actividad del sprint: refinamiento, desarrollo y antes de liberar.",
+   "c": "Pierden su valor práctico. La opción correcta es «Como criterios para justificar decisiones de prueba en cada momento del sprint»: Los principios no son una secuencia, sino criterios para decidir en cada actividad del sprint: refinamiento, desarrollo y antes de liberar."
+  }
+ },
+ "FND-W02-C06-T01-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. El testing incluye revisiones.",
+   "b": "Las estáticas también son testing. La opción correcta es «Sí: es una prueba estática»: Las pruebas incluyen planificar, analizar, diseñar, revisar (estáticas), ejecutar y reportar.",
+   "c": "La automatización es una forma de ejecución, no un requisito."
+  }
+ },
+ "FND-W02-C06-T02-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Los niveles describen el objeto. La opción correcta es «Una técnica de diseño de casos»: Nivel es el objeto que se prueba; tipo, la característica evaluada; técnica, cómo derivar los casos; estrategia, el plan que los combina.",
+   "b": "Correcto. Nivel es el objeto que se prueba; tipo, la característica evaluada; técnica, cómo derivar los casos; estrategia, el plan que los combina.",
+   "c": "El tipo dice qué característica se evalúa."
+  }
+ },
+ "FND-W02-C06-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Aceptación sigue siendo un nivel. La opción correcta es «Porque agrupan las dos integraciones»: El CTFL v4.0.1 enumera cinco niveles.",
+   "b": "E2E no es un nivel. La opción correcta es «Porque agrupan las dos integraciones»: El CTFL v4.0.1 enumera cinco niveles.",
+   "c": "Correcto. El CTFL v4.0.1 enumera cinco niveles."
+  }
+ },
+ "FND-W02-C06-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Uno dice qué se evalúa; el otro, desde dónde se diseña.",
+   "b": "Falso como regla general. La opción correcta es «No funcional y caja negra»: Uno dice qué se evalúa; el otro, desde dónde se diseña.",
+   "c": "Falso como regla general. La opción correcta es «No funcional y caja negra»: Uno dice qué se evalúa; el otro, desde dónde se diseña."
+  }
+ },
+ "FND-W02-C06-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Tienen objetivos distintos. La opción correcta es «Se hacen ambos, con objetivos distintos»: El re-test confirma el defecto original; la regresión, los efectos del cambio.",
+   "b": "Correcto. El re-test confirma el defecto original; la regresión, los efectos del cambio.",
+   "c": "El re-test confirma el arreglo. La opción correcta es «Se hacen ambos, con objetivos distintos»: El re-test confirma el defecto original; la regresión, los efectos del cambio."
+  }
+ },
+ "FND-W02-C06-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "No se ejecuta nada. La opción correcta es «Una prueba estática»: La estática evalúa sin ejecutar y encuentra defectos antes.",
+   "b": "Las revisiones encuentran defectos. La opción correcta es «Una prueba estática»: La estática evalúa sin ejecutar y encuentra defectos antes.",
+   "c": "Correcto. La estática evalúa sin ejecutar y encuentra defectos antes."
+  }
+ },
+ "FND-W02-C06-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. E2E describe alcance; smoke y sanity, propósito; exploratoria, el estilo de diseño y ejecución.",
+   "b": "Describe alcance. La opción correcta es «Ninguna es un nivel ISTQB»: E2E describe alcance; smoke y sanity, propósito; exploratoria, el estilo de diseño y ejecución.",
+   "c": "Describe propósito. La opción correcta es «Ninguna es un nivel ISTQB»: E2E describe alcance; smoke y sanity, propósito; exploratoria, el estilo de diseño y ejecución."
+  }
+ },
+ "FND-W02-C06-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Responden a preguntas distintas. La opción correcta es «Se complementan»: La pirámide orienta la cartera automatizada; los cuadrantes, la cobertura de perspectivas.",
+   "b": "Correcto. La pirámide orienta la cartera automatizada; los cuadrantes, la cobertura de perspectivas.",
+   "c": "No fijan proporciones. La opción correcta es «Se complementan»: La pirámide orienta la cartera automatizada; los cuadrantes, la cobertura de perspectivas."
+  }
+ },
+ "FND-W02-C06-T09-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "No reduce el mayor riesgo. La opción correcta es «Lo de mayor impacto y probabilidad»: Con probabilidad × impacto, tiempo disponible, habilidades y herramientas del equipo, declarando el riesgo residual.",
+   "b": "Sin criterio. La opción correcta es «Lo de mayor impacto y probabilidad»: Con probabilidad × impacto, tiempo disponible, habilidades y herramientas del equipo, declarando el riesgo residual.",
+   "c": "Correcto. Con probabilidad × impacto, tiempo disponible, habilidades y herramientas del equipo, declarando el riesgo residual."
+  }
+ },
+ "FND-W02-C06-T10-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto: repetitivo y estable.",
+   "b": "Requiere criterio humano. La opción correcta es «El conflicto 409 por API»: Se automatiza lo repetitivo, estable y valioso.",
+   "c": "Se pierde feedback rápido. La opción correcta es «El conflicto 409 por API»: Se automatiza lo repetitivo, estable y valioso."
+  }
+ },
+ "FND-W02-C07-T01-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Es solo la formulación. La opción correcta es «Acordar el comportamiento con ejemplos concretos entre negocio, QA y desarrollo»: BDD es un proceso colaborativo de descubrimiento, formulación y automatización basado en ejemplos concretos.",
+   "b": "Correcto. BDD es un proceso colaborativo de descubrimiento, formulación y automatización basado en ejemplos concretos.",
+   "c": "Es una herramienta, no un requisito. La opción correcta es «Acordar el comportamiento con ejemplos concretos entre negocio, QA y desarrollo»: BDD es un proceso colaborativo de descubrimiento, formulación y automatización basado en ejemplos concretos."
+  }
+ },
+ "FND-W02-C07-T02-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. En el descubrimiento se buscan reglas, ejemplos, contraejemplos y preguntas abiertas.",
+   "b": "Aporta valor. La opción correcta es «Revela casos límite y reglas ocultas, como la confirmación simultánea»: En el descubrimiento se buscan reglas, ejemplos, contraejemplos y preguntas abiertas.",
+   "c": "Los complementa. La opción correcta es «Revela casos límite y reglas ocultas, como la confirmación simultánea»: En el descubrimiento se buscan reglas, ejemplos, contraejemplos y preguntas abiertas."
+  }
+ },
+ "FND-W02-C07-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Es una aserción técnica. La opción correcta es «Entonces solo una reserva queda confirmada»: En español, Gherkin usa la cabecera «# language: es» y las palabras Característica, Escenario, Dado, Cuando, Entonces, Y y Pero.",
+   "b": "Es una acción. La opción correcta es «Entonces solo una reserva queda confirmada»: En español, Gherkin usa la cabecera «# language: es» y las palabras Característica, Escenario, Dado, Cuando, Entonces, Y y Pero.",
+   "c": "Correcto: resultado observable de negocio."
+  }
+ },
+ "FND-W02-C07-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Los escenarios pueden conectarse a pruebas automatizadas, que es la tercera práctica de BDD.",
+   "b": "No es reproducible. La opción correcta es «Controlar la concurrencia y los datos para que sea reproducible»: Los escenarios pueden conectarse a pruebas automatizadas, que es la tercera práctica de BDD.",
+   "c": "El escenario no lo garantiza. La opción correcta es «Controlar la concurrencia y los datos para que sea reproducible»: Los escenarios pueden conectarse a pruebas automatizadas, que es la tercera práctica de BDD."
+  }
+ },
+ "FND-W02-C07-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Está atado a la interfaz y no expresa la regla.",
+   "b": "Correcto. El escenario expresa comportamiento de negocio; el caso manual detalla pasos de ejecución; la aserción técnica comprueba un detalle de implementación.",
+   "c": "No comprueba un detalle de implementación."
+  }
+ },
+ "FND-W02-C07-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "No es reproducible. La opción correcta es ««Dado que el turno del martes a las 10:00 está disponible»»: Palabras como «rápido», «correcto» o «varios» no son verificables.",
+   "b": "Sigue siendo ambiguo. La opción correcta es ««Dado que el turno del martes a las 10:00 está disponible»»: Palabras como «rápido», «correcto» o «varios» no son verificables.",
+   "c": "Correcto. Palabras como «rápido», «correcto» o «varios» no son verificables."
+  }
+ },
+ "FND-W02-C07-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Los escenarios se agrupan por regla con «Regla:», con un ejemplo positivo, uno de conflicto y uno de fecha pasada.",
+   "b": "Faltan los negativos. La opción correcta es «Reserva exitosa, conflicto y fecha pasada»: Los escenarios se agrupan por regla con «Regla:», con un ejemplo positivo, uno de conflicto y uno de fecha pasada.",
+   "c": "Mezcla reglas. La opción correcta es «Reserva exitosa, conflicto y fecha pasada»: Los escenarios se agrupan por regla con «Regla:», con un ejemplo positivo, uno de conflicto y uno de fecha pasada."
+  }
+ },
+ "FND-W02-C07-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Genera defectos. La opción correcta es «Registrarla y resolverla con el PO antes de comprometer el escenario»: Las dudas del descubrimiento se registran y se resuelven con el PO antes de comprometer el escenario o automatizarlo.",
+   "b": "Correcto. Las dudas del descubrimiento se registran y se resuelven con el PO antes de comprometer el escenario o automatizarlo.",
+   "c": "Llega tarde. La opción correcta es «Registrarla y resolverla con el PO antes de comprometer el escenario»: Las dudas del descubrimiento se registran y se resuelven con el PO antes de comprometer el escenario o automatizarlo."
+  }
+ },
+ "FND-W02-C08-T01-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Deployment es llevar una versión a un ambiente: instalarla y configurarla para que esté en ejecución.",
+   "b": "No siempre ocurren a la vez. La opción correcta es «No: hubo deployment, pero los usuarios aún no tienen la función»: Deployment es llevar una versión a un ambiente: instalarla y configurarla para que esté en ejecución.",
+   "c": "No depende del navegador. La opción correcta es «No: hubo deployment, pero los usuarios aún no tienen la función»: Deployment es llevar una versión a un ambiente: instalarla y configurarla para que esté en ejecución."
+  }
+ },
+ "FND-W02-C08-T02-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "QA aporta evidencia, no decide sola. La opción correcta es «El PO, con la evidencia del equipo»: Release es poner la funcionalidad a disposición de los usuarios.",
+   "b": "Correcto. Release es poner la funcionalidad a disposición de los usuarios.",
+   "c": "Depende de la organización. La opción correcta es «El PO, con la evidencia del equipo»: Release es poner la funcionalidad a disposición de los usuarios."
+  }
+ },
+ "FND-W02-C08-T03-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Eso sí lo permite. La opción correcta es «Que el código oculto sea seguro frente a usuarios malintencionados»: Los feature flags permiten activar, desactivar, medir y revertir funciones sin redesplegar.",
+   "b": "Eso también lo permite. La opción correcta es «Que el código oculto sea seguro frente a usuarios malintencionados»: Los feature flags permiten activar, desactivar, medir y revertir funciones sin redesplegar.",
+   "c": "Correcto: no es un control de seguridad."
+  }
+ },
+ "FND-W02-C08-T04-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. En un lanzamiento progresivo la función se libera en porcentajes crecientes y se observan métricas en cada paso antes de ampliar.",
+   "b": "Aumenta el impacto. La opción correcta es «Desactivar el flag y analizar antes de seguir»: En un lanzamiento progresivo la función se libera en porcentajes crecientes y se observan métricas en cada paso antes de ampliar.",
+   "c": "El 10 % son usuarios reales. La opción correcta es «Desactivar el flag y analizar antes de seguir»: En un lanzamiento progresivo la función se libera en porcentajes crecientes y se observan métricas en cada paso antes de ampliar."
+  }
+ },
+ "FND-W02-C08-T05-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Eso es producción. La opción correcta es «Para ensayar configuración e integraciones cercanas a producción»: Local o desarrollo sirve para construir y depurar; QA, para validar requisitos y defectos; staging, para ensayar configuración e integraciones cercanas a producción; producción presta el servicio real.",
+   "b": "Correcto. Local o desarrollo sirve para construir y depurar; QA, para validar requisitos y defectos; staging, para ensayar configuración e integraciones cercanas a producción; producción presta el servicio real.",
+   "c": "Eso es local. La opción correcta es «Para ensayar configuración e integraciones cercanas a producción»: Local o desarrollo sirve para construir y depurar; QA, para validar requisitos y defectos; staging, para ensayar configuración e integraciones cercanas a producción; producción presta el servicio real."
+  }
+ },
+ "FND-W02-C08-T06-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "Varía. La opción correcta es «Los ambientes dependen de cada organización y producto»: Hay sandbox, integración, UAT y entornos efímeros por PR.",
+   "b": "No es así. La opción correcta es «Los ambientes dependen de cada organización y producto»: Hay sandbox, integración, UAT y entornos efímeros por PR.",
+   "c": "Correcto. Hay sandbox, integración, UAT y entornos efímeros por PR."
+  }
+ },
+ "FND-W02-C08-T07-Q1": {
+  "correct": "a",
+  "feedback": {
+   "a": "Correcto. Se prefieren datos sintéticos.",
+   "b": "Expone datos personales. La opción correcta es «Preferir datos sintéticos; si es imprescindible, enmascarar, autorizar y limitar el acceso»: Se prefieren datos sintéticos.",
+   "c": "Expone secretos. La opción correcta es «Preferir datos sintéticos; si es imprescindible, enmascarar, autorizar y limitar el acceso»: Se prefieren datos sintéticos."
+  }
+ },
+ "FND-W02-C08-T08-Q1": {
+  "correct": "b",
+  "feedback": {
+   "a": "Afecta a usuarios reales. La opción correcta es «Un smoke no destructivo y controlado»: Tras desplegar se ejecuta un smoke acotado y no destructivo.",
+   "b": "Correcto. Tras desplegar se ejecuta un smoke acotado y no destructivo.",
+   "c": "Es destructivo. La opción correcta es «Un smoke no destructivo y controlado»: Tras desplegar se ejecuta un smoke acotado y no destructivo."
+  }
+ },
+ "FND-W02-C08-T09-Q1": {
+  "correct": "c",
+  "feedback": {
+   "a": "No es evidencia de calidad. La opción correcta es «Evidencia de pruebas, métricas, riesgos aceptados y plan de reversión»: La decisión de salida se basa en evidencia: resultados de pruebas, defectos abiertos, métricas, riesgo residual aceptado y plan de reversión.",
+   "b": "No es evidencia. La opción correcta es «Evidencia de pruebas, métricas, riesgos aceptados y plan de reversión»: La decisión de salida se basa en evidencia: resultados de pruebas, defectos abiertos, métricas, riesgo residual aceptado y plan de reversión.",
+   "c": "Correcto. La decisión de salida se basa en evidencia: resultados de pruebas, defectos abiertos, métricas, riesgo residual aceptado y plan de reversión."
+  }
+ }
+}

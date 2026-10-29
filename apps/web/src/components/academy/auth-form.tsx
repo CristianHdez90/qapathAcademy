@@ -12,7 +12,7 @@ export function AuthForm({mode}:{mode:'login'|'register'}){
   if(register&&password!==confirm){setError('Las contraseñas no coinciden.');return;}
   setBusy(true);try{
    if(register){const result=await signUp(email,password);setMessage(result.message+' Revisa tu correo antes de iniciar sesión.');setPassword('');setConfirm('');}
-   else{const outcome=await signIn(email,password);router.replace(authRedirect(outcome));}
+   else{const outcome=await signIn(email,password);router.replace(authRedirect(outcome,new URLSearchParams(location.search).get('next')));}
   }catch(e){setError(e instanceof Error?e.message:'No fue posible completar la solicitud.')}finally{setBusy(false)}
  }
  return <div className="auth-page"><section className="auth-card"><p className="eyebrow">QAPATH ACADEMY · IDENTIDAD</p>
