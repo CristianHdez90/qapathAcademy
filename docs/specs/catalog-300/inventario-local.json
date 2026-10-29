@@ -1,0 +1,159 @@
+{
+  "branch": "codex/catalog-300",
+  "base": "5dcbdf45b5b21b43d8f99ae01e0e62dbaa6c60c2",
+  "checkedAt": "2026-10-29T10:26:05.001Z",
+  "baselineCount": 111,
+  "baselineModified": [
+    {
+      "file": "apps/api/src/app.module.ts",
+      "sha256": "3fddf2f3b30d920c00868750b1e19c42b319bf7264fd405621319cf9ac6d2978",
+      "currentSha256": "c75795264b3fc2f9d563f59ccea395e97f4ac7e91762adb166f122022dc31c01"
+    },
+    {
+      "file": "apps/web/next-env.d.ts",
+      "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc",
+      "currentSha256": "1862ac4bbbc5192d4bf562161df66ea547ed3e67173100656ab606ae9797db2b"
+    },
+    {
+      "file": "apps/web/src/components/layout/sidebar.tsx",
+      "sha256": "4dcf6b7d435919b438e3b17a7e99bc6f1321f8c8d83a7d319a6fbf92cad14a7f",
+      "currentSha256": "cb37e794a6436bc4a8935ef51410deed653c676bc89541004fcdd427a23c2307"
+    },
+    {
+      "file": "apps/web/src/features/navigation/learning-tree.json",
+      "sha256": "731d949598c5d716127930bd80110110c5f35e3386a1f51db21a89393443a9c1",
+      "currentSha256": "965bfb9a3742ecadaf0d55ba07193200ffcb30b6baa5b6c102faa72b1db70b2b"
+    },
+    {
+      "file": "libs/learning/src/index.ts",
+      "sha256": "0238c27ec13889419feccdba6fbe32363f46563094fda4d9559df5df8c9c499e",
+      "currentSha256": "bd98d71c511183d5246f1a58cd7eb65dfe5543546447d560d711b4c192a622c0"
+    },
+    {
+      "file": "packages/contracts/src/index.ts",
+      "sha256": "3b53e1bd6ba0d5dbcb3b10ed8fb96ca6e10008383222f229e26b9319e9fc9f2f",
+      "currentSha256": "554106e002110db67fa8f09409e5c2b166fb055545e22890fdeccac3329d79f4"
+    },
+    {
+      "file": "tests/foundation-v2.test.mjs",
+      "sha256": "ddbc2614b6d808ff94d872338e3873a08aca230f365b9681d7f7cdbf31d95c7f",
+      "currentSha256": "8451590b3be860f99b8a386e4478992bc3bcac8f5a216b287a35c8aeca31032d"
+    }
+  ],
+  "protected": [
+    {
+      "file": "apps/api/src/infrastructure/adapters/postgres-progress.adapter.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/learning-navigation.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/progress-provider.tsx",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/reading-coverage.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-lesson-pagination.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-reading-tracker.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/progress/src/domain/automatic-completion.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/progress/src/domain/progress-commands.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/progress/src/domain/progress.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/progress/src/index.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/api/src/presentation/controllers/foundation-check.controller.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-check.tsx",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-study.css",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-study.tsx",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/focused-reading-geometry.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/reading-text-map.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/study-steps.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-card-reading.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-focused-reading.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-focused-study-mode.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/src/features/progress/use-study-navigation.ts",
+      "unchanged": true
+    },
+    {
+      "file": "apps/web/tests/e2e/foundation-v2.spec.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2-keys.json",
+      "unchanged": true
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2.json",
+      "unchanged": true
+    },
+    {
+      "file": "libs/learning/src/application/grade-foundation-check.ts",
+      "unchanged": true
+    },
+    {
+      "file": "libs/progress/src/domain/foundation-rules.ts",
+      "unchanged": true
+    },
+    {
+      "file": "tests/foundation-v2.test.mjs",
+      "unchanged": false
+    },
+    {
+      "file": "tests/study-steps.test.mjs",
+      "unchanged": true
+    }
+  ],
+  "worktreeStatus": " M README.md\n M apps/api/src/app.module.ts\n M apps/api/src/application/tokens.ts\n M apps/api/src/infrastructure/adapters/json-content.adapter.ts\n M apps/api/src/infrastructure/adapters/postgres-progress.adapter.ts\n M apps/web/next-env.d.ts\n M apps/web/public/practice/kit/data/training.sql\n M apps/web/public/practice/kit/tests/first-quote.spec.ts\n M apps/web/scripts/prepare-learning-navigation.mjs\n M apps/web/src/app/auth/continue/page.tsx\n M apps/web/src/app/modules/[moduleId]/page.tsx\n M apps/web/src/app/modules/page.tsx\n M apps/web/src/app/page.tsx\n M apps/web/src/app/study/[week]/page.tsx\n M apps/web/src/components/academy/account-panel.tsx\n M apps/web/src/components/academy/auth-form.tsx\n D apps/web/src/components/academy/concept-demonstration.css\n D apps/web/src/components/academy/concept-demonstration.tsx\n M apps/web/src/components/academy/learning-steps.tsx\n M apps/web/src/components/academy/lesson-study.tsx\n M apps/web/src/components/academy/reading-concepts.css\n M apps/web/src/components/academy/reading-concepts.tsx\n M apps/web/src/components/assistant/qa-assistant.tsx\n M apps/web/src/components/layout/learning-tree.tsx\n M apps/web/src/components/layout/sidebar.tsx\n M apps/web/src/features/auth/auth-provider.tsx\n M apps/web/src/features/navigation/learning-tree.json\n M apps/web/src/features/progress/learning-navigation.ts\n M apps/web/src/features/progress/progress-provider.tsx\n M apps/web/src/features/progress/reading-coverage.ts\n M apps/web/src/features/progress/use-lesson-pagination.ts\n M apps/web/src/features/progress/use-reading-tracker.ts\n M apps/web/src/lib/academy-api.ts\n M apps/web/tests/e2e/learning-tree.spec.ts\n M apps/web/tests/e2e/lesson-pagination.spec.ts\n M apps/web/tests/e2e/reading-concepts.spec.ts\n M libs/content/src/data/catalog.json\n M libs/content/src/data/study-guides.json\n M libs/content/src/index.ts\n M libs/learning/src/domain/content-repository.ts\n M libs/learning/src/domain/models.ts\n M libs/learning/src/index.ts\n M libs/progress/src/domain/automatic-completion.ts\n M libs/progress/src/domain/progress-commands.ts\n M libs/progress/src/domain/progress.ts\n M libs/progress/src/index.ts\n M packages/contracts/src/auth.ts\n M packages/contracts/src/index.ts\n M packages/contracts/src/schemas.ts\n M packages/database/src/index.ts\n M packages/database/src/schema.ts\n M tests/learning-navigation.test.mjs\n M tests/learning-tree.test.mjs\n M tests/practice-completion.test.mjs\n M tests/reading-concepts.test.mjs\n?? apps/api/src/infrastructure/adapters/postgres-course-catalog.adapter.ts\n?? apps/api/src/presentation/controllers/course-catalog.controller.ts\n?? apps/api/src/presentation/controllers/foundation-check.controller.ts\n?? apps/web/playwright.catalog.config.ts\n?? apps/web/src/app/admin/courses/page.tsx\n?? apps/web/src/app/courses/[slug]/error.tsx\n?? apps/web/src/app/courses/[slug]/page.tsx\n?? apps/web/src/app/courses/page.tsx\n?? apps/web/src/app/learning-paths/page.tsx\n?? apps/web/src/app/legacy/modules/[moduleId]/page.tsx\n?? apps/web/src/components/academy/chapter-experience.css\n?? apps/web/src/components/academy/chapter-experience.tsx\n?? apps/web/src/components/academy/concept-details-fallback.tsx\n?? apps/web/src/components/academy/concept-step-details.css\n?? apps/web/src/components/academy/concept-step-details.tsx\n?? apps/web/src/components/academy/focused-study.css\n?? apps/web/src/components/academy/focused-study.tsx\n?? apps/web/src/components/academy/foundation-check.tsx\n?? apps/web/src/components/academy/foundation-study.css\n?? apps/web/src/components/academy/foundation-study.tsx\n?? apps/web/src/components/academy/lesson-download.ts\n?? apps/web/src/components/academy/lesson-study-legacy.tsx\n?? apps/web/src/components/academy/reading-reference.tsx\n?? apps/web/src/components/academy/study-dialog.tsx\n?? apps/web/src/components/courses/admin-courses.tsx\n?? apps/web/src/components/courses/course-catalog.tsx\n?? apps/web/src/components/courses/course-detail.tsx\n?? apps/web/src/components/courses/courses.css\n?? apps/web/src/components/courses/learning-path-builder.tsx\n?? apps/web/src/components/courses/legacy-course-access.tsx\n?? apps/web/src/components/layout/catalog-navigation.css\n?? apps/web/src/features/courses/course-api.ts\n?? apps/web/src/features/courses/safe-return.ts\n?? apps/web/src/features/progress/focused-reading-geometry.ts\n?? apps/web/src/features/progress/reading-text-map.ts\n?? apps/web/src/features/progress/study-steps.ts\n?? apps/web/src/features/progress/use-card-reading.ts\n?? apps/web/src/features/progress/use-focused-reading.ts\n?? apps/web/src/features/progress/use-focused-study-mode.ts\n?? apps/web/src/features/progress/use-study-navigation.ts\n?? apps/web/src/features/study/concept-detail-state.ts\n?? apps/web/src/features/study/demonstration-details.ts\n?? apps/web/tests/e2e/catalog-300.spec.ts\n?? apps/web/tests/e2e/concept-details.spec.ts\n?? apps/web/tests/e2e/focused-reading.spec.ts\n?? apps/web/tests/e2e/focused-study.spec.ts\n?? apps/web/tests/e2e/foundation-v2.spec.ts\n?? docs/specs/SPEC-CATALOG-300-cursos-y-rutas-personalizadas-TO-BE.md\n?? docs/specs/SPEC-CONTENT-210-consolidado-aprendizaje-interactivo-TO-BE.md\n?? docs/specs/SPEC-CONTENT-220-Fundamentos-del-Testing-TO-BE.md\n?? docs/specs/SPEC-UX-120-modo-estudio-enfocado-to-be.md\n?? docs/specs/catalog-300/ADR-001-aislamiento-y-persistencia.md\n?? docs/specs/catalog-300/API-y-administracion.md\n?? docs/specs/catalog-300/MIGRACION-y-liberacion.md\n?? docs/specs/catalog-300/baseline-local.json\n?? docs/specs/catalog-300/evidence/admin-chromium.png\n?? docs/specs/catalog-300/evidence/admin-webkit.png\n?? docs/specs/catalog-300/evidence/home-chromium.png\n?? docs/specs/catalog-300/evidence/home-webkit.png\n?? docs/specs/catalog-300/evidence/mobile-chromium.png\n?? docs/specs/catalog-300/evidence/mobile-webkit.png\n?? docs/specs/catalog-300/playwright-catalog.log\n?? docs/specs/catalog-300/pnpm-check-final.log\n?? docs/specs/catalog-300/pnpm-check.log\n?? docs/specs/content/00-baseline-y-fuentes.md\n?? docs/specs/content/00-contrato-grafos-y-globos.md\n?? docs/specs/content/00-decisiones-pendientes.md\n?? docs/specs/content/00-matriz-auditoria-curricular.md\n?? docs/specs/content/00-plan-pruebas-contenido-y-ux.md\n?? docs/specs/content/00-roadmap-por-modulos.md\n?? docs/specs/content/W01-C01-acta-implementacion-local.md\n?? docs/specs/content/W01-C01-entrega-local.md\n?? docs/specs/content/W01-C01-propuesta-capitulo.md\n?? docs/specs/content/W01-C01-validacion-local.md\n?? docs/specs/content/ajuste-global-sin-asi-se-aplica.md\n?? docs/specs/content/fundamentos/00-inventario-as-is.md\n?? docs/specs/content/fundamentos/01-matriz-curricular-y-fuentes.md\n?? docs/specs/content/fundamentos/02-mapa-as-is-to-be-y-riesgos.md\n?? docs/specs/content/fundamentos/03-piloto-capitulo-01.md\n?? docs/specs/content/fundamentos/04-contenido-de-los-8-capitulos-propuesto.md\n?? docs/specs/content/fundamentos/05-grafos-y-demostraciones.md\n?? docs/specs/content/fundamentos/06-interacciones-y-accesibilidad.md\n?? docs/specs/content/fundamentos/07-plan-de-migracion-y-regresion.md\n?? docs/specs/content/fundamentos/08-matriz-criterios-de-aceptacion.md\n?? docs/specs/content/fundamentos/09-contrato-g3-implementacion-local.md\n?? docs/specs/content/fundamentos/10-acta-implementacion-l0-l2.md\n?? docs/specs/ux/study-focused-as-is-evidence.md\n?? docs/specs/ux/study-focused-d1-validation.md\n?? docs/specs/ux/study-focused-figma-handoff.md\n?? docs/specs/ux/study-focused-implementation.md\n?? docs/specs/ux/study-focused-risks.md\n?? docs/specs/ux/study-focused-step-mapping.md\n?? docs/specs/ux/study-focused-test-matrix.md\n?? libs/content/src/data/fundamentals-v2-keys.json\n?? libs/content/src/data/fundamentals-v2.json\n?? libs/learning/src/application/grade-foundation-check.ts\n?? libs/learning/src/application/manage-course-catalog.ts\n?? libs/learning/src/domain/course-catalog.ts\n?? libs/progress/src/domain/foundation-rules.ts\n?? packages/contracts/src/course-catalog.ts\n?? packages/database/sql/008_course_catalog.sql\n?? packages/database/src/catalog-schema.ts\n?? tests/concept-details.test.mjs\n?? tests/course-catalog.integration.test.mjs\n?? tests/course-catalog.test.mjs\n?? tests/course-return.test.mjs\n?? tests/fixtures/catalog-server.mjs\n?? tests/focused-reading.test.mjs\n?? tests/foundation-v2.test.mjs\n?? tests/helpers/catalog-fixture.mjs\n?? tests/study-steps.test.mjs\n",
+  "originalStatusReadOnly": " M apps/api/src/app.module.ts\n M apps/api/src/application/tokens.ts\n M apps/api/src/infrastructure/adapters/json-content.adapter.ts\n M apps/api/src/infrastructure/adapters/postgres-progress.adapter.ts\n M apps/web/next-env.d.ts\n M apps/web/scripts/prepare-learning-navigation.mjs\n M apps/web/src/app/study/[week]/page.tsx\n D apps/web/src/components/academy/concept-demonstration.css\n D apps/web/src/components/academy/concept-demonstration.tsx\n M apps/web/src/components/academy/learning-steps.tsx\n M apps/web/src/components/academy/lesson-study.tsx\n M apps/web/src/components/academy/module-detail.tsx\n M apps/web/src/components/academy/quiz.tsx\n M apps/web/src/components/academy/reading-concepts.css\n M apps/web/src/components/academy/reading-concepts.tsx\n M apps/web/src/components/assistant/qa-assistant.tsx\n M apps/web/src/components/layout/learning-tree.tsx\n M apps/web/src/components/layout/sidebar.tsx\n M apps/web/src/features/navigation/learning-tree.json\n M apps/web/src/features/progress/learning-navigation.ts\n M apps/web/src/features/progress/progress-provider.tsx\n M apps/web/src/features/progress/reading-coverage.ts\n M apps/web/src/features/progress/use-lesson-pagination.ts\n M apps/web/src/features/progress/use-reading-tracker.ts\n M apps/web/tests/e2e/academy.spec.ts\n M apps/web/tests/e2e/admin.spec.ts\n M apps/web/tests/e2e/firebase-auth.spec.ts\n M apps/web/tests/e2e/learning-tree-completion.spec.ts\n M apps/web/tests/e2e/learning-tree.spec.ts\n M apps/web/tests/e2e/learning-ux.spec.ts\n M apps/web/tests/e2e/lesson-pagination.spec.ts\n M apps/web/tests/e2e/practice-progress.spec.ts\n M apps/web/tests/e2e/reading-concepts.spec.ts\n M apps/web/tests/e2e/student-auth.spec.ts\n M libs/content/src/data/catalog.json\n M libs/content/src/data/study-guides.json\n M libs/content/src/index.ts\n M libs/learning/src/domain/content-repository.ts\n M libs/learning/src/domain/models.ts\n M libs/learning/src/index.ts\n M libs/progress/src/domain/automatic-completion.ts\n M libs/progress/src/domain/progress-commands.ts\n M libs/progress/src/domain/progress.ts\n M libs/progress/src/index.ts\n M packages/contracts/src/auth.ts\n M packages/contracts/src/index.ts\n M packages/contracts/src/schemas.ts\n M tests/learning-navigation.test.mjs\n M tests/learning-tree.test.mjs\n M tests/practice-completion.test.mjs\n M tests/reading-concepts.test.mjs\n?? .claude-sync-2.tgz\n?? \"Claude outputs/\"\n?? apps/api/src/presentation/controllers/foundation-check.controller.ts\n?? apps/web/public/fundamentos/\n?? apps/web/src/components/academy/chapter-experience.css\n?? apps/web/src/components/academy/chapter-experience.tsx\n?? apps/web/src/components/academy/concept-details-fallback.tsx\n?? apps/web/src/components/academy/concept-step-details.css\n?? apps/web/src/components/academy/concept-step-details.tsx\n?? apps/web/src/components/academy/focused-study.css\n?? apps/web/src/components/academy/focused-study.tsx\n?? apps/web/src/components/academy/foundation-check.tsx\n?? apps/web/src/components/academy/foundation-study.css\n?? apps/web/src/components/academy/foundation-study.tsx\n?? apps/web/src/components/academy/lesson-download.ts\n?? apps/web/src/components/academy/lesson-study-legacy.tsx\n?? apps/web/src/components/academy/module-detail.css\n?? apps/web/src/components/academy/reading-reference.tsx\n?? apps/web/src/components/academy/state-balloons.css\n?? apps/web/src/components/academy/state-balloons.tsx\n?? apps/web/src/components/academy/study-dialog.tsx\n?? apps/web/src/features/progress/focused-reading-geometry.ts\n?? apps/web/src/features/progress/reading-text-map.ts\n?? apps/web/src/features/progress/study-steps.ts\n?? apps/web/src/features/progress/use-card-reading.ts\n?? apps/web/src/features/progress/use-focused-reading.ts\n?? apps/web/src/features/progress/use-focused-study-mode.ts\n?? apps/web/src/features/progress/use-study-navigation.ts\n?? apps/web/src/features/study/\n?? apps/web/tests/e2e/concept-details.spec.ts\n?? apps/web/tests/e2e/focused-reading.spec.ts\n?? apps/web/tests/e2e/focused-study.spec.ts\n?? apps/web/tests/e2e/foundation-v2.spec.ts\n?? docs/specs/SPEC-CATALOG-300-cursos-y-rutas-personalizadas-TO-BE.md\n?? docs/specs/SPEC-CONTENT-210-consolidado-aprendizaje-interactivo-TO-BE.md\n?? docs/specs/SPEC-CONTENT-220-Fundamentos-del-Testing-TO-BE.md\n?? docs/specs/SPEC-UX-120-modo-estudio-enfocado-to-be.md\n?? docs/specs/content/\n?? docs/specs/ux/\n?? libs/content/src/data/fundamentals-v2-keys.json\n?? libs/content/src/data/fundamentals-v2.json\n?? libs/learning/src/application/grade-foundation-check.ts\n?? libs/progress/src/domain/foundation-rules.ts\n?? tests/concept-details.test.mjs\n?? tests/focused-reading.test.mjs\n?? tests/foundation-v2.test.mjs\n?? tests/study-steps.test.mjs\n"
+}

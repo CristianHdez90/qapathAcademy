@@ -1,0 +1,28 @@
+.catalog-nav-search{display:grid;gap:.5rem;margin:1rem 0 1.5rem;min-width:0}
+.catalog-nav-search label{font-size:.85rem;font-weight:700;color:#b7d9e6}
+.catalog-nav-search input{width:100%;min-width:0;min-height:44px;background:#0b1c2a;border:1px solid #52758b;border-radius:8px;padding:.65rem;color:#e5f6ff}
+.catalog-nav-search button{min-height:44px;border:1px solid #52758b;background:#18384b;color:#e5f6ff;border-radius:8px;cursor:pointer}
+.catalog-nav-search :focus-visible,.catalog-mobile-tabs :focus-visible{outline:3px solid #80dfff;outline-offset:3px}
+.catalog-mobile-tabs>a,.catalog-mobile-tabs>button{flex:1;min-width:0;min-height:48px}
+.catalog-search-dialog{margin:auto;width:min(500px,calc(100vw - 2rem));padding:1.2rem;background:#102638;color:#e5f6ff;border:1px solid #52758b;border-radius:16px;max-height:85dvh;overflow:auto}
+.catalog-search-dialog::backdrop{background:#020a14c9}
+.catalog-search-dialog header{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+/* Menú lateral rediseñado: buscador con icono y atajo, iconos de línea y tarjeta de motivación. */
+.sidebar .catalog-nav-search{margin:22px 0 22px}
+.catalog-nav-search label,.sidebar .catalog-nav-search button[type=submit],.study-menu-sidebar .catalog-nav-search label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.catalog-search-dialog .catalog-nav-search button[type=submit]{position:static;width:auto;height:auto;clip:auto}
+.catalog-nav-search-field{position:relative;display:block}
+.catalog-nav-search-icon{position:absolute;left:12px;top:50%;width:18px;height:18px;transform:translateY(-50%);color:#8fa6bd;pointer-events:none}
+.catalog-nav-search input{padding:.65rem 3.4rem .65rem 2.4rem!important;border-radius:12px!important;border-color:#2a3d5a!important;background:#0f1a2e!important}
+.catalog-nav-search kbd{position:absolute;right:8px;top:50%;transform:translateY(-50%);font:600 11px Inter,ui-sans-serif,sans-serif;color:#9fb0c8;border:1px solid #2f4262;border-radius:6px;padding:2px 6px;background:#16233a}
+.sidebar .nav-icon svg{width:22px;height:22px}
+.sidebar .nav-item{padding:13px 14px;font-size:15px}
+.sidebar .nav-item.active{border-left:3px solid #52dfb7}
+.sidebar-promo{margin-top:auto;position:relative;overflow:hidden;border:1px solid #22324d;border-radius:14px;padding:16px;background:linear-gradient(160deg,#13213a,#0f1a2d);display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:center}
+.sidebar-promo::after{content:'';position:absolute;right:-10px;bottom:-6px;width:110px;height:70px;background:linear-gradient(135deg,transparent 45%,#1e6b5a55 46%,transparent 60%),linear-gradient(45deg,transparent 45%,#1e6b5a44 46%,transparent 60%);pointer-events:none}
+.sidebar-promo svg{width:30px;height:30px;color:#52dfb7;grid-row:span 1}
+.sidebar-promo p{margin:0;display:grid;font-size:14px;line-height:1.35;color:#e8f1fb}
+.sidebar-promo small{grid-column:1 / -1;font-size:12px;color:#9fb0c8;margin-top:6px}
+.catalog-mobile-tabs svg{width:22px;height:22px}
+.sidebar .catalog-nav-search input{font-size:14px;padding-right:3.6rem!important}
+.catalog-nav-search kbd{font-size:10px;padding:1px 5px}

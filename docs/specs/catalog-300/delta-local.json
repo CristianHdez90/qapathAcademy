@@ -1,0 +1,320 @@
+{
+  "branch": "codex/catalog-300",
+  "capturedAt": "2026-10-29T10:34:34.577Z",
+  "changes": [
+    {
+      "status": " M",
+      "file": "README.md"
+    },
+    {
+      "status": " M",
+      "file": "apps/api/src/app.module.ts"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/next-env.d.ts"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/public/practice/kit/data/training.sql"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/public/practice/kit/tests/first-quote.spec.ts"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/app/auth/continue/page.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/app/modules/[moduleId]/page.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/app/modules/page.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/app/page.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/components/academy/account-panel.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/components/academy/auth-form.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/components/layout/sidebar.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/features/auth/auth-provider.tsx"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/features/navigation/learning-tree.json"
+    },
+    {
+      "status": " M",
+      "file": "apps/web/src/lib/academy-api.ts"
+    },
+    {
+      "status": " M",
+      "file": "libs/learning/src/index.ts"
+    },
+    {
+      "status": " M",
+      "file": "packages/contracts/src/index.ts"
+    },
+    {
+      "status": " M",
+      "file": "packages/database/src/index.ts"
+    },
+    {
+      "status": " M",
+      "file": "packages/database/src/schema.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/api/src/infrastructure/adapters/postgres-course-catalog.adapter.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/api/src/presentation/controllers/course-catalog.controller.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/playwright.catalog.config.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/admin/courses/page.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/courses/[slug]/error.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/courses/[slug]/page.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/courses/page.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/learning-paths/page.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/app/legacy/modules/[moduleId]/page.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/admin-courses.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/course-catalog.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/course-detail.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/courses.css"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/learning-path-builder.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/courses/legacy-course-access.tsx"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/components/layout/catalog-navigation.css"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/features/courses/course-api.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/src/features/courses/safe-return.ts"
+    },
+    {
+      "status": "??",
+      "file": "apps/web/tests/e2e/catalog-300.spec.ts"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/ADR-001-aislamiento-y-persistencia.md"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/API-y-administracion.md"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/ENTREGA-y-evidencias.md"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/MIGRACION-y-liberacion.md"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/baseline-local.json"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/delta-local.json"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/admin-chromium.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/admin-webkit.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/home-chromium.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/home-webkit.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/mobile-chromium.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/evidence/mobile-webkit.png"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/huellas-evidencias.json"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/integracion-final.log"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/inventario-local.json"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/playwright-catalog-final.log"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/playwright-catalog.log"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/pnpm-check-final.log"
+    },
+    {
+      "status": "??",
+      "file": "docs/specs/catalog-300/pnpm-check.log"
+    },
+    {
+      "status": "??",
+      "file": "libs/learning/src/application/manage-course-catalog.ts"
+    },
+    {
+      "status": "??",
+      "file": "libs/learning/src/domain/course-catalog.ts"
+    },
+    {
+      "status": "??",
+      "file": "packages/contracts/src/course-catalog.ts"
+    },
+    {
+      "status": "??",
+      "file": "packages/database/sql/008_course_catalog.sql"
+    },
+    {
+      "status": "??",
+      "file": "packages/database/src/catalog-schema.ts"
+    },
+    {
+      "status": "??",
+      "file": "tests/course-catalog.integration.test.mjs"
+    },
+    {
+      "status": "??",
+      "file": "tests/course-catalog.test.mjs"
+    },
+    {
+      "status": "??",
+      "file": "tests/course-return.test.mjs"
+    },
+    {
+      "status": "??",
+      "file": "tests/fixtures/catalog-server.mjs"
+    },
+    {
+      "status": "??",
+      "file": "tests/foundation-v2.test.mjs"
+    },
+    {
+      "status": "??",
+      "file": "tests/helpers/catalog-fixture.mjs"
+    }
+  ],
+  "protectedFiles": [
+    {
+      "file": "apps/web/src/components/academy/foundation-study.tsx",
+      "baselineSha256": "2b8cc4ebf28641b5260801b0c63caffb97bd95842a02b644d8fed5db8a164984",
+      "currentSha256": "2b8cc4ebf28641b5260801b0c63caffb97bd95842a02b644d8fed5db8a164984"
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-study.css",
+      "baselineSha256": "716915ef03620ae31c8d471c13b251c8479d80f15f0afbd4580959a085389a4e",
+      "currentSha256": "716915ef03620ae31c8d471c13b251c8479d80f15f0afbd4580959a085389a4e"
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2.json",
+      "baselineSha256": "667588131b37c269c65a7655bd3a1f1e57e18d985ed03fa42cb00d9f33f28d49",
+      "currentSha256": "667588131b37c269c65a7655bd3a1f1e57e18d985ed03fa42cb00d9f33f28d49"
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2-keys.json",
+      "baselineSha256": "3d320fa88e5ac90cd58e1b4cc348aef54c8eed5cc2eae94dc11487ff5d6640a7",
+      "currentSha256": "3d320fa88e5ac90cd58e1b4cc348aef54c8eed5cc2eae94dc11487ff5d6640a7"
+    },
+    {
+      "file": "libs/progress/src/domain/foundation-rules.ts",
+      "baselineSha256": "4368761b53b07f0367638d0e8bab88710b844c4fe28a55e7f1af0617fd6f50c0",
+      "currentSha256": "4368761b53b07f0367638d0e8bab88710b844c4fe28a55e7f1af0617fd6f50c0"
+    },
+    {
+      "file": "libs/progress/src/domain/progress.ts",
+      "baselineSha256": "c43cc552b364a6ab835accb227b406013fcea1014e08f9f8fdf1cedd5c721d5c",
+      "currentSha256": "c43cc552b364a6ab835accb227b406013fcea1014e08f9f8fdf1cedd5c721d5c"
+    },
+    {
+      "file": "apps/web/src/features/progress/progress-provider.tsx",
+      "baselineSha256": "7e9be14172544eed8378ed90533c68605d49aa963898e5cee064af9ec1ad8031",
+      "currentSha256": "7e9be14172544eed8378ed90533c68605d49aa963898e5cee064af9ec1ad8031"
+    },
+    {
+      "file": "apps/api/src/infrastructure/adapters/postgres-progress.adapter.ts",
+      "baselineSha256": "3976b4fe5de1efe7d72ee6bdc4db03adc66d27f04451eb37a7b4bc7417c42616",
+      "currentSha256": "3976b4fe5de1efe7d72ee6bdc4db03adc66d27f04451eb37a7b4bc7417c42616"
+    }
+  ]
+}

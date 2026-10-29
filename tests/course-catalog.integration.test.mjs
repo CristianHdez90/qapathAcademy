@@ -1,0 +1,58 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {createCatalogFixture,fixtureUsers} from './helpers/catalog-fixture.mjs';
+test('catalog migration, PostgreSQL repositories and real HTTP guards preserve academic data',async t=>{
+ const f=await createCatalogFixture();t.after(()=>f.close());
+ const call=async(path,method='GET',body,token)=>{const response=await fetch(f.base+'/api/v1'+path,{method,headers:{'Content-Type':'application/json',Origin:'http://localhost:3017',...(token?{Cookie:f.cookieName+'='+token}:{})},...(body?{body:JSON.stringify(body)}:{})});return {status:response.status,body:await response.json()}};
+ const publicPage=await call('/courses');assert.equal(publicPage.status,200);assert.equal(publicPage.body.data.total,8);
+ assert.deepEqual(publicPage.body.data.items.map(x=>x.slug),['fundamentos','manual','herramientas','typescript','playwright','arquitectura','equipo-scrum','istqb-ctfl']);
+ assert.equal(publicPage.body.data.items.find(x=>x.slug==='equipo-scrum').weeks,undefined);
+ // Estado «En construcción» (011): solo Fundamentos tiene el contenido listo; el resto se ve con aviso.
+ assert.equal(publicPage.body.data.items.find(x=>x.slug==='fundamentos').comingSoon,false);
+ assert.deepEqual(publicPage.body.data.items.filter(x=>x.comingSoon).map(x=>x.slug),['manual','herramientas','typescript','playwright','arquitectura','equipo-scrum','istqb-ctfl']);
+ assert.equal((await call('/courses?search=AUTOMATIZACI%C3%93N')).body.data.total,2);
+ assert.equal((await call('/courses?search=%25')).body.data.total,0);
+ assert.equal((await call('/courses?status=ARCHIVED')).status,400);
+ for(const [token,status]of [[undefined,401],['student-a',403],['instructor',403]])assert.equal((await call('/admin/courses','GET',undefined,token)).status,status);
+ const input={slug:'curso-integracion',title:'Curso nuevo',summary:'Pruebas de integración',description:'Datos ficticios',category:'QA',skills:['API'],position:9,cover:null,contentKind:'LEGACY_MODULE',assignments:[{kind:'LEGACY_MODULE',ref:'manual'}]};
+ const created=await call('/admin/courses','POST',input,'admin');assert.equal(created.status,201);let course=created.body.data;
+ assert.equal(course.status,'DRAFT');assert.equal((await call('/courses/'+course.slug)).status,404);
+ const update={...input,title:'Título actualizado',status:'PUBLISHED',revision:course.revision};
+ const published=await call('/admin/courses/'+course.id,'PATCH',update,'admin');assert.equal(published.status,200);course=published.body.data;
+ assert.equal((await call('/admin/courses/'+course.id,'PATCH',update,'admin')).status,409);
+ assert.equal((await call('/courses/'+course.slug)).body.data.title,'Título actualizado');
+ const courses=publicPage.body.data.items,selected=[course.id,courses[0].id];
+ const route=await call('/me/learning-paths','POST',{title:'Mi ruta QA',courseIds:selected,active:true},'student-a');assert.equal(route.status,201);let path=route.body.data;
+ assert.equal((await call('/me/learning-paths/'+path.id,'GET',undefined,'student-b')).status,404);
+ assert.equal((await call('/me/learning-paths/'+path.id,'PATCH',{title:'Ataque',courseIds:selected,active:true,revision:path.revision},'student-b')).status,404);
+ assert.equal((await call('/me/learning-paths','POST',{title:'Duplicada',courseIds:[course.id,course.id],active:false},'student-a')).status,400);
+ const reordered=await call('/me/learning-paths/'+path.id,'PATCH',{title:path.title,courseIds:[...selected].reverse(),active:true,revision:path.revision},'student-a');assert.equal(reordered.status,200);path=reordered.body.data;assert.deepEqual(path.courses.map(x=>x.id),[...selected].reverse());
+ // Activating another route invalidates stale revisions and keeps at most one active selection.
+ const second=(await call('/me/learning-paths','POST',{title:'Ruta alternativa',courseIds:[courses[1].id],active:true},'student-a')).body.data;
+ const listed=(await call('/me/learning-paths','GET',undefined,'student-a')).body.data;
+ assert.equal(listed.filter(item=>item.active).length,1);assert.equal(listed.find(item=>item.active).id,second.id);
+ assert.equal((await call('/me/learning-paths/'+path.id,'PATCH',{title:path.title,courseIds:selected,active:true,revision:path.revision},'student-a')).status,409);
+ path=(await call('/me/learning-paths/'+path.id,'GET',undefined,'student-a')).body.data;
+ assert.equal((await call('/me/learning-paths','POST',{title:'Tercera ruta',courseIds:[courses[2].id],active:false},'student-a')).status,201);
+ assert.equal((await call('/me/learning-paths','POST',{title:'Fuera del límite',courseIds:[courses[3].id],active:false},'student-a')).status,409);
+ const archived=await call('/admin/courses/'+course.id,'DELETE',{revision:course.revision},'admin');assert.equal(archived.status,200);course=archived.body.data;
+ assert.equal((await call('/courses/'+course.slug)).status,404);
+ const existing=await call('/me/learning-paths/'+path.id,'GET',undefined,'student-a');assert.equal(existing.body.data.courses.find(x=>x.id===course.id).status,'ARCHIVED');
+ assert.equal((await call('/me/learning-paths','POST',{title:'Nueva',courseIds:[course.id],active:false},'student-b')).status,400);
+ const restored=await call('/admin/courses/'+course.id+'/restore','POST',{revision:course.revision},'admin');assert.equal(restored.status,201);assert.equal(restored.body.data.status,'DRAFT');
+ assert.equal((await call('/courses/'+course.slug)).status,404);
+ assert.equal((await call('/me/learning-paths/'+path.id,'DELETE',{revision:path.revision},'student-b')).status,404);
+ assert.equal((await call('/me/learning-paths/'+path.id,'DELETE',{revision:path.revision},'student-a')).status,200);
+ const audits=await f.db.query("SELECT actor_user_id,action,details FROM admin_audit_events WHERE action LIKE 'COURSE_%'");assert.equal(audits.rows.length,4);assert.ok(audits.rows.every(x=>x.actor_user_id===fixtureUsers.admin.id));
+ assert.deepEqual(audits.rows.find(x=>x.action==='COURSE_UPDATED').details.before.assignments,input.assignments);
+ assert.doesNotMatch(JSON.stringify(audits.rows),/password|sessionToken|cookie/i);
+ const historical=(await f.db.query('SELECT state FROM student_progress WHERE user_id=$1',[fixtureUsers['student-a'].id])).rows[0].state;assert.deepEqual(historical,f.initialProgress);assert.deepEqual(historical.weeks,[21,22,23,24]);
+ assert.equal((await f.db.query('SELECT count(*) count FROM learning_progress')).rows[0].count,1);
+ assert.equal((await f.db.query('SELECT count(*) count FROM lessons')).rows[0].count,1);
+ // Replaying the seed after ADMIN changes never restores metadata, visibility or source assignments.
+ const manual=await f.repository.get(courses.find(x=>x.slug==='manual').id,true);
+ await f.repository.update(fixtureUsers.admin.id,manual.id,manual.revision,{...manual,contentKind:'SCRUM',assignments:[{kind:'SCRUM',ref:'equipo-scrum'}],title:'Título ADMIN conservado'},'DRAFT');
+ await f.db.exec(f.migration);const retained=await f.repository.get(manual.id,true);assert.equal(retained.title,'Título ADMIN conservado');assert.equal(retained.status,'DRAFT');assert.deepEqual(retained.assignments,[{kind:'SCRUM',ref:'equipo-scrum'}]);
+ assert.equal((await f.db.query("SELECT count(*) count FROM courses WHERE slug='manual'")).rows[0].count,1);
+ const crossOrigin=await fetch(f.base+'/api/v1/admin/courses',{method:'POST',headers:{'Content-Type':'application/json',Origin:'https://foreign.example',Cookie:f.cookieName+'=admin'},body:JSON.stringify(input)});assert.equal(crossOrigin.status,403);
+});

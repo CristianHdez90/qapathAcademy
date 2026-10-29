@@ -1,0 +1,55 @@
+{
+  "capturedAt": "2026-10-29T10:34:34.554Z",
+  "items": [
+    {
+      "file": "packages/database/sql/008_course_catalog.sql",
+      "bytes": 5644,
+      "sha256": "6b4a321cf4253f07518e2d3c1bb269a098cac642c68a2d5cc7968aa0483872ba"
+    },
+    {
+      "file": "docs/specs/catalog-300/pnpm-check-final.log",
+      "bytes": 29740,
+      "sha256": "9f3d8d9d973a9c0dd3d4b719e243fd1c5f012565fd4ab06d0be2a3b68ec9b79e"
+    },
+    {
+      "file": "docs/specs/catalog-300/integracion-final.log",
+      "bytes": 229,
+      "sha256": "c33a863b0588cf73a93a2f1ba52c02972ea8d35a3d86d7d5e6ee8cc4355bd50a"
+    },
+    {
+      "file": "docs/specs/catalog-300/playwright-catalog-final.log",
+      "bytes": 2785,
+      "sha256": "be2eb8b14d7eb486344a7f426047040d6dcc81ac5645682e5c94e1daf3fe5284"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/admin-chromium.png",
+      "bytes": 170569,
+      "sha256": "85851e261dfce26eaa1b9fd2ac3e457b25afa87f1a5484938b559fed6b52fd55"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/admin-webkit.png",
+      "bytes": 488156,
+      "sha256": "5932b1140547b872b6aa9f7be05cbdecfe0e5ee4b5fd8bf22a5badfd1df65423"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/home-chromium.png",
+      "bytes": 114461,
+      "sha256": "a4d42240c225204e586b7ce164f295285aef098308e5e6f053464d30cc8005cc"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/home-webkit.png",
+      "bytes": 260378,
+      "sha256": "3ce829d04224d7edca85bba37733f599c4cc9113cd814bf939647409e048698f"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/mobile-chromium.png",
+      "bytes": 93684,
+      "sha256": "e574387c1ac4547d67791570dbe0c96fbaf7b73b6dd179ffeb35644e9f4ae736"
+    },
+    {
+      "file": "docs/specs/catalog-300/evidence/mobile-webkit.png",
+      "bytes": 241915,
+      "sha256": "9e10ff7c2fddb5e863c9bbb220cd2a91dd0501989571153f54cd9f85ef672e08"
+    }
+  ]
+}

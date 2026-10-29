@@ -1,0 +1,390 @@
+
+> qapath-academy@6.1.0 check C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm run test && pnpm run typecheck && pnpm run lint && pnpm run build
+
+
+> qapath-academy@6.1.0 test C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm run build:libs && node --test tests/*.test.mjs
+
+
+> qapath-academy@6.1.0 build:libs C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm --filter @qapath/contracts --filter @qapath/identity --filter @qapath/administration --filter @qapath/learning --filter @qapath/content --filter @qapath/progress --filter @qapath/database build
+
+Scope: 7 of 10 workspace projects
+packages/contracts build$ tsc -p tsconfig.json
+libs/identity build$ tsc -p tsconfig.json
+libs/learning build$ tsc -p tsconfig.json
+libs/content build$ tsc -p tsconfig.json
+libs/learning build: Done
+libs/progress build$ tsc -p tsconfig.json
+libs/identity build: Done
+packages/contracts build: Done
+libs/content build: Done
+libs/progress build: Done
+libs/administration build$ tsc -p tsconfig.json
+packages/database build$ tsc -p tsconfig.json
+libs/administration build: Done
+packages/database build: Done
+✔ Admin exige correo, cambio inicial y segundo factor antes de crear una sesión (9.6867ms)
+✔ Alumno verificado puede entrar sin MFA; la activación voluntaria protege accesos futuros (1.5413ms)
+✔ Cuentas administradas: solo STUDENT, normalización, búsqueda y desactivación (5.1087ms)
+✔ No es posible modificar ADMIN ni al actor (4.6462ms)
+✔ No se aceptan contraseñas débiles ni datos inconsistentes (1.3267ms)
+✔ La migración 003 crea eventos, índices y vista SQL de progreso (5.2359ms)
+✔ AI administration enforces real session, role and origin guards for reading, saving and provider tests (6105.8558ms)
+✔ strict config accepts Groq slash models and rejects foreign URLs, credentials, invalid numbers and conflicting key actions (11.8239ms)
+✔ settings encrypt credentials, return no secrets, preserve provider-specific keys and protect concurrent revisions (1906.1229ms)
+✔ missing credentials cannot enable AI, environment fallback works and invalid encryption cannot store secrets (247.106ms)
+✔ Groq Responses sends server instructions, private auth and safe context, omits unsupported fields and hides reasoning (72.9091ms)
+✔ Groq reports quota and upstream errors without leaking raw provider details, and rejects empty or incomplete responses (469.3268ms)
+✔ migration and encrypted configuration persist against an isolated PostgreSQL engine (16641.0843ms)
+✔ provider dispatch uses a single configuration snapshot and permits only admin probe to ignore disabled state (41.6534ms)
+✔ API mission needs all ten independent contract cases, not only a successful status (7.2481ms)
+✔ status-correct responses fail on wrong field types, business values, errors, sandbox headers or Bearer challenge (1.4002ms)
+✔ empty response is validated without requiring JSON and parsed missions preserve real evidence (4.9649ms)
+✔ all API observations and maximum reflections fit the evidence limits (0.4502ms)
+✔ generated request specs cover errors and empty bodies with explicit business contracts (944.2245ms)
+✔ API runtime reads text once, omits real credentials and never calls JSON for a 204 (121.0599ms)
+✔ DDD: Domain y Application no importan frameworks ni infraestructura (53.7317ms)
+✔ Hexagonal: interfaz web no importa application/domain ni adaptadores backend (351.1229ms)
+✔ Nest solo utiliza composición para enlazar puerto con adaptador (0.8722ms)
+✔ all async challenges execute real promises and clear actual timers (324.7024ms)
+✔ final matrix distinguishes five causes and preserves observed status and resources (73.9198ms)
+✔ incorrect HTTP handling, missing timer cleanup and incorrect expectations fail (100.3081ms)
+✔ completion rules match all 24 lessons and their module labs, task count and assessment answers (4.0649ms)
+✔ week completion requires reading, validated practice, self-check and module quiz; legacy labs are not required (19.709ms)
+✔ legacy flags do not confer completion and manual progress or fabricated grades are rejected by the API schema (164.8027ms)
+✔ invalid lesson sections, task IDs and empty evidence cannot complete activities (1.7673ms)
+✔ server imports recover notes without trusting imported completion or assessment records (4805.5525ms)
+✔ bug report export includes real reproduction, both retests, transitions and regression without inventing reflections (29.1006ms)
+✔ bug lifecycle replays failed retest, reopening, correction, verification, regression and closure (6.8084ms)
+✔ reporting needs reproduction and concrete steps; transitions cannot skip verification (2.8053ms)
+✔ drafts and early bug transitions do not complete practice; full reports and previous work survive serialization (15.5105ms)
+✔ W01-C01 provides 24 concise lists without discarding the full instructions (2.019ms)
+✔ malformed optional details preserve the legacy fallback as a whole (0.8075ms)
+✔ the formative case keeps confirmation pending and diagram references valid (1.3104ms)
+✔ Mantiene 8 módulos, 24 semanas y 24 guías (4.8331ms)
+✔ Cada semana pertenece a un módulo válido y tiene secciones completas (1.3711ms)
+✔ Preguntas y Scrum con estructura válida (0.5633ms)
+✔ catalog migration, PostgreSQL repositories and real HTTP guards preserve academic data (27514.1507ms)
+✔ course invariants reject unsafe slugs, covers, references and unusable publication (14.75ms)
+✔ archive is reversible only through DRAFT and route selection has no academic side effects (3.3443ms)
+✔ course return destinations remain local and never bypass login or MFA stages (2.8382ms)
+✔ CTFL bank has unique questions, six chapters, explanations and the 8/6/4/11/9/2 distribution (32.779ms)
+✔ CTFL grading counts omissions as incorrect and requires 26/40 without rounding up a failure (1.713ms)
+✔ certification results round-trip through existing evidence without changing the 24-week route (85.042ms)
+✔ DevTools completion requires reproduction, correct diagnosis and matching retest (1.9181ms)
+✔ Saved DevTools investigations restore observations while legacy or malformed evidence stays unvalidated (2.3476ms)
+✔ Aggregate Quiz calcula porcentaje y rechaza opciones inválidas (2.5117ms)
+✔ El caso de uso GradeQuiz no depende de NestJS ni DB (2.0112ms)
+✔ Value Objects validan invariantes (8.0778ms)
+✔ Caso de uso lección obtiene semana y guía desde puerto mock (1.635ms)
+✔ Progress mantiene datos versionados y adapter injectable (9.7059ms)
+✔ Los adaptadores PostgreSQL usan operadores exportados por @qapath/database (34.7475ms)
+✔ El API no instala una instancia directa adicional de Drizzle (1.8058ms)
+▶ SPEC-110 HTTP preserves guards, error envelope, per-id limits and account isolation without a database
+  ✔ anonymous, wrong roles and cross-site requests never reach the write port (246.9694ms)
+  ✔ all 24 ids retain the error shape and have exactly the approved boundaries (2790.0847ms)
+  ✔ non-exercise caps, strict payloads, unknown ids and trimming stay unchanged (289.5164ms)
+  ✔ full 23/24 JSON reports survive readback and a failed update cannot replace them (275.5466ms)
+  ✔ real adapter import rule grants only notes, never imported evidence or grades (8.4964ms)
+✔ SPEC-110 HTTP preserves guards, error envelope, per-id limits and account isolation without a database (7397.9486ms)
+✔ all 24 exercise limits agree in commands and persisted reads at every boundary (1320.2713ms)
+✔ task, lab and certification remain limited to 8000 even with extended exercise ids (3.0717ms)
+✔ full draft and validated reports for 23 and 24 survive serialized round trips without changing credit rules (30.0604ms)
+✔ noncanonical evidence keys retain their old default cap and cannot borrow an extended exercise limit (5.2126ms)
+✔ notes and normalization rules retain independent limits and preserve whitespace behavior (192.0352ms)
+✔ UTF-16 length and structural contract boundaries are unchanged (6.534ms)
+✔ a compatible rollback can pause large writes while keeping previously saved 23/24 evidence readable (2.1496ms)
+✔ Firebase diagnostic identifies unauthorized verification domain without exposing token or credentials (9116.7659ms)
+✔ Google structured API-key restrictions identify blocked backend referrer (641.9546ms)
+✔ unknown provider response text is never reflected into logs or client errors (605.4258ms)
+✔ incorrect credentials remain a generic authentication error (284.3773ms)
+✔ el correo de servicio solo es válido acompañado de proyecto y clave o archivo ADC (4.0702ms)
+✔ soporta credenciales ADC sin exponer la clave privada en .env (0.4454ms)
+✔ no permite rutas ni caracteres especiales en el nombre de colección (0.475ms)
+✔ Firebase encola correo con expiración y nunca usa la cuenta de servicio como remitente (1.4443ms)
+✔ VerificationEmailAdapter delega a Firebase y conserva el formato de URL con fragmento (397.0291ms)
+✔ Firebase registration links a STUDENT without storing a second password or invoking SMTP (6.573ms)
+✔ legacy linking requires old password and preserves PostgreSQL ID and role (2.8273ms)
+✔ a different Firebase UID cannot claim an already linked PostgreSQL user (1.5733ms)
+✔ local TOTP is still required after Firebase first factor and revoked challenges fail closed (4.5099ms)
+✔ verification resends require credentials, never accept a bare email as proof of identity (1.849ms)
+✔ UI challenges generate valid commented specs with awaited accessible locators and assertion (1017.5423ms)
+✔ only a real mismatched basic quote is classified as the intended failure (0.8131ms)
+✔ UI evidence distinguishes generated spec from integrated execution and preserves controlled failure (1.4385ms)
+✔ fixtures need explicit scopes, contamination and successful distinct views in both orders and concurrent tasks (12.6584ms)
+✔ validation preserves student predictions and requires meaningful data diversity (3.1062ms)
+✔ fixtures restore observations and reject malformed captures without inventing worker runs (142.9324ms)
+✔ four cases, two orders and two concurrent observations fit saved evidence with maximum notes (1.5891ms)
+✔ downloaded fixtures use per-test data and Page, an immutable worker catalog and no global mutable page (698.7968ms)
+✔ metrics preserve first failure, exclude blocked denominator and use median of first attempts (117.7529ms)
+✔ empty/all blocked samples have no invented rates or duration; even median is averaged (0.552ms)
+✔ completion requires quiz, two comparable full samples, plan and review, but does not demand a green result (1.1106ms)
+✔ parser rejects bad attempts and retries on approved first attempts; evidence remains within save limits (3.9198ms)
+✔ all approved observations do not claim stability or measured improvement (2.4406ms)
+✔ batch retries a failed first attempt once, keeps it and never retries blocked attempts (413.9282ms)
+✔ reflow credits a source band only after every original glyph is exposed (13.0961ms)
+✔ reflow does not credit partially clipped glyphs, hidden text or changed content (1.4284ms)
+✔ leading and trailing source spaces also require the real outer card edges (0.8572ms)
+✔ projection uses measured source lengths and union, not equal card weights (6.8885ms)
+✔ a side-by-side row requires both homologous regions and retains real gaps (4.1896ms)
+✔ resize retains historical source intervals without crediting old unpaired columns (4.8421ms)
+✔ projected boundaries use the unchanged baseline oracle without a completion epsilon (1.5735ms)
+✔ attention boundary is cumulative per chapter and cannot compensate missing coverage (0.8412ms)
+✔ foundation evidence distinguishes current failures from stale executions and never counts reference cases (3.2201ms)
+✔ download keeps test actions, separate expected and obtained results, bugs and partial reflections (1.3044ms)
+✔ five techniques need complete executed cases, with distinct IDs and sequential steps (8.1509ms)
+✔ changing a definition invalidates execution, and failed cases require a bug (1.0128ms)
+✔ validated evidence is checked in domain, drafts remain editable and long matrix survives reload (8.0717ms)
+✔ SPEC-220 v2 publishes eight complete chapters, four per week, 68 cards and 69 checks (9.3138ms)
+✔ rules match published content and every public check has a server-only key (87.7119ms)
+✔ grading is server-side; clients cannot send passed checks or fabricate cards (293.735ms)
+✔ a chapter passes with ceil(70 %) correct checks on read cards; pending chapters block the week (436.7637ms)
+✔ historically completed weeks stay completed and keep notes and scores (D-03) (2.148ms)
+✔ saved Gherkin selections are restored without fabricating missing or malformed steps (12.4014ms)
+✔ evidence report exports executed steps, acceptance criterion, observed result and partial reflections (2.5416ms)
+✔ incoherent scenarios retain their errors in the report and absent executions remain a draft (1.6583ms)
+✔ Gherkin validator rejects missing fields, wrong step roles and out-of-scope actions (8.4197ms)
+✔ positive and negative examples follow acceptance rules, rather than treating a refusal as a failed test (0.6964ms)
+✔ feature export separates the HU description from Scenario and its Gherkin steps (6.7377ms)
+✔ Registro público siempre usa rol STUDENT y evita duplicados (5.4889ms)
+✔ Operaciones de progreso mantienen datos entre actualizaciones (6.5746ms)
+✔ Importación fusiona progreso y conserva calificación más alta (1.9388ms)
+✔ report challenges use the kit fixture and execute meaningful assertions (282.8214ms)
+✔ final report includes 60 percent, ordered failures and boundary validations (35.1686ms)
+✔ legacy modules keep reading, practice, self-check and a closing test in their last week (D-10) (57.9219ms)
+✔ Fundamentos v2 steps follow cards, chapter minitests and practice without module quiz (58.591ms)
+✔ learning tree follows every module, week and chapter without publishing quiz answers (37.2681ms)
+✔ keyboard completion requires ordered focus, real Tab observations, activation, manual focus review and the result (2.3195ms)
+✔ locator records reject malformed configuration and preserve genuine last-check metadata (25.3619ms)
+✔ generated locator spec uses scoped exact names and state-based assertions without arbitrary first or sleeps (1651.1665ms)
+✔ matrix requires both actual views, layout checks and correct tag counts (22.7221ms)
+✔ matrix restores separate observations and rejects malformed captures (7.248ms)
+✔ exports preserve tags, independent cases and four projects with external status pending (520.0388ms)
+✔ QRCodeSVG usa una implementación local y el URI otpauth existente (7.8389ms)
+✔ QR y alternativa manual se reutilizan en ambos flujos MFA (2.5569ms)
+✔ MFA muestra manualmente la clave bajo demanda y copia sin persistirla (4.0101ms)
+✔ El frontend declara qrcode.react 4.2.0 o compatible (1.6104ms)
+✔ module three contains API and SQL while module three owns DevTools and module four owns Git readings practice and questions (13.2588ms)
+✔ POM completion requires explicit responsibilities, all cases, observed selector repair, defect and retest (23.1005ms)
+✔ POM restores all five observations and keeps legacy names without treating legacy output as a completed journey (5.7655ms)
+✔ generated Page Object owns actions, specs keep assertions and separate page fixtures without overwriting kit files (1389.4725ms)
+✔ local Page Object returns actual negative observation and restores fetch instead of grading inside the action (527.0268ms)
+✔ local operation rejects a stale DOM result without an observed HTTP response and restores fetch on failure (57.0343ms)
+✔ password report includes executed data, separate expected/obtained and partial reflections (3.9606ms)
+✔ password boundaries are inclusive and a valid length still needs a digit (14.3439ms)
+✔ coverage requires each distinct challenge, matching input and a correct prediction (3.9834ms)
+✔ malformed or legacy snapshots do not fabricate coverage and the API rejects premature completion (6.4463ms)
+✔ local completion requires configuration, baseline, a genuine assertion difference, later correction and review (9.6226ms)
+✔ network errors or unrelated UI failure cannot satisfy the red challenge (1.1576ms)
+✔ parser rejects invalid captures and preserves independent red/green evidence within storage limits (9.6486ms)
+✔ workflow preserves failure and attempts evidence upload even on failure (2.7535ms)
+✔ runtime observes actual stage outputs in order and compares UI expectation without changing response (1481.68ms)
+✔ runtime retains API failure and records UI separately; cancelled operations do not proceed (46.541ms)
+✔ all 24 weeks get actionable additional practice with expected results and evidence (4.7809ms)
+✔ narrative evidence stays a draft and cannot complete the practice requirement (1014.9821ms)
+✔ stateless quote contract distinguishes syntax, domain validation, absence and conflict (3.0242ms)
+✔ practice resources follow each topic and preserve executable tool assets (54.4172ms)
+✔ every week has a dedicated workspace and SQL does not require the quote simulator (0.8058ms)
+✔ ISTQB supplements and downloadable templates distinguish case definition from execution (24.6513ms)
+✔ all 24 activities complete only from validated exercise evidence (392.5591ms)
+✔ notes, legacy tasks/labs, failed runs and a bare completion flag cannot award practice credit (5.406ms)
+✔ final mission requires story, observed demo, concepts, script, manual review and next improvement (150.3529ms)
+✔ permission status alone does not pass wrong body/header and retest must follow bug (5.1454ms)
+✔ five planned blocks sum to 300 seconds but timed rehearsal remains optional and reports only measured duration (7.9652ms)
+✔ optional declared URLs can remain pending and unsafe or malformed schemes are rejected without fetching (105.3985ms)
+✔ parsing keeps captures and bounded timer; max draft fits saved source limits and reports preserve provenance (23.9614ms)
+✔ new Git challenge requires a matching publication of main while preserving old evidence (5.0016ms)
+✔ training publication proof survives saved evidence with its branch and SHA (4.4864ms)
+✔ programming completion needs real assertion counts and a clean matching committed file (0.9791ms)
+✔ programming evidence restores both tools, preserves failures and supports old completed work (2.0174ms)
+✔ controlled JavaScript examples execute as written and the mutation is caught by its assertion (155.4958ms)
+✔ week nine long notebooks survive contract and domain serialization without extending unrelated weeks (16.3801ms)
+✔ partial activities advance module and route before a week is complete (86.7594ms)
+✔ repeated, unknown, manual and non-completion records do not inflate percentages (1.2439ms)
+✔ 100 percent requires every activity across the full route (658.5213ms)
+✔ module card shows partial percentage even with zero completed weeks (3083.8903ms)
+✔ project completion requires all five risk links, UI reproduction/retest, API contracts, nine SQL queries and decision (363.9365ms)
+✔ correct status does not replace contracts or business totals; retest must follow captured bug (113.154ms)
+✔ SQL validation checks columns, all values and ordering, with numeric aggregate strings normalized (4.5133ms)
+✔ saved project and complete SQL tables fit source limits and downloads distinguish origins and pending external reports (146.7533ms)
+✔ Q1–Q9 use exactly the versioned kit queries and no mutation (3.0078ms)
+✔ chat validates user-first alternating history and excludes arbitrary roles, query strings and oversized input (54.3904ms)
+✔ saved conversations require valid UUIDs and a revision; clients cannot overwrite stored messages (3.2526ms)
+✔ Gemini adapter sends server-owned QA instruction and private header, maps conversation roles and filters thoughts (2909.9304ms)
+✔ Gemini 3.8 uses the configured model without forcing the Gemini 2.5 thinking budget (105.4373ms)
+✔ disabled or missing-key AI never calls the provider (228.8282ms)
+✔ provider failures, quota, blocked responses and network failures are explicit and do not leak provider body (478.6358ms)
+✔ quota persists reservations transactionally and rolls back rejected requests (56.8069ms)
+✔ Gemini diagnostics distinguish key restrictions, missing model, disabled API and unsupported generation parameters (431.6334ms)
+✔ Gemini diagnostic logs contain only an enumerated code and HTTP status (42.8156ms)
+✔ all 266 rendered cards retain their examples without Así se aplica or animation controls (3070.0719ms)
+✔ all 48 foundation cards have specific examples and three explanatory steps (1.897ms)
+✔ all 24 weeks provide specific chapter and guided cards with valid step icons (5.7426ms)
+✔ a chapter header or a jump to its bottom cannot complete the reading (3.5271ms)
+✔ continuous coverage must reach the final part of the chapter (1.33ms)
+✔ revisiting the same viewport does not fabricate more coverage; short chapters work (1.6362ms)
+✔ recovery requires exact scope, three distinct failures, cleanup and real recovery after error in the same view (5.6467ms)
+✔ HTTP 200 and a visible success do not pass the incomplete-contract goal; a real 503 cannot count as a simulated failure (0.8143ms)
+✔ record parsing preserves null transport status and distinguishes mock bodies from real responses (5.5714ms)
+✔ downloaded specs separate mocks, mixed recovery and integration, scope exact POST and always unroute (304.4105ms)
+✔ runtime limits interception to exact POST, forwards other routes and restores the actual iframe fetch (304.209ms)
+✔ transport records no HTTP response and cleans up even when the operation throws (125.109ms)
+✔ risk evidence does not invent a strategy for absent, legacy or malformed runs (3.4321ms)
+✔ risk evidence exports the actual simulation and preserves incomplete reflections (5.9504ms)
+✔ risk ranking reacts to probabilities, impacts and estimated mitigation without mutating the starting scores (5.0899ms)
+✔ two slots must cover the highest exposures; cutoff ties accept either equally ranked risk (38.4408ms)
+✔ feedback checks four distinct levels and restoring evidence filters invalid data (1.5905ms)
+✔ Sprint metrics distinguish executed, blocked, remaining and zero denominators (2.6803ms)
+✔ Sprint completion requires event understanding, correct predictions, DoD and process improvement (2.2464ms)
+✔ Sprint drafts and malformed snapshots cannot award practice credit (5.2158ms)
+✔ four SQL mission expectations match actual PostgreSQL results including NULL and COUNT (8176.1539ms)
+✔ valid SQL without matching the business goal never earns mission completion (1.2363ms)
+✔ SQL progress needs all four checked missions, supports drafts and preserves legacy completions (1.1025ms)
+✔ SQL notebook evidence beyond 8000 characters survives validation and progress serialization (9.9053ms)
+✔ SQL results preserve column order, empty rows and explicit null values (37.0556ms)
+✔ SQL evidence size limits retain valid table data and disclose omitted rows (32.1931ms)
+✔ CSV exports headers and quoted relational cells without serializing the result as JSON (1.3087ms)
+✔ SQL hint records and relationships match executable PostgreSQL and order totals (8430.2394ms)
+✔ all 24 guides retain each source unit exactly once, in source order (15.0002ms)
+✔ optional and alternative content is not fabricated or silently discarded (4.3262ms)
+✔ tool evidence merges three latest executions without duplicating the current one or hiding failed results (8.8297ms)
+✔ tool snapshot restoration validates data and retains compatible legacy executions (1.1148ms)
+✔ week seven evidence larger than 8k survives contract, domain and reload without changing other week limits (737.4084ms)
+✔ DevTools evidence retains a separate HTTP slot across save and reload (0.9238ms)
+✔ trace investigation needs observed reproduction, diagnosis, successful retest and regression (3.0253ms)
+✔ trace parsing preserves captures and rejects malformed or legacy observations (3.1276ms)
+✔ trace spec preserves the failing assertion and captures the actual quote response before clicking (128.4862ms)
+✔ capture reads actual response and DOM, then restores the iframe fetch (222.8117ms)
+✔ invalid API responses cannot become reproductions and fetch is restored on error (127.152ms)
+✔ TypeScript challenges pass semantic strict checks and runtime assertions except the intentional error (2131.4879ms)
+✔ strict checking catches semantic assignments, unsafe union access and nullable values without execution (1065.7736ms)
+✔ evidence needs matching runtime and types, includes diagnostics and fits the existing save limit (393.7258ms)
+ℹ tests 235
+ℹ suites 0
+ℹ pass 235
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 31004.0194
+
+> qapath-academy@6.1.0 typecheck C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm run build:libs && pnpm --filter @qapath/api typecheck && pnpm --filter @qapath/web typecheck
+
+
+> qapath-academy@6.1.0 build:libs C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm --filter @qapath/contracts --filter @qapath/identity --filter @qapath/administration --filter @qapath/learning --filter @qapath/content --filter @qapath/progress --filter @qapath/database build
+
+Scope: 7 of 10 workspace projects
+packages/contracts build$ tsc -p tsconfig.json
+libs/identity build$ tsc -p tsconfig.json
+libs/learning build$ tsc -p tsconfig.json
+libs/content build$ tsc -p tsconfig.json
+libs/learning build: Done
+libs/progress build$ tsc -p tsconfig.json
+libs/identity build: Done
+libs/content build: Done
+packages/contracts build: Done
+libs/progress build: Done
+libs/administration build$ tsc -p tsconfig.json
+packages/database build$ tsc -p tsconfig.json
+libs/administration build: Done
+packages/database build: Done
+
+> @qapath/api@6.1.0 typecheck C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\api
+> tsc -p tsconfig.json --noEmit
+
+
+> @qapath/web@6.0.0 typecheck C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\web
+> tsc --noEmit
+
+
+> qapath-academy@6.1.0 lint C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm --filter @qapath/web lint && pnpm --filter @qapath/api lint
+
+
+> @qapath/web@6.0.0 lint C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\web
+> eslint .
+
+
+> @qapath/api@6.1.0 lint C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\api
+> eslint src --ext .ts
+
+
+> qapath-academy@6.1.0 build C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm run build:libs && pnpm --filter @qapath/api build && pnpm --filter @qapath/web build
+
+
+> qapath-academy@6.1.0 build:libs C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy
+> pnpm --filter @qapath/contracts --filter @qapath/identity --filter @qapath/administration --filter @qapath/learning --filter @qapath/content --filter @qapath/progress --filter @qapath/database build
+
+Scope: 7 of 10 workspace projects
+packages/contracts build$ tsc -p tsconfig.json
+libs/content build$ tsc -p tsconfig.json
+libs/identity build$ tsc -p tsconfig.json
+libs/learning build$ tsc -p tsconfig.json
+libs/identity build: Done
+libs/progress build$ tsc -p tsconfig.json
+libs/learning build: Done
+libs/content build: Done
+packages/contracts build: Done
+libs/progress build: Done
+libs/administration build$ tsc -p tsconfig.json
+packages/database build$ tsc -p tsconfig.json
+libs/administration build: Done
+packages/database build: Done
+
+> @qapath/api@6.1.0 build C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\api
+> nest build
+
+
+> @qapath/web@6.0.0 build C:\ProyectosIA\QAPathAcademy\QAPath-Academy-4-Identity-PostgreSQL-DDD\qapath-academy\apps\web
+> node scripts/prepare-learning-navigation.mjs && node scripts/prepare-practice-runtime.mjs && next build
+
+▲ Next.js 16.4.3 (Turbopack)
+- Environments: .env.local
+✓ Running next.config.ts took 232ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 11.1s
+  Running TypeScript ...
+  Finished TypeScript in 34.7s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/14) ...
+  Generating static pages using 11 workers (3/14) 
+  Generating static pages using 11 workers (6/14) 
+  Generating static pages using 11 workers (10/14) 
+✓ Generating static pages using 11 workers (14/14) in 1565ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ○ /_not-found
+├ ○ /account
+├ ○ /admin
+├ ○ /admin/courses
+├ ƒ /api-status
+├ ○ /auth/continue
+├ ○ /certification/istqb
+├ ƒ /courses
+├ ƒ /courses/[slug]
+├ ƒ /learning-paths
+├ ƒ /legacy/modules/[moduleId]
+├ ○ /login
+├ ƒ /modules
+├ ƒ /modules/[moduleId]
+├ ○ /practice
+├ ƒ /practice/[week]
+├ ƒ /project
+├ ○ /register
+├ ƒ /resources
+├ ƒ /scrum
+├ ƒ /study/[week]
+└ ○ /verify-email
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
