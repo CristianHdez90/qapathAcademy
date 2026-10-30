@@ -58,3 +58,13 @@
 .study-lesson-nav{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;margin:2.5rem 0 1rem;padding-top:1.2rem;border-top:1px solid #22324d}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media (max-width:900px){.study-graph-layout{grid-template-columns:1fr}.study-balloon::before{display:none}.study-graph-canvas{height:360px}.study-lesson-link{grid-template-columns:auto 1fr}.study-lesson-link .study-kinds{grid-column:2}}
+/* Texto a la izquierda, gráficas a la derecha (como las tarjetas de Fundamentos). */
+.study-section{min-width:0}
+.study-section.has-aside{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1.6rem;align-items:start}
+.study-section-aside{position:sticky;top:1rem;display:grid;gap:1rem;min-width:0}
+.study-section-aside .study-figure{margin:0}
+.study-section-aside .study-graph-layout{grid-template-columns:1fr}
+.study-section-aside .study-balloon::before{display:none}
+.study-section-aside .study-graph-canvas{height:340px}
+.study-section-aside .study-chart-canvas{height:280px}
+@media (max-width:1000px){.study-section.has-aside{grid-template-columns:1fr}.study-section-aside{position:static}}

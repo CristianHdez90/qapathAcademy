@@ -28,7 +28,8 @@ test('admin uploads .md/.mmd/.json/.svg, rejects .drawio, previews and publishes
  await expect(page.getByText(/deben exportarse a SVG/)).toBeVisible();
  await page.getByRole('button',{name:'Crear lección'}).click();await expect(page.getByText('Retira los archivos con errores antes de guardar.')).toBeVisible();
  await page.getByRole('button',{name:'Retirar arquitectura.drawio'}).click();
- await page.getByRole('button',{name:'Vista previa'}).click();
+ // La vista previa (texto a la izquierda, gráficas a la derecha) está abierta por defecto.
+ await expect(page.locator('.lesson-preview .study-section.has-aside')).toHaveCount(1);
  await expect(page.locator('.lesson-preview .study-mermaid-canvas svg')).toHaveCount(2);
  await expect(page.locator('.lesson-preview .react-flow__node')).toHaveCount(2);
  await page.getByRole('button',{name:'Crear lección'}).click();await expect(page.getByText(/Lección creada como borrador/)).toBeVisible();
