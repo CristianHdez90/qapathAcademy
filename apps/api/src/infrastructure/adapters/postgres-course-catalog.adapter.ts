@@ -29,6 +29,9 @@ export class PostgresCourseCatalogAdapter implements CourseRepositoryPort{
  }
  async get(key:string,admin:boolean){const result=await this.pool.query(`${courseSelect} WHERE ${admin?'c.id=$1::uuid':'c.slug=$1'} ${admin?'':"AND c.catalog_managed AND c.status='PUBLISHED'"}`,[key]);if(!result.rows[0])return undefined;const data=course(result.rows[0]);if(admin)data.usageCount=Number((await this.pool.query('SELECT count(*) total FROM learning_path_courses WHERE course_id=$1',[data.id])).rows[0].total);return data}
  private async assignments(db:Connection,id:string,input:CourseInput){
+  // Las lecciones asignadas deben existir en la biblioteca y no estar eliminadas.
+  const lessons=input.assignments.filter(ref=>ref.kind==='LESSON').map(ref=>ref.ref);
+  if(lessons.length&&Number((await db.query('SELECT count(*) total FROM course_lessons WHERE id::text=ANY($1::text[]) AND deleted_at IS NULL',[lessons])).rows[0].total)!==lessons.length)throw new CatalogError('INVALID','Alguna lección asignada no existe o fue eliminada. Recarga el editor.');
   await db.query('DELETE FROM course_content WHERE course_id=$1',[id]);
   for(const [position,ref] of input.assignments.entries())await db.query('INSERT INTO course_content(course_id,kind,content_ref,position) VALUES($1,$2,$3,$4)',[id,ref.kind,ref.ref,position]);
  }
@@ -48,7 +51,8 @@ export class PostgresCourseCatalogAdapter implements CourseRepositoryPort{
  async update(actor:string,id:string,revision:number,input:CourseInput,status:CourseStatus){return this.transaction(async db=>{
   const before=await this.locked(db,id,revision);courseTransition(before,status);
   if(before.slug!==input.slug)throw new CatalogError('CONFLICT','El slug es estable y no puede cambiarse.');
-  validateCourse(input,status,Number((await db.query("SELECT count(*) total FROM course_lessons WHERE course_id=$1 AND status='PUBLISHED'",[id])).rows[0].total));
+  const lessonRefs=input.assignments.filter(ref=>ref.kind==='LESSON').map(ref=>ref.ref);
+  validateCourse(input,status,lessonRefs.length?Number((await db.query("SELECT count(*) total FROM course_lessons WHERE id::text=ANY($1::text[]) AND status='PUBLISHED' AND deleted_at IS NULL",[lessonRefs])).rows[0].total):0);
   await db.query('UPDATE courses SET title=$2,summary=$3,description=$4,category=$5,skills=$6::jsonb,cover=$7,position=$8,content_kind=$9,status=$10,published=$11,coming_soon=$12,catalog_managed=true,revision=revision+1,updated_at=now() WHERE id=$1',[id,...values(input),status,status==='PUBLISHED',input.comingSoon===true]);
   await this.assignments(db,id,input);await this.audit(db,actor,id,'COURSE_UPDATED',before,{...input,status});
   return course((await db.query(`${courseSelect} WHERE c.id=$1`,[id])).rows[0]);

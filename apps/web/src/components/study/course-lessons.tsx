@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type {LessonDTO,LessonSummaryDTO,StudyFileKind} from '@qapath/contracts';
-import {StudyFileView} from './study-file-view';
+import {LessonBody} from './lesson-body';
+import './study.css';
 export const KIND_LABEL:Record<StudyFileKind,string>={markdown:'Lectura',mermaid:'Diagrama',interaction:'Interactivo',svg:'Imagen'};
 /** «Contenido de estudio» del curso: lecciones publicadas desde archivos. */
 export function CourseLessons({slug,lessons}:{slug:string;lessons:LessonSummaryDTO[]}){
@@ -14,7 +15,7 @@ export function LessonView({courseSlug,courseTitle,lesson,lessons}:{courseSlug:s
  return <article className="study-lesson">
   <Link className="text-link" href={`/courses/${courseSlug}`}>← {courseTitle}</Link>
   <header className="study-lesson-header"><p className="eyebrow">LECCIÓN {index>=0?String(index+1).padStart(2,'0'):''} · CONTENIDO DE ESTUDIO</p><h1>{lesson.title}</h1>{lesson.summary&&<p className="page-description">{lesson.summary}</p>}</header>
-  <div className="study-lesson-files">{lesson.files.map(file=><StudyFileView key={file.id} file={file}/>)}</div>
+  <LessonBody files={lesson.files} title={lesson.title}/>
   <nav className="study-lesson-nav" aria-label="Lecciones">{previous?<Link className="button button-outline" href={`/courses/${courseSlug}/lessons/${previous.id}`}>← {previous.title}</Link>:<span/>}{next?<Link className="button button-primary" href={`/courses/${courseSlug}/lessons/${next.id}`}>{next.title} →</Link>:<Link className="button button-outline" href={`/courses/${courseSlug}`}>Volver al curso</Link>}</nav>
  </article>;
 }

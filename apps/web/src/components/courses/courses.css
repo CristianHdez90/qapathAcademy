@@ -117,3 +117,12 @@ a.course-tile:hover .course-tile-cta{border-color:var(--accent)}
 .course-soon-card svg{width:56px;height:56px;flex:0 0 56px;color:#f3c94c}
 .course-soon-card h2{margin:0 0 6px;font-size:22px;color:#fff3c4}.course-soon-card p{margin:0 0 8px;line-height:1.6;color:#efe3bd}
 .course-soon-card a{color:#77e7cb;font-weight:700}
+/* Editor de curso + vista previa de la tarjeta */
+.course-editor-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:1.4rem;align-items:start}
+.course-card-preview{position:sticky;top:1rem;display:grid;gap:.6rem}
+.course-card-preview-frame{pointer-events:none}
+.course-card-preview-frame .course-card{max-width:340px}
+.course-editor .field-error{display:block;margin-top:.35rem;color:#ffb4a8;font-weight:600}
+.course-editor input[aria-invalid=true],.course-editor textarea[aria-invalid=true]{border-color:#ffb4a8}
+.course-editor label .hint{display:block;margin-top:.35rem;font-weight:400}
+@media (max-width:1100px){.course-editor-layout{grid-template-columns:1fr}.course-card-preview{position:static}}

@@ -6,7 +6,8 @@ import {courseInputSchema,courseUpdateSchema,courseQuerySchema,adminCourseQueryS
 import {CONTENT_REPOSITORY} from '../../application/tokens';
 import {Public,Roles} from '../security/session-security';
 import type {AuthenticatedRequest} from '../security/session-security';
-const parse=<T>(schema:{parse:(value:unknown)=>T},value:unknown):T=>{try{return schema.parse(value)}catch{throw new BadRequestException({error:{code:'VALIDATION_ERROR',message:'Revisa los campos de la solicitud.'}})}};
+const FIELD:Record<string,string>={slug:'Slug (minúsculas, números y guiones)',title:'Título',summary:'Resumen',description:'Descripción',category:'Categoría',skills:'Habilidades',position:'Orden editorial',cover:'Portada (/course-covers/archivo.webp o vacía)',contentKind:'Origen del contenido',assignments:'Contenido asignado',revision:'Revisión',status:'Visibilidad'};
+const parse=<T>(schema:{safeParse:(value:unknown)=>{success:true;data:T}|{success:false;error:{issues:{path:PropertyKey[]}[]}}},value:unknown):T=>{const result=schema.safeParse(value);if(result.success)return result.data;const field=String(result.error.issues[0]?.path[0]??'');throw new BadRequestException({error:{code:'VALIDATION_ERROR',message:FIELD[field]?`Revisa el campo: ${FIELD[field]}.`:'Revisa los campos de la solicitud.'}})};
 /** Bounded per-process backstop; existing session/Origin guards remain authoritative. */
 @Injectable()
 export class CatalogWriteRateGuard implements CanActivate{
