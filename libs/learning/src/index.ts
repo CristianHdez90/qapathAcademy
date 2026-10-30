@@ -17,3 +17,5 @@ export * from './domain/course-lessons';
 export * from './application/manage-course-lessons';
 export * from './domain/course-outline';
 export * from './application/manage-course-outline';
+export * from './domain/content-modules';
+export * from './application/manage-content-modules';

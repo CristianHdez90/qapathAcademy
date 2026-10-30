@@ -27,21 +27,22 @@ test('public outline hides answers; grading reports score, pass at 70 % and expl
  assert.throws(()=>gradeChapter({...chapter,quiz:[]},{}),/no tiene minitest/);
 });
 test('ManageCourseOutline: draft → publish rules, read/grade only published, progress only for known cards',async()=>{
- let state={courseId:'c',draft:null,draftRevision:0,draftUpdatedAt:null,published:null,publishedRevision:0,publishedAt:null};const calls=[];
+ let state={courseId:'c',title:'Curso',draft:null,draftRevision:0,draftUpdatedAt:null,published:null,publishedRevision:0,publishedAt:null};const calls=[];
  const repo={load:async()=>state,saveDraft:async(actor,id,rev,o,action)=>{calls.push(action);if(rev!==state.draftRevision)throw new CatalogError('CONFLICT','x');state={...state,draft:o,draftRevision:rev+1};return rev+1},
   publish:async()=>{state={...state,published:state.draft,publishedRevision:state.publishedRevision+1,publishedAt:new Date()}},unpublish:async()=>{state={...state,published:null,publishedAt:null}},
   published:async slug=>slug==='curso'&&state.published?{courseId:'c',slug,title:'Curso',revision:1,outline:state.published}:undefined,
   progress:async()=>({readCards:[],passedChapters:{}}),markRead:async(u,c,ids)=>({readCards:ids,passedChapters:{}}),recordQuiz:async(u,c,ch,p)=>{calls.push(['quiz',u,ch,p]);return {readCards:[],passedChapters:{[ch]:p}}}};
- const m=new ManageCourseOutline(repo,checkStudyFile);
- await assert.rejects(m.publish('a','c',0),/al menos una tarjeta/);
- const empty={weeks:[{...outline.weeks[0],chapters:[outline.weeks[0].chapters[0],{...outline.weeks[0].chapters[0],id:'c2',title:'Vacío',cards:[],quiz:[]}]}]};await m.saveDraft('a','c',0,empty);await assert.rejects(m.publish('a','c',1),/no tiene tarjetas/);
- const saved=await m.saveDraft('a','c',1,outline);assert.equal(saved.dirty,true);await assert.rejects(m.saveDraft('a','c',1,outline),/x/);
+ const m=new ManageCourseOutline(repo,checkStudyFile),owner={kind:'course',id:'c'};
+ await assert.rejects(m.publish('a',owner,0),/al menos una tarjeta/);
+ const empty={weeks:[{...outline.weeks[0],chapters:[outline.weeks[0].chapters[0],{...outline.weeks[0].chapters[0],id:'c2',title:'Vacío',cards:[],quiz:[]}]}]};await m.saveDraft('a',owner,0,empty);await assert.rejects(m.publish('a',owner,1),/no tiene tarjetas/);
+ const saved=await m.saveDraft('a',owner,1,outline);assert.equal(saved.dirty,true);await assert.rejects(m.saveDraft('a',owner,1,outline),/x/);
  await assert.rejects(m.read('curso'),/no tiene contenido publicado/);
- const published=await m.publish('a','c',2);assert.equal(published.dirty,false);
+ const published=await m.publish('a',owner,2);assert.equal(published.dirty,false);
  const read=await m.read('curso');assert.equal(read.weeks[0].chapters[0].quiz[0].correct,undefined);
  assert.equal((await m.grade('curso','c1',{q1:1,q2:0},'student')).percent,100);assert.deepEqual(calls.at(-1),['quiz','student','c1',100]);
  await m.grade('curso','c1',{q1:1});assert.equal(calls.at(-1)[0],'quiz');
  await assert.rejects(m.grade('curso','nope',{}),/Capítulo no disponible/);
  assert.deepEqual((await m.markRead('u','curso',['k1','inventada'])).readCards,['k1']);
- await m.unpublish('a','c');await assert.rejects(m.read('curso'),/no tiene contenido/);
+ assert.equal((await m.admin(owner)).ownerKind,'course');
+ await m.unpublish('a',owner);await assert.rejects(m.read('curso'),/no tiene contenido/);
 });

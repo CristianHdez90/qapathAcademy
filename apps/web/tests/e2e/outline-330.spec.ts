@@ -33,8 +33,9 @@ test('admin builds weeks → chapters → cards with preview and minitest; stude
  await session(page,'student-a');await page.goto('/courses/fundamentos');
  await expect(page.getByRole('heading',{name:'Clases y actividades'})).toBeVisible();await expect(page.locator('.module-chapters')).toContainText('0/1 tarjetas leídas');
  await page.getByRole('link',{name:/Comenzar: /}).click();
- await expect(page.getByRole('heading',{level:1,name:'Ciclo de vida del defecto'})).toBeVisible();await expect(page.locator('.study-section.has-aside .study-mermaid-canvas svg')).toHaveCount(1);
- await page.getByRole('button',{name:/Menú/}).click();await expect(page.locator('.outline-menu')).toContainText('Minitest (1)');await page.getByRole('button',{name:'Cerrar'}).click();
+ await expect(page.getByRole('heading',{level:2,name:'Ciclo de vida del defecto'})).toBeVisible();await expect(page.locator('.sidebar')).toBeHidden();await expect(page.locator('.study-section.has-aside .study-mermaid-canvas svg')).toHaveCount(1);
+ await page.getByRole('button',{name:/Menú/}).click();await expect(page.getByRole('dialog',{name:'Menú del curso'}).locator('.course-menu-chapters')).toContainText('Capítulo 01');await page.getByRole('button',{name:'Cerrar Menú del curso'}).click();
+ await page.getByRole('button',{name:/Avance del curso/}).click();await expect(page.getByRole('dialog',{name:'Avance del curso'})).toContainText('Minitest · Nuevo capítulo');await page.getByRole('button',{name:'Cerrar Avance del curso'}).click();
  await page.getByRole('button',{name:'Ir al minitest →'}).click();
  await page.getByLabel('En la mente').check();await page.getByRole('button',{name:'Calificar minitest'}).click();await expect(page.getByText(/Necesitas 70 %/)).toBeVisible();
  await page.getByRole('button',{name:'Repetir minitest'}).click();await page.getByLabel('En el código').check();await page.getByRole('button',{name:'Calificar minitest'}).click();

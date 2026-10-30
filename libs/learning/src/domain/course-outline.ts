@@ -2,12 +2,14 @@
 import {CatalogError} from './course-catalog';
 import type {StudyFileValidator} from './course-lessons';
 export type OutlineVisual={filename:string;kind?:'mermaid'|'interaction'|'svg';content:string};
-export type OutlineCard={id:string;title:string;text:string;visuals:OutlineVisual[]};
+export type OutlineCard={id:string;title:string;text:string;source?:string;visuals:OutlineVisual[]};
 export type OutlineQuestion={id:string;question:string;options:string[];correct:number;explanation:string};
 export type OutlineChapter={id:string;title:string;outcome:string;cards:OutlineCard[];quiz:OutlineQuestion[]};
 export type OutlineWeek={id:string;title:string;summary:string;chapters:OutlineChapter[]};
 export type CourseOutline={weeks:OutlineWeek[]};
-export type OutlineState={courseId:string;draft:CourseOutline|null;draftRevision:number;draftUpdatedAt:Date|null;published:CourseOutline|null;publishedRevision:number;publishedAt:Date|null};
+/** Dueño del contenido: un curso (contenido propio) o un módulo propio reutilizable. */
+export type OutlineOwner={kind:'course'|'module';id:string};
+export type OutlineState={courseId:string;title:string;draft:CourseOutline|null;draftRevision:number;draftUpdatedAt:Date|null;published:CourseOutline|null;publishedRevision:number;publishedAt:Date|null};
 export type OutlineProgress={readCards:string[];passedChapters:Record<string,number>};
 export const PASS_PERCENT=70;
 export const OUTLINE_BYTES=1_800_000;
@@ -36,11 +38,11 @@ export function gradeChapter(chapter:OutlineChapter,answers:Record<string,number
  return {score,total,percent,passed:percent>=PASS_PERCENT,feedback};
 }
 export interface OutlineRepositoryPort{
- load(courseId:string):Promise<OutlineState|undefined>;
- saveDraft(actor:string,courseId:string,expectedRevision:number,outline:CourseOutline,action:string):Promise<number>;
- publish(actor:string,courseId:string,expectedRevision:number):Promise<void>;
- unpublish(actor:string,courseId:string):Promise<void>;
- /** Curso visible para estudiantes (publicado, catálogo, no «En construcción») con contenido publicado. */
+ load(owner:OutlineOwner):Promise<OutlineState|undefined>;
+ saveDraft(actor:string,owner:OutlineOwner,expectedRevision:number,outline:CourseOutline,action:string):Promise<number>;
+ publish(actor:string,owner:OutlineOwner,expectedRevision:number):Promise<void>;
+ unpublish(actor:string,owner:OutlineOwner):Promise<void>;
+ /** Curso visible (publicado, catálogo, no «En construcción»): su contenido propio publicado + los módulos propios asignados, en orden. */
  published(slug:string):Promise<{courseId:string;slug:string;title:string;revision:number;outline:CourseOutline}|undefined>;
  progress(userId:string,courseId:string):Promise<OutlineProgress>;
  markRead(userId:string,courseId:string,cardIds:string[]):Promise<OutlineProgress>;
