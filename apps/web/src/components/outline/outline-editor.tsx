@@ -8,7 +8,7 @@ import {StudyFilesField,type StudyItem} from '@/components/study/study-files-fie
 import {OutlineCardView} from './outline-card';
 import {FocusedReader} from './focused-reader';
 import {StudyMarkdown} from '@/components/study/study-markdown';
-import {outlineHrefResolver,resolveOutlineTarget} from './outline-links';
+import {completeFromIndex,outlineHrefResolver,resolveOutlineTarget} from './outline-links';
 import '@/components/courses/courses.css';
 import '@/components/study/admin-course-lessons.css';
 import './outline.css';
@@ -122,7 +122,7 @@ function OutlineEditor({courseId,kind}:{courseId:string;kind:OutlineOwnerKind}){
     :card&&chapter?<CardForm key={card.id} card={card} resolveHref={outlineHrefResolver(learnBase,outline.weeks)} onChange={next=>updCard(week.id,chapter.id,card.id,()=>next)}/>
     :chapter&&sel.quiz?<QuizForm key={chapter.id+'quiz'} chapter={chapter} onChange={quiz=>updChapter(week.id,chapter.id,c=>({...c,quiz}))}/>
     :chapter?<div><h2>Capítulo</h2><label>Título<input maxLength={160} value={chapter.title} onChange={e=>updChapter(week.id,chapter.id,c=>({...c,title:e.target.value}))}/></label><label>Resultado de aprendizaje<textarea maxLength={400} value={chapter.outcome} onChange={e=>updChapter(week.id,chapter.id,c=>({...c,outcome:e.target.value}))}/></label><p className="hint">{chapter.cards.length} tarjetas · minitest con {chapter.quiz.length} preguntas.</p></div>
-    :<WeekForm key={week.id} week={week} number={outline.weeks.indexOf(week)+1} weeks={outline.weeks} learnBase={learnBase} onChange={next=>updWeek(week.id,()=>next)}/>}
+    :<WeekForm key={week.id} week={week} number={outline.weeks.indexOf(week)+1} weeks={outline.weeks} learnBase={learnBase} onChange={next=>updWeek(week.id,()=>next)} onWeeks={(weeks,selectWeek)=>{setOutline({weeks});if(selectWeek)setSel({week:selectWeek})}}/>}
    </div>
   </div>
   {fullPreview&&<div className="lesson-modal" role="dialog" aria-modal="true" aria-label="Vista previa del curso"><div className="lesson-modal-card course-editor">
@@ -150,8 +150,29 @@ function CardForm({card,onChange,resolveHref}:{card:OutlineCard;onChange:(card:O
 }
 const LINK=/\[([^\]]+)\]\(([^)\s]+)\)/g;
 /** Semana: título y resumen en Markdown (índice con enlaces a capítulos y tarjetas), con carga de .md y vista previa. */
-function WeekForm({week,number,weeks,learnBase,onChange}:{week:OutlineWeek;number:number;weeks:OutlineWeek[];learnBase:string;onChange:(week:OutlineWeek)=>void}){
- const [fileError,setFileError]=useState('');
+function WeekForm({week,number,weeks,learnBase,onChange,onWeeks}:{week:OutlineWeek;number:number;weeks:OutlineWeek[];learnBase:string;onChange:(week:OutlineWeek)=>void;onWeeks:(weeks:OutlineWeek[],selectWeek?:string)=>void}){
+ const [fileError,setFileError]=useState(''),[notice,setNotice]=useState('');
+ /** Crea los capítulos que el índice enlaza y aún no existen; con archivos .md, también llena el texto de sus tarjetas. */
+ const complete=(files?:Map<string,string>)=>{
+  setFileError('');setNotice('');
+  const plan=completeFromIndex(weeks,week.id,newId,files);
+  if(!plan.createdChapters&&!plan.filled){setNotice(files?'Ningún archivo coincide con un enlace del índice (se compara el nombre del .md).':'No hay capítulos por crear.');return}
+  if(plan.createdChapters&&!window.confirm(`Se crearán ${plan.createdChapters} capítulo(s)${plan.createdWeeks?` y ${plan.createdWeeks} semana(s)`:''} desde los enlaces del índice, cada uno con una tarjeta${files?'':' vacía'}.${files?'':'\nLuego carga en cada tarjeta su .md (o usa «Cargar .md de los capítulos»).'}\n\nLos cambios se aplican al guardar el borrador.`))return;
+  onWeeks(plan.weeks as OutlineWeek[]);
+  setNotice(`✓ ${plan.createdChapters} capítulo(s) creados${plan.createdWeeks?` · ${plan.createdWeeks} semana(s) nuevas`:''}${plan.filled?` · ${plan.filled} tarjeta(s) con texto`:''}. Revisa el árbol y guarda el borrador.${plan.skipped.length?` Sin crear (no son .md): ${plan.skipped.join(', ')}.`:''}`);
+ };
+ const loadChapters=async(list:FileList|null)=>{
+  setFileError('');if(!list?.length)return;
+  const files=new Map<string,string>();
+  for(const file of Array.from(list)){
+   if(!/\.(md|markdown)$/i.test(file.name)){setFileError(`«${file.name}» no es un .md.`);return}
+   const text=(await file.text()).replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n');
+   if(text.length>OUTLINE_LIMITS.text){setFileError(`«${file.name}» supera ${OUTLINE_LIMITS.text.toLocaleString('es')} caracteres: divídelo en varias tarjetas.`);return}
+   if(/<script|<iframe|javascript:/i.test(text)){setFileError(`«${file.name}» incluye scripts, iframes o enlaces javascript:.`);return}
+   files.set(file.name.toLowerCase(),text);
+  }
+  complete(files);
+ };
  const resolveHref=useMemo(()=>outlineHrefResolver(learnBase,weeks,week.id),[learnBase,weeks,week.id]);
  const chapters=weeks.flatMap(w=>w.chapters);
  const links=[...week.summary.matchAll(LINK)].filter(m=>!/^(https?:|mailto:)/i.test(m[2]));
@@ -177,7 +198,11 @@ function WeekForm({week,number,weeks,learnBase,onChange}:{week:OutlineWeek;numbe
     <ul><li><code>[Tema](capitulo:2)</code> · capítulo por número</li><li><code>[Tema](tarjeta:5)</code> · tarjeta por número</li><li><code>[Tema](C02-tema.md)</code> · tarjeta cargada desde ese .md (o «C02» = capítulo 2)</li><li><code>[Tema](Título del capítulo)</code> · por título</li></ul>
     <p>Capítulos disponibles:</p><ol>{chapters.map(c=><li key={c.id}>{c.title} <small>· {c.cards.length} tarjeta(s){c.cards.some(k=>k.source)?` · ${c.cards.filter(k=>k.source).map(k=>k.source).join(', ')}`:''}</small></li>)}</ol>
    </details>
-   {broken.length>0&&<p className="feedback bad" role="status">{broken.length===1?'1 enlace no':`${broken.length} enlaces no`} apunta(n) a un capítulo o tarjeta y se mostrará(n) como texto: {broken.slice(0,6).map(m=>`«${m[1]}» (${m[2]})`).join(', ')}{broken.length>6?'…':''}</p>}
+   {broken.length>0&&<div className="outline-index-pending" role="status"><p><strong>{broken.length===1?'1 enlace del índice aún no tiene capítulo':`${broken.length} enlaces del índice aún no tienen capítulo`}</strong> (por ahora se muestran como texto): {broken.slice(0,8).map(m=>`«${m[1].replace(/[*_`]/g,'')}»`).join(', ')}{broken.length>8?'…':''}.</p>
+    <p className="hint">Crea esos capítulos automáticamente (uno por enlace, con su tarjeta) o carga a la vez los .md de los capítulos: se emparejan por nombre de archivo y llenan cada tarjeta.</p>
+    <div className="course-toolbar"><button type="button" className="button button-primary" onClick={()=>complete()}>Crear capítulos desde el índice</button></div></div>}
+   <label className="outline-file">Cargar .md de los capítulos (varios a la vez)<input type="file" multiple accept=".md,.markdown,text/markdown" onChange={e=>{void loadChapters(e.target.files);e.target.value=''}}/></label>
+   {notice&&<p className="feedback good" role="status">{notice}</p>}
    {links.length>0&&!broken.length&&<p className="feedback good" role="status">✓ {links.length} enlace(s) del índice resueltos.</p>}
   </div>
   <div className="outline-preview" aria-label="Vista previa del índice de la semana"><p className="eyebrow">VISTA PREVIA · ÍNDICE DEL CURSO</p><p className="eyebrow">SEMANA {String(number).padStart(2,'0')}</p><h1>{week.title||'Semana sin título'}</h1>{week.summary.trim()?<StudyMarkdown source={week.summary} resolveHref={resolveHref}/>:<p className="hint">Escribe el resumen o carga un .md: aparecerá bajo el título de la semana en el índice del curso.</p>}</div>

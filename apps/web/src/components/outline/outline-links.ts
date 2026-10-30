@@ -64,3 +64,53 @@ export function outlineHrefResolver(base:string,weeks:Week[],weekId?:string){
   return target?targetHref(base,target):null;
  };
 }
+
+/**
+ * SPEC-CONTENT-331 · Completa el curso desde el índice de una semana: cada enlace a un .md que aún no apunta a nada
+ * crea un capítulo con una tarjeta (origen = ese .md). Los encabezados «SEMANA 0N» del índice deciden la semana destino
+ * (se crea si falta). Con `files` (nombre .md → texto), también llena el texto de las tarjetas.
+ */
+type DraftCard={id:string;title:string;text:string;source?:string;visuals:unknown[]};
+type DraftChapter={id:string;title:string;outcome:string;cards:DraftCard[];quiz:unknown[]};
+type DraftWeek={id:string;title:string;summary:string;chapters:DraftChapter[]};
+const LINK_RE=/\[([^\]]+)\]\(([^)\s]+)\)/g;
+const WEEK_RE=/^\s*(?:#{1,6}\s*)?(?:\*\*)?\s*SEMANA\s*0*(\d{1,2})\b\s*[—–:-]?\s*(.*?)(?:\*\*)?\s*$/gim;
+const plainTitle=(text:string)=>text.replace(/[*_`]/g,'').replace(/\s+/g,' ').trim().slice(0,160);
+const fileNumber=(file:string)=>Number(/^(?:c|cap|capitulo|chapter)[-_ ]?0*(\d{1,3})(?:\D|$)/i.exec(file)?.[1]??9999);
+export type IndexPlan<W>={weeks:W[];createdChapters:number;createdWeeks:number;filled:number;skipped:string[]};
+export function completeFromIndex<W extends DraftWeek>(weeks:W[],weekId:string,newId:(prefix:string)=>string,files?:Map<string,string>):IndexPlan<W>{
+ const current=weeks.findIndex(w=>w.id===weekId);
+ const summary=weeks[current]?.summary??'';
+ const headings=[...summary.matchAll(WEEK_RE)].map(m=>({pos:m.index??0,n:Number(m[1]),title:plainTitle(m[2]??'')}));
+ const next:W[]=weeks.map(w=>({...w,chapters:w.chapters.map(c=>({...c,cards:c.cards.map(k=>({...k}))}))}));
+ // Número de cada capítulo existente: el de su .md de origen o, si no tiene, su posición en el curso.
+ const position=new Map(weeks.flatMap(w=>w.chapters).map((c,i)=>[c.id,i+1]));
+ const numberOf=(c:DraftChapter)=>{const source=c.cards.find(k=>k.source)?.source;return source&&fileNumber(basename(source))!==9999?fileNumber(basename(source)):position.get(c.id)??9999};
+ let createdChapters=0,createdWeeks=0,filled=0;const skipped:string[]=[];const seen=new Set<string>();
+ const links=[...summary.matchAll(LINK_RE)].filter(m=>!/^(https?:|mailto:)/i.test(m[2])).map(m=>({text:m[1],href:m[2],pos:m.index??0,file:basename(m[2])}))
+  .sort((a,b)=>a.pos-b.pos);
+ for(const link of links){
+  if(seen.has(link.href))continue;seen.add(link.href);
+  const content=files?.get(link.file);
+  const target=resolveOutlineTarget(link.href,next);
+  if(target){
+   // Ya existe: si se cargó su .md y la tarjeta está vacía, se llena.
+   const card=target.kind==='card'?next.flatMap(w=>w.chapters).flatMap(c=>c.cards).find(k=>k.id===target.id):next.flatMap(w=>w.chapters).find(c=>c.id===target.id)?.cards[0];
+   if(card&&content!==undefined&&!card.text.trim()){card.text=content;card.source??=link.file;filled++}
+   continue;
+  }
+  if(!/\.(md|markdown)$/.test(link.file)){skipped.push(link.href);continue}
+  const heading=[...headings].reverse().find(h=>h.pos<link.pos);
+  let index=heading?heading.n-1:current;
+  if(index<0)index=current;
+  while(next.length<=index){next.push({id:newId('sem'),title:heading&&next.length===index&&heading.title.length>=3?heading.title:`Semana ${next.length+1}`,summary:'',chapters:[]} as unknown as W);createdWeeks++}
+  const title=plainTitle(link.text).length>=3?plainTitle(link.text):plainTitle(link.file.replace(/\.(md|markdown)$/,'').replace(/[-_]+/g,' '));
+  const chapter:DraftChapter={id:newId('cap'),title,outcome:'',cards:[{id:newId('card'),title,text:content??'',source:link.file,visuals:[]}],quiz:[]};
+  // Se inserta respetando el número del archivo (C02 antes que C03).
+  const list=next[index].chapters,n=fileNumber(link.file);
+  const at=list.findIndex(c=>numberOf(c)>n);
+  if(at<0)list.push(chapter);else list.splice(at,0,chapter);
+  createdChapters++;if(content!==undefined)filled++;
+ }
+ return {weeks:next,createdChapters,createdWeeks,filled,skipped};
+}
