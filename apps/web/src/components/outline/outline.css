@@ -67,3 +67,5 @@
 .study-link-unresolved{text-decoration:none}
 .study-internal-link{text-decoration:underline;text-underline-offset:3px}
 .outline-reader.focused-study{max-width:none;padding-bottom:0}
+.outline-index-pending{margin:.6rem 0;padding:.8rem 1rem;border:1px solid var(--line);border-left:3px solid #f3d06b;border-radius:10px;font-size:.9rem;line-height:1.6}
+.outline-index-pending p{margin:0 0 .4rem}

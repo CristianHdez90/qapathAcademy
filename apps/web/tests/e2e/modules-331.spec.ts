@@ -32,7 +32,13 @@ test('admin creates an own module with a .md week index; student opens the linke
  const weekPreview=page.getByLabel('Vista previa del índice de la semana');
  await expect(weekPreview.getByRole('link',{name:'Códigos de estado'})).toBeVisible();
  await expect(weekPreview.getByRole('link',{name:'Pendiente'})).toHaveCount(0);await expect(weekPreview).toContainText('Pendiente');
- await expect(page.getByText(/1 enlace no apunta/)).toBeVisible();
+ await expect(page.getByText('1 enlace del índice aún no tiene capítulo')).toBeVisible();
+ // Corrección: cargar los .md de los capítulos crea el capítulo faltante (C09) con su texto y el enlace se resuelve
+ page.once('dialog',d=>void d.accept());
+ await page.getByLabel('Cargar .md de los capítulos (varios a la vez)').setInputFiles([{name:'C09-otro.md',mimeType:'text/markdown',buffer:Buffer.from('# Otro tema\n\nContenido del capítulo 9.')}]);
+ await expect(page.getByText(/1 capítulo\(s\) creados · 1 tarjeta\(s\) con texto/)).toBeVisible();
+ await expect(weekPreview.getByRole('link',{name:'Pendiente'})).toBeVisible();
+ await expect(page.locator('.outline-tree')).toContainText('Pendiente');
  await page.getByRole('button',{name:'Guardar borrador'}).click();await expect(page.getByText(/Borrador guardado/)).toBeVisible();
  page.once('dialog',d=>d.accept());await page.getByRole('button',{name:'Publicar',exact:true}).click();await expect(page.getByText('Contenido publicado.')).toBeVisible();
  // 4) Asignarlo a un curso y cambiar su slug (URL)
