@@ -15,3 +15,5 @@ export * from './domain/course-catalog';
 export * from './application/manage-course-catalog';
 export * from './domain/course-lessons';
 export * from './application/manage-course-lessons';
+export * from './domain/course-outline';
+export * from './application/manage-course-outline';

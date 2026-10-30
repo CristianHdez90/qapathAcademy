@@ -102,3 +102,4 @@ export type {LoginOutcomeDTO} from './auth';
 export * from './course-catalog';
 export * from './appearance';
 export * from './course-lessons';
+export * from './course-outline';
