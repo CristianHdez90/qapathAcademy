@@ -19,7 +19,7 @@ const hints:Record<string,Step[]>={
  ],
  retest:[
   {title:'Revisa la regla corregida',content:<>Primero resta el descuento al subtotal; después suma el envío.<pre><code>{'return subtotal - discount + delivery;'}</code></pre></>},
-  {title:'Conserva las mismas entradas',content:<>Repite la prueba con <code>total(3, 'QA10', 'delivery')</code>. Mantener las entradas y la expectativa permite comparar con el fallo anterior.</>},
+  {title:'Conserva las mismas entradas',content:<>Repite la prueba con <code>{"total(3, 'QA10', 'delivery')"}</code>. Mantener las entradas y la expectativa permite comparar con el fallo anterior.</>},
   {title:'Comprueba el resultado',content:<>El total debe ser <strong>104.500 COP</strong> y la aserción debe pasar. Revisa la salida real antes de registrar tu conclusión.</>},
  ],
  free:[

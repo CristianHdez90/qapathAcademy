@@ -1,6 +1,6 @@
-import {BadRequestException,ConflictException,ForbiddenException,NotFoundException,Body,Controller,Get,Inject,Param,ParseUUIDPipe,Patch,Post,Query,Req} from '@nestjs/common';
+import {BadRequestException,ConflictException,ForbiddenException,NotFoundException,Body,Controller,Get,Inject,Param,ParseUUIDPipe,HttpCode,Patch,Post,Query,Req} from '@nestjs/common';
 import {ManageStudents,AdminDomainError} from '@qapath/administration';
-import {auditQuerySchema,changeStudentSchema,listStudentsSchema,newStudentSchema} from '@qapath/contracts';
+import {adminMfaResetSchema,auditQuerySchema,changeStudentSchema,listStudentsSchema,newStudentSchema} from '@qapath/contracts';
 import {SecureAuthenticationService,SecurityFlowError} from '@qapath/identity';
 import {Roles} from '../security/session-security';
 import type {AuthenticatedRequest} from '../security/session-security';
@@ -24,5 +24,6 @@ export class AdminController {
  @Get('students/:id')async detail(@Param('id',ParseUUIDPipe)id:string){try{return {data:await this.admin.detail(id)};}catch(e){errors(e)}}
  @Patch('students/:id')async modify(@Param('id',ParseUUIDPipe)id:string,@Req()request:AuthenticatedRequest,@Body()body:unknown){const data=validated(changeStudentSchema.safeParse(body));try{const changed=await this.admin.change(id,request.user!.id,data);if(data.email){await this.security.updateExternalEmail(id,changed.email);if(!this.security.externalIdentityEnabled)await this.security.resendVerification(changed.email);}return {data:changed};}catch(e){errors(e)}}
  @Get('students/:id/events')async history(@Param('id',ParseUUIDPipe)id:string){try{await this.admin.detail(id);return {data:await this.admin.history(id,50)}}catch(e){errors(e)}}
+ @Post('mfa-reset')@HttpCode(200)async resetMfa(@Req()request:AuthenticatedRequest,@Body()body:unknown){const data=validated(adminMfaResetSchema.safeParse(body));try{return {data:await this.security.resetMfaByAdmin(data.email,request.user!.id)}}catch(e){if(e instanceof SecurityFlowError&&e.status===403)throw new ForbiddenException(e.message);errors(e)}}
  @Get('audit')async audit(@Query()query:unknown){const q=validated(auditQuerySchema.safeParse(query));return {data:await this.admin.audit(q.studentId,q.page,q.limit)};}
 }

@@ -1,0 +1,5043 @@
+{
+ "version": "fnd-v2",
+ "weeks": {
+  "1": {
+   "version": "fnd-v2",
+   "week": 1,
+   "title": "Tipos, enfoques, niveles y pirámide de pruebas",
+   "summary": "ReservaYa es un caso ficticio: un equipo Scrum decide qué probar, cómo diseñarlo y con qué evidencia. No usa datos personales ni médicos reales.",
+   "chapters": [
+    {
+     "id": "FND-C01",
+     "week": 1,
+     "number": 1,
+     "status": "published",
+     "title": "Tipos de pruebas: qué evaluamos y cómo",
+     "outcome": "Clasifica una prueba por objetivo, base de diseño y ejecución sin confundir las dimensiones.",
+     "opening": {
+      "story": [
+       "Lunes, refinamiento del sprint 14. Valeria (PO) lee la HU-RES-01: «quiero reservar un bloque disponible sin que el mismo turno se asigne a dos personas».",
+       "Andrés (backend) dice: «Listo, lo pruebo con un par de clics». Tomás (QA) levanta la mano: «¿Probamos que reserve, que lo haga rápido con 200 personas a la vez, que se pueda usar con teclado… o todo?».",
+       "Cuatro personas acaban de usar la palabra «probar» y cada una piensa en algo distinto. En este capítulo aprenderás a ponerle nombre a cada pregunta."
+      ],
+      "question": "¿Cuántas preguntas distintas sobre calidad escuchas en la escena?",
+      "answer": "Al menos tres: ¿hace lo que debe?, ¿con qué calidad lo hace (rapidez, accesibilidad)? y ¿cómo diseñamos la comprobación?"
+     },
+     "objectives": [
+      "Distinguir las pruebas funcionales, no funcionales, de caja negra y de caja blanca.",
+      "Explicar por qué E2E, Smoke, Re-test, Regresión y Exploratoria no son subtipos de las pruebas funcionales.",
+      "Identificar qué dimensión describe cada término: objetivo, alcance, propósito, cambio o enfoque.",
+      "Combinar pruebas de forma adecuada a una necesidad de negocio.",
+      "Diferenciar una prueba individual, un enfoque y una suite de pruebas."
+     ],
+     "cards": [
+      {
+       "id": "FND-W01-C01-T01",
+       "title": "Probar es obtener información",
+       "objective": "Reconocer que el testing aporta evidencia sobre riesgos y no solo «busca errores al final».",
+       "context": "Una reserva doble se descubrió en producción en otra aplicación del mismo centro.",
+       "explanation": "El testing es el conjunto de actividades que evalúan un producto y sus artefactos para encontrar defectos y obtener información sobre su calidad. QA (aseguramiento de calidad) mejora el proceso para prevenir problemas; QC (control de calidad) verifica el producto. Una persona comete un error, que introduce un defecto en el código o en un documento; ese defecto, al ejecutarse, puede producir un fallo visible.",
+       "example": {
+        "situation": "Andrés olvidó bloquear el turno mientras se confirma (error); el código permite dos inserciones (defecto); dos usuarios ven «Reserva confirmada» para las 10:00 (fallo).",
+        "qaDecision": "Registrar el fallo con pasos reproducibles y llevar a la retrospectiva qué práctica habría prevenido el error: eso es una mejora de QA.",
+        "evidence": "Reporte con las dos confirmaciones del mismo bloque y la hora del servidor."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T01-Q1",
+         "question": "Dos usuarios reciben la confirmación del mismo turno. ¿Qué observaste?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Un error"
+          },
+          {
+           "id": "b",
+           "text": "Un fallo"
+          },
+          {
+           "id": "c",
+           "text": "Una mejora de QA"
+          }
+         ]
+        },
+        {
+         "id": "FND-W01-C01-T01-Q2",
+         "question": "La suite de ReservaYa pasa al 100 %. ¿Qué puedes afirmar?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Que no hay defectos"
+          },
+          {
+           "id": "b",
+           "text": "Que los casos ejecutados no encontraron fallos y el riesgo cubierto bajó"
+          },
+          {
+           "id": "c",
+           "text": "Que ya no hace falta revisar requisitos"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Qué entendemos por probar"
+        },
+        {
+         "kind": "p",
+         "text": "Probar es un conjunto de actividades que aportan **información sobre la calidad** de un producto de trabajo: requisitos, diseños, código, servicios y aplicaciones integradas. No se limita a ejecutar el software."
+        },
+        {
+         "kind": "list",
+         "title": "Para qué sirve probar",
+         "items": [
+          "**Evaluar** productos de trabajo (historias, diseños, código).",
+          "**Verificar** que se cumplen los requisitos especificados.",
+          "**Validar** que el producto satisface la necesidad del usuario.",
+          "**Detectar defectos** y reducir el riesgo de que lleguen a producción."
+         ]
+        },
+        {
+         "kind": "callout",
+         "tone": "note",
+         "title": "Revisar también es probar",
+         "text": "Durante el refinamiento de una historia de transferencias, QA detecta que no está definido qué ocurre si la conexión falla después de confirmar el pago. Esa revisión, sin ejecutar nada, descubre un riesgo antes de programar."
+        },
+        {
+         "kind": "callout",
+         "tone": "key",
+         "title": "Nota ISTQB",
+         "text": "El syllabus CTFL v4.0.1 identifica cuatro **tipos de prueba**: funcional, no funcional, caja negra y caja blanca. Términos como E2E, Smoke o Regresión describen otras dimensiones: los verás al final del capítulo."
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T02",
+       "title": "Pruebas funcionales: ¿hace lo que debe?",
+       "objective": "Identificar pruebas que evalúan el comportamiento frente a los requisitos.",
+       "context": "Reglas RES-R1 a RES-R4 de la historia HU-RES-01.",
+       "explanation": "Una prueba funcional evalúa qué hace el sistema: sus funciones frente a lo especificado o esperado (CTFL §2.2.2). Responde a la pregunta «¿cumple la regla?».",
+       "example": {
+        "situation": "Reservar el martes a las 09:00 cuando hoy es miércoles.",
+        "qaDecision": "Esperar el rechazo con el mensaje «No puedes reservar en el pasado» (regla RES-R1).",
+        "evidence": "Captura del mensaje y respuesta de la API 422 con el código PAST_SLOT."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T02-Q1",
+         "question": "¿Cuál es una prueba funcional de ReservaYa?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Verificar que un segundo usuario recibe «conflicto» si el turno ya fue tomado"
+          },
+          {
+           "id": "b",
+           "text": "Medir que la confirmación tarde menos de 2 s con 200 usuarios"
+          },
+          {
+           "id": "c",
+           "text": "Revisar que el código use transacciones"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Definición"
+        },
+        {
+         "kind": "p",
+         "text": "Las pruebas funcionales comprueban si las **funciones del sistema** cumplen los requisitos funcionales y producen los resultados esperados. Responden a la pregunta **«¿qué hace el sistema?»**."
+        },
+        {
+         "kind": "list",
+         "title": "Ejemplos",
+         "items": [
+          "Iniciar sesión con credenciales válidas.",
+          "Rechazar una transferencia cuando el saldo es insuficiente.",
+          "Calcular el valor correcto de un descuento.",
+          "Permitir consultar el historial de operaciones."
+         ]
+        },
+        {
+         "kind": "h",
+         "text": "Otro ejemplo: banca digital"
+        },
+        {
+         "kind": "code",
+         "caption": "Caso práctico en formato Dado / Cuando / Entonces",
+         "code": "Dado   un usuario con saldo de $500.000\nCuando transfiere $100.000 a una cuenta registrada\nEntonces el sistema registra la transacción\n  y refleja el saldo correspondiente, según las tarifas y reglas del producto"
+        }
+       ],
+       "focus": [
+        "functional"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T03",
+       "title": "Pruebas no funcionales: ¿con qué calidad lo hace?",
+       "objective": "Relacionar las pruebas no funcionales con características de calidad.",
+       "context": "El lunes a las 8:00 se abren los turnos de la semana y entran cientos de personas.",
+       "explanation": "Una prueba no funcional evalúa cómo de bien se comporta el sistema. El modelo ISO/IEC 25010:2023 organiza la calidad del producto en nueve características: adecuación funcional, eficiencia de desempeño, compatibilidad, capacidad de interacción, fiabilidad, seguridad, mantenibilidad, flexibilidad y protección (nombres en traducción editorial). La adecuación funcional se cubre con pruebas funcionales; las otras ocho, con pruebas no funcionales.",
+       "example": {
+        "situation": "200 solicitudes simultáneas de reserva.",
+        "qaDecision": "Acordar con Valeria un objetivo medible (por ejemplo, el 95 % de las confirmaciones en menos de 2 s; cifra ficticia del caso) y medirlo en staging.",
+        "evidence": "Informe de la herramienta de carga con percentiles y errores."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T03-Q1",
+         "question": "«La pantalla de reserva se completa solo con teclado y el lector de pantalla anuncia el turno elegido». ¿Qué característica evalúa?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Adecuación funcional"
+          },
+          {
+           "id": "b",
+           "text": "Capacidad de interacción (accesibilidad)"
+          },
+          {
+           "id": "c",
+           "text": "Mantenibilidad"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Definición"
+        },
+        {
+         "kind": "p",
+         "text": "Las pruebas no funcionales evalúan **características de calidad**: cómo se comporta el sistema y qué restricciones de calidad satisface. Responden a **«¿qué tan bien lo hace?»**."
+        },
+        {
+         "kind": "table",
+         "caption": "Características de calidad y ejemplos de verificación",
+         "columns": [
+          "Característica",
+          "Ejemplo de verificación"
+         ],
+         "rows": [
+          [
+           "Eficiencia del desempeño",
+           "Una consulta responde en menos de 2 segundos bajo las condiciones definidas."
+          ],
+          [
+           "Seguridad",
+           "Un usuario no autorizado no puede consultar datos ajenos."
+          ],
+          [
+           "Usabilidad",
+           "El usuario completa una transferencia sin confusiones relevantes."
+          ],
+          [
+           "Compatibilidad",
+           "La aplicación funciona en los navegadores soportados."
+          ],
+          [
+           "Fiabilidad",
+           "El sistema mantiene el servicio ante fallos previstos."
+          ],
+          [
+           "Accesibilidad",
+           "Los controles se operan con teclado y tecnologías de asistencia."
+          ]
+         ]
+        },
+        {
+         "kind": "callout",
+         "tone": "warn",
+         "title": "Hazlo medible",
+         "text": "«El sistema debe ser rápido» es ambiguo. «El percentil 95 de respuesta será ≤ 2 s con 100 usuarios concurrentes en el ambiente definido» sí es verificable."
+        }
+       ],
+       "focus": [
+        "nonfunctional"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T04",
+       "title": "Caja negra: diseñar desde la especificación",
+       "objective": "Reconocer pruebas diseñadas sin mirar la estructura interna.",
+       "context": "Tomás solo tiene la historia de usuario y sus reglas.",
+       "explanation": "En una prueba de caja negra los casos se derivan de la especificación o del comportamiento esperado, sin usar la estructura interna (CTFL §2.2.2; técnicas en §4.2, como particiones de equivalencia y valores límite). Sirve tanto para objetivos funcionales como no funcionales.",
+       "example": {
+        "situation": "La regla RES-R2 dice «bloques de una hora».",
+        "qaDecision": "Usar valores límite: 09:00 (válido), 09:30 (inválido) y 23:00 (último bloque si el centro cierra a medianoche).",
+        "evidence": "Tabla entrada → resultado esperado → obtenido."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T04-Q1",
+         "question": "Una prueba de carga que solo envía peticiones HTTP a la API de reservas y mide tiempos, sin mirar el código, es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "No funcional y de caja negra"
+          },
+          {
+           "id": "b",
+           "text": "Funcional y de caja negra"
+          },
+          {
+           "id": "c",
+           "text": "No funcional y de caja blanca"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Definición"
+        },
+        {
+         "kind": "p",
+         "text": "Las pruebas de caja negra se diseñan a partir de **especificaciones y del comportamiento observable**, sin basarse en la estructura interna del software."
+        },
+        {
+         "kind": "list",
+         "title": "Técnicas asociadas",
+         "items": [
+          "Partición de equivalencia",
+          "Análisis de valores límite",
+          "Tablas de decisión",
+          "Transición de estados"
+         ]
+        },
+        {
+         "kind": "table",
+         "caption": "Ejemplo: un campo acepta edades entre 18 y 65 años (valores límite)",
+         "columns": [
+          "Valor",
+          "Resultado esperado",
+          "Por qué"
+         ],
+         "rows": [
+          [
+           "17",
+           "Rechazado",
+           "Justo debajo del mínimo"
+          ],
+          [
+           "18",
+           "Aceptado",
+           "Límite inferior"
+          ],
+          [
+           "65",
+           "Aceptado",
+           "Límite superior"
+          ],
+          [
+           "66",
+           "Rechazado",
+           "Justo encima del máximo"
+          ]
+         ]
+        }
+       ],
+       "focus": [
+        "blackbox"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T05",
+       "title": "Caja blanca: diseñar desde la estructura",
+       "objective": "Reconocer pruebas basadas en el código, la arquitectura o el flujo interno.",
+       "context": "Andrés escribió: si el turno está tomado, devolver CONFLICTO.",
+       "explanation": "En la caja blanca los casos se derivan de la estructura interna: sentencias, ramas o flujos de datos (CTFL §2.2.2 y §4.3). La cobertura mide cuánto de esa estructura ejercitaron las pruebas. No equivale a «no funcional»: puedes cubrir las ramas de una regla de negocio.",
+       "example": {
+        "situation": "La función tiene dos ramas: libre → reservar; ocupado → conflicto.",
+        "qaDecision": "Diseñar un caso por rama y revisar el informe de cobertura de ramas.",
+        "evidence": "Informe con el 100 % de las ramas de reserveSlot cubiertas, que no significa ausencia de defectos."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T05-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "La caja blanca solo la hace DEV"
+          },
+          {
+           "id": "b",
+           "text": "Una prueba de caja blanca puede comprobar una regla funcional"
+          },
+          {
+           "id": "c",
+           "text": "100 % de cobertura significa que no hay defectos"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Definición"
+        },
+        {
+         "kind": "p",
+         "text": "Las pruebas de caja blanca se diseñan a partir de la **estructura interna** del objeto de prueba: instrucciones, decisiones, flujos de control o código."
+        },
+        {
+         "kind": "list",
+         "title": "Técnicas asociadas en CTFL",
+         "items": [
+          "Cobertura de sentencias",
+          "Cobertura de ramas"
+         ]
+        },
+        {
+         "kind": "code",
+         "caption": "Ejemplo: ejercitar ambas salidas de una validación de saldo",
+         "code": "si saldo >= monto entonces\n   registrar transferencia     ← caso 1: saldo 500.000, monto 100.000\nsi no\n   rechazar \"Saldo insuficiente\" ← caso 2: saldo 50.000, monto 100.000"
+        },
+        {
+         "kind": "callout",
+         "tone": "key",
+         "title": "No son ejes excluyentes",
+         "text": "Funcional / no funcional y caja negra / caja blanca **se combinan**: una prueba de seguridad puede ser no funcional y de caja negra; una prueba funcional también puede diseñarse con información de caja blanca."
+        }
+       ],
+       "focus": [
+        "whitebox"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T06",
+       "title": "Técnicas basadas en la experiencia",
+       "objective": "Valorar el conocimiento de quien prueba como fuente de casos.",
+       "context": "Tomás recuerda que en otra aplicación los turnos fallaban al cambiar el horario de verano.",
+       "explanation": "Las técnicas basadas en la experiencia (CTFL §4.4) usan el conocimiento y la intuición del equipo: predicción de errores, prueba exploratoria y listas de comprobación. Complementan a las técnicas sistemáticas; no las sustituyen.",
+       "example": {
+        "situation": "Predicción de errores sobre fechas.",
+        "qaDecision": "Probar la reserva a las 23:00 del día previo al cambio horario y con la zona horaria del navegador distinta a la del servidor.",
+        "evidence": "Nota de exploración con hallazgos y datos usados."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T06-Q1",
+         "question": "¿Qué es la predicción de errores?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Anticipar defectos probables a partir de la experiencia y de fallos conocidos"
+          },
+          {
+           "id": "b",
+           "text": "Calcular la probabilidad de fallo con estadística"
+          },
+          {
+           "id": "c",
+           "text": "Ejecutar todos los casos posibles"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Aprender mientras se prueba"
+        },
+        {
+         "kind": "p",
+         "text": "Las técnicas basadas en la experiencia aprovechan el conocimiento del tester. La **prueba exploratoria** diseña y ejecuta pruebas al mismo tiempo, aprendiendo del producto en cada paso."
+        },
+        {
+         "kind": "list",
+         "title": "Ejemplos",
+         "items": [
+          "Explorar combinaciones no previstas de cuentas, importes, navegación y cancelaciones.",
+          "Buscar dificultades de usabilidad o de accesibilidad y complementarlas con verificaciones sistemáticas."
+         ]
+        },
+        {
+         "kind": "callout",
+         "tone": "note",
+         "title": "Exploratorio no es improvisado",
+         "text": "Se guía con una **misión de exploración** (*test charter*), se registran hallazgos y se documentan riesgos. ISTQB la trata entre las técnicas basadas en la experiencia (CTFL §4.4)."
+        }
+       ],
+       "focus": [
+        "approach"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T07",
+       "title": "Estáticas y dinámicas: ¿ejecutamos o no?",
+       "objective": "Diferenciar evaluar sin ejecutar de evaluar ejecutando.",
+       "context": "La historia dice «el turno se libera si no se confirma».",
+       "explanation": "Las pruebas estáticas examinan productos de trabajo (requisitos, historias, código) sin ejecutarlos, mediante revisiones o análisis estático (CTFL cap. 3). Las dinámicas ejecutan el software. Las estáticas encuentran defectos antes y de forma más barata, por ejemplo ambigüedades en un requisito.",
+       "example": {
+        "situation": "En la revisión, Tomás pregunta: «¿se libera en cuánto tiempo?».",
+        "qaDecision": "Registrar la ambigüedad antes de que se escriba código; Valeria fija 5 minutos.",
+        "evidence": "Comentario en la historia con la nueva regla RES-R5."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T07-Q1",
+         "question": "Revisar la HU-RES-01 y descubrir que «se libera» no tiene tiempo definido es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Una prueba estática"
+          },
+          {
+           "id": "b",
+           "text": "Una prueba dinámica"
+          },
+          {
+           "id": "c",
+           "text": "No es testing"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "¿Ejecutamos o no?"
+        },
+        {
+         "kind": "table",
+         "caption": "Estáticas y dinámicas",
+         "columns": [
+          "",
+          "Pruebas estáticas",
+          "Pruebas dinámicas"
+         ],
+         "rows": [
+          [
+           "Qué hacen",
+           "Examinan productos de trabajo sin ejecutar el objeto probado",
+           "Ejercitan componentes o sistemas ejecutables y observan su comportamiento"
+          ],
+          [
+           "Ejemplos",
+           "Revisar una historia de usuario, un diseño o el código; análisis estático",
+           "Ejecutar un formulario, una API o un flujo completo"
+          ],
+          [
+           "Cuándo aportan más",
+           "Antes de programar: un defecto en un requisito es más barato de corregir",
+           "Cuando existe algo ejecutable y se compara resultado esperado y obtenido"
+          ]
+         ]
+        },
+        {
+         "kind": "list",
+         "title": "Taller en dos pasos",
+         "items": [
+          "Detectar una ambigüedad en un requisito de autenticación (estática).",
+          "Ejecutar una prueba sobre el formulario y comparar el resultado esperado y el obtenido (dinámica)."
+         ],
+         "ordered": true
+        }
+       ],
+       "focus": [
+        "static"
+       ]
+      },
+      {
+       "id": "FND-W01-C01-T08",
+       "title": "Combinar dimensiones sin confundirlas",
+       "objective": "Describir una prueba con varias dimensiones a la vez.",
+       "context": "El equipo prepara el sprint y anota cada prueba en el tablero.",
+       "explanation": "Una misma prueba se describe por su objetivo (funcional o no funcional), su base de diseño (caja negra, caja blanca o experiencia) y su ejecución (estática o dinámica). No son sinónimos ni opuestos: «funcional = caja negra» es falso como regla general.",
+       "example": {
+        "situation": "Comprobar con un lector de pantalla que el mensaje de conflicto se anuncia.",
+        "qaDecision": "Etiquetarla como no funcional (capacidad de interacción) · caja negra · dinámica.",
+        "evidence": "Grabación del lector de pantalla y criterio WCAG de referencia."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C01-T08-Q1",
+         "question": "Selecciona la clasificación correcta para «revisar el código de reserveSlot buscando una condición de carrera».",
+         "options": [
+          {
+           "id": "a",
+           "text": "Funcional · caja negra · dinámica"
+          },
+          {
+           "id": "b",
+           "text": "Funcional · caja blanca · estática"
+          },
+          {
+           "id": "c",
+           "text": "No funcional · caja negra · estática"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Una prueba, varias clasificaciones"
+        },
+        {
+         "kind": "p",
+         "text": "No existe una única jerarquía que contenga todos los términos del testing. Se usan **ejes complementarios**, y cada uno responde una pregunta distinta:"
+        },
+        {
+         "kind": "table",
+         "caption": "Ejes de clasificación",
+         "columns": [
+          "Pregunta",
+          "Dimensión",
+          "Ejemplos"
+         ],
+         "rows": [
+          [
+           "¿Qué característica se evalúa?",
+           "Tipo u objetivo",
+           "Funcional, no funcional"
+          ],
+          [
+           "¿En qué se basa el diseño?",
+           "Perspectiva",
+           "Caja negra, caja blanca"
+          ],
+          [
+           "¿En qué nivel se prueba?",
+           "Nivel",
+           "Componente, integración, sistema, aceptación"
+          ],
+          [
+           "¿Qué extensión del proceso se comprueba?",
+           "Alcance",
+           "End-to-End (E2E)"
+          ],
+          [
+           "¿Para qué se ejecuta?",
+           "Propósito",
+           "Smoke, Sanity"
+          ],
+          [
+           "¿Por qué se vuelve a probar tras un cambio?",
+           "Cambios",
+           "Confirmación (Re-test), regresión"
+          ],
+          [
+           "¿Cómo se diseñan y ejecutan?",
+           "Enfoque",
+           "Exploratorio, casos predefinidos"
+          ],
+          [
+           "¿Cómo se ejecutan?",
+           "Modalidad",
+           "Manual, automatizada"
+          ]
+         ]
+        },
+        {
+         "kind": "list",
+         "title": "Regla para recordar",
+         "items": [
+          "**Funcional / no funcional:** ¿qué evaluamos?",
+          "**Caja negra / caja blanca:** ¿en qué información se basa el diseño?",
+          "**E2E:** ¿cuánto del proceso cubrimos?",
+          "**Smoke:** ¿es estable para seguir probando?",
+          "**Re-test:** ¿se corrigió el defecto conocido?",
+          "**Regresión:** ¿un cambio dañó algo que ya funcionaba?",
+          "**Exploratoria:** ¿cómo investigamos y aprendemos mientras probamos?"
+         ]
+        },
+        {
+         "kind": "h",
+         "text": "Ejemplo práctico: una transferencia bancaria"
+        },
+        {
+         "kind": "flow",
+         "caption": "Escenario: realizar una transferencia bancaria",
+         "steps": [
+          "Login",
+          "Cuenta",
+          "Transferir",
+          "Confirmar"
+         ]
+        },
+        {
+         "kind": "table",
+         "caption": "Un mismo escenario, varias pruebas",
+         "columns": [
+          "Prueba",
+          "Qué se verifica"
+         ],
+         "rows": [
+          [
+           "Funcional",
+           "Que se transfieran correctamente $100.000."
+          ],
+          [
+           "No funcional",
+           "Que la operación responda dentro del tiempo establecido."
+          ],
+          [
+           "E2E",
+           "Que el usuario complete todo el flujo, desde el login hasta el comprobante."
+          ],
+          [
+           "Smoke",
+           "Que las funciones críticas estén operativas después del despliegue."
+          ],
+          [
+           "Re-test",
+           "Que se haya corregido un defecto que impedía transferir."
+          ],
+          [
+           "Regresión",
+           "Que una modificación no haya afectado transferencias ni otras funcionalidades."
+          ],
+          [
+           "Exploratoria",
+           "Comportamientos inesperados al cambiar valores, cuentas o secuencias de acciones."
+          ]
+         ]
+        },
+        {
+         "kind": "table",
+         "caption": "¿Cómo se relacionan con funcional y no funcional?",
+         "columns": [
+          "Prueba",
+          "Clasificación",
+          "¿Funcionales?",
+          "¿No funcionales?"
+         ],
+         "rows": [
+          [
+           "E2E",
+           "Alcance de la prueba",
+           "✓ Sí",
+           "✓ Sí"
+          ],
+          [
+           "Smoke",
+           "Propósito de verificación",
+           "✓ Sí",
+           "✓ Sí"
+          ],
+          [
+           "Re-test",
+           "Prueba de confirmación",
+           "✓ Sí",
+           "✓ Sí"
+          ],
+          [
+           "Regresión",
+           "Pruebas relacionadas con cambios",
+           "✓ Sí",
+           "✓ Sí"
+          ],
+          [
+           "Exploratoria",
+           "Enfoque de prueba",
+           "✓ Sí",
+           "✓ Sí"
+          ]
+         ]
+        },
+        {
+         "kind": "callout",
+         "tone": "key",
+         "title": "Mensaje clave",
+         "text": "Los **tipos de prueba** indican qué o desde qué perspectiva se evalúa el software; **E2E, Smoke, Re-test, Regresión y Exploratoria** añaden información sobre alcance, propósito, cambios o enfoque. «Automatizar la transferencia completa tras cada despliegue» puede ser **funcional + E2E + regresión + automatizada + caja negra** a la vez."
+        },
+        {
+         "kind": "callout",
+         "tone": "note",
+         "title": "Suite de pruebas",
+         "text": "Una **suite** es un conjunto de casos agrupados para una finalidad: smoke suite, regression suite, E2E suite. Re-test describe una finalidad y la exploratoria una forma de trabajar; no son necesariamente colecciones fijas. Profundizarás en el Capítulo 02."
+        }
+       ],
+       "focus": [
+        "scope",
+        "purpose",
+        "changes",
+        "approach"
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Valeria (PO)",
+       "what": "Presenta la HU-RES-01 con sus reglas.",
+       "evidence": "Historia en el tablero"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Hace una revisión estática y detecta la ambigüedad «se libera».",
+       "evidence": "Comentario y nueva regla RES-R5"
+      },
+      {
+       "who": "Andrés (backend)",
+       "what": "Diseña la reserva atómica.",
+       "evidence": "PR con prueba de componente por rama"
+      },
+      {
+       "who": "Lucía (frontend)",
+       "what": "Pregunta cómo validar la accesibilidad del mensaje de conflicto.",
+       "evidence": "Criterio de aceptación añadido"
+      },
+      {
+       "who": "Equipo",
+       "what": "Clasifica seis pruebas en el tablero con las tres dimensiones.",
+       "evidence": "Tabla del entregable"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C01-D1",
+      "title": "Tres ejes combinables",
+      "relations": [
+       {
+        "from": "Carga por API",
+        "to": [
+         "No funcional",
+         "Caja negra",
+         "Dinámica"
+        ]
+       },
+       {
+        "from": "Revisión de reserveSlot",
+        "to": [
+         "Funcional",
+         "Caja blanca",
+         "Estática"
+        ]
+       },
+       {
+        "from": "Valor límite 09:30",
+        "to": [
+         "Funcional",
+         "Caja negra",
+         "Dinámica"
+        ]
+       },
+       {
+        "from": "Lector de pantalla",
+        "to": [
+         "No funcional",
+         "Caja negra",
+         "Dinámica"
+        ]
+       }
+      ],
+      "alternative": "Una prueba de carga por API es no funcional, de caja negra y dinámica. La revisión del código de reserveSlot es funcional, de caja blanca y estática. El valor límite 09:30 es funcional, de caja negra y dinámico. La comprobación con lector de pantalla es no funcional, de caja negra y dinámica. Elegir un valor en un eje no determina los otros.",
+      "mermaid": "flowchart LR\n    subgraph Objetivo\n      F[Funcional]\n      NF[No funcional]\n    end\n    subgraph Base de diseño\n      CN[Caja negra]\n      CB[Caja blanca]\n      EX[Experiencia]\n    end\n    subgraph Ejecución\n      ES[Estática]\n      DI[Dinámica]\n    end\n    T1([Carga por API]) --> NF & CN & DI\n    T2([Revisión de reserveSlot]) --> F & CB & ES\n    T3([Límite 09:30]) --> F & CN & DI\n    T4([Lector de pantalla]) --> NF & CN & DI\n",
+      "groups": [
+       {
+        "title": "Objetivo",
+        "hint": "¿Qué se evalúa?",
+        "options": [
+         "Funcional",
+         "No funcional"
+        ]
+       },
+       {
+        "title": "Base de diseño",
+        "hint": "¿Desde qué información se diseña?",
+        "options": [
+         "Caja negra",
+         "Caja blanca",
+         "Experiencia"
+        ]
+       },
+       {
+        "title": "Ejecución",
+        "hint": "¿Se ejecuta el software?",
+        "options": [
+         "Estática",
+         "Dinámica"
+        ]
+       }
+      ]
+     },
+     "balloons": {
+      "title": "Clasificar una prueba antes del sprint",
+      "states": [
+       {
+        "id": "FND-C01-S1",
+        "title": "Leer la intención",
+        "actions": [
+         "Identificar la regla o característica afectada",
+         "Preguntar «¿qué riesgo cubre?»"
+        ],
+        "owner": "QA con PO",
+        "evidence": "Regla RES-Rn o característica 25010",
+        "result": "Objetivo definido: funcional o no funcional"
+       },
+       {
+        "id": "FND-C01-S2",
+        "title": "Elegir la base de diseño",
+        "actions": [
+         "Decidir si se deriva de la especificación, la estructura o la experiencia",
+         "Elegir la técnica: límites, ramas o predicción de errores"
+        ],
+        "owner": "QA y DEV",
+        "evidence": "Técnica anotada en el caso",
+        "result": "Caja negra, caja blanca o experiencia"
+       },
+       {
+        "id": "FND-C01-S3",
+        "title": "Decidir cómo se evalúa",
+        "actions": [
+         "¿Revisión sin ejecutar o ejecución?",
+         "¿En qué ambiente?"
+        ],
+        "owner": "Equipo",
+        "evidence": "Tipo de evidencia esperada",
+        "result": "Estática o dinámica, con criterio de salida"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Clasifica seis pruebas de ReservaYa",
+      "prompt": "Para cada prueba elige una opción en cada eje. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "objective",
+        "label": "Objetivo",
+        "options": [
+         {
+          "id": "functional",
+          "label": "Funcional"
+         },
+         {
+          "id": "nonfunctional",
+          "label": "No funcional"
+         }
+        ]
+       },
+       {
+        "id": "basis",
+        "label": "Base de diseño",
+        "options": [
+         {
+          "id": "black",
+          "label": "Caja negra"
+         },
+         {
+          "id": "white",
+          "label": "Caja blanca"
+         },
+         {
+          "id": "experience",
+          "label": "Experiencia"
+         }
+        ]
+       },
+       {
+        "id": "execution",
+        "label": "Ejecución",
+        "options": [
+         {
+          "id": "static",
+          "label": "Estática"
+         },
+         {
+          "id": "dynamic",
+          "label": "Dinámica"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "Reservar a las 09:30 y esperar el rechazo",
+        "answers": {
+         "objective": "functional",
+         "basis": "black",
+         "execution": "dynamic"
+        },
+        "feedback": "Valor límite de la regla RES-R2, diseñado desde la especificación y ejecutado."
+       },
+       {
+        "id": "A2",
+        "text": "200 reservas simultáneas midiendo percentiles",
+        "answers": {
+         "objective": "nonfunctional",
+         "basis": "black",
+         "execution": "dynamic"
+        },
+        "feedback": "Desempeño medido desde fuera del sistema."
+       },
+       {
+        "id": "A3",
+        "text": "Revisar la historia de usuario buscando ambigüedades",
+        "answers": {
+         "objective": "functional",
+         "basis": "black",
+         "execution": "static"
+        },
+        "feedback": "Se revisa la especificación del comportamiento sin ejecutar ni mirar código."
+       },
+       {
+        "id": "A4",
+        "text": "Cubrir las ramas libre/ocupado de reserveSlot",
+        "answers": {
+         "objective": "functional",
+         "basis": "white",
+         "execution": "dynamic"
+        },
+        "feedback": "Cobertura de ramas de una regla de negocio."
+       },
+       {
+        "id": "A5",
+        "text": "Navegar la reserva solo con teclado",
+        "answers": {
+         "objective": "nonfunctional",
+         "basis": "black",
+         "execution": "dynamic"
+        },
+        "feedback": "Capacidad de interacción (accesibilidad), evaluada desde la interfaz."
+       },
+       {
+        "id": "A6",
+        "text": "Explorar zonas horarias con predicción de errores",
+        "answers": {
+         "objective": "functional",
+         "basis": "experience",
+         "execution": "dynamic"
+        },
+        "feedback": "Técnica basada en la experiencia (§4.4) sobre la regla de fechas."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Elabora una tabla de seis pruebas de ReservaYa con estas columnas: prueba · objetivo · base de diseño · ejecución · evidencia esperada · riesgo que cubre.",
+      "rubric": [
+       "Las seis filas tienen los tres ejes.",
+       "Incluye al menos una prueba no funcional, una estática y una de caja blanca.",
+       "Cada eje tiene una justificación de una línea y una evidencia concreta."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "El objetivo dice qué evalúas.",
+       "La base de diseño dice desde dónde diseñas.",
+       "La ejecución dice si ejecutas o revisas."
+      ],
+      "glossary": [
+       {
+        "term": "Error",
+        "meaning": "Acción humana que produce un resultado incorrecto."
+       },
+       {
+        "term": "Defecto",
+        "meaning": "Imperfección en un producto de trabajo, por ejemplo en el código o en un requisito."
+       },
+       {
+        "term": "Fallo",
+        "meaning": "Comportamiento incorrecto observable al ejecutar."
+       },
+       {
+        "term": "Prueba funcional",
+        "meaning": "Evalúa qué hace el sistema frente a lo esperado."
+       },
+       {
+        "term": "Prueba no funcional",
+        "meaning": "Evalúa con qué calidad lo hace: desempeño, accesibilidad, seguridad…"
+       },
+       {
+        "term": "Caja negra",
+        "meaning": "Casos derivados de la especificación."
+       },
+       {
+        "term": "Caja blanca",
+        "meaning": "Casos derivados de la estructura interna."
+       },
+       {
+        "term": "Prueba estática",
+        "meaning": "Evalúa sin ejecutar, por ejemplo con una revisión."
+       }
+      ],
+      "next": "Capítulo 02: el defecto de doble reserva ya está corregido. ¿Qué vuelves a probar?"
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1 · §2.2.2 tipos, cap. 3 estáticas, §4.2–4.4 técnicas",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISTQB · Certified Tester Foundation Level",
+       "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+       "version": "CTFL v4.0",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISO/IEC 25010:2023 · Modelo de calidad del producto",
+       "url": "https://www.iso.org/standard/78176.html",
+       "version": "Ed. 2 (2023-11)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "Tipos de pruebas de software: guía completa con ejemplos (según ISTQB) — Cool Testers (referencia secundaria)",
+       "url": "https://cooltesters.com/blogs/guias/tipos-de-pruebas-de-software",
+       "version": "Miguel Hernández, 22/10/2026",
+       "consulted": "2026-10-29"
+      }
+     ],
+     "typesMap": true,
+     "intro": [
+      {
+       "kind": "facts",
+       "items": [
+        [
+         "Nivel",
+         "Inicial"
+        ],
+        [
+         "Duración sugerida",
+         "60–90 minutos"
+        ],
+        [
+         "Modalidad",
+         "Teórico-práctica"
+        ],
+        [
+         "Referencia",
+         "ISTQB CTFL v4.0.1 · §2.2.1–2.2.3 y §4.4"
+        ]
+       ]
+      },
+      {
+       "kind": "callout",
+       "tone": "key",
+       "title": "La idea central del capítulo",
+       "text": "Una misma prueba puede tener **varias clasificaciones a la vez**. CTFL v4.0.1 nombra cuatro **tipos de prueba** (funcional, no funcional, caja negra y caja blanca); E2E, Smoke, Re-test, Regresión o Exploratoria responden **otras preguntas**: alcance, propósito, cambios o enfoque."
+      },
+      {
+       "kind": "h",
+       "text": "Recorrido del capítulo"
+      },
+      {
+       "kind": "list",
+       "items": [
+        "**Probar es obtener información:** probar también es revisar, no solo ejecutar.",
+        "**Funcionales:** ¿hace lo que debe?",
+        "**No funcionales:** ¿con qué calidad lo hace?",
+        "**Caja negra:** diseñar desde la especificación.",
+        "**Caja blanca:** diseñar desde la estructura interna.",
+        "**Basadas en la experiencia:** aprender mientras se prueba.",
+        "**Estáticas y dinámicas:** ¿ejecutamos o no?",
+        "**Combinar dimensiones:** una prueba, varias etiquetas, con un caso bancario."
+       ],
+       "ordered": true
+      },
+      {
+       "kind": "table",
+       "caption": "Preguntas que ordenan el capítulo",
+       "columns": [
+        "Si preguntas…",
+        "Hablas de…"
+       ],
+       "rows": [
+        [
+         "¿Qué característica se evalúa?",
+         "Funcional / no funcional"
+        ],
+        [
+         "¿En qué información se basa el diseño?",
+         "Caja negra / caja blanca"
+        ],
+        [
+         "¿Se ejecuta el software?",
+         "Estática / dinámica"
+        ],
+        [
+         "¿Cuánto del proceso, para qué, tras qué cambio, de qué forma?",
+         "E2E, Smoke, Re-test / Regresión, Exploratoria"
+        ]
+       ]
+      },
+      {
+       "kind": "callout",
+       "tone": "note",
+       "title": "Cómo estudiar este capítulo",
+       "text": "Avanza **una tarjeta a la vez**. Al terminar de leer cada tarjeta resuelve su minitest: cuenta solo cuando la lectura queda registrada. Para aprobar el capítulo necesitas el **70 %** de minitests correctos. El mapa de la derecha te indica en qué parte de la clasificación estás."
+      }
+     ]
+    },
+    {
+     "id": "FND-C02",
+     "week": 1,
+     "number": 2,
+     "status": "published",
+     "title": "Enfoques y estrategias de pruebas",
+     "outcome": "Elige smoke, re-test, regresión, exploratoria y automatización tras un cambio, y declara el riesgo residual.",
+     "opening": {
+      "story": [
+       "Viernes, 16:30. Andrés corrigió la doble reserva y la build nueva ya está en el ambiente QA.",
+       "La demo con Valeria es a las 17:00. Tomás tiene 30 minutos y una lista larga de cosas que podría probar.",
+       "¿Por dónde empieza? En este capítulo separarás para qué sirve cada tipo de ejecución y cómo combinarlos con poco tiempo."
+      ],
+      "question": "¿Qué es lo primero que comprobarías con la build nueva?",
+      "answer": "Que la build es apta para probar (smoke) y, enseguida, que el defecto original ya no ocurre (re-test). Después, el impacto del cambio (regresión)."
+     },
+     "objectives": [
+      "Separar alcance, propósito, relación con cambios, estilo y forma de ejecución.",
+      "Diferenciar re-test de regresión.",
+      "Elegir comprobaciones según tiempo y riesgo, y justificar el riesgo residual."
+     ],
+     "cards": [
+      {
+       "id": "FND-W01-C02-T01",
+       "title": "Una estrategia combina ejes",
+       "objective": "Distinguir las preguntas que responde cada término.",
+       "context": "El equipo usa «E2E», «smoke» y «regresión» como si fueran lo mismo.",
+       "explanation": "Cada término responde a una pregunta distinta: hasta dónde llega la prueba (alcance: E2E o aislada), para qué se ejecuta ahora (propósito: smoke o sanity), qué relación tiene con un cambio (confirmación o regresión), cómo se diseña y ejecuta (exploratoria o basada en casos) y quién o qué la ejecuta (manual o automatizada). Una misma prueba puede tener una etiqueta en cada eje.",
+       "example": {
+        "situation": "Un recorrido E2E automatizado se ejecuta tras cada despliegue.",
+        "qaDecision": "Etiquetarlo en tres ejes: alcance E2E, propósito smoke (si es del subconjunto crítico) y ejecución automatizada.",
+        "evidence": "Etiquetas en el plan de pruebas con su justificación."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T01-Q1",
+         "question": "«Smoke» describe…",
+         "options": [
+          {
+           "id": "a",
+           "text": "El propósito de una ejecución rápida tras una build: comprobar que lo crítico funciona antes de seguir"
+          },
+          {
+           "id": "b",
+           "text": "Un nivel de prueba"
+          },
+          {
+           "id": "c",
+           "text": "Una técnica de caja blanca"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T02",
+       "title": "E2E: alcance de punta a punta",
+       "objective": "Reconocer el alcance E2E sin confundirlo con un nivel.",
+       "context": "La reserva atraviesa interfaz, API, base de datos y un proveedor de notificaciones.",
+       "explanation": "Una prueba E2E recorre un flujo completo del usuario a través de capas e integraciones. Describe el alcance de la prueba; no es un nivel ISTQB ni equivale a «todas las pruebas de sistema».",
+       "example": {
+        "situation": "Iniciar sesión, elegir el bloque de las 10:00, confirmar y recibir el correo en un buzón simulado.",
+        "qaDecision": "Automatizar solo los recorridos críticos y dejar las reglas detalladas a pruebas más pequeñas.",
+        "evidence": "Traza de la ejecución y el correo recibido en el buzón falso."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T02-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "E2E es el sexto nivel ISTQB"
+          },
+          {
+           "id": "b",
+           "text": "Una prueba E2E suele ejecutarse en el nivel de sistema o de integración de sistemas, pero E2E describe su alcance"
+          },
+          {
+           "id": "c",
+           "text": "Toda prueba de sistema es E2E"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T03",
+       "title": "Smoke: ¿vale la pena seguir?",
+       "objective": "Usar smoke como filtro rápido de una build.",
+       "context": "Cada despliegue en QA trae cambios de varios equipos.",
+       "explanation": "El smoke es un subconjunto pequeño de comprobaciones críticas que se ejecuta tras una build o un despliegue para decidir si vale la pena seguir probando. Es un término de práctica: cada equipo define su alcance.",
+       "example": {
+        "situation": "Tras desplegar en QA: login, listar turnos y reservar uno.",
+        "qaDecision": "Si una comprobación falla, rechazar la build e informar antes de invertir más tiempo.",
+        "evidence": "Informe de 3 pruebas con build, hora y resultado."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T03-Q1",
+         "question": "El smoke de QA falla en «listar turnos». ¿Qué haces?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Ejecutar toda la regresión igualmente"
+          },
+          {
+           "id": "b",
+           "text": "Marcar el sprint como fallido"
+          },
+          {
+           "id": "c",
+           "text": "Detener las pruebas detalladas y avisar: la build no es apta para seguir"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T04",
+       "title": "Sanity: revisión focalizada",
+       "objective": "Reconocer el uso variable del término sanity.",
+       "context": "Lucía solo cambió el texto del mensaje de conflicto.",
+       "explanation": "Una sanity es una comprobación rápida y acotada de que un cambio concreto parece razonable antes de dedicarle más esfuerzo. Su significado varía entre equipos, así que conviene definirlo en el glosario del equipo.",
+       "example": {
+        "situation": "Verificar solo el mensaje de conflicto nuevo en dos navegadores.",
+        "qaDecision": "Acordar con el equipo qué entiende por sanity y registrarlo.",
+        "evidence": "Dos capturas del mensaje y la definición en el glosario del equipo."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T04-Q1",
+         "question": "¿Qué es lo más honesto decir sobre «sanity»?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Que es un término de práctica cuyo alcance se acuerda en cada equipo"
+          },
+          {
+           "id": "b",
+           "text": "Que el CTFL lo define como nivel"
+          },
+          {
+           "id": "c",
+           "text": "Que es igual que la regresión completa"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T05",
+       "title": "Re-test o prueba de confirmación",
+       "objective": "Confirmar que el defecto original se corrigió.",
+       "context": "El reporte DEF-31 describe la doble reserva de las 10:00.",
+       "explanation": "La prueba de confirmación (re-test) confirma que el defecto original se corrigió (CTFL §2.2.3). Se repiten los pasos del reporte, con los mismos datos si es posible.",
+       "example": {
+        "situation": "Dos usuarios confirman el turno de las 10:00 casi a la vez.",
+        "qaDecision": "Solo una reserva debe quedar confirmada y la otra recibir conflicto; si ocurre, cerrar DEF-31.",
+        "evidence": "Reporte cerrado con el resultado del re-test y la versión de la build."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T05-Q1",
+         "question": "Andrés corrigió la doble reserva. ¿Qué es el re-test?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Ejecutar toda la suite"
+          },
+          {
+           "id": "b",
+           "text": "Ejecutar el escenario del reporte para confirmar que ese defecto ya no ocurre"
+          },
+          {
+           "id": "c",
+           "text": "Explorar zonas nuevas de la aplicación"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T06",
+       "title": "Regresión: lo que ya funcionaba",
+       "objective": "Seleccionar regresión por impacto del cambio.",
+       "context": "El arreglo tocó el servicio de reservas.",
+       "explanation": "La regresión confirma que un cambio no causó efectos adversos en lo que ya funcionaba (CTFL §2.2.3). Se seleccionan las zonas cercanas al cambio y los flujos críticos. Repetirla es valioso; lo que se desgasta son pruebas que nunca se actualizan.",
+       "example": {
+        "situation": "Tras corregir la concurrencia, cancelar, reprogramar y notificar podrían romperse.",
+        "qaDecision": "Ejecutar la regresión de esas tres funciones y de los flujos críticos.",
+        "evidence": "Resultados de la regresión seleccionada."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T06-Q1",
+         "question": "¿Por qué hacer regresión si el re-test pasó?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Porque el re-test no sirve"
+          },
+          {
+           "id": "b",
+           "text": "Por costumbre, sin criterio"
+          },
+          {
+           "id": "c",
+           "text": "Porque el arreglo pudo romper otras funciones, como cancelar o reprogramar"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T07",
+       "title": "Exploratoria con misión y pruebas basadas en casos",
+       "objective": "Combinar exploración guiada y casos documentados.",
+       "context": "Nadie probó qué pasa si la conexión se corta al confirmar.",
+       "explanation": "La prueba exploratoria diseña, ejecuta y aprende a la vez, guiada por una misión (charter) con tiempo acotado y notas. Las pruebas basadas en casos siguen pasos y resultados documentados de antemano. Ambas conviven en una buena estrategia.",
+       "example": {
+        "situation": "Misión: «explorar reservas cuando la conexión se corta al confirmar», 20 minutos.",
+        "qaDecision": "Anotar lo probado y los hallazgos; convertir los hallazgos valiosos en casos o reportes.",
+        "evidence": "Hoja de sesión con dos hallazgos."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T07-Q1",
+         "question": "¿Qué hace profesional a una sesión exploratoria?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Una misión, un tiempo acotado y notas de lo probado y hallado"
+          },
+          {
+           "id": "b",
+           "text": "Hacer clics al azar sin registro"
+          },
+          {
+           "id": "c",
+           "text": "Escribir todos los casos antes de empezar"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T08",
+       "title": "Manual y automatizada",
+       "objective": "Decidir qué automatizar por valor, costo y estabilidad.",
+       "context": "El re-test de concurrencia se repetirá en cada build.",
+       "explanation": "Manual o automatizada es la forma de ejecución, independiente del objetivo: hay pruebas funcionales y no funcionales en ambos modos. Automatizar conviene cuando la prueba se repite, es estable y su valor supera el costo de mantenerla.",
+       "example": {
+        "situation": "La comprobación de conflicto por API y la valoración de si el mensaje es claro.",
+        "qaDecision": "Automatizar el conflicto por API; mantener manual la valoración del texto.",
+        "evidence": "PR con la prueba automatizada y nota de la revisión manual."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T08-Q1",
+         "question": "¿Qué candidata conviene automatizar primero?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Juzgar si el texto del mensaje es amable"
+          },
+          {
+           "id": "b",
+           "text": "La comprobación de conflicto por API, que se repetirá en cada build"
+          },
+          {
+           "id": "c",
+           "text": "Una pantalla que cambiará la semana próxima"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C02-T09",
+       "title": "Priorizar por riesgo y declarar el riesgo residual",
+       "objective": "Elegir qué probar primero con tiempo limitado.",
+       "context": "Quedan 30 minutos antes de la demo.",
+       "explanation": "El riesgo combina la probabilidad de un problema y su impacto. Con poco tiempo se prueba primero lo de mayor riesgo y se declara explícitamente qué queda sin cubrir: el riesgo residual.",
+       "example": {
+        "situation": "Plan de 30 minutos: re-test (10), smoke (5), regresión de cancelación (10) y exploratoria de red (5).",
+        "qaDecision": "Informar que la reprogramación quedó sin probar y por qué.",
+        "evidence": "Plan con el riesgo residual escrito."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C02-T09-Q1",
+         "question": "Con 30 minutos, ¿qué es imprescindible comunicar?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Que se probó todo"
+          },
+          {
+           "id": "b",
+           "text": "Solo el número de casos ejecutados"
+          },
+          {
+           "id": "c",
+           "text": "Qué no se probó y qué riesgo queda"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Andrés (backend)",
+       "what": "Entrega el arreglo de DEF-31 en la build 2.3.1.",
+       "evidence": "PR enlazado al reporte"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Ejecuta smoke y re-test.",
+       "evidence": "Informe con build y hora"
+      },
+      {
+       "who": "Tomás y Andrés",
+       "what": "Eligen la regresión por impacto.",
+       "evidence": "Lista de funciones afectadas"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Hace una misión exploratoria de 5 minutos.",
+       "evidence": "Hoja de sesión"
+      },
+      {
+       "who": "Valeria (PO)",
+       "what": "Recibe el informe con el riesgo residual.",
+       "evidence": "Decisión para la demo"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C02-D1",
+      "title": "Árbol de decisión tras un arreglo",
+      "relations": [
+       {
+        "from": "Llega una build con el arreglo",
+        "to": [
+         "Ejecutar el smoke crítico",
+         "No pasa: rechazar la build e informar"
+        ]
+       },
+       {
+        "from": "El smoke pasa",
+        "to": [
+         "Re-test del defecto original"
+        ]
+       },
+       {
+        "from": "¿El defecto está corregido?",
+        "to": [
+         "Sí: regresión según el impacto",
+         "Sí: misión exploratoria acotada",
+         "No: reabrir con evidencia"
+        ]
+       },
+       {
+        "from": "Al terminar",
+        "to": [
+         "Informe de resultados y riesgo residual"
+        ]
+       }
+      ],
+      "alternative": "Cuando llega una build con un arreglo, primero se ejecuta el smoke. Si falla, se rechaza la build. Si pasa, se hace el re-test del defecto original. Si el defecto persiste, se reabre con evidencia. Si está corregido, se ejecuta la regresión por impacto y una misión exploratoria, y se cierra con un informe de resultados y riesgo residual.",
+      "mermaid": "flowchart TD\n    S[Build con arreglo] --> Q1{¿Smoke crítico pasa?}\n    Q1 -- No --> R1[Rechazar build e informar]\n    Q1 -- Sí --> RT[Re-test del defecto original]\n    RT --> Q2{¿Defecto corregido?}\n    Q2 -- No --> R2[Reabrir con evidencia]\n    Q2 -- Sí --> RG[Regresión por impacto]\n    RG --> EXP[Misión exploratoria acotada]\n    EXP --> D[Informe: resultados y riesgo residual]\n",
+      "flow": true
+     },
+     "balloons": {
+      "title": "Probar un arreglo con poco tiempo",
+      "states": [
+       {
+        "id": "FND-C02-S1",
+        "title": "Smoke",
+        "actions": [
+         "Ejecutar 3 comprobaciones críticas",
+         "Decidir si seguir"
+        ],
+        "owner": "QA (puede automatizarse)",
+        "evidence": "Informe del smoke con build y hora",
+        "result": "Build apta o rechazada"
+       },
+       {
+        "id": "FND-C02-S2",
+        "title": "Re-test",
+        "actions": [
+         "Repetir los pasos del reporte",
+         "Usar los mismos datos"
+        ],
+        "owner": "QA",
+        "evidence": "Reporte con el resultado del re-test",
+        "result": "Defecto cerrado o reabierto"
+       },
+       {
+        "id": "FND-C02-S3",
+        "title": "Regresión",
+        "actions": [
+         "Elegir las zonas afectadas",
+         "Ejecutar la suite seleccionada"
+        ],
+        "owner": "QA y DEV",
+        "evidence": "Resultados de la regresión",
+        "result": "Impacto del cambio conocido"
+       },
+       {
+        "id": "FND-C02-S4",
+        "title": "Informar",
+        "actions": [
+         "Resumir los resultados",
+         "Declarar lo no probado"
+        ],
+        "owner": "QA con PO",
+        "evidence": "Riesgo residual escrito",
+        "result": "Decisión informada"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "¿Para qué ejecutarías cada comprobación?",
+      "prompt": "Elige el propósito principal de cada comprobación tras el arreglo de la doble reserva. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "purpose",
+        "label": "Propósito",
+        "options": [
+         {
+          "id": "smoke",
+          "label": "Smoke"
+         },
+         {
+          "id": "retest",
+          "label": "Re-test"
+         },
+         {
+          "id": "regression",
+          "label": "Regresión"
+         },
+         {
+          "id": "explore",
+          "label": "Exploratoria"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "Login, listar turnos y reservar uno tras el despliegue",
+        "answers": {
+         "purpose": "smoke"
+        },
+        "feedback": "Filtro rápido: ¿la build es apta?"
+       },
+       {
+        "id": "A2",
+        "text": "Dos confirmaciones simultáneas de las 10:00",
+        "answers": {
+         "purpose": "retest"
+        },
+        "feedback": "Repite el escenario del defecto original."
+       },
+       {
+        "id": "A3",
+        "text": "Cancelar y reprogramar una reserva existente",
+        "answers": {
+         "purpose": "regression"
+        },
+        "feedback": "Zonas cercanas al cambio."
+       },
+       {
+        "id": "A4",
+        "text": "Cortar la conexión al confirmar durante 5 minutos",
+        "answers": {
+         "purpose": "explore"
+        },
+        "feedback": "Misión con tiempo acotado y notas."
+       },
+       {
+        "id": "A5",
+        "text": "Notificaciones de reservas tras el arreglo",
+        "answers": {
+         "purpose": "regression"
+        },
+        "feedback": "Efectos adversos en funciones existentes."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Escribe un mini plan para la build 2.3.1: smoke, re-test, regresión, una misión exploratoria y un candidato a automatización, con el tiempo de cada uno y el riesgo residual.",
+      "rubric": [
+       "Smoke, re-test y regresión aparecen con objetivos distintos.",
+       "La misión exploratoria tiene tiempo y foco.",
+       "Se declara qué queda sin probar."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "El alcance dice hasta dónde llega una prueba.",
+       "El propósito dice para qué se ejecuta ahora.",
+       "Re-test confirma el arreglo; la regresión, que no se rompió nada más."
+      ],
+      "glossary": [
+       {
+        "term": "Smoke",
+        "meaning": "Subconjunto crítico tras una build para decidir si seguir."
+       },
+       {
+        "term": "Re-test (confirmación)",
+        "meaning": "Confirma que el defecto original se corrigió."
+       },
+       {
+        "term": "Regresión",
+        "meaning": "Confirma que un cambio no causó efectos adversos."
+       },
+       {
+        "term": "Exploratoria",
+        "meaning": "Diseñar, ejecutar y aprender a la vez con una misión."
+       },
+       {
+        "term": "Riesgo residual",
+        "meaning": "Lo que queda sin cubrir y se comunica."
+       }
+      ],
+      "next": "Capítulo 03: el correo no llega. ¿Qué pieza o integración observas?"
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "Glosario ISTQB · Confirmation testing",
+       "url": "https://glossary.istqb.org/en_US/term/confirmation-testing",
+       "version": "En línea",
+       "consulted": "2026-10-29"
+      }
+     ]
+    },
+    {
+     "id": "FND-C03",
+     "week": 1,
+     "number": 3,
+     "status": "published",
+     "title": "Cinco niveles de prueba según ISTQB",
+     "outcome": "Asigna pruebas a los cinco niveles del CTFL v4.0.1 y distingue las dos integraciones.",
+     "opening": {
+      "story": [
+       "El correo de confirmación de ReservaYa no llega.",
+       "¿Falla nuestro servicio de reservas, la base de datos o el proveedor externo de notificaciones?",
+       "Para saberlo hay que elegir qué pieza o qué integración observar: eso es un nivel de prueba."
+      ],
+      "question": "¿Probarías igual el validador de fechas que la conexión con el proveedor externo?",
+      "answer": "No. El validador se prueba aislado (componente); la conexión con un sistema externo es integración de sistemas."
+     },
+     "objectives": [
+      "Nombrar los cinco niveles del CTFL v4.0.1.",
+      "Distinguir integración de componentes de integración de sistemas.",
+      "Explicar la simplificación de cuatro niveles.",
+      "Asignar responsabilidades compartidas."
+     ],
+     "cards": [
+      {
+       "id": "FND-W01-C03-T01",
+       "title": "Nivel no es tipo",
+       "objective": "Separar nivel (objeto) de tipo (característica).",
+       "context": "El equipo dice «pruebas de regresión de integración».",
+       "explanation": "Un nivel agrupa actividades de prueba según el objeto: desde un componente hasta el sistema en su entorno, cada uno con sus objetivos y base de prueba. Un tipo dice qué característica se evalúa. Se combinan: una prueba de sistema puede ser funcional o no funcional.",
+       "example": {
+        "situation": "Prueba de carga del sistema completo en staging.",
+        "qaDecision": "Etiquetarla: nivel sistema, tipo no funcional.",
+        "evidence": "Etiquetas en el plan."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T01-Q1",
+         "question": "¿Cuál es un nivel de prueba según el CTFL?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Regresión"
+          },
+          {
+           "id": "b",
+           "text": "Integración de componentes"
+          },
+          {
+           "id": "c",
+           "text": "Smoke"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C03-T02",
+       "title": "Componente (unitaria)",
+       "objective": "Reconocer pruebas de componentes aislados.",
+       "context": "El validador isPastSlot decide si una fecha ya pasó.",
+       "explanation": "Las pruebas de componente prueban componentes aislados y suelen necesitar dobles de prueba. Se ejecutan en segundos y dan feedback inmediato.",
+       "example": {
+        "situation": "isPastSlot con hoy, ayer y mañana.",
+        "qaDecision": "Andrés escribe los casos y Tomás propone límites como la medianoche.",
+        "evidence": "Prueba de componente en el PR."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T02-Q1",
+         "question": "Probar isPastSlot sin base de datos ni red es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "De componente"
+          },
+          {
+           "id": "b",
+           "text": "De sistema"
+          },
+          {
+           "id": "c",
+           "text": "De aceptación"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "component"
+      },
+      {
+       "id": "FND-W01-C03-T03",
+       "title": "Integración de componentes",
+       "objective": "Probar interfaces entre componentes del mismo sistema.",
+       "context": "El servicio de reservas guarda en el repositorio.",
+       "explanation": "La integración de componentes prueba las interfaces e interacciones entre componentes del mismo sistema, por ejemplo un servicio y su repositorio de datos.",
+       "example": {
+        "situation": "Una segunda inserción del mismo bloque.",
+        "qaDecision": "Verificar que la restricción única la rechaza y el servicio responde conflicto.",
+        "evidence": "Prueba con una base de datos efímera."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T03-Q1",
+         "question": "Servicio de reservas + repositorio de PostgreSQL de ReservaYa es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Integración de sistemas"
+          },
+          {
+           "id": "b",
+           "text": "Componente"
+          },
+          {
+           "id": "c",
+           "text": "Integración de componentes"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "componentIntegration"
+      },
+      {
+       "id": "FND-W01-C03-T04",
+       "title": "Sistema",
+       "objective": "Evaluar el sistema completo.",
+       "context": "La aplicación completa está desplegada en el ambiente QA.",
+       "explanation": "Las pruebas de sistema evalúan el comportamiento y las capacidades del sistema completo, a menudo extremo a extremo, incluidas sus características no funcionales.",
+       "example": {
+        "situation": "Reservar, cancelar y ver el historial desde la interfaz.",
+        "qaDecision": "Ejecutar los casos de sistema y registrar los resultados.",
+        "evidence": "Casos ejecutados con capturas."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T04-Q1",
+         "question": "¿Qué prueba es de nivel sistema?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Reservar, cancelar y ver el historial en la aplicación completa en QA"
+          },
+          {
+           "id": "b",
+           "text": "Probar solo isPastSlot"
+          },
+          {
+           "id": "c",
+           "text": "Que Valeria valide la necesidad"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "system"
+      },
+      {
+       "id": "FND-W01-C03-T05",
+       "title": "Integración de sistemas",
+       "objective": "Probar interfaces con sistemas externos.",
+       "context": "ReservaYa usa un proveedor externo para enviar correos.",
+       "explanation": "La integración de sistemas prueba las interfaces entre el sistema y otros sistemas o servicios externos, como un proveedor de notificaciones o de pagos.",
+       "example": {
+        "situation": "El proveedor responde 503.",
+        "qaDecision": "Verificar el reintento controlado y que la reserva queda consistente.",
+        "evidence": "Contrato del proveedor y traza anonimizada."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T05-Q1",
+         "question": "ReservaYa ↔ proveedor externo de notificaciones es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Integración de componentes"
+          },
+          {
+           "id": "b",
+           "text": "Integración de sistemas"
+          },
+          {
+           "id": "c",
+           "text": "Aceptación"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "systemIntegration"
+      },
+      {
+       "id": "FND-W01-C03-T06",
+       "title": "Aceptación: ¿construimos lo correcto?",
+       "objective": "Distinguir validación de verificación.",
+       "context": "Valeria y dos usuarios piloto prueban la reserva.",
+       "explanation": "La aceptación valida que el sistema satisface las necesidades y está listo para usarse. La verificación pregunta «¿cumple lo especificado?»; la validación, «¿sirve a quien lo usa?». Hay variantes: de usuario, operacional, contractual, alfa y beta.",
+       "example": {
+        "situation": "Los usuarios piloto reservan su turno ficticio.",
+        "qaDecision": "Recoger si resuelve su necesidad y qué les cuesta.",
+        "evidence": "Acta de aceptación con comentarios."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T06-Q1",
+         "question": "La aceptación responde principalmente a…",
+         "options": [
+          {
+           "id": "a",
+           "text": "¿Cada función cumple su especificación técnica?"
+          },
+          {
+           "id": "b",
+           "text": "¿Qué porcentaje de código se cubrió?"
+          },
+          {
+           "id": "c",
+           "text": "¿El producto resuelve la necesidad del negocio o del usuario?"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "acceptance"
+      },
+      {
+       "id": "FND-W01-C03-T07",
+       "title": "¿Por qué algunos cursos enseñan cuatro niveles?",
+       "objective": "Reconocer la simplificación tradicional.",
+       "context": "Sofía estudió con un curso de cuatro niveles.",
+       "explanation": "Muchas introducciones agrupan las dos integraciones en un solo «nivel de integración». Es una simplificación tradicional; el CTFL v4.0.1 enumera cinco niveles.",
+       "example": {
+        "situation": "El curso muestra: unitaria, integración, sistema, aceptación.",
+        "qaDecision": "Traducirlo a los cinco niveles del CTFL separando las dos integraciones.",
+        "evidence": "Tabla de equivalencias."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T07-Q1",
+         "question": "Un curso muestra cuatro niveles. ¿Qué haces?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Reconocer que agrupa las dos integraciones y usar los cinco del CTFL v4.0.1"
+          },
+          {
+           "id": "b",
+           "text": "Asumir que el CTFL tiene cuatro"
+          },
+          {
+           "id": "c",
+           "text": "Descartar el curso"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C03-T08",
+       "title": "Responsabilidad compartida",
+       "objective": "Evitar roles exclusivos por nivel.",
+       "context": "Alguien dice: «las unitarias son cosa de DEV».",
+       "explanation": "No hay niveles «de DEV» ni «de QA». Hay participaciones habituales: DEV escribe la mayoría de las pruebas de componente, QA aporta ideas de casos y negocio lidera la aceptación con apoyo del equipo.",
+       "example": {
+        "situation": "Tomás revisa los casos límite de la prueba de componente de Andrés.",
+        "qaDecision": "Proponer el caso de la medianoche en el PR.",
+        "evidence": "Comentario en el PR."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C03-T08-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Las unitarias son exclusivamente de DEV"
+          },
+          {
+           "id": "b",
+           "text": "La calidad es responsabilidad de todo el equipo; los roles describen participaciones habituales"
+          },
+          {
+           "id": "c",
+           "text": "La aceptación es exclusivamente de QA"
+          }
+         ]
+        }
+       ],
+       "levelFocus": "roles"
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Lucía (frontend)",
+       "what": "Reporta que el correo no llega en QA.",
+       "evidence": "Captura y hora"
+      },
+      {
+       "who": "Andrés (backend)",
+       "what": "Revisa las pruebas de componente e integración de componentes.",
+       "evidence": "Pruebas en verde"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Prueba la integración con el proveedor simulando 503.",
+       "evidence": "Traza anonimizada"
+      },
+      {
+       "who": "Marta (DevOps)",
+       "what": "Confirma la configuración del proveedor en QA.",
+       "evidence": "Variables revisadas"
+      },
+      {
+       "who": "Valeria (PO)",
+       "what": "Valida con usuarios piloto.",
+       "evidence": "Acta de aceptación"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C03-D1",
+      "title": "Cinco niveles sobre ReservaYa",
+      "relations": [
+       {
+        "from": "Validador de fecha",
+        "to": [
+         "Componente"
+        ]
+       },
+       {
+        "from": "Servicio + repositorio",
+        "to": [
+         "Integración de componentes"
+        ]
+       },
+       {
+        "from": "Aplicación completa",
+        "to": [
+         "Sistema"
+        ]
+       },
+       {
+        "from": "ReservaYa + proveedor de notificaciones",
+        "to": [
+         "Integración de sistemas"
+        ]
+       },
+       {
+        "from": "PO y usuarios",
+        "to": [
+         "Aceptación"
+        ]
+       }
+      ],
+      "alternative": "El validador de fecha aislado corresponde al nivel de componente. El servicio de reservas con su repositorio, ambos dentro de ReservaYa, a la integración de componentes. La aplicación completa desde la interfaz, al nivel de sistema. ReservaYa con el proveedor externo de notificaciones, a la integración de sistemas. El PO y los usuarios validando la necesidad, a la aceptación.",
+      "mermaid": "flowchart LR\n    subgraph ReservaYa\n      UI[Interfaz web] --> API[Servicio de reservas]\n      API --> REPO[(Repositorio)]\n      VAL[Validador de fecha] --- API\n    end\n    API -->|HTTP| NOTI[[Proveedor de notificaciones]]\n    C1{{Componente}} -.-> VAL\n    C2{{Integración de componentes}} -.-> API & REPO\n    C3{{Sistema}} -.-> UI\n    C4{{Integración de sistemas}} -.-> NOTI\n    C5{{Aceptación}} -.-> U((PO y usuarios))\n    U --> UI\n"
+     },
+     "balloons": {
+      "title": "Probar la integración con el proveedor",
+      "states": [
+       {
+        "id": "FND-C03-S1",
+        "title": "Preparar integración",
+        "actions": [
+         "Revisar el contrato externo",
+         "Simular la respuesta 503",
+         "Definir el resultado esperado"
+        ],
+        "owner": "DEV y QA",
+        "evidence": "Contrato y datos ficticios",
+        "result": "Caso listo y reproducible"
+       },
+       {
+        "id": "FND-C03-S2",
+        "title": "Ejecutar intercambio",
+        "actions": [
+         "Enviar la solicitud",
+         "Comprobar el reintento",
+         "Inspeccionar la respuesta"
+        ],
+        "owner": "QA",
+        "evidence": "Traza anonimizada",
+        "result": "Comportamiento observado"
+       },
+       {
+        "id": "FND-C03-S3",
+        "title": "Evaluar recuperación",
+        "actions": [
+         "Confirmar que la reserva queda consistente",
+         "Registrar la incidencia o la conformidad"
+        ],
+        "owner": "Equipo",
+        "evidence": "Resultado y riesgo residual",
+        "result": "Decisión documentada"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Asigna cada prueba a su nivel",
+      "prompt": "Elige el nivel más representativo de cada prueba. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "level",
+        "label": "Nivel",
+        "options": [
+         {
+          "id": "component",
+          "label": "Componente"
+         },
+         {
+          "id": "cint",
+          "label": "Integración de componentes"
+         },
+         {
+          "id": "system",
+          "label": "Sistema"
+         },
+         {
+          "id": "sint",
+          "label": "Integración de sistemas"
+         },
+         {
+          "id": "acceptance",
+          "label": "Aceptación"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "isPastSlot con ayer y mañana",
+        "answers": {
+         "level": "component"
+        },
+        "feedback": "Pieza aislada."
+       },
+       {
+        "id": "A2",
+        "text": "El servicio rechaza un bloque duplicado en la base",
+        "answers": {
+         "level": "cint"
+        },
+        "feedback": "Dos componentes del mismo sistema."
+       },
+       {
+        "id": "A3",
+        "text": "Reservar y cancelar desde la interfaz en QA",
+        "answers": {
+         "level": "system"
+        },
+        "feedback": "Sistema completo."
+       },
+       {
+        "id": "A4",
+        "text": "El proveedor de correo responde 503",
+        "answers": {
+         "level": "sint"
+        },
+        "feedback": "Sistema externo."
+       },
+       {
+        "id": "A5",
+        "text": "Usuarios piloto validan que la reserva les sirve",
+        "answers": {
+         "level": "acceptance"
+        },
+        "feedback": "Validación de la necesidad."
+       },
+       {
+        "id": "A6",
+        "text": "Carga de 200 reservas en staging",
+        "answers": {
+         "level": "system"
+        },
+        "feedback": "No funcional, pero del sistema completo."
+       },
+       {
+        "id": "A7",
+        "text": "Contrato con el proveedor de pagos",
+        "answers": {
+         "level": "sint"
+        },
+        "feedback": "Interfaz con otro sistema."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Construye una matriz para HU-RES-01 con los cinco niveles: objetivo, objeto de prueba, participación habitual y evidencia.",
+      "rubric": [
+       "Aparecen los cinco niveles.",
+       "Las dos integraciones están diferenciadas.",
+       "Las responsabilidades no son exclusivas."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "El nivel dice qué objeto observas.",
+       "Hay dos integraciones: entre componentes y entre sistemas.",
+       "La responsabilidad es del equipo."
+      ],
+      "glossary": [
+       {
+        "term": "Componente",
+        "meaning": "Pieza aislada del sistema."
+       },
+       {
+        "term": "Integración de componentes",
+        "meaning": "Interfaces entre piezas del mismo sistema."
+       },
+       {
+        "term": "Sistema",
+        "meaning": "El sistema completo."
+       },
+       {
+        "term": "Integración de sistemas",
+        "meaning": "Interfaces con sistemas externos."
+       },
+       {
+        "term": "Aceptación",
+        "meaning": "Validación de la necesidad del negocio o del usuario."
+       }
+      ],
+      "next": "Capítulo 04: la suite tiene 70 E2E lentos. ¿Cómo la reequilibras?"
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISTQB · Certified Tester Foundation Level",
+       "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+       "version": "CTFL v4.0",
+       "consulted": "2026-10-29"
+      }
+     ],
+     "levelsMap": true
+    },
+    {
+     "id": "FND-C04",
+     "week": 1,
+     "number": 4,
+     "status": "published",
+     "title": "Pirámide de Cohn y trabajo conjunto QA–DEV",
+     "outcome": "Rediseña una suite lenta en una cartera equilibrada sin confundir la pirámide con los niveles.",
+     "opening": {
+      "story": [
+       "La suite de ReservaYa tiene 70 pruebas E2E.",
+       "Tarda 50 minutos y falla 1 de cada 5 veces sin cambios en el código (cifras ficticias del caso).",
+       "Nadie confía en el rojo. ¿Cómo se reequilibra?"
+      ],
+      "question": "¿Qué harías con 12 E2E que solo prueban validaciones de fecha?",
+      "answer": "Moverlas a pruebas de componente rápidas y dejar como mucho un E2E representativo."
+     },
+     "objectives": [
+      "Explicar la forma de la pirámide sin porcentajes obligatorios.",
+      "Mover pruebas a la capa adecuada.",
+      "Distinguir la pirámide de los niveles ISTQB y de los cuadrantes."
+     ],
+     "cards": [
+      {
+       "id": "FND-W01-C04-T01",
+       "title": "Origen y forma de la pirámide",
+       "objective": "Describir la pirámide de Cohn.",
+       "context": "El equipo dibuja su suite actual.",
+       "explanation": "Mike Cohn propuso la pirámide en «Succeeding with Agile» con capas de unidad, servicio e interfaz: muchas pruebas rápidas y aisladas abajo y pocas pruebas amplias arriba (CTFL §5.1.6). Los nombres de las capas varían entre equipos.",
+       "example": {
+        "situation": "La suite actual tiene forma de cono invertido.",
+        "qaDecision": "Proponer más pruebas pequeñas y menos recorridos amplios.",
+        "evidence": "Dibujo de la suite antes y después."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T01-Q1",
+         "question": "La pirámide recomienda…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Más pruebas pequeñas y rápidas y menos recorridos amplios"
+          },
+          {
+           "id": "b",
+           "text": "Exactamente 70/20/10"
+          },
+          {
+           "id": "c",
+           "text": "Eliminar los E2E"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T02",
+       "title": "Base: reglas puras, feedback en segundos",
+       "objective": "Ubicar reglas de negocio puras en la capa rápida.",
+       "context": "12 E2E validan RES-R1 y RES-R2.",
+       "explanation": "Las reglas puras, como no reservar en el pasado o los bloques de una hora, se prueban en la capa de componente: el feedback llega en segundos y los fallos son fáciles de diagnosticar.",
+       "example": {
+        "situation": "12 E2E de fechas que tardan 8 minutos.",
+        "qaDecision": "Convertirlos en 12 pruebas de componente y dejar un E2E representativo.",
+        "evidence": "Tiempo antes y después."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T02-Q1",
+         "question": "«No reservar en el pasado» probado 12 veces por la interfaz. ¿Qué propones?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Añadir más E2E"
+          },
+          {
+           "id": "b",
+           "text": "Moverlo a pruebas de componente y dejar como mucho un E2E representativo"
+          },
+          {
+           "id": "c",
+           "text": "Dejar de probarlo"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T03",
+       "title": "Medio: servicios y contratos",
+       "objective": "Probar interacciones sin interfaz.",
+       "context": "La API devuelve 409 en un conflicto.",
+       "explanation": "Las interacciones entre API, base de datos y proveedores se prueban en la capa de servicio o integración, por ejemplo con pruebas de contrato. Son más rápidas y estables que pasar por la interfaz.",
+       "example": {
+        "situation": "Verificar el 409 y el contrato del proveedor de notificaciones.",
+        "qaDecision": "Probarlo por API en CI.",
+        "evidence": "Prueba de contrato en el pipeline."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T03-Q1",
+         "question": "¿Dónde pruebas mejor que la API devuelve 409 en un conflicto?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Solo por la interfaz"
+          },
+          {
+           "id": "b",
+           "text": "En una prueba de componente sin API"
+          },
+          {
+           "id": "c",
+           "text": "En la capa de servicio o API"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T04",
+       "title": "Cima: pocos E2E de alto valor",
+       "objective": "Reservar los E2E para recorridos críticos.",
+       "context": "Hay que decidir qué E2E conservar.",
+       "explanation": "Los E2E se reservan para los recorridos críticos del usuario: los que, si fallan, impiden el valor principal del producto.",
+       "example": {
+        "situation": "Quedan 6 E2E: reservar, cancelar, reprogramar, login, notificación y consulta de historial.",
+        "qaDecision": "Revisar su estabilidad y su tiempo.",
+        "evidence": "Lista de recorridos críticos."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T04-Q1",
+         "question": "¿Qué recorrido merece un E2E?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Reservar un turno de punta a punta"
+          },
+          {
+           "id": "b",
+           "text": "El color del botón en cada página"
+          },
+          {
+           "id": "c",
+           "text": "Cada validación de campo"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T05",
+       "title": "Antipatrón: el cono de helado",
+       "objective": "Reconocer una cartera desequilibrada.",
+       "context": "El feedback tarda 50 minutos.",
+       "explanation": "El cono de helado aparece cuando hay muchas pruebas manuales o E2E arriba y pocas abajo. Sus síntomas son un feedback lento y pruebas inestables (flaky) difíciles de diagnosticar.",
+       "example": {
+        "situation": "El estado actual de ReservaYa.",
+        "qaDecision": "Plan de tres sprints para invertir la forma.",
+        "evidence": "Métricas de tiempo y de fallos intermitentes."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T05-Q1",
+         "question": "El síntoma típico del cono de helado es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Demasiadas pruebas de componente"
+          },
+          {
+           "id": "b",
+           "text": "Un feedback lento y fallos intermitentes difíciles de diagnosticar"
+          },
+          {
+           "id": "c",
+           "text": "No tener ningún E2E"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T06",
+       "title": "La pirámide no son los niveles ISTQB",
+       "objective": "Separar cartera de automatización y niveles.",
+       "context": "Alguien dice «la capa de servicio es el nivel de integración».",
+       "explanation": "La pirámide es un modelo para la cartera de automatización; los niveles clasifican actividades según el objeto. No coinciden uno a uno: la capa de servicio puede abarcar integración de componentes y de sistemas.",
+       "example": {
+        "situation": "El contrato con el proveedor es integración de sistemas y vive en la capa media.",
+        "qaDecision": "Etiquetar por separado capa y nivel.",
+        "evidence": "Plan con ambas etiquetas."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T06-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Cada capa es un nivel"
+          },
+          {
+           "id": "b",
+           "text": "La pirámide sustituye a los niveles"
+          },
+          {
+           "id": "c",
+           "text": "La pirámide orienta la automatización; los niveles describen qué objeto se prueba"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T07",
+       "title": "Cuadrantes: otro mapa",
+       "objective": "Usar los cuadrantes para cubrir perspectivas.",
+       "context": "La suite no tiene pruebas de carga ni de accesibilidad.",
+       "explanation": "Los cuadrantes de prueba (CTFL §5.1.7) clasifican las pruebas según estén orientadas al negocio o a la tecnología y según apoyen al equipo o critiquen el producto. Ayudan a no olvidar pruebas no funcionales ni exploratorias. No reemplazan a la pirámide.",
+       "example": {
+        "situation": "Revisar la suite con los cuatro cuadrantes.",
+        "qaDecision": "Añadir carga y accesibilidad al plan.",
+        "evidence": "Mapa de cuadrantes con huecos marcados."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T07-Q1",
+         "question": "¿Para qué sirven los cuadrantes?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Para revisar que la estrategia cubre distintas perspectivas: negocio, tecnología, apoyo y crítica"
+          },
+          {
+           "id": "b",
+           "text": "Para fijar cuántas pruebas automatizar"
+          },
+          {
+           "id": "c",
+           "text": "Para reemplazar la pirámide"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W01-C04-T08",
+       "title": "Feedback en cada PR",
+       "objective": "Ordenar la ejecución para obtener feedback temprano.",
+       "context": "Cada PR ejecuta hoy toda la suite al final.",
+       "explanation": "En cada PR se ejecutan primero las pruebas rápidas, luego las de integración y después los flujos críticos. Así el testing acompaña cada fase del ciclo de vida del software y no queda para el final del sprint.",
+       "example": {
+        "situation": "El pipeline del PR de reservas.",
+        "qaDecision": "Reordenar las etapas y fallar rápido.",
+        "evidence": "Tiempos por etapa del pipeline."
+       },
+       "checks": [
+        {
+         "id": "FND-W01-C04-T08-Q1",
+         "question": "¿Qué orden da el feedback más rápido?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Primero los E2E"
+          },
+          {
+           "id": "b",
+           "text": "Componente → integración o servicio → E2E críticos"
+          },
+          {
+           "id": "c",
+           "text": "Todo al final del sprint"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Tomás (QA)",
+       "what": "Mide la suite: 70 E2E y 50 minutos.",
+       "evidence": "Tabla del estado actual"
+      },
+      {
+       "who": "Andrés (backend)",
+       "what": "Mueve las reglas puras a pruebas de componente.",
+       "evidence": "PR con las pruebas movidas"
+      },
+      {
+       "who": "Tomás y Andrés",
+       "what": "Convierten interacciones en pruebas de contrato.",
+       "evidence": "Contratos en CI"
+      },
+      {
+       "who": "Marta (DevOps)",
+       "what": "Reordena el pipeline por etapas.",
+       "evidence": "Tiempos por etapa"
+      },
+      {
+       "who": "Equipo",
+       "what": "Conserva 6 E2E críticos.",
+       "evidence": "Lista de recorridos críticos"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C04-D1",
+      "title": "Pirámide de ReservaYa",
+      "relations": [
+       {
+        "from": "Cima",
+        "to": [
+         "Pocos E2E de alto valor"
+        ]
+       },
+       {
+        "from": "Medio",
+        "to": [
+         "Servicio y contratos"
+        ]
+       },
+       {
+        "from": "Base",
+        "to": [
+         "Muchas pruebas de componente"
+        ]
+       },
+       {
+        "from": "Pull request",
+        "to": [
+         "Componente",
+         "Integración",
+         "E2E críticos"
+        ]
+       }
+      ],
+      "alternative": "La base de la pirámide tiene muchas pruebas de componente para las reglas puras; el medio, pruebas de servicio y contratos; la cima, pocos E2E de alto valor. En cada pull request se ejecutan primero las pruebas de componente, luego las de integración y contratos y, por último, los E2E críticos. No hay proporciones obligatorias.",
+      "mermaid": "flowchart LR\n    PR[Pull request] --> U[Componente · segundos]\n    U --> I[Integración y contratos · minutos]\n    I --> C[E2E críticos]\n    C --> D{¿Todo en verde?}\n    D -- Sí --> M[Merge y despliegue a QA]\n    D -- No --> F[Feedback al autor]\n",
+      "flow": true
+     },
+     "balloons": {
+      "title": "Rebalancear la suite",
+      "states": [
+       {
+        "id": "FND-C04-S1",
+        "title": "Medir",
+        "actions": [
+         "Contar pruebas por capa",
+         "Medir tiempos y fallos intermitentes"
+        ],
+        "owner": "QA Automation y DEV",
+        "evidence": "Tabla del estado actual",
+        "result": "Línea base"
+       },
+       {
+        "id": "FND-C04-S2",
+        "title": "Mover",
+        "actions": [
+         "Pasar reglas puras a componente",
+         "Pasar interacciones a contratos"
+        ],
+        "owner": "DEV con QA",
+        "evidence": "PRs con las pruebas movidas",
+        "result": "Capas equilibradas"
+       },
+       {
+        "id": "FND-C04-S3",
+        "title": "Conservar",
+        "actions": [
+         "Dejar pocos E2E críticos",
+         "Revisar su estabilidad"
+        ],
+        "owner": "QA",
+        "evidence": "Lista de recorridos críticos",
+        "result": "E2E confiables"
+       },
+       {
+        "id": "FND-C04-S4",
+        "title": "Verificar",
+        "actions": [
+         "Comparar el tiempo de feedback antes y después"
+        ],
+        "owner": "Equipo",
+        "evidence": "Métrica antes y después",
+        "result": "Mejora demostrada"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Ubica cada escenario en una capa",
+      "prompt": "Elige la capa de la pirámide y quién participa habitualmente. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "layer",
+        "label": "Capa",
+        "options": [
+         {
+          "id": "unit",
+          "label": "Componente"
+         },
+         {
+          "id": "service",
+          "label": "Servicio o contrato"
+         },
+         {
+          "id": "e2e",
+          "label": "E2E"
+         }
+        ]
+       },
+       {
+        "id": "who",
+        "label": "Participación habitual",
+        "options": [
+         {
+          "id": "dev",
+          "label": "DEV con apoyo de QA"
+         },
+         {
+          "id": "qa",
+          "label": "QA con apoyo de DEV"
+         },
+         {
+          "id": "team",
+          "label": "Todo el equipo"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "Bloques de una hora (RES-R2)",
+        "answers": {
+         "layer": "unit",
+         "who": "dev"
+        },
+        "feedback": "Regla pura: componente."
+       },
+       {
+        "id": "A2",
+        "text": "La API responde 409 en conflicto",
+        "answers": {
+         "layer": "service",
+         "who": "qa"
+        },
+        "feedback": "Contrato HTTP sin interfaz."
+       },
+       {
+        "id": "A3",
+        "text": "Reservar de punta a punta",
+        "answers": {
+         "layer": "e2e",
+         "who": "team"
+        },
+        "feedback": "Recorrido crítico."
+       },
+       {
+        "id": "A4",
+        "text": "Contrato con el proveedor de correo",
+        "answers": {
+         "layer": "service",
+         "who": "qa"
+        },
+        "feedback": "Interacción con sistema externo."
+       },
+       {
+        "id": "A5",
+        "text": "No reservar en el pasado",
+        "answers": {
+         "layer": "unit",
+         "who": "dev"
+        },
+        "feedback": "Regla pura."
+       },
+       {
+        "id": "A6",
+        "text": "Cancelar una reserva desde la interfaz",
+        "answers": {
+         "layer": "e2e",
+         "who": "team"
+        },
+        "feedback": "Recorrido crítico."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Propón una suite para ReservaYa por riesgo y tiempo: al menos una prueba por capa, con su justificación y el tiempo esperado de feedback.",
+      "rubric": [
+       "Hay al menos una prueba por capa.",
+       "La justificación usa riesgo y tiempo.",
+       "No se inventan proporciones obligatorias."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "Muchas pruebas rápidas abajo, pocas amplias arriba.",
+       "La pirámide orienta la automatización; los niveles describen el objeto.",
+       "Los cuadrantes ayudan a no olvidar perspectivas."
+      ],
+      "glossary": [
+       {
+        "term": "Pirámide de pruebas",
+        "meaning": "Modelo de cartera: muchas pruebas pequeñas y pocas amplias."
+       },
+       {
+        "term": "Cono de helado",
+        "meaning": "Antipatrón con muchas pruebas amplias o manuales arriba."
+       },
+       {
+        "term": "Prueba de contrato",
+        "meaning": "Verifica el acuerdo de interfaz entre servicios."
+       },
+       {
+        "term": "Flaky",
+        "meaning": "Prueba que falla de forma intermitente sin cambios."
+       },
+       {
+        "term": "Cuadrantes",
+        "meaning": "Mapa de perspectivas: negocio o tecnología, apoyo o crítica."
+       }
+      ],
+      "next": "Semana 2 · Capítulo 05: ¿por qué el equipo probó 40 colores y ninguna concurrencia?"
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "The Practical Test Pyramid (Ham Vocke, martinfowler.com)",
+       "url": "https://martinfowler.com/articles/practical-test-pyramid.html",
+       "version": "2018-02-26",
+       "consulted": "2026-10-29"
+      }
+     ]
+    }
+   ]
+  },
+  "2": {
+   "version": "fnd-v2",
+   "week": 2,
+   "title": "Principios, clasificaciones, BDD y release",
+   "summary": "El equipo de ReservaYa justifica sus decisiones con los principios del testing, especifica con ejemplos y decide cuándo liberar.",
+   "chapters": [
+    {
+     "id": "FND-C05",
+     "week": 2,
+     "number": 5,
+     "status": "published",
+     "title": "Los siete principios del testing",
+     "outcome": "Justifica decisiones del sprint con el principio del testing que aplica.",
+     "opening": {
+      "story": [
+       "El equipo probó 40 variaciones del color de los botones y ninguna de concurrencia.",
+       "El viernes apareció la doble reserva en producción.",
+       "Después corrigieron el módulo, pero siguieron usando los mismos datos de prueba de siempre. ¿Qué principios ignoraron?"
+      ],
+      "question": "¿Qué principio olvidaron al probar 40 colores y ninguna concurrencia?",
+      "answer": "Que las pruebas exhaustivas son imposibles: hay que priorizar por riesgo. Y que los defectos se agrupan en zonas concretas."
+     },
+     "objectives": [
+      "Enunciar los siete principios con la terminología del CTFL v4.0.1.",
+      "Aplicar cada principio a una decisión del sprint."
+     ],
+     "cards": [
+      {
+       "id": "FND-W02-C05-T01",
+       "title": "1. Presencia, no ausencia",
+       "objective": "Comunicar resultados sin prometer cero defectos.",
+       "context": "El informe del sprint dice «0 fallos».",
+       "explanation": "Las pruebas pueden mostrar que hay defectos, pero no pueden demostrar que no los hay. Reducen la probabilidad de defectos no descubiertos.",
+       "example": {
+        "situation": "45 casos ejecutados sin fallos.",
+        "qaDecision": "Comunicar «sin fallos en los 45 casos ejecutados» y el riesgo residual.",
+        "evidence": "Informe con el alcance probado."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T01-Q1",
+         "question": "¿Qué frase respeta el principio?",
+         "options": [
+          {
+           "id": "a",
+           "text": "«No encontramos fallos en los casos ejecutados.»"
+          },
+          {
+           "id": "b",
+           "text": "«El sistema no tiene errores.»"
+          },
+          {
+           "id": "c",
+           "text": "«Si pasó todo, no hay riesgo.»"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T02",
+       "title": "2. Las pruebas exhaustivas son imposibles",
+       "objective": "Usar técnicas y prioridades.",
+       "context": "365 días × 14 bloques × 3 sedes.",
+       "explanation": "Salvo en casos triviales no se puede probar todo. Por eso se usan técnicas de diseño, como particiones y valores límite, y se prioriza por riesgo.",
+       "example": {
+        "situation": "Miles de combinaciones de fecha y hora.",
+        "qaDecision": "Particiones de equivalencia y valores límite priorizados.",
+        "evidence": "Tabla de particiones."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T02-Q1",
+         "question": "¿Qué haces frente a miles de combinaciones de fecha y hora?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Probarlas todas a mano"
+          },
+          {
+           "id": "b",
+           "text": "Particiones y valores límite priorizados por riesgo"
+          },
+          {
+           "id": "c",
+           "text": "No probar fechas"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T03",
+       "title": "3. Las pruebas tempranas ahorran tiempo y dinero",
+       "objective": "Llevar el testing al inicio.",
+       "context": "La regla «se libera» era ambigua.",
+       "explanation": "Probar o revisar pronto, por ejemplo con pruebas estáticas en el refinamiento, encuentra defectos cuando corregirlos es más barato.",
+       "example": {
+        "situation": "La revisión de la HU encontró la ambigüedad antes de programar.",
+        "qaDecision": "Revisar cada HU en el refinamiento con QA presente.",
+        "evidence": "Comentarios en las historias."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T03-Q1",
+         "question": "¿Cuál es la actividad más temprana?",
+         "options": [
+          {
+           "id": "a",
+           "text": "El E2E tras el despliegue"
+          },
+          {
+           "id": "b",
+           "text": "La encuesta a usuarios en producción"
+          },
+          {
+           "id": "c",
+           "text": "Revisar la HU en el refinamiento"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T04",
+       "title": "4. Los defectos se agrupan",
+       "objective": "Enfocar el esfuerzo donde se concentran los defectos.",
+       "context": "El historial de defectos del trimestre.",
+       "explanation": "Un número pequeño de componentes suele contener la mayoría de los defectos. Conocer esa concentración ayuda a enfocar las pruebas, sin abandonar el resto.",
+       "example": {
+        "situation": "6 de 8 defectos del trimestre están en concurrencia y fechas (datos ficticios).",
+        "qaDecision": "Intensificar pruebas y revisiones en esas zonas.",
+        "evidence": "Mapa de defectos por módulo."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T04-Q1",
+         "question": "Los datos muestran muchos defectos en «reprogramar». ¿Qué haces?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Intensificar pruebas y revisiones en esa zona sin abandonar las demás"
+          },
+          {
+           "id": "b",
+           "text": "Probar todos los módulos por igual"
+          },
+          {
+           "id": "c",
+           "text": "Probar solo «reprogramar»"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T05",
+       "title": "5. Las pruebas se desgastan",
+       "objective": "Mantener la regresión viva.",
+       "context": "La regresión lleva seis meses sin encontrar nada.",
+       "explanation": "Si repites siempre las mismas pruebas con los mismos datos, dejan de encontrar defectos nuevos (tradicionalmente, «paradoja del pesticida»). Repetir la regresión sigue siendo valioso: lo que hay que hacer es actualizarla.",
+       "example": {
+        "situation": "Añadir datos de cambio horario y de dos usuarios simultáneos.",
+        "qaDecision": "Revisar la suite cada sprint.",
+        "evidence": "Suite actualizada con casos nuevos."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T05-Q1",
+         "question": "La regresión lleva 6 meses sin encontrar nada. ¿Qué haces?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Borrarla"
+          },
+          {
+           "id": "b",
+           "text": "Revisarla y añadir casos y datos nuevos, sin eliminar la protección existente"
+          },
+          {
+           "id": "c",
+           "text": "Dejarla igual"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T06",
+       "title": "6. Las pruebas dependen del contexto",
+       "objective": "Adaptar la estrategia al producto.",
+       "context": "Comparar ReservaYa con una landing page.",
+       "explanation": "No se prueba igual una aplicación de reservas, un videojuego o un dispositivo médico. El dominio, el riesgo, el equipo y las restricciones definen la estrategia.",
+       "example": {
+        "situation": "ReservaYa prioriza concurrencia y accesibilidad.",
+        "qaDecision": "Ajustar técnicas y rigor al dominio.",
+        "evidence": "Estrategia documentada con su justificación."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T06-Q1",
+         "question": "¿Qué estrategia es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Usar la misma checklist para cualquier producto"
+          },
+          {
+           "id": "b",
+           "text": "Copiar la estrategia de otra empresa sin analizarla"
+          },
+          {
+           "id": "c",
+           "text": "Adaptar técnicas y rigor al dominio, al riesgo y al equipo"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T07",
+       "title": "7. Falacia de la ausencia de defectos",
+       "objective": "Validar el valor, no solo la corrección.",
+       "context": "La reserva funciona, pero exige 9 pasos.",
+       "explanation": "Un producto sin fallos detectados puede no servir a sus usuarios. Además de verificar, hay que validar que el producto satisface sus necesidades.",
+       "example": {
+        "situation": "Los usuarios siguen llamando por teléfono para reservar.",
+        "qaDecision": "Validar con usuarios y simplificar el flujo.",
+        "evidence": "Feedback de usuarios piloto."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T07-Q1",
+         "question": "Cero defectos y nadie usa la función. ¿Qué principio se ilustra?",
+         "options": [
+          {
+           "id": "a",
+           "text": "La falacia de la ausencia de defectos"
+          },
+          {
+           "id": "b",
+           "text": "Los defectos se agrupan"
+          },
+          {
+           "id": "c",
+           "text": "Las pruebas exhaustivas son imposibles"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C05-T08",
+       "title": "Los principios en el sprint",
+       "objective": "Usar los principios como criterios de decisión.",
+       "context": "El equipo planifica el sprint 15.",
+       "explanation": "Los principios no son una secuencia, sino criterios para decidir en cada actividad del sprint: refinamiento, desarrollo y antes de liberar.",
+       "example": {
+        "situation": "Cada decisión del plan cita el principio que la justifica.",
+        "qaDecision": "Revisar el plan con los siete principios.",
+        "evidence": "Plan con justificaciones."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C05-T08-Q1",
+         "question": "¿Cómo se usan mejor los siete principios?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Como pasos obligatorios del 1 al 7"
+          },
+          {
+           "id": "b",
+           "text": "Como criterios para justificar decisiones de prueba en cada momento del sprint"
+          },
+          {
+           "id": "c",
+           "text": "Solo para el examen"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Valeria (PO)",
+       "what": "Pide revisar por qué falló la concurrencia.",
+       "evidence": "Retrospectiva"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Muestra que los defectos se agrupan en concurrencia y fechas.",
+       "evidence": "Mapa de defectos"
+      },
+      {
+       "who": "Andrés (backend)",
+       "what": "Propone revisar las HU en el refinamiento.",
+       "evidence": "Acuerdo del equipo"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Actualiza los datos de la regresión.",
+       "evidence": "Suite actualizada"
+      },
+      {
+       "who": "Equipo",
+       "what": "Valida el flujo con usuarios piloto.",
+       "evidence": "Feedback recogido"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C05-D1",
+      "title": "Principios y decisiones",
+      "relations": [
+       {
+        "from": "Presencia, no ausencia",
+        "to": [
+         "Informar con riesgo residual"
+        ]
+       },
+       {
+        "from": "Exhaustivas imposibles",
+        "to": [
+         "Técnicas y prioridad"
+        ]
+       },
+       {
+        "from": "Tempranas",
+        "to": [
+         "Revisar la HU en refinamiento"
+        ]
+       },
+       {
+        "from": "Defectos se agrupan",
+        "to": [
+         "Foco en concurrencia y fechas"
+        ]
+       },
+       {
+        "from": "Pruebas se desgastan",
+        "to": [
+         "Actualizar datos y casos"
+        ]
+       },
+       {
+        "from": "Contexto",
+        "to": [
+         "Estrategia según el dominio"
+        ]
+       },
+       {
+        "from": "Falacia",
+        "to": [
+         "Validar con usuarios"
+        ]
+       }
+      ],
+      "alternative": "Cada principio lleva a una decisión. Presencia de defectos: informar con riesgo residual. Exhaustivas imposibles: técnicas y prioridad. Tempranas: revisar la historia en el refinamiento. Agrupación: foco en concurrencia y fechas. Desgaste: actualizar datos y casos. Contexto: estrategia según el dominio. Falacia: validar con usuarios. El orden no es una secuencia.",
+      "mermaid": "flowchart LR\n    P1[Presencia, no ausencia] --> D1[Riesgo residual]\n    P2[Exhaustivas imposibles] --> D2[Técnicas y prioridad]\n    P3[Tempranas] --> D3[Revisar HU]\n    P4[Defectos se agrupan] --> D4[Foco en zonas]\n    P5[Pruebas se desgastan] --> D5[Actualizar casos]\n    P6[Contexto] --> D6[Estrategia del dominio]\n    P7[Falacia] --> D7[Validar con usuarios]\n"
+     },
+     "balloons": {
+      "title": "Aplicar principios en el sprint",
+      "states": [
+       {
+        "id": "FND-C05-S1",
+        "title": "Refinamiento",
+        "actions": [
+         "Revisar la HU (tempranas)",
+         "Elegir técnicas (exhaustivas imposibles)"
+        ],
+        "owner": "Equipo",
+        "evidence": "Comentarios en la HU",
+        "result": "Requisitos claros"
+       },
+       {
+        "id": "FND-C05-S2",
+        "title": "Desarrollo",
+        "actions": [
+         "Enfocar zonas con más defectos (agrupación)",
+         "Renovar datos (desgaste)"
+        ],
+        "owner": "QA y DEV",
+        "evidence": "Suite actualizada",
+        "result": "Pruebas eficaces"
+       },
+       {
+        "id": "FND-C05-S3",
+        "title": "Antes de liberar",
+        "actions": [
+         "Informar sin prometer cero errores (presencia)",
+         "Validar el valor (falacia)"
+        ],
+        "owner": "QA con PO",
+        "evidence": "Informe y feedback de usuarios",
+        "result": "Decisión informada"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Decide con criterio",
+      "prompt": "Elige el principio que mejor explica cada situación. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "principle",
+        "label": "Principio",
+        "options": [
+         {
+          "id": "p1",
+          "label": "Presencia, no ausencia"
+         },
+         {
+          "id": "p2",
+          "label": "Exhaustivas imposibles"
+         },
+         {
+          "id": "p3",
+          "label": "Tempranas"
+         },
+         {
+          "id": "p4",
+          "label": "Defectos se agrupan"
+         },
+         {
+          "id": "p5",
+          "label": "Se desgastan"
+         },
+         {
+          "id": "p6",
+          "label": "Contexto"
+         },
+         {
+          "id": "p7",
+          "label": "Falacia"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "El informe promete «sin errores»",
+        "answers": {
+         "principle": "p1"
+        },
+        "feedback": "Las pruebas no demuestran ausencia."
+       },
+       {
+        "id": "A2",
+        "text": "Hay miles de combinaciones de horarios",
+        "answers": {
+         "principle": "p2"
+        },
+        "feedback": "Se prioriza con técnicas."
+       },
+       {
+        "id": "A3",
+        "text": "La ambigüedad se encontró en el refinamiento",
+        "answers": {
+         "principle": "p3"
+        },
+        "feedback": "Antes es más barato."
+       },
+       {
+        "id": "A4",
+        "text": "Casi todos los defectos están en reprogramar",
+        "answers": {
+         "principle": "p4"
+        },
+        "feedback": "Concentración de defectos."
+       },
+       {
+        "id": "A5",
+        "text": "La regresión no encuentra nada desde hace meses",
+        "answers": {
+         "principle": "p5"
+        },
+        "feedback": "Hay que actualizarla."
+       },
+       {
+        "id": "A6",
+        "text": "Un videojuego y ReservaYa no se prueban igual",
+        "answers": {
+         "principle": "p6"
+        },
+        "feedback": "Depende del contexto."
+       },
+       {
+        "id": "A7",
+        "text": "Funciona, pero nadie la usa",
+        "answers": {
+         "principle": "p7"
+        },
+        "feedback": "Sin defectos no significa útil."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Prioriza cinco riesgos de ReservaYa con probabilidad × impacto (escala ficticia de 1 a 3) y propón una mejora temprana de requisitos.",
+      "rubric": [
+       "Hay cinco riesgos con probabilidad e impacto.",
+       "La priorización se justifica con al menos dos principios.",
+       "Incluye una mejora temprana de requisitos."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "Las pruebas muestran presencia, no ausencia.",
+       "Prioriza, prueba pronto y actualiza tus pruebas.",
+       "Sin defectos no significa útil."
+      ],
+      "glossary": [
+       {
+        "term": "Paradoja del pesticida",
+        "meaning": "Nombre tradicional de «las pruebas se desgastan»."
+       },
+       {
+        "term": "Agrupación de defectos",
+        "meaning": "Pocos componentes concentran la mayoría de los defectos."
+       },
+       {
+        "term": "Pruebas tempranas",
+        "meaning": "Probar o revisar lo antes posible."
+       },
+       {
+        "term": "Falacia de la ausencia de defectos",
+        "meaning": "Un producto sin fallos puede no aportar valor."
+       },
+       {
+        "term": "Contexto",
+        "meaning": "Dominio, riesgo y restricciones que definen la estrategia."
+       }
+      ],
+      "next": "Capítulo 06: Sofía pregunta si una prueba puede ser E2E, smoke y de sistema a la vez."
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISTQB · Certified Tester Foundation Level",
+       "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+       "version": "CTFL v4.0",
+       "consulted": "2026-10-29"
+      }
+     ]
+    },
+    {
+     "id": "FND-C06",
+     "week": 2,
+     "number": 6,
+     "status": "published",
+     "title": "Resolviendo dudas: mapa definitivo de clasificaciones",
+     "outcome": "Describe una misma prueba con varias etiquetas a la vez y justifica cada una.",
+     "opening": {
+      "story": [
+       "Entra al equipo Sofía, QA junior (personaje ficticio).",
+       "Pregunta: «La prueba de Playwright del despliegue, ¿es E2E, smoke, de sistema o automatizada?».",
+       "La respuesta corta: puede ser todo a la vez. Este capítulo responde sus diez dudas."
+      ],
+      "question": "¿Puede una prueba ser E2E, smoke y automatizada a la vez?",
+      "answer": "Sí: E2E es su alcance, smoke su propósito si pertenece al subconjunto crítico, y automatizada su forma de ejecución."
+     },
+     "objectives": [
+      "Responder las diez dudas más frecuentes con ejemplos de ReservaYa.",
+      "Clasificar una prueba con varias etiquetas simultáneas."
+     ],
+     "cards": [
+      {
+       "id": "FND-W02-C06-T01",
+       "title": "Duda 1: ¿Qué son las pruebas y por qué no son solo ejecutar casos?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Sofía cree que revisar una HU «no es probar».",
+       "explanation": "Las pruebas incluyen planificar, analizar, diseñar, revisar (estáticas), ejecutar y reportar. Ejecutar casos es solo una parte.",
+       "example": {
+        "situation": "Sofía cree que revisar una HU «no es probar».",
+        "qaDecision": "Mostrarle que la revisión encontró la regla RES-R5.",
+        "evidence": "Comentario en la HU."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T01-Q1",
+         "question": "¿Revisar una HU es testing?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Sí: es una prueba estática"
+          },
+          {
+           "id": "b",
+           "text": "No: solo cuenta ejecutar"
+          },
+          {
+           "id": "c",
+           "text": "Solo si se automatiza"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T02",
+       "title": "Duda 2: ¿Qué diferencia nivel, tipo, técnica y estrategia?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Sofía mezcla «valores límite» con «nivel de integración».",
+       "explanation": "Nivel es el objeto que se prueba; tipo, la característica evaluada; técnica, cómo derivar los casos; estrategia, el plan que los combina.",
+       "example": {
+        "situation": "Sofía mezcla «valores límite» con «nivel de integración».",
+        "qaDecision": "Separar cada término en el plan.",
+        "evidence": "Glosario del equipo."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T02-Q1",
+         "question": "«Valores límite» es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Un nivel"
+          },
+          {
+           "id": "b",
+           "text": "Una técnica de diseño de casos"
+          },
+          {
+           "id": "c",
+           "text": "Un tipo de prueba"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T03",
+       "title": "Duda 3: ¿Cuatro o cinco niveles?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "El curso de Sofía muestra cuatro.",
+       "explanation": "El CTFL v4.0.1 enumera cinco niveles. La versión de cuatro es una simplificación tradicional que agrupa las dos integraciones.",
+       "example": {
+        "situation": "El curso de Sofía muestra cuatro.",
+        "qaDecision": "Traducirlo a los cinco del CTFL.",
+        "evidence": "Tabla de equivalencias."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T03-Q1",
+         "question": "¿Por qué algunos cursos muestran cuatro niveles?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Porque el CTFL eliminó aceptación"
+          },
+          {
+           "id": "b",
+           "text": "Porque son seis con E2E"
+          },
+          {
+           "id": "c",
+           "text": "Porque agrupan las dos integraciones"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T04",
+       "title": "Duda 4: ¿Por qué se combinan funcional/no funcional y caja negra/blanca?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Una prueba de carga por API.",
+       "explanation": "Uno dice qué se evalúa; el otro, desde dónde se diseña. Son ejes independientes.",
+       "example": {
+        "situation": "Una prueba de carga por API.",
+        "qaDecision": "Etiquetarla como no funcional y de caja negra.",
+        "evidence": "Etiquetas en el plan."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T04-Q1",
+         "question": "Carga por API sin mirar el código es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "No funcional y caja negra"
+          },
+          {
+           "id": "b",
+           "text": "Funcional siempre es caja negra"
+          },
+          {
+           "id": "c",
+           "text": "No funcional siempre es caja blanca"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T05",
+       "title": "Duda 5: ¿Re-test o regresión?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Arreglo de la doble reserva.",
+       "explanation": "El re-test confirma el defecto original; la regresión, los efectos del cambio. Tras un arreglo se hacen ambos.",
+       "example": {
+        "situation": "Arreglo de la doble reserva.",
+        "qaDecision": "Planificar los dos con objetivos distintos.",
+        "evidence": "Plan con ambos."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T05-Q1",
+         "question": "Tras un arreglo…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Son sinónimos"
+          },
+          {
+           "id": "b",
+           "text": "Se hacen ambos, con objetivos distintos"
+          },
+          {
+           "id": "c",
+           "text": "Solo regresión"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T06",
+       "title": "Duda 6: ¿Estática o dinámica?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "El contrato de la API nueva está en borrador.",
+       "explanation": "La estática evalúa sin ejecutar y encuentra defectos antes. La dinámica observa el comportamiento real.",
+       "example": {
+        "situation": "El contrato de la API nueva está en borrador.",
+        "qaDecision": "Revisarlo antes de codificar.",
+        "evidence": "Comentarios en el contrato."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T06-Q1",
+         "question": "Revisar el contrato API antes de codificar es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Una prueba dinámica"
+          },
+          {
+           "id": "b",
+           "text": "Inútil: no encuentra defectos"
+          },
+          {
+           "id": "c",
+           "text": "Una prueba estática"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T07",
+       "title": "Duda 7: ¿Dónde están E2E, smoke, sanity y exploratoria?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Sofía las pone todas en la columna «nivel».",
+       "explanation": "E2E describe alcance; smoke y sanity, propósito; exploratoria, el estilo de diseño y ejecución. Ninguna es un nivel ISTQB.",
+       "example": {
+        "situation": "Sofía las pone todas en la columna «nivel».",
+        "qaDecision": "Moverlas a su eje.",
+        "evidence": "Plan corregido."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T07-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Ninguna es un nivel ISTQB"
+          },
+          {
+           "id": "b",
+           "text": "E2E es un nivel"
+          },
+          {
+           "id": "c",
+           "text": "Smoke es una técnica de caja blanca"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T08",
+       "title": "Duda 8: ¿Pirámide o cuadrantes?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "El equipo duda cuál usar.",
+       "explanation": "La pirámide orienta la cartera automatizada; los cuadrantes, la cobertura de perspectivas. Se complementan.",
+       "example": {
+        "situation": "El equipo duda cuál usar.",
+        "qaDecision": "Usar ambos: forma de la cartera y huecos de perspectiva.",
+        "evidence": "Mapa combinado."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T08-Q1",
+         "question": "Pirámide y cuadrantes…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Son lo mismo"
+          },
+          {
+           "id": "b",
+           "text": "Se complementan"
+          },
+          {
+           "id": "c",
+           "text": "Los cuadrantes fijan proporciones"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T09",
+       "title": "Duda 9: ¿Cómo selecciono por riesgo y capacidad?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "Quedan dos días antes del release.",
+       "explanation": "Con probabilidad × impacto, tiempo disponible, habilidades y herramientas del equipo, declarando el riesgo residual.",
+       "example": {
+        "situation": "Quedan dos días antes del release.",
+        "qaDecision": "Priorizar y declarar lo no probado.",
+        "evidence": "Plan priorizado."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T09-Q1",
+         "question": "¿Qué se prueba primero?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Lo más fácil"
+          },
+          {
+           "id": "b",
+           "text": "Por orden alfabético"
+          },
+          {
+           "id": "c",
+           "text": "Lo de mayor impacto y probabilidad"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C06-T10",
+       "title": "Duda 10: ¿Qué automatizo y qué dejo manual o exploratorio?",
+       "objective": "Resolver una confusión frecuente con un ejemplo.",
+       "context": "El equipo quiere automatizarlo todo.",
+       "explanation": "Se automatiza lo repetitivo, estable y valioso. Se mantiene manual o exploratorio lo que requiere juicio humano o cambia mucho.",
+       "example": {
+        "situation": "El equipo quiere automatizarlo todo.",
+        "qaDecision": "Elegir candidatos por valor, costo y estabilidad.",
+        "evidence": "Lista de candidatos."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C06-T10-Q1",
+         "question": "¿Qué conviene automatizar?",
+         "options": [
+          {
+           "id": "a",
+           "text": "El conflicto 409 por API"
+          },
+          {
+           "id": "b",
+           "text": "El juicio de usabilidad"
+          },
+          {
+           "id": "c",
+           "text": "Nada"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Sofía (QA junior)",
+       "what": "Trae sus diez dudas a la reunión.",
+       "evidence": "Lista de preguntas"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Responde cada una con un ejemplo de ReservaYa.",
+       "evidence": "Respuestas en el wiki"
+      },
+      {
+       "who": "Equipo",
+       "what": "Acuerda su glosario.",
+       "evidence": "Glosario publicado"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C06-D1",
+      "title": "Una prueba, varios ejes",
+      "relations": [
+       {
+        "from": "¿Cómo describo esta prueba?",
+        "to": [
+         "Tipo → C01",
+         "Enfoque → C02",
+         "Nivel → C03",
+         "Cartera → C04",
+         "Principios → C05",
+         "BDD → C07",
+         "Release → C08"
+        ]
+       }
+      ],
+      "alternative": "La pregunta «¿cómo describo esta prueba?» se responde por partes: su tipo (capítulo 01), su enfoque y propósito (02), su nivel (03), su lugar en la cartera (04), los principios que justifican la decisión (05), la especificación con ejemplos (07) y el ambiente y el release (08).",
+      "mermaid": "flowchart TB\n    Q((¿Cómo describo esta prueba?))\n    Q --> T[Tipo → C01]\n    Q --> E[Enfoque → C02]\n    Q --> L[Nivel → C03]\n    Q --> PY[Cartera → C04]\n    Q --> PR[Principios → C05]\n    Q --> BD[BDD → C07]\n    Q --> RL[Release → C08]\n"
+     },
+     "balloons": {
+      "title": "Clasificar un escenario ambiguo",
+      "states": [
+       {
+        "id": "FND-C06-S1",
+        "title": "Separar ejes",
+        "actions": [
+         "Leer el escenario",
+         "Identificar las palabras de cada eje"
+        ],
+        "owner": "QA",
+        "evidence": "Etiquetas anotadas",
+        "result": "Ejes separados"
+       },
+       {
+        "id": "FND-C06-S2",
+        "title": "Resolver condiciones",
+        "actions": [
+         "Preguntar si pertenece al subconjunto crítico",
+         "Decidir si es smoke"
+        ],
+        "owner": "QA con equipo",
+        "evidence": "Justificación escrita",
+        "result": "Etiquetas condicionadas"
+       },
+       {
+        "id": "FND-C06-S3",
+        "title": "Registrar",
+        "actions": [
+         "Guardar la clasificación en el plan o la suite"
+        ],
+        "owner": "QA",
+        "evidence": "Plan actualizado",
+        "result": "Clasificación compartida"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Clasificador multidimensional",
+      "prompt": "Para cada prueba elige una opción en cada eje. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "level",
+        "label": "Nivel",
+        "options": [
+         {
+          "id": "component",
+          "label": "Componente"
+         },
+         {
+          "id": "system",
+          "label": "Sistema"
+         },
+         {
+          "id": "sint",
+          "label": "Integración de sistemas"
+         }
+        ]
+       },
+       {
+        "id": "scope",
+        "label": "Alcance",
+        "options": [
+         {
+          "id": "isolated",
+          "label": "Aislada"
+         },
+         {
+          "id": "e2e",
+          "label": "E2E"
+         }
+        ]
+       },
+       {
+        "id": "execution",
+        "label": "Ejecución",
+        "options": [
+         {
+          "id": "manual",
+          "label": "Manual"
+         },
+         {
+          "id": "automated",
+          "label": "Automatizada"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "Playwright comprueba la reserva de punta a punta tras un despliegue",
+        "answers": {
+         "level": "system",
+         "scope": "e2e",
+         "execution": "automated"
+        },
+        "feedback": "Sistema · E2E · automatizada; además smoke si es del subconjunto crítico."
+       },
+       {
+        "id": "A2",
+        "text": "Prueba unitaria de isPastSlot en CI",
+        "answers": {
+         "level": "component",
+         "scope": "isolated",
+         "execution": "automated"
+        },
+        "feedback": "Componente aislado y automatizado."
+       },
+       {
+        "id": "A3",
+        "text": "Tomás verifica a mano el correo del proveedor",
+        "answers": {
+         "level": "sint",
+         "scope": "isolated",
+         "execution": "manual"
+        },
+        "feedback": "Integración con un sistema externo, manual."
+       },
+       {
+        "id": "A4",
+        "text": "Sesión exploratoria de reservas en la aplicación",
+        "answers": {
+         "level": "system",
+         "scope": "e2e",
+         "execution": "manual"
+        },
+        "feedback": "Sistema completo, manual."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Crea tu chuleta: glosario de 10 términos, una tabla comparativa de ejes y cinco ejemplos de ReservaYa clasificados en todos los ejes.",
+      "rubric": [
+       "El glosario usa redacción propia.",
+       "La tabla separa nivel, tipo, técnica, alcance, propósito y ejecución.",
+       "Los ejemplos tienen todas sus etiquetas justificadas."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "Una prueba se describe con varios ejes a la vez.",
+       "Ninguna etiqueta de alcance o propósito es un nivel.",
+       "Las etiquetas condicionales se justifican."
+      ],
+      "glossary": [
+       {
+        "term": "Eje",
+        "meaning": "Dimensión independiente para describir una prueba."
+       },
+       {
+        "term": "Técnica",
+        "meaning": "Forma de derivar casos de prueba."
+       },
+       {
+        "term": "Estrategia",
+        "meaning": "Plan que combina niveles, tipos, técnicas y enfoques."
+       }
+      ],
+      "next": "Capítulo 07: en el refinamiento, ¿cómo se descubren las reglas con ejemplos?"
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISTQB · Certified Tester Foundation Level",
+       "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+       "version": "CTFL v4.0",
+       "consulted": "2026-10-29"
+      }
+     ]
+    },
+    {
+     "id": "FND-C07",
+     "week": 2,
+     "number": 7,
+     "status": "published",
+     "title": "Behavior-Driven Development (BDD)",
+     "outcome": "Redacta escenarios Dado/Cuando/Entonces a partir de ejemplos descubiertos en equipo.",
+     "opening": {
+      "story": [
+       "Refinamiento del sprint 15. Valeria dice: «Dos usuarios no pueden tomar el mismo turno».",
+       "Tomás pregunta: «¿Y si confirman en el mismo segundo?».",
+       "Andrés se queda callado: acaba de ver la condición de carrera. Así empieza BDD: con una conversación y un ejemplo."
+      ],
+      "question": "¿Qué aportó la pregunta de Tomás?",
+      "answer": "Un contraejemplo concreto que reveló una regla oculta: la confirmación casi simultánea."
+     },
+     "objectives": [
+      "Describir BDD como colaboración con ejemplos.",
+      "Formular escenarios Dado/Cuando/Entonces comprensibles y verificables.",
+      "Distinguir un escenario de negocio de un caso manual y de una aserción técnica."
+     ],
+     "cards": [
+      {
+       "id": "FND-W02-C07-T01",
+       "title": "BDD es conversación, no sintaxis",
+       "objective": "Entender BDD como proceso colaborativo.",
+       "context": "El equipo cree que BDD es «escribir archivos .feature».",
+       "explanation": "BDD es un proceso colaborativo de descubrimiento, formulación y automatización basado en ejemplos concretos. Participan negocio, QA y desarrollo. No exige Cucumber ni otra herramienta concreta.",
+       "example": {
+        "situation": "20 minutos de conversación con Valeria antes de escribir nada.",
+        "qaDecision": "Empezar por ejemplos y preguntas, no por la sintaxis.",
+        "evidence": "Tarjetas de la conversación."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T01-Q1",
+         "question": "¿Qué es lo esencial de BDD?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Escribir archivos .feature"
+          },
+          {
+           "id": "b",
+           "text": "Acordar el comportamiento con ejemplos concretos entre negocio, QA y desarrollo"
+          },
+          {
+           "id": "c",
+           "text": "Usar Cucumber"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T02",
+       "title": "Descubrimiento con ejemplos",
+       "objective": "Encontrar reglas, ejemplos y preguntas.",
+       "context": "La regla RES-R3 parece obvia.",
+       "explanation": "En el descubrimiento se buscan reglas, ejemplos, contraejemplos y preguntas abiertas. Los contraejemplos revelan casos límite y reglas ocultas.",
+       "example": {
+        "situation": "Ana reserva las 10:00 y Luis ve conflicto.",
+        "qaDecision": "Preguntar: «¿se avisa a Luis de otros turnos libres?».",
+        "evidence": "Tarjetas de reglas, ejemplos y preguntas."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T02-Q1",
+         "question": "¿Qué aporta un contraejemplo en el descubrimiento?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Revela casos límite y reglas ocultas, como la confirmación simultánea"
+          },
+          {
+           "id": "b",
+           "text": "Retrasa el sprint sin valor"
+          },
+          {
+           "id": "c",
+           "text": "Sustituye a los criterios de aceptación"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T03",
+       "title": "Formulación en Gherkin",
+       "objective": "Escribir escenarios con lenguaje de negocio.",
+       "context": "Hay que documentar RES-R3.",
+       "explanation": "En español, Gherkin usa la cabecera «# language: es» y las palabras Característica, Escenario, Dado, Cuando, Entonces, Y y Pero. Cada escenario describe una regla con lenguaje de negocio.",
+       "example": {
+        "situation": "El escenario «Evitar doble reserva del mismo turno».",
+        "qaDecision": "Revisar que cada «Entonces» sea un resultado observable.",
+        "evidence": "Archivo reservas.feature revisado."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T03-Q1",
+         "question": "¿Qué línea es un buen «Entonces»?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Entonces la tabla bookings tiene 1 fila"
+          },
+          {
+           "id": "b",
+           "text": "Entonces hago clic en Aceptar"
+          },
+          {
+           "id": "c",
+           "text": "Entonces solo una reserva queda confirmada"
+          }
+         ]
+        }
+       ],
+       "content": [
+        {
+         "kind": "h",
+         "text": "Palabras clave en español y en inglés"
+        },
+        {
+         "kind": "table",
+         "caption": "Gherkin: equivalencias más usadas",
+         "columns": [
+          "Español (# language: es)",
+          "English",
+          "Para qué sirve"
+         ],
+         "rows": [
+          [
+           "Característica",
+           "Feature",
+           "Agrupa los escenarios de una funcionalidad y su historia (Como… Quiero… Para…)."
+          ],
+          [
+           "Antecedentes",
+           "Background",
+           "Pasos comunes que se repiten antes de cada escenario."
+          ],
+          [
+           "Escenario",
+           "Scenario",
+           "Un ejemplo concreto de una regla de negocio."
+          ],
+          [
+           "Esquema del escenario",
+           "Scenario Outline",
+           "Plantilla que se repite con varios datos."
+          ],
+          [
+           "Ejemplos",
+           "Examples",
+           "Tabla con los valores de cada <parámetro> del esquema."
+          ],
+          [
+           "Dado · Cuando · Entonces",
+           "Given · When · Then",
+           "Contexto inicial · acción del usuario · resultado observable."
+          ],
+          [
+           "Y · Pero",
+           "And · But",
+           "Continúan el paso anterior sin repetir la palabra clave."
+          ]
+         ]
+        },
+        {
+         "kind": "list",
+         "title": "Buenas prácticas",
+         "items": [
+          "Escribe en **lenguaje de negocio**: personas, turnos y mensajes, no tablas ni botones técnicos.",
+          "Un escenario describe **una regla**; si necesitas «y además…» en el título, probablemente son dos.",
+          "Cada **Entonces** describe algo que el usuario o el negocio puede **observar**.",
+          "Usa **Esquema del escenario** cuando la regla es la misma y solo cambian los datos."
+         ]
+        },
+        {
+         "kind": "callout",
+         "tone": "note",
+         "title": "Mira el ejemplo",
+         "text": "El archivo **reservas.feature** muestra RES-R3 con un escenario y un esquema con ejemplos. Puedes verlo en español o en inglés: la estructura es la misma, solo cambian las palabras clave."
+        }
+       ],
+       "aside": [
+        {
+         "kind": "gherkin",
+         "caption": "Ejemplo: reservas.feature",
+         "variants": [
+          {
+           "label": "Español",
+           "filename": "reservas.feature",
+           "code": "# language: es\n# HU-RES-01 · Regla RES-R3: un turno no se asigna a dos personas\nCaracterística: Reserva de turnos\n  Como cliente de ReservaYa\n  Quiero reservar un turno disponible\n  Para asegurar mi cita sin que otra persona ocupe el mismo turno\n\n  Antecedentes:\n    Dado que el turno \"lunes 09:00\" está disponible\n\n  Escenario: Evitar doble reserva del mismo turno\n    Dado que Ana reservó el turno \"lunes 09:00\"\n    Cuando Luis intenta reservar el turno \"lunes 09:00\"\n    Entonces Luis ve el mensaje \"Este turno ya no está disponible\"\n    Y el turno \"lunes 09:00\" sigue asignado a Ana\n\n  Esquema del escenario: Rechazar turnos no válidos\n    Dado que hoy es \"<hoy>\"\n    Cuando el cliente intenta reservar el turno \"<turno>\"\n    Entonces ve el mensaje \"<mensaje>\"\n    Pero el turno no aparece en \"Mis reservas\"\n\n    Ejemplos: Turnos no válidos\n      | hoy             | turno          | mensaje                         |\n      | miércoles 10:00 | martes 09:00   | No puedes reservar en el pasado |\n      | miércoles 10:00 | domingo 08:00  | Fuera del horario de atención   |"
+          },
+          {
+           "label": "English",
+           "filename": "bookings.feature",
+           "code": "# language: en\n# HU-RES-01 · Rule RES-R3: a slot is never assigned to two people\nFeature: Slot booking\n  As a ReservaYa customer\n  I want to book an available slot\n  So that nobody else takes the same slot\n\n  Background:\n    Given the slot \"Monday 09:00\" is available\n\n  Scenario: Prevent double booking of the same slot\n    Given Ana booked the slot \"Monday 09:00\"\n    When Luis tries to book the slot \"Monday 09:00\"\n    Then Luis sees the message \"This slot is no longer available\"\n    And the slot \"Monday 09:00\" is still assigned to Ana\n\n  Scenario Outline: Reject invalid slots\n    Given today is \"<today>\"\n    When the customer tries to book the slot \"<slot>\"\n    Then they see the message \"<message>\"\n    But the slot does not appear in \"My bookings\"\n\n    Examples: Invalid slots\n      | today           | slot           | message                          |\n      | Wednesday 10:00 | Tuesday 09:00  | You cannot book in the past      |\n      | Wednesday 10:00 | Sunday 08:00   | Outside business hours           |"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T04",
+       "title": "Automatización: el tercer paso",
+       "objective": "Conectar escenarios a pruebas sin olvidar el valor del descubrimiento.",
+       "context": "Se quiere automatizar el escenario de concurrencia.",
+       "explanation": "Los escenarios pueden conectarse a pruebas automatizadas, que es la tercera práctica de BDD. El valor empieza en el descubrimiento, y automatizar «casi al mismo tiempo» exige controlar la concurrencia y los datos.",
+       "example": {
+        "situation": "Dos solicitudes simultáneas a la API.",
+        "qaDecision": "Usar una barrera de sincronización y datos propios de la prueba.",
+        "evidence": "Prueba reproducible en CI."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T04-Q1",
+         "question": "¿Qué hace falta para automatizar «ambos confirman casi al mismo tiempo»?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Controlar la concurrencia y los datos para que sea reproducible"
+          },
+          {
+           "id": "b",
+           "text": "Dos personas haciendo clic a la vez"
+          },
+          {
+           "id": "c",
+           "text": "Nada especial"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T05",
+       "title": "Escenario, caso manual y aserción técnica",
+       "objective": "Distinguir tres formatos.",
+       "context": "La misma regla RES-R3 en tres formatos.",
+       "explanation": "El escenario expresa comportamiento de negocio; el caso manual detalla pasos de ejecución; la aserción técnica comprueba un detalle de implementación. Los tres son útiles en su lugar.",
+       "example": {
+        "situation": "«1. Abrir /reservas · 2. Elegir 10:00 · 3. Pulsar Confirmar».",
+        "qaDecision": "Reconocerlo como caso manual y reescribir el escenario sin pasos de interfaz.",
+        "evidence": "Escenario y caso, cada uno en su sitio."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T05-Q1",
+         "question": "«1. Abrir /reservas · 2. Elegir 10:00 · 3. Pulsar Confirmar» es…",
+         "options": [
+          {
+           "id": "a",
+           "text": "Un escenario BDD"
+          },
+          {
+           "id": "b",
+           "text": "Un caso manual con pasos"
+          },
+          {
+           "id": "c",
+           "text": "Una aserción técnica"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T06",
+       "title": "Escenarios ambiguos",
+       "objective": "Reemplazar palabras vagas por ejemplos observables.",
+       "context": "Un escenario dice «la reserva es rápida».",
+       "explanation": "Palabras como «rápido», «correcto» o «varios» no son verificables. Se sustituyen por ejemplos observables, y los requisitos no funcionales se expresan con criterios medibles aparte.",
+       "example": {
+        "situation": "«Dado un turno cualquiera».",
+        "qaDecision": "Reescribir: «Dado que el turno del martes a las 10:00 está disponible».",
+        "evidence": "Escenario reescrito."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T06-Q1",
+         "question": "¿Cómo mejoras «Dado un turno cualquiera»?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Dejarlo igual"
+          },
+          {
+           "id": "b",
+           "text": "«Dado un turno correcto»"
+          },
+          {
+           "id": "c",
+           "text": "«Dado que el turno del martes a las 10:00 está disponible»"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T07",
+       "title": "Reglas con ejemplos positivos y negativos",
+       "objective": "Cubrir una regla con varios ejemplos.",
+       "context": "HU-RES-01 tiene varias reglas.",
+       "explanation": "Los escenarios se agrupan por regla con «Regla:», con un ejemplo positivo, uno de conflicto y uno de fecha pasada.",
+       "example": {
+        "situation": "Regla: no reservar en el pasado.",
+        "qaDecision": "Escribir un escenario por cada ejemplo relevante.",
+        "evidence": "Tres escenarios por HU."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T07-Q1",
+         "question": "¿Qué conjunto cubre mejor HU-RES-01?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Reserva exitosa, conflicto y fecha pasada"
+          },
+          {
+           "id": "b",
+           "text": "Tres variaciones de la reserva exitosa"
+          },
+          {
+           "id": "c",
+           "text": "Un único escenario con todas las reglas"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C07-T08",
+       "title": "Preguntas pendientes al PO",
+       "objective": "Gestionar dudas abiertas.",
+       "context": "Surgen dudas en el refinamiento.",
+       "explanation": "Las dudas del descubrimiento se registran y se resuelven con el PO antes de comprometer el escenario o automatizarlo.",
+       "example": {
+        "situation": "«¿Cuánto dura el bloqueo temporal?», «¿se notifica a quien pierde el conflicto?».",
+        "qaDecision": "Registrarlas y resolverlas antes de cerrar la HU.",
+        "evidence": "Lista de preguntas con respuesta."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C07-T08-Q1",
+         "question": "¿Qué haces con una pregunta abierta en el refinamiento?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Inventar la respuesta"
+          },
+          {
+           "id": "b",
+           "text": "Registrarla y resolverla con el PO antes de comprometer el escenario"
+          },
+          {
+           "id": "c",
+           "text": "Ignorarla hasta producción"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Valeria (PO)",
+       "what": "Enuncia la regla RES-R3.",
+       "evidence": "Tarjeta de regla"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Propone el contraejemplo simultáneo.",
+       "evidence": "Tarjeta de ejemplo"
+      },
+      {
+       "who": "Andrés (backend)",
+       "what": "Detecta la condición de carrera.",
+       "evidence": "Nota técnica"
+      },
+      {
+       "who": "Tomás y Valeria",
+       "what": "Formulan tres escenarios.",
+       "evidence": "reservas.feature"
+      },
+      {
+       "who": "Andrés y Tomás",
+       "what": "Automatizan el escenario de concurrencia.",
+       "evidence": "Prueba en CI"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C07-D1",
+      "title": "Ciclo BDD",
+      "relations": [
+       {
+        "from": "Descubrimiento",
+        "to": [
+         "Ejemplos",
+         "Preguntas",
+         "PO, QA y DEV"
+        ]
+       },
+       {
+        "from": "Formulación",
+        "to": [
+         "Escenarios Gherkin",
+         "QA con PO"
+        ]
+       },
+       {
+        "from": "Automatización",
+        "to": [
+         "Pruebas ligadas",
+         "DEV y QA"
+        ]
+       },
+       {
+        "from": "Feedback",
+        "to": [
+         "Resultados",
+         "Siguiente refinamiento"
+        ]
+       }
+      ],
+      "alternative": "El ciclo BDD empieza con el descubrimiento de ejemplos y preguntas entre el PO, QA y DEV. Sigue la formulación de escenarios Gherkin, la automatización de pruebas ligadas a esos escenarios y el feedback de su ejecución, que alimenta el siguiente refinamiento.",
+      "mermaid": "flowchart LR\n    D[Descubrimiento] --> F[Formulación]\n    F --> A[Automatización]\n    A --> FB[Feedback]\n    FB --> D\n",
+      "flow": true
+     },
+     "balloons": {
+      "title": "De la conversación al escenario",
+      "states": [
+       {
+        "id": "FND-C07-S1",
+        "title": "Descubrir",
+        "actions": [
+         "Enunciar la regla",
+         "Proponer ejemplo y contraejemplo",
+         "Anotar preguntas"
+        ],
+        "owner": "PO, QA y DEV",
+        "evidence": "Tarjetas de la conversación",
+        "result": "Regla y ejemplos acordados"
+       },
+       {
+        "id": "FND-C07-S2",
+        "title": "Formular",
+        "actions": [
+         "Escribir Dado/Cuando/Entonces",
+         "Revisar ambigüedades"
+        ],
+        "owner": "QA con PO",
+        "evidence": "Archivo .feature revisado",
+        "result": "Escenario comprensible"
+       },
+       {
+        "id": "FND-C07-S3",
+        "title": "Automatizar",
+        "actions": [
+         "Conectar los pasos",
+         "Controlar concurrencia y datos"
+        ],
+        "owner": "DEV y QA Automation",
+        "evidence": "Prueba reproducible",
+        "result": "Escenario ejecutable"
+       },
+       {
+        "id": "FND-C07-S4",
+        "title": "Retroalimentar",
+        "actions": [
+         "Ejecutar",
+         "Compartir resultados",
+         "Ajustar la regla"
+        ],
+        "owner": "Equipo",
+        "evidence": "Informe de ejecución",
+        "result": "Aprendizaje para el siguiente refinamiento"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "Constructor de Gherkin",
+      "prompt": "Indica a qué parte del escenario pertenece cada línea. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "part",
+        "label": "Parte",
+        "options": [
+         {
+          "id": "given",
+          "label": "Dado (contexto)"
+         },
+         {
+          "id": "when",
+          "label": "Cuando (evento)"
+         },
+         {
+          "id": "then",
+          "label": "Entonces (resultado)"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "el turno del martes a las 10:00 está disponible",
+        "answers": {
+         "part": "given"
+        },
+        "feedback": "Es el contexto inicial."
+       },
+       {
+        "id": "A2",
+        "text": "Ana y Luis han iniciado sesión",
+        "answers": {
+         "part": "given"
+        },
+        "feedback": "También es contexto."
+       },
+       {
+        "id": "A3",
+        "text": "ambos confirman la reserva casi al mismo tiempo",
+        "answers": {
+         "part": "when"
+        },
+        "feedback": "Es el evento."
+       },
+       {
+        "id": "A4",
+        "text": "solo una reserva queda confirmada",
+        "answers": {
+         "part": "then"
+        },
+        "feedback": "Resultado observable."
+       },
+       {
+        "id": "A5",
+        "text": "la otra persona recibe un mensaje de conflicto",
+        "answers": {
+         "part": "then"
+        },
+        "feedback": "Segundo resultado observable."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Escribe tres escenarios de negocio para HU-RES-01 (positivo, conflicto y fecha pasada) y una lista de preguntas pendientes para Valeria.",
+      "rubric": [
+       "Los tres escenarios usan lenguaje de negocio, sin pasos de interfaz.",
+       "Cada «Entonces» es observable.",
+       "Hay al menos dos preguntas al PO."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "BDD empieza con una conversación y ejemplos.",
+       "Cada «Entonces» es un resultado observable.",
+       "Automatizar es el tercer paso, no el primero."
+      ],
+      "glossary": [
+       {
+        "term": "BDD",
+        "meaning": "Proceso colaborativo de descubrimiento, formulación y automatización con ejemplos."
+       },
+       {
+        "term": "Gherkin",
+        "meaning": "Lenguaje estructurado para escribir escenarios."
+       },
+       {
+        "term": "Escenario",
+        "meaning": "Ejemplo concreto de una regla de negocio."
+       },
+       {
+        "term": "Contraejemplo",
+        "meaning": "Ejemplo que pone a prueba una regla."
+       }
+      ],
+      "next": "Capítulo 08: el jueves se despliega con el flag apagado. ¿Cuándo se libera?"
+     },
+     "sources": [
+      {
+       "title": "Cucumber · Behaviour-Driven Development",
+       "url": "https://cucumber.io/docs/bdd/",
+       "version": "En línea",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "Cucumber · Gherkin reference",
+       "url": "https://cucumber.io/docs/gherkin/reference/",
+       "version": "En línea",
+       "consulted": "2026-10-29"
+      }
+     ]
+    },
+    {
+     "id": "FND-C08",
+     "week": 2,
+     "number": 8,
+     "status": "published",
+     "title": "Deployment, release y ambientes de software",
+     "outcome": "Decide entre release, mantener el flag desactivado o hacer rollback con evidencia.",
+     "opening": {
+      "story": [
+       "El jueves se despliega la reserva exclusiva en producción con el feature flag desactivado.",
+       "El lunes Valeria decide lanzarla al 10 % de los usuarios.",
+       "¿Qué pasó entre el jueves y el lunes? En este capítulo separarás desplegar de lanzar."
+      ],
+      "question": "El código está en producción con el flag OFF. ¿Los usuarios ya tienen la función?",
+      "answer": "No. Hubo deployment, pero no release: la función aún no está disponible para los usuarios."
+     },
+     "objectives": [
+      "Diferenciar deployment de release.",
+      "Elegir el ambiente y los datos adecuados.",
+      "Decidir entre release, mantener el flag OFF o hacer rollback con evidencia."
+     ],
+     "cards": [
+      {
+       "id": "FND-W02-C08-T01",
+       "title": "Deployment",
+       "objective": "Definir el despliegue.",
+       "context": "La versión 2.3 está lista.",
+       "explanation": "Deployment es llevar una versión a un ambiente: instalarla y configurarla para que esté en ejecución.",
+       "example": {
+        "situation": "La v2.3 se instala en producción el jueves.",
+        "qaDecision": "Verificar la versión y la configuración tras el despliegue.",
+        "evidence": "Registro del pipeline."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T01-Q1",
+         "question": "El código está en producción con el flag OFF. ¿Hubo release?",
+         "options": [
+          {
+           "id": "a",
+           "text": "No: hubo deployment, pero los usuarios aún no tienen la función"
+          },
+          {
+           "id": "b",
+           "text": "Sí: deployment y release son lo mismo"
+          },
+          {
+           "id": "c",
+           "text": "Depende del navegador"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T02",
+       "title": "Release",
+       "objective": "Definir el lanzamiento.",
+       "context": "Valeria decide la fecha del lanzamiento.",
+       "explanation": "Release es poner la funcionalidad a disposición de los usuarios. Puede ocurrir después del deployment, por ejemplo al activar un flag.",
+       "example": {
+        "situation": "El lunes se activa para el 10 % de los usuarios.",
+        "qaDecision": "Registrar quién decidió y con qué evidencia.",
+        "evidence": "Cambio del flag con hora y autor."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T02-Q1",
+         "question": "¿Quién decide normalmente el release de negocio en ReservaYa?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Solo QA"
+          },
+          {
+           "id": "b",
+           "text": "El PO, con la evidencia del equipo"
+          },
+          {
+           "id": "c",
+           "text": "El pipeline, siempre de forma automática"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T03",
+       "title": "Feature flags",
+       "objective": "Usar flags para separar despliegue y lanzamiento.",
+       "context": "El flag reserva_exclusiva.",
+       "explanation": "Los feature flags permiten activar, desactivar, medir y revertir funciones sin redesplegar. No son, por sí mismos, un control de seguridad.",
+       "example": {
+        "situation": "reserva_exclusiva activado solo para el grupo piloto.",
+        "qaDecision": "Probar la función con el flag ON y OFF.",
+        "evidence": "Matriz de pruebas por estado del flag."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T03-Q1",
+         "question": "¿Qué NO garantiza un feature flag?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Que la función se pueda desactivar sin redesplegar"
+          },
+          {
+           "id": "b",
+           "text": "Que se pueda lanzar a un grupo reducido"
+          },
+          {
+           "id": "c",
+           "text": "Que el código oculto sea seguro frente a usuarios malintencionados"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T04",
+       "title": "Lanzamiento progresivo",
+       "objective": "Liberar en pasos observando métricas.",
+       "context": "El release empieza al 10 %.",
+       "explanation": "En un lanzamiento progresivo la función se libera en porcentajes crecientes y se observan métricas en cada paso antes de ampliar.",
+       "example": {
+        "situation": "10 % → 50 % → 100 %, condicionado a tasas ficticias de errores y conflictos.",
+        "qaDecision": "Definir umbrales antes de empezar.",
+        "evidence": "Panel con métricas por paso."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T04-Q1",
+         "question": "Al 10 % suben los errores 5xx. ¿Qué haces?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Desactivar el flag y analizar antes de seguir"
+          },
+          {
+           "id": "b",
+           "text": "Subir al 100 % para tener más datos"
+          },
+          {
+           "id": "c",
+           "text": "Ignorarlo: es solo el 10 %"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T05",
+       "title": "Ambientes frecuentes",
+       "objective": "Reconocer el propósito de cada ambiente.",
+       "context": "ReservaYa tiene local, QA, staging y producción.",
+       "explanation": "Local o desarrollo sirve para construir y depurar; QA, para validar requisitos y defectos; staging, para ensayar configuración e integraciones cercanas a producción; producción presta el servicio real. Los ambientes varían según la organización.",
+       "example": {
+        "situation": "El recorrido de la v2.3 por los cuatro ambientes.",
+        "qaDecision": "Elegir qué validar en cada uno.",
+        "evidence": "Mapa de ambientes."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T05-Q1",
+         "question": "¿Para qué sirve sobre todo staging?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Para atender a los usuarios reales"
+          },
+          {
+           "id": "b",
+           "text": "Para ensayar configuración e integraciones cercanas a producción"
+          },
+          {
+           "id": "c",
+           "text": "Para depurar en el portátil del desarrollador"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T06",
+       "title": "Otros ambientes",
+       "objective": "Evitar suponer un pipeline universal.",
+       "context": "Otra empresa tiene UAT y entornos por PR.",
+       "explanation": "Hay sandbox, integración, UAT y entornos efímeros por PR. No todas las organizaciones los tienen, y en QA no solo se usan mocks.",
+       "example": {
+        "situation": "Un ambiente efímero por PR para revisar la interfaz de reserva.",
+        "qaDecision": "Adaptar la estrategia a los ambientes reales.",
+        "evidence": "Lista de ambientes del proyecto."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T06-Q1",
+         "question": "¿Qué afirmación es correcta?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Toda empresa tiene exactamente cuatro ambientes"
+          },
+          {
+           "id": "b",
+           "text": "En QA solo se usan mocks"
+          },
+          {
+           "id": "c",
+           "text": "Los ambientes dependen de cada organización y producto"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T07",
+       "title": "Datos en cada ambiente",
+       "objective": "Proteger los datos personales.",
+       "context": "Piden copiar la base de producción a QA.",
+       "explanation": "Se prefieren datos sintéticos. Si es imprescindible copiar datos reales, se enmascaran, se autorizan y se limita el acceso. Nunca se exponen secretos.",
+       "example": {
+        "situation": "Usuarios generados en staging, como usuario-0001@example.test.",
+        "qaDecision": "Rechazar la copia sin enmascarar y proponer datos sintéticos.",
+        "evidence": "Política de datos del ambiente."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T07-Q1",
+         "question": "Te piden copiar la base de producción a QA. ¿Qué respondes?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Preferir datos sintéticos; si es imprescindible, enmascarar, autorizar y limitar el acceso"
+          },
+          {
+           "id": "b",
+           "text": "Copiarla tal cual, que es más rápido"
+          },
+          {
+           "id": "c",
+           "text": "Compartir las credenciales de producción con el equipo"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T08",
+       "title": "Smoke post-deployment y rollback",
+       "objective": "Verificar tras desplegar sin dañar producción.",
+       "context": "La v2.3 acaba de llegar a producción.",
+       "explanation": "Tras desplegar se ejecuta un smoke acotado y no destructivo. Si falla, se hace rollback o se mantiene el flag desactivado según el riesgo. No se ejecutan pruebas destructivas en producción.",
+       "example": {
+        "situation": "Smoke de lectura: login y consulta de turnos.",
+        "qaDecision": "Si falla, revertir; si pasa, esperar la decisión de release.",
+        "evidence": "Resultado del smoke con hora."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T08-Q1",
+         "question": "¿Qué prueba es aceptable en producción?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Una prueba de carga con reservas reales"
+          },
+          {
+           "id": "b",
+           "text": "Un smoke no destructivo y controlado"
+          },
+          {
+           "id": "c",
+           "text": "Borrar reservas para probar la cancelación"
+          }
+         ]
+        }
+       ]
+      },
+      {
+       "id": "FND-W02-C08-T09",
+       "title": "Decisión de salida",
+       "objective": "Sustentar el release con evidencia.",
+       "context": "Lunes por la mañana, antes de activar el 10 %.",
+       "explanation": "La decisión de salida se basa en evidencia: resultados de pruebas, defectos abiertos, métricas, riesgo residual aceptado y plan de reversión.",
+       "example": {
+        "situation": "Un defecto menor conocido y documentado.",
+        "qaDecision": "Recomendar el release al 10 % con el riesgo aceptado por Valeria.",
+        "evidence": "Acta de la decisión."
+       },
+       "checks": [
+        {
+         "id": "FND-W02-C08-T09-Q1",
+         "question": "¿Qué sustenta mejor la decisión de release?",
+         "options": [
+          {
+           "id": "a",
+           "text": "Que la fecha ya está comprometida"
+          },
+          {
+           "id": "b",
+           "text": "Que QA «tiene buena sensación»"
+          },
+          {
+           "id": "c",
+           "text": "Evidencia de pruebas, métricas, riesgos aceptados y plan de reversión"
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "teamCase": [
+      {
+       "who": "Marta (DevOps)",
+       "what": "Despliega la v2.3 con el flag OFF el jueves.",
+       "evidence": "Registro del pipeline"
+      },
+      {
+       "who": "Tomás (QA)",
+       "what": "Ejecuta el smoke no destructivo.",
+       "evidence": "Resultado con hora"
+      },
+      {
+       "who": "Equipo",
+       "what": "Revisa métricas y defectos abiertos.",
+       "evidence": "Informe de salida"
+      },
+      {
+       "who": "Valeria (PO)",
+       "what": "Decide el release al 10 % el lunes.",
+       "evidence": "Acta de la decisión"
+      },
+      {
+       "who": "Marta y Tomás",
+       "what": "Monitorean y preparan el rollback.",
+       "evidence": "Panel de métricas"
+      }
+     ],
+     "diagram": {
+      "id": "FND-C08-D1",
+      "title": "Del commit al release",
+      "relations": [
+       {
+        "from": "Commit",
+        "to": [
+         "CI",
+         "Ambiente QA",
+         "Staging"
+        ]
+       },
+       {
+        "from": "Producción",
+        "to": [
+         "Deployment con el flag OFF",
+         "Smoke no destructivo"
+        ]
+       },
+       {
+        "from": "Decisión del PO",
+        "to": [
+         "Activar al 10 %: release progresivo",
+         "No: mantener OFF y esperar evidencia"
+        ]
+       },
+       {
+        "from": "Monitoreo",
+        "to": [
+         "Saludable: ampliar el release",
+         "No: desactivar el flag o hacer rollback"
+        ]
+       }
+      ],
+      "alternative": "El commit pasa por CI, el ambiente QA y staging, y se despliega a producción con el flag desactivado. Tras un smoke no destructivo, el PO decide activar el release progresivo o mantener el flag OFF. Tras activarlo se monitorea: si las métricas son buenas se amplía; si empeoran, se desactiva el flag o se hace rollback. La ruta exacta depende de cada organización.",
+      "mermaid": "flowchart LR\n    C[Commit] --> CI[CI]\n    CI --> QA[Ambiente QA]\n    QA --> ST[Staging]\n    ST --> DP[Deployment · flag OFF]\n    DP --> SM[Smoke no destructivo]\n    SM --> FL{Decisión del PO}\n    FL -- Activar 10 % --> RL[Release progresivo]\n    FL -- Mantener OFF --> W[Esperar evidencia]\n    RL --> MO[Monitoreo]\n    MO -- Mal --> RB[Desactivar o rollback]\n    MO -- Bien --> UP[Ampliar]\n",
+      "flow": true
+     },
+     "balloons": {
+      "title": "Del deployment al release",
+      "states": [
+       {
+        "id": "FND-C08-S1",
+        "title": "Desplegar con flag OFF",
+        "actions": [
+         "Verificar la versión",
+         "Comprobar la configuración del flag"
+        ],
+        "owner": "DevOps",
+        "evidence": "Registro del pipeline",
+        "result": "Versión instalada sin exposición"
+       },
+       {
+        "id": "FND-C08-S2",
+        "title": "Smoke post-deployment",
+        "actions": [
+         "Ejecutar comprobaciones no destructivas",
+         "Revisar logs"
+        ],
+        "owner": "QA y DevOps",
+        "evidence": "Resultado con hora",
+        "result": "Producción estable"
+       },
+       {
+        "id": "FND-C08-S3",
+        "title": "Decidir release",
+        "actions": [
+         "Revisar evidencia, defectos y métricas",
+         "Elegir el porcentaje"
+        ],
+        "owner": "PO con equipo",
+        "evidence": "Acta de la decisión",
+        "result": "Release o espera"
+       },
+       {
+        "id": "FND-C08-S4",
+        "title": "Monitorear o revertir",
+        "actions": [
+         "Observar errores y conflictos",
+         "Desactivar si se supera el umbral"
+        ],
+        "owner": "DevOps y QA",
+        "evidence": "Panel de métricas y registro",
+        "result": "Ampliación o rollback"
+       }
+      ]
+     },
+     "activity": {
+      "kind": "classifier",
+      "title": "¿Release o rollback?",
+      "prompt": "Para cada situación ficticia elige la decisión más prudente. Es una práctica formativa: no cuenta para tu nota.",
+      "axes": [
+       {
+        "id": "decision",
+        "label": "Decisión",
+        "options": [
+         {
+          "id": "release",
+          "label": "Activar el release"
+         },
+         {
+          "id": "hold",
+          "label": "Mantener el flag OFF"
+         },
+         {
+          "id": "rollback",
+          "label": "Desactivar o hacer rollback"
+         }
+        ]
+       }
+      ],
+      "items": [
+       {
+        "id": "A1",
+        "text": "Smoke en verde, sin defectos críticos y plan de reversión listo",
+        "answers": {
+         "decision": "release"
+        },
+        "feedback": "Hay evidencia suficiente para el 10 %."
+       },
+       {
+        "id": "A2",
+        "text": "Smoke en verde, pero el proveedor de correo responde 503 de forma intermitente",
+        "answers": {
+         "decision": "hold"
+        },
+        "feedback": "Esperar evidencia antes de exponer a usuarios."
+       },
+       {
+        "id": "A3",
+        "text": "Al 10 % los conflictos duplicados vuelven a aparecer",
+        "answers": {
+         "decision": "rollback"
+        },
+        "feedback": "El defecto principal reapareció."
+       },
+       {
+        "id": "A4",
+        "text": "Al 50 % las métricas están dentro de los umbrales",
+        "answers": {
+         "decision": "release"
+        },
+        "feedback": "Se puede ampliar."
+       }
+      ]
+     },
+     "transfer": {
+      "prompt": "Prepara tu checklist de salida y el Plan QA de ReservaYa: matriz de 10 escenarios, 3 escenarios BDD, propuesta de pirámide, mapa de ambientes y release, y decisión de salida justificada.",
+      "rubric": [
+       "El checklist cubre ambiente, datos, smoke post-deployment y decisión.",
+       "El Plan QA integra niveles, técnicas, enfoques y release.",
+       "La decisión cita evidencia y riesgo residual."
+      ]
+     },
+     "closing": {
+      "summary": [
+       "Deployment lleva la versión a un ambiente; release la pone a disposición de los usuarios.",
+       "Los flags separan ambos momentos, pero no son un control de seguridad.",
+       "Decide con evidencia y ten un plan de reversión."
+      ],
+      "glossary": [
+       {
+        "term": "Deployment",
+        "meaning": "Llevar una versión a un ambiente."
+       },
+       {
+        "term": "Release",
+        "meaning": "Poner la función a disposición de los usuarios."
+       },
+       {
+        "term": "Feature flag",
+        "meaning": "Interruptor para activar o desactivar una función sin redesplegar."
+       },
+       {
+        "term": "Rollback",
+        "meaning": "Volver a una versión o estado anterior."
+       },
+       {
+        "term": "Staging",
+        "meaning": "Ambiente cercano a producción para ensayar."
+       }
+      ],
+      "next": "¡Terminaste Fundamentos! Completa tu Plan QA y la práctica de la semana."
+     },
+     "sources": [
+      {
+       "title": "ISTQB CTFL Syllabus v4.0.1",
+       "url": "https://istqb.org/wp-content/uploads/2024/11/ISTQB_CTFL_Syllabus_v4.0.1.pdf",
+       "version": "v4.0.1 (2024-09-15)",
+       "consulted": "2026-10-29"
+      },
+      {
+       "title": "ISTQB · Certified Tester Foundation Level",
+       "url": "https://www.istqb.org/certifications/certified-tester-foundation-level-ctfl-v4-0/",
+       "version": "CTFL v4.0",
+       "consulted": "2026-10-29"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}

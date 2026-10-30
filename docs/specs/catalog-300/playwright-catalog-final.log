@@ -1,0 +1,27 @@
+[WebServer] (node:34964) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:45328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:53196) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\catalog-300.spec.ts:7:5 › Home has all eight courses and a keyboard search; retired hero and modules are absent (3.1s)
+  ok  2 [chromium] › tests\e2e\catalog-300.spec.ts:20:5 › mobile search closes with Escape, restores focus and fits 320 px (1.3s)
+  ok  3 [chromium] › tests\e2e\catalog-300.spec.ts:28:5 › Scrum and CTFL reuse their existing experiences and course metadata (2.8s)
+  ok  4 [chromium] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog (1.6s)
+  ok  5 [chromium] › tests\e2e\catalog-300.spec.ts:38:5 › ADMIN creates, publishes, archives and restores without exposing drafts (5.5s)
+  ok  6 [chromium] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress (4.3s)
+  ok  7 [chromium] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership (916ms)
+(node:14148) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 [webkit] › tests\e2e\catalog-300.spec.ts:7:5 › Home has all eight courses and a keyboard search; retired hero and modules are absent (14.6s)
+  ok  9 [webkit] › tests\e2e\catalog-300.spec.ts:20:5 › mobile search closes with Escape, restores focus and fits 320 px (6.1s)
+  ok 10 [webkit] › tests\e2e\catalog-300.spec.ts:28:5 › Scrum and CTFL reuse their existing experiences and course metadata (16.1s)
+  ok 11 [webkit] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog (12.8s)
+  ok 12 [webkit] › tests\e2e\catalog-300.spec.ts:38:5 › ADMIN creates, publishes, archives and restores without exposing drafts (35.5s)
+  ok 13 [webkit] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress (55.9s)
+  ok 14 [webkit] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership (7.6s)
+
+  14 passed (3.2m)

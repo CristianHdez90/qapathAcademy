@@ -6,23 +6,373 @@
     "weeks": [
       {
         "id": 1,
-        "title": "Mentalidad QA y ciclo de vida del software",
+        "title": "Tipos, enfoques, niveles y pirámide de pruebas",
         "chapters": [
-          "QA, QC y testing: conceptos diferentes",
-          "Cómo se relacionan SDLC y STLC",
-          "Los siete principios del testing"
+          "Tipos de pruebas: qué evaluamos y cómo",
+          "Enfoques y estrategias de pruebas",
+          "Cinco niveles de prueba según ISTQB",
+          "Pirámide de Cohn y trabajo conjunto QA–DEV"
         ],
-        "guided": "Caso guiado · saldo bancario incorrecto"
+        "guided": null,
+        "foundation": [
+          {
+            "id": "FND-C01",
+            "anchor": "FND-W01-C01",
+            "number": 1,
+            "title": "Tipos de pruebas: qué evaluamos y cómo",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W01-C01-T01",
+                "title": "Probar es obtener información"
+              },
+              {
+                "id": "FND-W01-C01-T02",
+                "title": "Pruebas funcionales: ¿hace lo que debe?"
+              },
+              {
+                "id": "FND-W01-C01-T03",
+                "title": "Pruebas no funcionales: ¿con qué calidad lo hace?"
+              },
+              {
+                "id": "FND-W01-C01-T04",
+                "title": "Caja negra: diseñar desde la especificación"
+              },
+              {
+                "id": "FND-W01-C01-T05",
+                "title": "Caja blanca: diseñar desde la estructura"
+              },
+              {
+                "id": "FND-W01-C01-T06",
+                "title": "Técnicas basadas en la experiencia"
+              },
+              {
+                "id": "FND-W01-C01-T07",
+                "title": "Estáticas y dinámicas: ¿ejecutamos o no?"
+              },
+              {
+                "id": "FND-W01-C01-T08",
+                "title": "Combinar dimensiones sin confundirlas"
+              }
+            ]
+          },
+          {
+            "id": "FND-C02",
+            "anchor": "FND-W01-C02",
+            "number": 2,
+            "title": "Enfoques y estrategias de pruebas",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W01-C02-T01",
+                "title": "Una estrategia combina ejes"
+              },
+              {
+                "id": "FND-W01-C02-T02",
+                "title": "E2E: alcance de punta a punta"
+              },
+              {
+                "id": "FND-W01-C02-T03",
+                "title": "Smoke: ¿vale la pena seguir?"
+              },
+              {
+                "id": "FND-W01-C02-T04",
+                "title": "Sanity: revisión focalizada"
+              },
+              {
+                "id": "FND-W01-C02-T05",
+                "title": "Re-test o prueba de confirmación"
+              },
+              {
+                "id": "FND-W01-C02-T06",
+                "title": "Regresión: lo que ya funcionaba"
+              },
+              {
+                "id": "FND-W01-C02-T07",
+                "title": "Exploratoria con misión y pruebas basadas en casos"
+              },
+              {
+                "id": "FND-W01-C02-T08",
+                "title": "Manual y automatizada"
+              },
+              {
+                "id": "FND-W01-C02-T09",
+                "title": "Priorizar por riesgo y declarar el riesgo residual"
+              }
+            ]
+          },
+          {
+            "id": "FND-C03",
+            "anchor": "FND-W01-C03",
+            "number": 3,
+            "title": "Cinco niveles de prueba según ISTQB",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W01-C03-T01",
+                "title": "Nivel no es tipo"
+              },
+              {
+                "id": "FND-W01-C03-T02",
+                "title": "Componente (unitaria)"
+              },
+              {
+                "id": "FND-W01-C03-T03",
+                "title": "Integración de componentes"
+              },
+              {
+                "id": "FND-W01-C03-T04",
+                "title": "Sistema"
+              },
+              {
+                "id": "FND-W01-C03-T05",
+                "title": "Integración de sistemas"
+              },
+              {
+                "id": "FND-W01-C03-T06",
+                "title": "Aceptación: ¿construimos lo correcto?"
+              },
+              {
+                "id": "FND-W01-C03-T07",
+                "title": "¿Por qué algunos cursos enseñan cuatro niveles?"
+              },
+              {
+                "id": "FND-W01-C03-T08",
+                "title": "Responsabilidad compartida"
+              }
+            ]
+          },
+          {
+            "id": "FND-C04",
+            "anchor": "FND-W01-C04",
+            "number": 4,
+            "title": "Pirámide de Cohn y trabajo conjunto QA–DEV",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W01-C04-T01",
+                "title": "Origen y forma de la pirámide"
+              },
+              {
+                "id": "FND-W01-C04-T02",
+                "title": "Base: reglas puras, feedback en segundos"
+              },
+              {
+                "id": "FND-W01-C04-T03",
+                "title": "Medio: servicios y contratos"
+              },
+              {
+                "id": "FND-W01-C04-T04",
+                "title": "Cima: pocos E2E de alto valor"
+              },
+              {
+                "id": "FND-W01-C04-T05",
+                "title": "Antipatrón: el cono de helado"
+              },
+              {
+                "id": "FND-W01-C04-T06",
+                "title": "La pirámide no son los niveles ISTQB"
+              },
+              {
+                "id": "FND-W01-C04-T07",
+                "title": "Cuadrantes: otro mapa"
+              },
+              {
+                "id": "FND-W01-C04-T08",
+                "title": "Feedback en cada PR"
+              }
+            ]
+          }
+        ]
       },
       {
         "id": 2,
-        "title": "Niveles, tipos y gestión de riesgos",
+        "title": "Principios, clasificaciones, BDD y release",
         "chapters": [
-          "Niveles de prueba",
-          "Tipos y objetivos de pruebas",
-          "Priorización basada en riesgos"
+          "Los siete principios del testing",
+          "Resolviendo dudas: mapa definitivo de clasificaciones",
+          "Behavior-Driven Development (BDD)",
+          "Deployment, release y ambientes de software"
         ],
-        "guided": "Caso guiado · priorizar cinco funcionalidades"
+        "guided": null,
+        "foundation": [
+          {
+            "id": "FND-C05",
+            "anchor": "FND-W02-C05",
+            "number": 5,
+            "title": "Los siete principios del testing",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W02-C05-T01",
+                "title": "1. Presencia, no ausencia"
+              },
+              {
+                "id": "FND-W02-C05-T02",
+                "title": "2. Las pruebas exhaustivas son imposibles"
+              },
+              {
+                "id": "FND-W02-C05-T03",
+                "title": "3. Las pruebas tempranas ahorran tiempo y dinero"
+              },
+              {
+                "id": "FND-W02-C05-T04",
+                "title": "4. Los defectos se agrupan"
+              },
+              {
+                "id": "FND-W02-C05-T05",
+                "title": "5. Las pruebas se desgastan"
+              },
+              {
+                "id": "FND-W02-C05-T06",
+                "title": "6. Las pruebas dependen del contexto"
+              },
+              {
+                "id": "FND-W02-C05-T07",
+                "title": "7. Falacia de la ausencia de defectos"
+              },
+              {
+                "id": "FND-W02-C05-T08",
+                "title": "Los principios en el sprint"
+              }
+            ]
+          },
+          {
+            "id": "FND-C06",
+            "anchor": "FND-W02-C06",
+            "number": 6,
+            "title": "Resolviendo dudas: mapa definitivo de clasificaciones",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W02-C06-T01",
+                "title": "Duda 1: ¿Qué son las pruebas y por qué no son solo ejecutar casos?"
+              },
+              {
+                "id": "FND-W02-C06-T02",
+                "title": "Duda 2: ¿Qué diferencia nivel, tipo, técnica y estrategia?"
+              },
+              {
+                "id": "FND-W02-C06-T03",
+                "title": "Duda 3: ¿Cuatro o cinco niveles?"
+              },
+              {
+                "id": "FND-W02-C06-T04",
+                "title": "Duda 4: ¿Por qué se combinan funcional/no funcional y caja negra/blanca?"
+              },
+              {
+                "id": "FND-W02-C06-T05",
+                "title": "Duda 5: ¿Re-test o regresión?"
+              },
+              {
+                "id": "FND-W02-C06-T06",
+                "title": "Duda 6: ¿Estática o dinámica?"
+              },
+              {
+                "id": "FND-W02-C06-T07",
+                "title": "Duda 7: ¿Dónde están E2E, smoke, sanity y exploratoria?"
+              },
+              {
+                "id": "FND-W02-C06-T08",
+                "title": "Duda 8: ¿Pirámide o cuadrantes?"
+              },
+              {
+                "id": "FND-W02-C06-T09",
+                "title": "Duda 9: ¿Cómo selecciono por riesgo y capacidad?"
+              },
+              {
+                "id": "FND-W02-C06-T10",
+                "title": "Duda 10: ¿Qué automatizo y qué dejo manual o exploratorio?"
+              }
+            ]
+          },
+          {
+            "id": "FND-C07",
+            "anchor": "FND-W02-C07",
+            "number": 7,
+            "title": "Behavior-Driven Development (BDD)",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W02-C07-T01",
+                "title": "BDD es conversación, no sintaxis"
+              },
+              {
+                "id": "FND-W02-C07-T02",
+                "title": "Descubrimiento con ejemplos"
+              },
+              {
+                "id": "FND-W02-C07-T03",
+                "title": "Formulación en Gherkin"
+              },
+              {
+                "id": "FND-W02-C07-T04",
+                "title": "Automatización: el tercer paso"
+              },
+              {
+                "id": "FND-W02-C07-T05",
+                "title": "Escenario, caso manual y aserción técnica"
+              },
+              {
+                "id": "FND-W02-C07-T06",
+                "title": "Escenarios ambiguos"
+              },
+              {
+                "id": "FND-W02-C07-T07",
+                "title": "Reglas con ejemplos positivos y negativos"
+              },
+              {
+                "id": "FND-W02-C07-T08",
+                "title": "Preguntas pendientes al PO"
+              }
+            ]
+          },
+          {
+            "id": "FND-C08",
+            "anchor": "FND-W02-C08",
+            "number": 8,
+            "title": "Deployment, release y ambientes de software",
+            "status": "published",
+            "cards": [
+              {
+                "id": "FND-W02-C08-T01",
+                "title": "Deployment"
+              },
+              {
+                "id": "FND-W02-C08-T02",
+                "title": "Release"
+              },
+              {
+                "id": "FND-W02-C08-T03",
+                "title": "Feature flags"
+              },
+              {
+                "id": "FND-W02-C08-T04",
+                "title": "Lanzamiento progresivo"
+              },
+              {
+                "id": "FND-W02-C08-T05",
+                "title": "Ambientes frecuentes"
+              },
+              {
+                "id": "FND-W02-C08-T06",
+                "title": "Otros ambientes"
+              },
+              {
+                "id": "FND-W02-C08-T07",
+                "title": "Datos en cada ambiente"
+              },
+              {
+                "id": "FND-W02-C08-T08",
+                "title": "Smoke post-deployment y rollback"
+              },
+              {
+                "id": "FND-W02-C08-T09",
+                "title": "Decisión de salida"
+              }
+            ]
+          }
+        ]
       }
     ],
     "labs": [
@@ -45,7 +395,8 @@
           "Criterios de aceptación comprobables",
           "Revisión temprana y refinamiento"
         ],
-        "guided": "Ejemplo trabajado · acceso a una plataforma"
+        "guided": "Ejemplo trabajado · acceso a una plataforma",
+        "foundation": null
       },
       {
         "id": 4,
@@ -55,7 +406,8 @@
           "Análisis de valores límite",
           "Tablas de decisión y transiciones"
         ],
-        "guided": "Tabla de decisión · inicio de sesión"
+        "guided": "Tabla de decisión · inicio de sesión",
+        "foundation": null
       },
       {
         "id": 5,
@@ -65,7 +417,8 @@
           "Ciclo de vida del defecto",
           "Evidencias y trazabilidad"
         ],
-        "guided": "Bug escrito correctamente"
+        "guided": "Bug escrito correctamente",
+        "foundation": null
       },
       {
         "id": 6,
@@ -75,7 +428,8 @@
           "Diseña una estrategia ligera",
           "Métricas para decidir"
         ],
-        "guided": "Informe de cierre de sprint"
+        "guided": "Informe de cierre de sprint",
+        "foundation": null
       }
     ],
     "labs": [
@@ -103,7 +457,8 @@
           "Validaciones automatizadas en Postman",
           "Herramientas de desarrollo (DevTools)"
         ],
-        "guided": "Script de Postman para validar respuesta"
+        "guided": "Script de Postman para validar respuesta",
+        "foundation": null
       },
       {
         "id": 8,
@@ -113,7 +468,8 @@
           "NULL y cardinalidad en relaciones",
           "Agregaciones y comprobaciones SQL"
         ],
-        "guided": "SQL guiado · contar órdenes por estado"
+        "guided": "SQL guiado · contar órdenes por estado",
+        "foundation": null
       }
     ],
     "labs": [
@@ -141,7 +497,8 @@
           "Funciones pequeñas, fáciles de probar",
           "Git como respaldo del trabajo QA"
         ],
-        "guided": "Validador de contraseña"
+        "guided": "Validador de contraseña",
+        "foundation": null
       },
       {
         "id": 10,
@@ -151,7 +508,8 @@
           "map, filter, find y reduce",
           "JSON y operaciones seguras"
         ],
-        "guided": "Calcular subtotal desde JSON"
+        "guided": "Calcular subtotal desde JSON",
+        "foundation": null
       },
       {
         "id": 11,
@@ -161,7 +519,8 @@
           "Interfaces, opcionales y nulabilidad",
           "Generics y tipos reutilizables"
         ],
-        "guided": "Modelar un resultado API"
+        "guided": "Modelar un resultado API",
+        "foundation": null
       },
       {
         "id": 12,
@@ -171,7 +530,8 @@
           "Manejo de fallos asíncronos",
           "Clases y módulos para organizar el código"
         ],
-        "guided": "Consultar un servicio con control de error"
+        "guided": "Consultar un servicio con control de error",
+        "foundation": null
       }
     ],
     "labs": [
@@ -194,7 +554,8 @@
           "Estructura de una prueba y aserciones",
           "Primer ciclo de depuración"
         ],
-        "guided": "Primera prueba con SauceDemo"
+        "guided": "Primera prueba con SauceDemo",
+        "foundation": null
       },
       {
         "id": 14,
@@ -204,7 +565,8 @@
           "Auto-waiting y reintentos automáticos",
           "Locators estrictos y debugging"
         ],
-        "guided": "Esperar un mensaje de confirmación"
+        "guided": "Esperar un mensaje de confirmación",
+        "foundation": null
       },
       {
         "id": 15,
@@ -214,7 +576,8 @@
           "Observabilidad de errores",
           "Diseñar un E2E de valor"
         ],
-        "guided": "Abrir una pestaña nueva de forma segura"
+        "guided": "Abrir una pestaña nueva de forma segura",
+        "foundation": null
       },
       {
         "id": 16,
@@ -224,7 +587,8 @@
           "Cross-browser con sentido",
           "Test isolation y retries"
         ],
-        "guided": "Configuración multiplataforma"
+        "guided": "Configuración multiplataforma",
+        "foundation": null
       }
     ],
     "labs": [
@@ -251,7 +615,8 @@
           "Principios de diseño aplicados",
           "Cuándo considerar Screenplay"
         ],
-        "guided": "Separación entre Page Object y test"
+        "guided": "Separación entre Page Object y test",
+        "foundation": null
       },
       {
         "id": 18,
@@ -261,7 +626,8 @@
           "Estado autenticado y datos",
           "Setup, teardown y diseño de datos"
         ],
-        "guided": "Fixture propia para usuario de práctica"
+        "guided": "Fixture propia para usuario de práctica",
+        "foundation": null
       },
       {
         "id": 19,
@@ -271,7 +637,8 @@
           "Separar contratos de comportamiento",
           "API como herramienta de preparación de UI"
         ],
-        "guided": "Prueba API sencilla con request"
+        "guided": "Prueba API sencilla con request",
+        "foundation": null
       },
       {
         "id": 20,
@@ -281,7 +648,8 @@
           "Configuración por ambientes",
           "Elegir abstracciones avanzadas"
         ],
-        "guided": "Mock controlado de catálogo"
+        "guided": "Mock controlado de catálogo",
+        "foundation": null
       }
     ],
     "labs": [
@@ -308,7 +676,8 @@
           "Workflow para Playwright",
           "Diagnóstico y seguridad en CI"
         ],
-        "guided": "Workflow mínimo GitHub Actions"
+        "guided": "Workflow mínimo GitHub Actions",
+        "foundation": null
       },
       {
         "id": 22,
@@ -318,7 +687,8 @@
           "Paralelización y sharding",
           "Métricas que aportan valor"
         ],
-        "guided": "Investigar un flaky login"
+        "guided": "Investigar un flaky login",
+        "foundation": null
       }
     ],
     "labs": [
@@ -341,7 +711,8 @@
           "Matriz de trazabilidad",
           "Diseñar una combinación UI + API"
         ],
-        "guided": "Plan de proyecto integrador"
+        "guided": "Plan de proyecto integrador",
+        "foundation": null
       },
       {
         "id": 24,
@@ -351,7 +722,8 @@
           "Presentar decisiones de calidad",
           "Evaluación final del nivel QA Automation"
         ],
-        "guided": "Guion de demostración de cinco minutos"
+        "guided": "Guion de demostración de cinco minutos",
+        "foundation": null
       }
     ],
     "labs": [

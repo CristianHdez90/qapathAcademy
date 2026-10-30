@@ -2,6 +2,14 @@
 
 > Monorepo Next.js + NestJS + PostgreSQL con Clean Architecture, Hexagonal y DDD.
 
+## Catálogo de cursos y rutas personales · SPEC-CATALOG-300
+
+Home y `/courses` presentan cursos publicados. ADMIN gestiona metadatos y publicación desde Mi cuenta; STUDENT organiza rutas privadas sin reiniciar progreso. La migración 008 es aditiva y requiere revisión antes de aplicarse a un entorno compartido.
+
+- [API, permisos y guía de administración](docs/specs/catalog-300/API-y-administracion.md).
+- [Migración, preproducción y reversión](docs/specs/catalog-300/MIGRACION-y-liberacion.md).
+- [Entrega local, trazabilidad y evidencias de validación](docs/specs/catalog-300/ENTREGA-y-evidencias.md).
+
 ## Novedades de seguridad
 
 - Verificación de correo con enlace de un solo uso y vencimiento de 24 h.

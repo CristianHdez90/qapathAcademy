@@ -1,0 +1,28 @@
+/* Menú y avance del curso en la lectura enfocada. */
+.course-study-menu{display:grid;gap:18px}
+.course-menu-root>summary{cursor:pointer;color:#77e7cb;font-weight:750;font-size:15px;padding:6px 0 12px;list-style-position:inside}
+.course-menu-root>summary::marker{color:#77e7cb}
+.course-menu-button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:10px 16px;border:1px solid #2a3c57;border-radius:12px;background:#16233a;color:#edf5ff;font-size:13px;font-weight:750;text-align:center}
+.course-menu-button:hover{border-color:#4b918b;background:#1b2c46}
+.course-menu-button[aria-current]{border-color:#4b918b;background:#1d3a45;color:#7cfdc8}
+.course-menu-wide{display:flex;width:100%;margin:0 0 10px}
+.course-menu-week{margin:0 0 10px}
+.course-menu-row{display:flex;flex-wrap:wrap;gap:8px}
+.course-menu-week.is-current{border-left:3px solid #52dfb7;padding-left:10px}
+.course-menu-here{margin:8px 0 4px;font-size:12px;color:#9fd8c7}
+.course-menu-chapters{margin:4px 0 6px;padding-left:20px;display:grid;gap:6px;font-size:13px;line-height:1.5}
+.course-menu-chapters a{color:#c4d5e3}.course-menu-chapters a:hover{color:#7be9c7}
+.course-menu-done{color:#7be9c7;margin:0 4px;font-weight:800}
+.course-menu-progress{font-size:13px;color:#b8cddd;margin:12px 0 0}
+.course-menu-platform{display:grid;gap:6px;border-top:1px solid #293b56;padding-top:14px}
+.course-menu-link{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:10px;color:#a5b2c8;font-size:13px;font-weight:650}
+.course-menu-link:hover{background:#172742;color:#fff}
+.course-progress-panel{display:grid;gap:10px;margin-bottom:22px}
+.course-progress-summary{display:flex;align-items:baseline;gap:10px}.course-progress-summary strong{font-size:30px;color:#fff}.course-progress-summary span{color:#a6b6cb;font-size:13px}
+.course-progress-weeks{list-style:none;padding:0;margin:8px 0 0;display:grid;gap:8px}
+.course-progress-weeks li{display:flex;gap:12px;align-items:flex-start;padding:10px 12px;border:1px solid #293b56;border-radius:10px;background:#101c31}
+.course-progress-weeks li.is-current{border-color:#4b918b}
+.course-progress-weeks small{display:block;color:#9fb6c6;font-size:12px;margin-top:3px;line-height:1.5}
+.course-progress-state{font-weight:800;color:#a8b7ce}.course-progress-state.started{color:#a1ceff}.course-progress-state.done{color:#7ce7bb}
+.course-progress-index-title{font-size:15px;margin:6px 0 4px}
+@media(max-width:600px){.course-menu-row .course-menu-button{flex:1}}

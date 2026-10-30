@@ -61,6 +61,8 @@ test('local TOTP is still required after Firebase first factor and revoked chall
 test('verification resends require credentials, never accept a bare email as proof of identity',async()=>{
  const h=harness();await h.auth.signUp('student@example.test','old-password-123');
  await assert.rejects(h.auth.resendVerification(h.user.email),SecurityFlowError);
- await h.auth.resendVerification(h.user.email,'incorrect');assert.equal(h.mails,1);
- await h.auth.resendVerification(h.user.email,'old-password-123');assert.equal(h.mails,2);
+ const wrong=await h.auth.resendVerification(h.user.email,'incorrect');assert.equal(h.mails,1);assert.equal(wrong.verified,undefined);assert.equal(wrong.sent,undefined);
+ const sent=await h.auth.resendVerification(h.user.email,'old-password-123');assert.equal(h.mails,2);assert.equal(sent.sent,true);
+ // Con la contraseña correcta y el correo ya verificado no se envía nada y se informa el estado real.
+ h.verify();const done=await h.auth.resendVerification(h.user.email,'old-password-123');assert.equal(done.verified,true);assert.equal(h.mails,2);assert.match(done.message,/ya está verificado/);
 });

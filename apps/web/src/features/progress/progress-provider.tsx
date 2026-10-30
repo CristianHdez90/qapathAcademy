@@ -13,7 +13,7 @@ type ProgressContext={
  saveGrade:(moduleId:string,score:number)=>void;
  saveScrum:(score?:number)=>void;
  toggleScrumIntro:()=>void;
- recordLearning:(command:Extract<ProgressCommand,{type:'reading-section'|'lesson-answer'|'submit-evidence'}>)=>Promise<boolean>;
+ recordLearning:(command:Extract<ProgressCommand,{type:'reading-section'|'lesson-answer'|'submit-evidence'|'foundation-card-read'|'foundation-check-passed'}>)=>Promise<boolean>;
  exportJson:()=>void;importJson:(file:File)=>Promise<void>;
  importDeviceProgress:()=>Promise<void>;refreshProgress:()=>Promise<void>;
 };
@@ -23,6 +23,8 @@ function actionKey(cmd:ProgressCommand){
  if(cmd.type==='submit-evidence')return `evidence:${cmd.kind}:${cmd.id}`;
  if(cmd.type==='lesson-answer')return `lesson:${cmd.week}`;
  if(cmd.type==='reading-section')return `reading:${cmd.week}:${cmd.section}`;
+ if(cmd.type==='foundation-card-read')return `foundation-card:${cmd.cardId}`;
+ if(cmd.type==='foundation-check-passed')return `foundation-check:${cmd.questionId}`;
  return cmd.type;
 }
 async function remoteProgress(method:'GET'|'PATCH'|'POST',command?:unknown):Promise<Progress>{

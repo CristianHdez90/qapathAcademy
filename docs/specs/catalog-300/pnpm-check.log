@@ -1,0 +1,592 @@
+
+> qapath-academy@6.1.0 check C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy
+> pnpm run test && pnpm run typecheck && pnpm run lint && pnpm run build
+
+
+> qapath-academy@6.1.0 test C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy
+> pnpm run build:libs && node --test tests/*.test.mjs
+
+
+> qapath-academy@6.1.0 build:libs C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy
+> pnpm --filter @qapath/contracts --filter @qapath/identity --filter @qapath/administration --filter @qapath/learning --filter @qapath/content --filter @qapath/progress --filter @qapath/database build
+
+Scope: 7 of 10 workspace projects
+packages/contracts build$ tsc -p tsconfig.json
+libs/learning build$ tsc -p tsconfig.json
+libs/content build$ tsc -p tsconfig.json
+libs/identity build$ tsc -p tsconfig.json
+libs/learning build: Done
+libs/progress build$ tsc -p tsconfig.json
+libs/identity build: Done
+packages/contracts build: Done
+libs/content build: Done
+libs/progress build: Done
+libs/administration build$ tsc -p tsconfig.json
+packages/database build$ tsc -p tsconfig.json
+libs/administration build: Done
+packages/database build: Done
+✔ Admin exige correo, cambio inicial y segundo factor antes de crear una sesión (16.7374ms)
+✔ Alumno verificado puede entrar sin MFA; la activación voluntaria protege accesos futuros (5.2074ms)
+✔ Cuentas administradas: solo STUDENT, normalización, búsqueda y desactivación (6.8665ms)
+✔ No es posible modificar ADMIN ni al actor (4.0844ms)
+✔ No se aceptan contraseñas débiles ni datos inconsistentes (1.5335ms)
+✔ La migración 003 crea eventos, índices y vista SQL de progreso (8.3737ms)
+✔ AI administration enforces real session, role and origin guards for reading, saving and provider tests (4832.667ms)
+✔ strict config accepts Groq slash models and rejects foreign URLs, credentials, invalid numbers and conflicting key actions (33.1796ms)
+✔ settings encrypt credentials, return no secrets, preserve provider-specific keys and protect concurrent revisions (3062.9121ms)
+✔ missing credentials cannot enable AI, environment fallback works and invalid encryption cannot store secrets (2904.3537ms)
+✔ Groq Responses sends server instructions, private auth and safe context, omits unsupported fields and hides reasoning (641.2316ms)
+✔ Groq reports quota and upstream errors without leaking raw provider details, and rejects empty or incomplete responses (689.6815ms)
+✔ migration and encrypted configuration persist against an isolated PostgreSQL engine (16532.7718ms)
+✔ provider dispatch uses a single configuration snapshot and permits only admin probe to ignore disabled state (45.1446ms)
+✔ API mission needs all ten independent contract cases, not only a successful status (36.9657ms)
+✔ status-correct responses fail on wrong field types, business values, errors, sandbox headers or Bearer challenge (1.7653ms)
+✔ empty response is validated without requiring JSON and parsed missions preserve real evidence (6.5149ms)
+✔ all API observations and maximum reflections fit the evidence limits (0.6152ms)
+✔ generated request specs cover errors and empty bodies with explicit business contracts (626.1189ms)
+✔ API runtime reads text once, omits real credentials and never calls JSON for a 204 (175.6853ms)
+✔ DDD: Domain y Application no importan frameworks ni infraestructura (63.7052ms)
+✔ Hexagonal: interfaz web no importa application/domain ni adaptadores backend (344.1305ms)
+✔ Nest solo utiliza composición para enlazar puerto con adaptador (1.01ms)
+✔ all async challenges execute real promises and clear actual timers (386.0625ms)
+✔ final matrix distinguishes five causes and preserves observed status and resources (149.6931ms)
+✔ incorrect HTTP handling, missing timer cleanup and incorrect expectations fail (214.6735ms)
+✔ completion rules match all 24 lessons and their module labs, task count and assessment answers (5.821ms)
+✔ week completion requires reading, validated practice, self-check and module quiz; legacy labs are not required (28.119ms)
+✔ legacy flags do not confer completion and manual progress or fabricated grades are rejected by the API schema (17.8223ms)
+✔ invalid lesson sections, task IDs and empty evidence cannot complete activities (1.8034ms)
+✔ server imports recover notes without trusting imported completion or assessment records (7694.0406ms)
+✔ bug report export includes real reproduction, both retests, transitions and regression without inventing reflections (6.6158ms)
+✔ bug lifecycle replays failed retest, reopening, correction, verification, regression and closure (8.8493ms)
+✔ reporting needs reproduction and concrete steps; transitions cannot skip verification (4.0364ms)
+✔ drafts and early bug transitions do not complete practice; full reports and previous work survive serialization (25.1109ms)
+✔ W01-C01 provides 24 concise lists without discarding the full instructions (10.1897ms)
+✔ malformed optional details preserve the legacy fallback as a whole (2.1276ms)
+✔ the formative case keeps confirmation pending and diagram references valid (3.3847ms)
+✔ Mantiene 8 módulos, 24 semanas y 24 guías (2.5847ms)
+✔ Cada semana pertenece a un módulo válido y tiene secciones completas (0.892ms)
+✔ Preguntas y Scrum con estructura válida (0.7723ms)
+✔ catalog migration, PostgreSQL repositories and real HTTP guards preserve academic data (33992.9351ms)
+✔ course invariants reject unsafe slugs, covers, references and unusable publication (59.1487ms)
+✔ archive is reversible only through DRAFT and route selection has no academic side effects (3.5941ms)
+✔ course return destinations remain local and never bypass login or MFA stages (15.8835ms)
+✔ CTFL bank has unique questions, six chapters, explanations and the 8/6/4/11/9/2 distribution (11.7106ms)
+✔ CTFL grading counts omissions as incorrect and requires 26/40 without rounding up a failure (2.5268ms)
+✔ certification results round-trip through existing evidence without changing the 24-week route (126.3271ms)
+✔ DevTools completion requires reproduction, correct diagnosis and matching retest (3.6656ms)
+✔ Saved DevTools investigations restore observations while legacy or malformed evidence stays unvalidated (3.8597ms)
+✔ Aggregate Quiz calcula porcentaje y rechaza opciones inválidas (8.7865ms)
+✔ El caso de uso GradeQuiz no depende de NestJS ni DB (1.0571ms)
+✔ Value Objects validan invariantes (1.268ms)
+✔ Caso de uso lección obtiene semana y guía desde puerto mock (3.0652ms)
+✔ Progress mantiene datos versionados y adapter injectable (17.6569ms)
+✔ Los adaptadores PostgreSQL usan operadores exportados por @qapath/database (16.3596ms)
+✔ El API no instala una instancia directa adicional de Drizzle (4.7645ms)
+▶ SPEC-110 HTTP preserves guards, error envelope, per-id limits and account isolation without a database
+  ✔ anonymous, wrong roles and cross-site requests never reach the write port (906.7171ms)
+  ✔ all 24 ids retain the error shape and have exactly the approved boundaries (3486.2265ms)
+  ✔ non-exercise caps, strict payloads, unknown ids and trimming stay unchanged (146.0774ms)
+  ✔ full 23/24 JSON reports survive readback and a failed update cannot replace them (191.3627ms)
+  ✔ real adapter import rule grants only notes, never imported evidence or grades (18.5707ms)
+✔ SPEC-110 HTTP preserves guards, error envelope, per-id limits and account isolation without a database (9115.17ms)
+✔ all 24 exercise limits agree in commands and persisted reads at every boundary (787.0365ms)
+✔ task, lab and certification remain limited to 8000 even with extended exercise ids (3.164ms)
+✔ full draft and validated reports for 23 and 24 survive serialized round trips without changing credit rules (46.4943ms)
+✔ noncanonical evidence keys retain their old default cap and cannot borrow an extended exercise limit (117.1851ms)
+✔ notes and normalization rules retain independent limits and preserve whitespace behavior (172.5003ms)
+✔ UTF-16 length and structural contract boundaries are unchanged (386.8706ms)
+✔ a compatible rollback can pause large writes while keeping previously saved 23/24 evidence readable (63.2106ms)
+✔ Firebase diagnostic identifies unauthorized verification domain without exposing token or credentials (11317.4213ms)
+✔ Google structured API-key restrictions identify blocked backend referrer (1779.7471ms)
+✔ unknown provider response text is never reflected into logs or client errors (1962.8604ms)
+✔ incorrect credentials remain a generic authentication error (438.8801ms)
+✔ el correo de servicio solo es válido acompañado de proyecto y clave o archivo ADC (5.3771ms)
+✔ soporta credenciales ADC sin exponer la clave privada en .env (4.4458ms)
+✔ no permite rutas ni caracteres especiales en el nombre de colección (1.0448ms)
+✔ Firebase encola correo con expiración y nunca usa la cuenta de servicio como remitente (2.5225ms)
+✔ VerificationEmailAdapter delega a Firebase y conserva el formato de URL con fragmento (85.0035ms)
+✔ Firebase registration links a STUDENT without storing a second password or invoking SMTP (8.1881ms)
+✔ legacy linking requires old password and preserves PostgreSQL ID and role (4.8878ms)
+✔ a different Firebase UID cannot claim an already linked PostgreSQL user (1.6833ms)
+✔ local TOTP is still required after Firebase first factor and revoked challenges fail closed (2.7257ms)
+✔ verification resends require credentials, never accept a bare email as proof of identity (2.4729ms)
+✔ UI challenges generate valid commented specs with awaited accessible locators and assertion (1444.9294ms)
+✔ only a real mismatched basic quote is classified as the intended failure (2.2325ms)
+✔ UI evidence distinguishes generated spec from integrated execution and preserves controlled failure (0.9926ms)
+✔ fixtures need explicit scopes, contamination and successful distinct views in both orders and concurrent tasks (6.8619ms)
+✔ validation preserves student predictions and requires meaningful data diversity (2.3518ms)
+✔ fixtures restore observations and reject malformed captures without inventing worker runs (9.7617ms)
+✔ four cases, two orders and two concurrent observations fit saved evidence with maximum notes (1.8062ms)
+✔ downloaded fixtures use per-test data and Page, an immutable worker catalog and no global mutable page (1254.6982ms)
+✔ metrics preserve first failure, exclude blocked denominator and use median of first attempts (2.6149ms)
+✔ empty/all blocked samples have no invented rates or duration; even median is averaged (0.6665ms)
+✔ completion requires quiz, two comparable full samples, plan and review, but does not demand a green result (0.9949ms)
+✔ parser rejects bad attempts and retries on approved first attempts; evidence remains within save limits (27.2725ms)
+✔ all approved observations do not claim stability or measured improvement (2.0883ms)
+✔ batch retries a failed first attempt once, keeps it and never retries blocked attempts (271.2599ms)
+✔ reflow credits a source band only after every original glyph is exposed (8.7363ms)
+✔ reflow does not credit partially clipped glyphs, hidden text or changed content (0.8099ms)
+✔ leading and trailing source spaces also require the real outer card edges (1.3601ms)
+✔ projection uses measured source lengths and union, not equal card weights (3.6339ms)
+✔ a side-by-side row requires both homologous regions and retains real gaps (1.7108ms)
+✔ resize retains historical source intervals without crediting old unpaired columns (1.5926ms)
+✔ projected boundaries use the unchanged baseline oracle without a completion epsilon (2.1025ms)
+✔ attention boundary is cumulative per chapter and cannot compensate missing coverage (0.6125ms)
+✔ foundation evidence distinguishes current failures from stale executions and never counts reference cases (8.6602ms)
+✔ download keeps test actions, separate expected and obtained results, bugs and partial reflections (2.0035ms)
+✔ five techniques need complete executed cases, with distinct IDs and sequential steps (41.8378ms)
+✔ changing a definition invalidates execution, and failed cases require a bug (29.3097ms)
+✔ validated evidence is checked in domain, drafts remain editable and long matrix survives reload (88.6371ms)
+✔ SPEC-220 v2 publishes eight complete chapters, four per week, 68 cards and 69 checks (53.8308ms)
+✔ rules match published content and every public check has a server-only key (25.2127ms)
+✖ grading is server-side; clients cannot send passed checks or fabricate cards (179.85ms)
+✔ a chapter passes with ceil(70 %) correct checks on read cards; pending chapters block the week (247.9878ms)
+✔ historically completed weeks stay completed and keep notes and scores (D-03) (2.4052ms)
+✔ saved Gherkin selections are restored without fabricating missing or malformed steps (5.215ms)
+✔ evidence report exports executed steps, acceptance criterion, observed result and partial reflections (2.8135ms)
+✔ incoherent scenarios retain their errors in the report and absent executions remain a draft (1.9438ms)
+✔ Gherkin validator rejects missing fields, wrong step roles and out-of-scope actions (5.2707ms)
+✔ positive and negative examples follow acceptance rules, rather than treating a refusal as a failed test (0.7608ms)
+✔ feature export separates the HU description from Scenario and its Gherkin steps (7.1609ms)
+✔ Registro público siempre usa rol STUDENT y evita duplicados (4.8828ms)
+✔ Operaciones de progreso mantienen datos entre actualizaciones (91.8933ms)
+✔ Importación fusiona progreso y conserva calificación más alta (3.1222ms)
+✔ report challenges use the kit fixture and execute meaningful assertions (385.9976ms)
+✔ final report includes 60 percent, ordered failures and boundary validations (122.7587ms)
+✔ legacy modules keep reading, practice, self-check and module quiz steps (19.9627ms)
+✔ Fundamentos v2 steps follow cards, chapter minitests and practice without module quiz (24.3151ms)
+✖ learning tree follows every module, week and chapter without publishing quiz answers (123.8037ms)
+✔ keyboard completion requires ordered focus, real Tab observations, activation, manual focus review and the result (14.6666ms)
+✔ locator records reject malformed configuration and preserve genuine last-check metadata (5.1466ms)
+✔ generated locator spec uses scoped exact names and state-based assertions without arbitrary first or sleeps (3086.4251ms)
+✔ matrix requires both actual views, layout checks and correct tag counts (7.1163ms)
+✔ matrix restores separate observations and rejects malformed captures (3.2304ms)
+✔ exports preserve tags, independent cases and four projects with external status pending (2699.663ms)
+✔ QRCodeSVG usa una implementación local y el URI otpauth existente (4.8577ms)
+✔ QR y alternativa manual se reutilizan en ambos flujos MFA (3.108ms)
+✔ MFA muestra manualmente la clave bajo demanda y copia sin persistirla (1.5369ms)
+✔ El frontend declara qrcode.react 4.2.0 o compatible (53.1698ms)
+✔ module three contains API and SQL while module three owns DevTools and module four owns Git readings practice and questions (4.1825ms)
+✔ POM completion requires explicit responsibilities, all cases, observed selector repair, defect and retest (5.5862ms)
+✔ POM restores all five observations and keeps legacy names without treating legacy output as a completed journey (5.5105ms)
+✔ generated Page Object owns actions, specs keep assertions and separate page fixtures without overwriting kit files (456.2629ms)
+✔ local Page Object returns actual negative observation and restores fetch instead of grading inside the action (377.088ms)
+✔ local operation rejects a stale DOM result without an observed HTTP response and restores fetch on failure (28.694ms)
+✔ password report includes executed data, separate expected/obtained and partial reflections (71.0973ms)
+✔ password boundaries are inclusive and a valid length still needs a digit (7.1535ms)
+✔ coverage requires each distinct challenge, matching input and a correct prediction (1.6739ms)
+✔ malformed or legacy snapshots do not fabricate coverage and the API rejects premature completion (8.104ms)
+✔ local completion requires configuration, baseline, a genuine assertion difference, later correction and review (5.8059ms)
+✔ network errors or unrelated UI failure cannot satisfy the red challenge (0.9063ms)
+✔ parser rejects invalid captures and preserves independent red/green evidence within storage limits (5.9723ms)
+✔ workflow preserves failure and attempts evidence upload even on failure (1.2212ms)
+✔ runtime observes actual stage outputs in order and compares UI expectation without changing response (296.352ms)
+✔ runtime retains API failure and records UI separately; cancelled operations do not proceed (186.8766ms)
+✔ all 24 weeks get actionable additional practice with expected results and evidence (6.7745ms)
+✔ narrative evidence stays a draft and cannot complete the practice requirement (745.0711ms)
+✔ stateless quote contract distinguishes syntax, domain validation, absence and conflict (3.8609ms)
+✖ practice resources follow each topic and preserve executable tool assets (84.4708ms)
+✔ every week has a dedicated workspace and SQL does not require the quote simulator (0.8775ms)
+✔ ISTQB supplements and downloadable templates distinguish case definition from execution (37.5493ms)
+✔ all 24 activities complete only from validated exercise evidence (356.3673ms)
+✔ notes, legacy tasks/labs, failed runs and a bare completion flag cannot award practice credit (44.597ms)
+✔ final mission requires story, observed demo, concepts, script, manual review and next improvement (23.9216ms)
+✔ permission status alone does not pass wrong body/header and retest must follow bug (2.0445ms)
+✔ five planned blocks sum to 300 seconds but timed rehearsal remains optional and reports only measured duration (5.3854ms)
+✔ optional declared URLs can remain pending and unsafe or malformed schemes are rejected without fetching (4.3689ms)
+✔ parsing keeps captures and bounded timer; max draft fits saved source limits and reports preserve provenance (12.9355ms)
+✔ new Git challenge requires a matching publication of main while preserving old evidence (5.7067ms)
+✔ training publication proof survives saved evidence with its branch and SHA (5.8161ms)
+✔ programming completion needs real assertion counts and a clean matching committed file (1.0573ms)
+✔ programming evidence restores both tools, preserves failures and supports old completed work (5.0808ms)
+✔ controlled JavaScript examples execute as written and the mutation is caught by its assertion (28.5813ms)
+✔ week nine long notebooks survive contract and domain serialization without extending unrelated weeks (32.4534ms)
+✔ partial activities advance module and route before a week is complete (83.8284ms)
+✔ repeated, unknown, manual and non-completion records do not inflate percentages (0.8285ms)
+✔ 100 percent requires every activity across the full route (1183.5182ms)
+✔ module card shows partial percentage even with zero completed weeks (2873.659ms)
+✔ project completion requires all five risk links, UI reproduction/retest, API contracts, nine SQL queries and decision (34.7308ms)
+✔ correct status does not replace contracts or business totals; retest must follow captured bug (2.0887ms)
+✔ SQL validation checks columns, all values and ordering, with numeric aggregate strings normalized (7.3681ms)
+✔ saved project and complete SQL tables fit source limits and downloads distinguish origins and pending external reports (14.022ms)
+✖ Q1–Q9 use exactly the versioned kit queries and no mutation (23.0451ms)
+✔ chat validates user-first alternating history and excludes arbitrary roles, query strings and oversized input (52.7759ms)
+✔ saved conversations require valid UUIDs and a revision; clients cannot overwrite stored messages (6.4239ms)
+✔ Gemini adapter sends server-owned QA instruction and private header, maps conversation roles and filters thoughts (2289.1419ms)
+✔ Gemini 3.8 uses the configured model without forcing the Gemini 2.5 thinking budget (111.1269ms)
+✔ disabled or missing-key AI never calls the provider (148.8328ms)
+✔ provider failures, quota, blocked responses and network failures are explicit and do not leak provider body (912.5108ms)
+✔ quota persists reservations transactionally and rolls back rejected requests (217.0843ms)
+✔ Gemini diagnostics distinguish key restrictions, missing model, disabled API and unsupported generation parameters (973.0017ms)
+✔ Gemini diagnostic logs contain only an enumerated code and HTTP status (135.9119ms)
+✔ all 266 rendered cards retain their examples without Así se aplica or animation controls (2929.1881ms)
+✔ all 48 foundation cards have specific examples and three explanatory steps (1.7204ms)
+✔ all 24 weeks provide specific chapter and guided cards with valid step icons (14.2592ms)
+✔ a chapter header or a jump to its bottom cannot complete the reading (12.5554ms)
+✔ continuous coverage must reach the final part of the chapter (6.7412ms)
+✔ revisiting the same viewport does not fabricate more coverage; short chapters work (0.584ms)
+✔ recovery requires exact scope, three distinct failures, cleanup and real recovery after error in the same view (42.4267ms)
+✔ HTTP 200 and a visible success do not pass the incomplete-contract goal; a real 503 cannot count as a simulated failure (0.7069ms)
+✔ record parsing preserves null transport status and distinguishes mock bodies from real responses (26.9932ms)
+✔ downloaded specs separate mocks, mixed recovery and integration, scope exact POST and always unroute (1136.1044ms)
+✔ runtime limits interception to exact POST, forwards other routes and restores the actual iframe fetch (473.3289ms)
+✔ transport records no HTTP response and cleans up even when the operation throws (284.5188ms)
+✔ risk evidence does not invent a strategy for absent, legacy or malformed runs (18.7566ms)
+✔ risk evidence exports the actual simulation and preserves incomplete reflections (32.7876ms)
+✔ risk ranking reacts to probabilities, impacts and estimated mitigation without mutating the starting scores (8.2646ms)
+✔ two slots must cover the highest exposures; cutoff ties accept either equally ranked risk (112.6717ms)
+✔ feedback checks four distinct levels and restoring evidence filters invalid data (9.4218ms)
+✔ Sprint metrics distinguish executed, blocked, remaining and zero denominators (44.3765ms)
+✔ Sprint completion requires event understanding, correct predictions, DoD and process improvement (2.4184ms)
+✔ Sprint drafts and malformed snapshots cannot award practice credit (64.7998ms)
+✔ four SQL mission expectations match actual PostgreSQL results including NULL and COUNT (12095.3445ms)
+✔ valid SQL without matching the business goal never earns mission completion (4.6323ms)
+✔ SQL progress needs all four checked missions, supports drafts and preserves legacy completions (9.8003ms)
+✔ SQL notebook evidence beyond 8000 characters survives validation and progress serialization (22.5178ms)
+✔ SQL results preserve column order, empty rows and explicit null values (22.0093ms)
+✔ SQL evidence size limits retain valid table data and disclose omitted rows (43.9155ms)
+✔ CSV exports headers and quoted relational cells without serializing the result as JSON (9.1972ms)
+✔ SQL hint records and relationships match executable PostgreSQL and order totals (12870.3856ms)
+✔ all 24 guides retain each source unit exactly once, in source order (79.6751ms)
+✔ optional and alternative content is not fabricated or silently discarded (23.5881ms)
+✔ tool evidence merges three latest executions without duplicating the current one or hiding failed results (7.4453ms)
+✔ tool snapshot restoration validates data and retains compatible legacy executions (26.2946ms)
+✔ week seven evidence larger than 8k survives contract, domain and reload without changing other week limits (1672.9778ms)
+✔ DevTools evidence retains a separate HTTP slot across save and reload (4.1549ms)
+✔ trace investigation needs observed reproduction, diagnosis, successful retest and regression (20.7104ms)
+✔ trace parsing preserves captures and rejects malformed or legacy observations (24.1171ms)
+✔ trace spec preserves the failing assertion and captures the actual quote response before clicking (340.9563ms)
+✔ capture reads actual response and DOM, then restores the iframe fetch (457.7378ms)
+✔ invalid API responses cannot become reproductions and fetch is restored on error (136.364ms)
+✔ TypeScript challenges pass semantic strict checks and runtime assertions except the intentional error (1258.9076ms)
+✔ strict checking catches semantic assignments, unsafe union access and nullable values without execution (908.1666ms)
+✔ evidence needs matching runtime and types, includes diagnostics and fits the existing save limit (375.3497ms)
+ℹ tests 235
+ℹ suites 0
+ℹ pass 231
+ℹ fail 4
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 41505.6425
+
+✖ failing tests:
+
+test at tests\foundation-v2.test.mjs:51:1
+✖ grading is server-side; clients cannot send passed checks or fabricate cards (179.85ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///C:/Users/ingcr/.codex/worktrees/catalog-300/qapath-academy/tests/foundation-v2.test.mjs:61:9)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /Tarjeta de lectura inválida/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+
+test at tests\learning-tree.test.mjs:7:1
+✖ learning tree follows every module, week and chapter without publishing quiz answers (123.8037ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  ... Skipped lines
+  
+    [
+      [
+        'FND-W01-C01-T01',
+        'FND-W01-C01-T02',
+        'FND-W01-C01-T03',
+  ...
+      ],
+  +   [],
+  +   [],
+  +   []
+  -   [
+  -     'FND-W01-C02-T01',
+  -     'FND-W01-C02-T02',
+  -     'FND-W01-C02-T03',
+  -     'FND-W01-C02-T04',
+  -     'FND-W01-C02-T05',
+  -     'FND-W01-C02-T06',
+  -     'FND-W01-C02-T07',
+  -     'FND-W01-C02-T08',
+  -     'FND-W01-C02-T09'
+  -   ],
+  -   [
+  -     'FND-W01-C03-T01',
+  -     'FND-W01-C03-T02',
+  -     'FND-W01-C03-T03',
+  -     'FND-W01-C03-T04',
+  -     'FND-W01-C03-T05',
+  -     'FND-W01-C03-T06',
+  -     'FND-W01-C03-T07',
+  -     'FND-W01-C03-T08'
+  -   ],
+  -   [
+  -     'FND-W01-C04-T01',
+  -     'FND-W01-C04-T02',
+  -     'FND-W01-C04-T03',
+  -     'FND-W01-C04-T04',
+  -     'FND-W01-C04-T05',
+  -     'FND-W01-C04-T06',
+  -     'FND-W01-C04-T07',
+  -     'FND-W01-C04-T08'
+  -   ]
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/ingcr/.codex/worktrees/catalog-300/qapath-academy/tests/learning-tree.test.mjs:10:320)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ [ 'FND-W01-C01-T01', 'FND-W01-C01-T02', 'FND-W01-C01-T03', 'FND-W01-C01-T04', 'FND-W01-C01-T05', 'FND-W01-C01-T06', 'FND-W01-C01-T07', 'FND-W01-C01-T08' ], [], [], [] ],
+    expected: [ [ 'FND-W01-C01-T01', 'FND-W01-C01-T02', 'FND-W01-C01-T03', 'FND-W01-C01-T04', 'FND-W01-C01-T05', 'FND-W01-C01-T06', 'FND-W01-C01-T07', 'FND-W01-C01-T08' ], [ 'FND-W01-C02-T01', 'FND-W01-C02-T02', 'FND-W01-C02-T03', 'FND-W01-C02-T04', 'FND-W01-C02-T05', 'FND-W01-C02-T06', 'FND-W01-C02-T07', 'FND-W01-C02-T08', 'FND-W01-C02-T09' ], [ 'FND-W01-C03-T01', 'FND-W01-C03-T02', 'FND-W01-C03-T03', 'FND-W01-C03-T04', 'FND-W01-C03-T05', 'FND-W01-C03-T06', 'FND-W01-C03-T07', 'FND-W01-C03-T08' ], [ 'FND-W01-C04-T01', 'FND-W01-C04-T02', 'FND-W01-C04-T03', 'FND-W01-C04-T04', 'FND-W01-C04-T05', 'FND-W01-C04-T06', 'FND-W01-C04-T07', 'FND-W01-C04-T08' ] ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at tests\practice-activities.test.mjs:11:1
+✖ practice resources follow each topic and preserve executable tool assets (84.4708ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + '-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\n' +
+  +   '-- Datos ficticios. Tablas temporales y ROLLBACK; no usa tablas de la academia.\n' +
+  +   '-- Generado desde training-data.json mediante scripts/generate-sql-training.mjs.\n' +
+  +   'BEGIN;\n' +
+  +   'CREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\n' +
+  +   'INSERT INTO qa_training_customers VALUES\n' +
+  +   "(1,'Ana Demo',true),\n" +
+  +   "(2,'Luis Demo',false),\n" +
+  +   "(3,'Sol Demo',true),\n" +
+  +   "(4,'Diego Demo',true),\n" +
+  +   "(5,'Mía Demo',true),\n" +
+  +   "(6,'Leo Demo',false),\n" +
+  +   "(7,'Sara Demo',true),\n" +
+  +   "(8,'Eva Demo',true);\n" +
+  +   'CREATE TEMP TABLE qa_training_products(id integer PRIMARY KEY, name text, price integer, active boolean);\n' +
+  +   'INSERT INTO qa_training_products VALUES\n' +
+  +   "(1,'Curso básico QA',35000,true),\n" +
+  +   "(2,'Curso profesional QA',75000,true),\n" +
+  +   "(3,'Curso SQL',50000,true),\n" +
+  +   "(4,'Licencia de práctica',10000,false),\n" +
+  +   "(5,'Taller DevTools',20000,true),\n" +
+  +   "(6,'Kit API',29500,true);\n" +
+  +   'CREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\n' +
+  +   'INSERT INTO qa_training_orders VALUES\n' +
+  +   "(1,1,'paid',35000),\n" +
+  +   "(2,1,'pending',75000),\n" +
+  +   "(3,3,'paid',104500),\n" +
+  +   "(4,4,'pending',50000),\n" +
+  +   "(5,5,'paid',70000),\n" +
+  +   "(6,1,'cancelled',10000),\n" +
+  +   "(7,6,'paid',75000),\n" +
+  +   "(8,4,'shipped',29500),\n" +
+  +   "(9,7,'refunded',20000),\n" +
+  +   "(10,3,'paid',100000),\n" +
+  +   "(11,5,'pending',45000),\n" +
+  +   "(12,6,'paid',35000);\n" +
+  +   'CREATE TEMP TABLE qa_training_order_items(id integer PRIMARY KEY, order_id integer REFERENCES qa_training_orders(id), product_id integer REFERENCES qa_training_products(id), quantity integer, unit_price integer);\n' +
+  +   'INSERT INTO qa_training_order_items VALUES\n' +
+  +   '(1,1,1,1,35000),\n' +
+  +   '(2,2,2,1,75000),\n' +
+  +   '(3,3,2,1,75000),\n' +
+  +   '(4,3,6,1,29500),\n' +
+  +   '(5,4,3,1,50000),\n' +
+  +   '(6,5,1,2,35000),\n' +
+  +   '(7,6,4,1,10000),\n' +
+  +   '(8,7,2,1,75000),\n' +
+  +   '(9,8,6,1,29500),\n' +
+  +   '(10,9,5,1,20000),\n' +
+  +   '(11,10,3,2,50000),\n' +
+  +   '(12,11,1,1,35000),\n' +
+  +   '(13,11,4,1,10000),\n' +
+  +   '(14,12,1,1,35000);\n' +
+  +   '-- Q1 SELECT: ocho clientes.\n' +
+  +   'SELECT id,name,active FROM qa_training_customers ORDER BY id;\n' +
+  +   '-- Q2 WHERE + ORDER BY: seis pedidos pagados.\n' +
+  +   "SELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\n" +
+  +   '-- Q3 INNER JOIN: doce pedidos con sus clientes.\n' +
+  +   'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\n' +
+  +   'INNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\n' +
+  +   '-- Q4 LEFT JOIN: catorce filas; Luis y Eva tienen pedido NULL.\n' +
+  +   'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\n' +
+  +   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\n' +
+  +   '-- Q5 Clientes sin pedidos: Luis y Eva. IS NULL, nunca = NULL.\n' +
+  +   'SELECT c.id,c.name FROM qa_training_customers c\n' +
+  +   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\n' +
+  +   '-- Q6 GROUP BY: suma y cantidad por estado.\n' +
+  +   'SELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n' +
+  +   '-- Q7 Filtro en ON conserva a clientes sin pagos, con total 0.\n' +
+  +   'SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\n' +
+  +   "LEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n" +
+  +   '-- Q8 HAVING: clientes con más de un pedido. COUNT(o.id) no cuenta NULL.\n' +
+  +   'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\n' +
+  +   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\n' +
+  +   '-- Q9 EXISTS: clientes con algún pago.\n' +
+  +   'SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n' +
+  +   "(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\n" +
+  +   '-- Q10 Tres tablas: detalle con nombre del producto y subtotal por línea.\n' +
+  +   'SELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal\n' +
+  +   'FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\n' +
+  +   'INNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;\n' +
+  +   '-- Q11 Conciliación: ninguna fila si los totales son correctos.\n' +
+  +   'SELECT o.id,o.total,sum(i.quantity*i.unit_price) AS calculated_total\n' +
+  +   'FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\n' +
+  +   'GROUP BY o.id,o.total HAVING o.total<>sum(i.quantity*i.unit_price);\n' +
+  +   'ROLLBACK;\n' +
+  +   '-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué clientes desaparecen.\n' +
+  +   '-- Entrega consulta, resultado esperado, resultado obtenido y explicación de la diferencia.\n'
+  - '-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\r\n' +
+  -   '-- Datos ficticios. Tablas temporales y ROLLBACK; no usa tablas de la academia.\r\n' +
+  -   '-- Generado desde training-data.json mediante scripts/generate-sql-training.mjs.\r\n' +
+  -   'BEGIN;\r\n' +
+  -   'CREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\r\n' +
+  -   'INSERT INTO qa_training_customers VALUES\r\n' +
+  -   "(1,'Ana Demo',true),\r\n" +
+  -   "(2,'Luis Demo',false),\r\n" +
+  -   "(3,'Sol Demo',true),\r\n" +
+  -   "(4,'Diego Demo',true),\r\n" +
+  -   "(5,'Mía Demo',true),\r\n" +
+  -   "(6,'Leo Demo',false),\r\n" +
+  -   "(7,'Sara Demo',true),\r\n" +
+  -   "(8,'Eva Demo',true);\r\n" +
+  -   'CREATE TEMP TABLE qa_training_products(id integer PRIMARY KEY, name text, price integer, active boolean);\r\n' +
+  -   'INSERT INTO qa_training_products VALUES\r\n' +
+  -   "(1,'Curso básico QA',35000,true),\r\n" +
+  -   "(2,'Curso profesional QA',75000,true),\r\n" +
+  -   "(3,'Curso SQL',50000,true),\r\n" +
+  -   "(4,'Licencia de práctica',10000,false),\r\n" +
+  -   "(5,'Taller DevTools',20000,true),\r\n" +
+  -   "(6,'Kit API',29500,true);\r\n" +
+  -   'CREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\r\n' +
+  -   'INSERT INTO qa_training_orders VALUES\r\n' +
+  -   "(1,1,'paid',35000),\r\n" +
+  -   "(2,1,'pending',75000),\r\n" +
+  -   "(3,3,'paid',104500),\r\n" +
+  -   "(4,4,'pending',50000),\r\n" +
+  -   "(5,5,'paid',70000),\r\n" +
+  -   "(6,1,'cancelled',10000),\r\n" +
+  -   "(7,6,'paid',75000),\r\n" +
+  -   "(8,4,'shipped',29500),\r\n" +
+  -   "(9,7,'refunded',20000),\r\n" +
+  -   "(10,3,'paid',100000),\r\n" +
+  -   "(11,5,'pending',45000),\r\n" +
+  -   "(12,6,'paid',35000);\r\n" +
+  -   'CREATE TEMP TABLE qa_training_order_items(id integer PRIMARY KEY, order_id integer REFERENCES qa_training_orders(id), product_id integer REFERENCES qa_training_products(id), quantity integer, unit_price integer);\r\n' +
+  -   'INSERT INTO qa_training_order_items VALUES\r\n' +
+  -   '(1,1,1,1,35000),\r\n' +
+  -   '(2,2,2,1,75000),\r\n' +
+  -   '(3,3,2,1,75000),\r\n' +
+  -   '(4,3,6,1,29500),\r\n' +
+  -   '(5,4,3,1,50000),\r\n' +
+  -   '(6,5,1,2,35000),\r\n' +
+  -   '(7,6,4,1,10000),\r\n' +
+  -   '(8,7,2,1,75000),\r\n' +
+  -   '(9,8,6,1,29500),\r\n' +
+  -   '(10,9,5,1,20000),\r\n' +
+  -   '(11,10,3,2,50000),\r\n' +
+  -   '(12,11,1,1,35000),\r\n' +
+  -   '(13,11,4,1,10000),\r\n' +
+  -   '(14,12,1,1,35000);\r\n' +
+  -   '-- Q1 SELECT: ocho clientes.\r\n' +
+  -   'SELECT id,name,active FROM qa_training_customers ORDER BY id;\r\n' +
+  -   '-- Q2 WHERE + ORDER BY: seis pedidos pagados.\r\n' +
+  -   "SELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\r\n" +
+  -   '-- Q3 INNER JOIN: doce pedidos con sus clientes.\r\n' +
+  -   'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\r\n' +
+  -   'INNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\r\n' +
+  -   '-- Q4 LEFT JOIN: catorce filas; Luis y Eva tienen pedido NULL.\r\n' +
+  -   'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\r\n' +
+  -   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\r\n' +
+  -   '-- Q5 Clientes sin pedidos: Luis y Eva. IS NULL, nunca = NULL.\r\n' +
+  -   'SELECT c.id,c.name FROM qa_training_customers c\r\n' +
+  -   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\r\n' +
+  -   '-- Q6 GROUP BY: suma y cantidad por estado.\r\n' +
+  -   'SELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\r\n' +
+  -   '-- Q7 Filtro en ON conserva a clientes sin pagos, con total 0.\r\n' +
+  -   'SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\r\n' +
+  -   "LEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\r\n" +
+  -   '-- Q8 HAVING: clientes con más de un pedido. COUNT(o.id) no cuenta NULL.\r\n' +
+  -   'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\r\n' +
+  -   'LEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\r\n' +
+  -   '-- Q9 EXISTS: clientes con algún pago.\r\n' +
+  -   'SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\r\n' +
+  -   "(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\r\n" +
+  -   '-- Q10 Tres tablas: detalle con nombre del producto y subtotal por línea.\r\n' +
+  -   'SELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal\r\n' +
+  -   'FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\r\n' +
+  -   'INNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;\r\n' +
+  -   '-- Q11 Conciliación: ninguna fila si los totales son correctos.\r\n' +
+  -   'SELECT o.id,o.total,sum(i.quantity*i.unit_price) AS calculated_total\r\n' +
+  -   'FROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\r\n' +
+  -   'GROUP BY o.id,o.total HAVING o.total<>sum(i.quantity*i.unit_price);\r\n' +
+  -   'ROLLBACK;\r\n' +
+  -   '-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué clientes desaparecen.\r\n' +
+  -   '-- Entrega consulta, resultado esperado, resultado obtenido y explicación de la diferencia.\r\n'
+  
+      at TestContext.<anonymous> (file:///C:/Users/ingcr/.codex/worktrees/catalog-300/qapath-academy/tests/practice-activities.test.mjs:15:9)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.start (node:internal/test_runner/test:1003:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:358:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: "-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\n-- Datos ficticios. Tablas temporales y ROLLBACK; no usa tablas de la academia.\n-- Generado desde training-data.json mediante scripts/generate-sql-training.mjs.\nBEGIN;\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\nINSERT INTO qa_training_customers VALUES\n(1,'Ana Demo',true),\n(2,'Luis Demo',false),\n(3,'Sol Demo',true),\n(4,'Diego Demo',true),\n(5,'Mía Demo',true),\n(6,'Leo Demo',false),\n(7,'Sara Demo',true),\n(8,'Eva Demo',true);\nCREATE TEMP TABLE qa_training_products(id integer PRIMARY KEY, name text, price integer, active boolean);\nINSERT INTO qa_training_products VALUES\n(1,'Curso básico QA',35000,true),\n(2,'Curso profesional QA',75000,true),\n(3,'Curso SQL',50000,true),\n(4,'Licencia de práctica',10000,false),\n(5,'Taller DevTools',20000,true),\n(6,'Kit API',29500,true);\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\nINSERT INTO qa_training_orders VALUES\n(1,1,'paid',35000),\n(2,1,'pending',75000),\n(3,3,'paid',104500),\n(4,4,'pending',50000),\n(5,5,'paid',70000),\n(6,1,'cancelled',10000),\n(7,6,'paid',75000),\n(8,4,'shipped',29500),\n(9,7,'refunded',20000),\n(10,3,'paid',100000),\n(11,5,'pending',45000),\n(12,6,'paid',35000);\nCREATE TEMP TABLE qa_training_order_items(id integer PRIMARY KEY, order_id integer REFERENCES qa_training_orders(id), product_id integer REFERENCES qa_training_products(id), quantity integer, unit_price integer);\nINSERT INTO qa_training_order_items VALUES\n(1,1,1,1,35000),\n(2,2,2,1,75000),\n(3,3,2,1,75000),\n(4,3,6,1,29500),\n(5,4,3,1,50000),\n(6,5,1,2,35000),\n(7,6,4,1,10000),\n(8,7,2,1,75000),\n(9,8,6,1,29500),\n(10,9,5,1,20000),\n(11,10,3,2,50000),\n(12,11,1,1,35000),\n(13,11,4,1,10000),\n(14,12,1,1,35000);\n-- Q1 SELECT: ocho clientes.\nSELECT id,name,active FROM qa_training_customers ORDER BY id;\n-- Q2 WHERE + ORDER BY: seis pedidos pagados.\nSELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\n-- Q3 INNER JOIN: doce pedidos con sus clientes.\nSELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\n-- Q4 LEFT JOIN: catorce filas; Luis y Eva tienen pedido NULL.\nSELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\n-- Q5 Clientes sin pedidos: Luis y Eva. IS NULL, nunca = NULL.\nSELECT c.id,c.name FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\n-- Q6 GROUP BY: suma y cantidad por estado.\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\n-- Q7 Filtro en ON conserva a clientes sin pagos, con total 0.\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\n-- Q8 HAVING: clientes con más de un pedido. COUNT(o.id) no cuenta NULL.\nSELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\n-- Q9 EXISTS: clientes con algún pago.\nSELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\n-- Q10 Tres tablas: detalle con nombre del producto y subtotal por línea.\nSELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\nINNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;\n-- Q11 Conciliación: ninguna fila si los totales son correctos.\nSELECT o.id,o.total,sum(i.quantity*i.unit_price) AS calculated_total\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\nGROUP BY o.id,o.total HAVING o.total<>sum(i.quantity*i.unit_price);\nROLLBACK;\n-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué clientes desaparecen.\n-- Entrega consulta, resultado esperado, resultado obtenido y explicación de la diferencia.\n",
+    expected: "-- PostgreSQL: ejecutar TODO el archivo en una misma sesión de práctica.\r\n-- Datos ficticios. Tablas temporales y ROLLBACK; no usa tablas de la academia.\r\n-- Generado desde training-data.json mediante scripts/generate-sql-training.mjs.\r\nBEGIN;\r\nCREATE TEMP TABLE qa_training_customers(id integer PRIMARY KEY, name text, active boolean);\r\nINSERT INTO qa_training_customers VALUES\r\n(1,'Ana Demo',true),\r\n(2,'Luis Demo',false),\r\n(3,'Sol Demo',true),\r\n(4,'Diego Demo',true),\r\n(5,'Mía Demo',true),\r\n(6,'Leo Demo',false),\r\n(7,'Sara Demo',true),\r\n(8,'Eva Demo',true);\r\nCREATE TEMP TABLE qa_training_products(id integer PRIMARY KEY, name text, price integer, active boolean);\r\nINSERT INTO qa_training_products VALUES\r\n(1,'Curso básico QA',35000,true),\r\n(2,'Curso profesional QA',75000,true),\r\n(3,'Curso SQL',50000,true),\r\n(4,'Licencia de práctica',10000,false),\r\n(5,'Taller DevTools',20000,true),\r\n(6,'Kit API',29500,true);\r\nCREATE TEMP TABLE qa_training_orders(id integer PRIMARY KEY, customer_id integer REFERENCES qa_training_customers(id), status text, total integer);\r\nINSERT INTO qa_training_orders VALUES\r\n(1,1,'paid',35000),\r\n(2,1,'pending',75000),\r\n(3,3,'paid',104500),\r\n(4,4,'pending',50000),\r\n(5,5,'paid',70000),\r\n(6,1,'cancelled',10000),\r\n(7,6,'paid',75000),\r\n(8,4,'shipped',29500),\r\n(9,7,'refunded',20000),\r\n(10,3,'paid',100000),\r\n(11,5,'pending',45000),\r\n(12,6,'paid',35000);\r\nCREATE TEMP TABLE qa_training_order_items(id integer PRIMARY KEY, order_id integer REFERENCES qa_training_orders(id), product_id integer REFERENCES qa_training_products(id), quantity integer, unit_price integer);\r\nINSERT INTO qa_training_order_items VALUES\r\n(1,1,1,1,35000),\r\n(2,2,2,1,75000),\r\n(3,3,2,1,75000),\r\n(4,3,6,1,29500),\r\n(5,4,3,1,50000),\r\n(6,5,1,2,35000),\r\n(7,6,4,1,10000),\r\n(8,7,2,1,75000),\r\n(9,8,6,1,29500),\r\n(10,9,5,1,20000),\r\n(11,10,3,2,50000),\r\n(12,11,1,1,35000),\r\n(13,11,4,1,10000),\r\n(14,12,1,1,35000);\r\n-- Q1 SELECT: ocho clientes.\r\nSELECT id,name,active FROM qa_training_customers ORDER BY id;\r\n-- Q2 WHERE + ORDER BY: seis pedidos pagados.\r\nSELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;\r\n-- Q3 INNER JOIN: doce pedidos con sus clientes.\r\nSELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\r\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;\r\n-- Q4 LEFT JOIN: catorce filas; Luis y Eva tienen pedido NULL.\r\nSELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;\r\n-- Q5 Clientes sin pedidos: Luis y Eva. IS NULL, nunca = NULL.\r\nSELECT c.id,c.name FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;\r\n-- Q6 GROUP BY: suma y cantidad por estado.\r\nSELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;\r\n-- Q7 Filtro en ON conserva a clientes sin pagos, con total 0.\r\nSELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;\r\n-- Q8 HAVING: clientes con más de un pedido. COUNT(o.id) no cuenta NULL.\r\nSELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;\r\n-- Q9 EXISTS: clientes con algún pago.\r\nSELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\r\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;\r\n-- Q10 Tres tablas: detalle con nombre del producto y subtotal por línea.\r\nSELECT o.id AS order_id,p.name,i.quantity,i.unit_price,i.quantity*i.unit_price AS subtotal\r\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\r\nINNER JOIN qa_training_products p ON p.id=i.product_id ORDER BY o.id,i.id;\r\n-- Q11 Conciliación: ninguna fila si los totales son correctos.\r\nSELECT o.id,o.total,sum(i.quantity*i.unit_price) AS calculated_total\r\nFROM qa_training_orders o INNER JOIN qa_training_order_items i ON i.order_id=o.id\r\nGROUP BY o.id,o.total HAVING o.total<>sum(i.quantity*i.unit_price);\r\nROLLBACK;\r\n-- Reto: mueve el filtro paid de ON a WHERE en Q7 y explica qué clientes desaparecen.\r\n-- Entrega consulta, resultado esperado, resultado obtenido y explicación de la diferencia.\r\n",
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at tests\project-practice.test.mjs:8:1
+✖ Q1–Q9 use exactly the versioned kit queries and no mutation (23.0451ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+      'SELECT id,name,active FROM qa_training_customers ORDER BY id;',
+      "SELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;",
+  +   'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\n' +
+  -   'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\r\n' +
+        'INNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;',
+  +   'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\n' +
+  -   'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\r\n' +
+        'LEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;',
+  +   'SELECT c.id,c.name FROM qa_training_customers c\n' +
+  -   'SELECT c.id,c.name FROM qa_training_customers c\r\n' +
+        'LEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;',
+      'SELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;',
+  +   'SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\n' +
+  -   'SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\r\n' +
+        "LEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;",
+  +   'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\n' +
+  -   'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\r\n' +
+        'LEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;',
+  +   'SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n' +
+  -   'SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\r\n' +
+        "(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;"
+    ]
+  
+      at TestContext.<anonymous> (file:///C:/Users/ingcr/.codex/worktrees/catalog-300/qapath-academy/tests/project-practice.test.mjs:8:272)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1106:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:788:18)
+      at Test.postRun (node:internal/test_runner/test:1235:19)
+      at Test.run (node:internal/test_runner/test:1163:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:788:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'SELECT id,name,active FROM qa_training_customers ORDER BY id;', "SELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;", 'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;', 'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;', 'SELECT c.id,c.name FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;', 'SELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;', "SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;", 'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;', "SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;" ],
+    expected: [ 'SELECT id,name,active FROM qa_training_customers ORDER BY id;', "SELECT id,total FROM qa_training_orders WHERE status='paid' ORDER BY total DESC,id;", 'SELECT o.id,c.name,o.status,o.total FROM qa_training_orders o\r\nINNER JOIN qa_training_customers c ON c.id=o.customer_id ORDER BY o.id;', 'SELECT c.id AS customer_id,c.name,o.id AS order_id FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id ORDER BY c.id,o.id;', 'SELECT c.id,c.name FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id WHERE o.id IS NULL ORDER BY c.id;', 'SELECT status,count(*) AS orders,sum(total) AS total FROM qa_training_orders GROUP BY status ORDER BY status;', "SELECT c.name,coalesce(sum(o.total),0) AS total_paid FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id AND o.status='paid' GROUP BY c.id,c.name ORDER BY c.id;", 'SELECT c.id,c.name,count(o.id) AS orders FROM qa_training_customers c\r\nLEFT JOIN qa_training_orders o ON o.customer_id=c.id GROUP BY c.id,c.name HAVING count(o.id)>1 ORDER BY c.id;', "SELECT c.id,c.name FROM qa_training_customers c WHERE EXISTS\r\n(SELECT 1 FROM qa_training_orders o WHERE o.customer_id=c.id AND o.status='paid') ORDER BY c.id;" ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Test failed. See above for more details.
+ ELIFECYCLE  Command failed with exit code 1.

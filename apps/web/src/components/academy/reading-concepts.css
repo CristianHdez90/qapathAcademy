@@ -9,3 +9,8 @@
 .reading-concept-testing .reading-concept-icon,.reading-concept-validation .reading-concept-icon{color:#c8b6ff;background:#ae91f214;border-color:#ae91f240}
 .reading-concept-error .reading-concept-icon,.reading-concept-failure .reading-concept-icon{color:#f2cb88;background:#f2cb8812;border-color:#f2cb8833}
 @media(max-width:650px){.reading-concepts{grid-template-columns:minmax(0,1fr)}.reading-concept{padding:18px}}
+
+.concept-example{display:block;margin-top:18px;padding:16px;border:1px solid #4c7b775c;background:#0a202c;border-radius:10px}
+.concept-example-title{display:block;color:#91ebce;font-size:11px;letter-spacing:1px;text-transform:uppercase;font-weight:750;margin-bottom:12px}
+.concept-example>span:not(.concept-example-title){display:block;margin-top:10px;font-size:13px;line-height:1.85;color:#bcd1df}
+.concept-example b{color:#e1edf7;font-weight:650}

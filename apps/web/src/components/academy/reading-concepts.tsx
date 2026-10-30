@@ -1,7 +1,6 @@
 import type {ReactNode} from 'react';
 import type {ReadingConcept} from '@qapath/contracts';
 import {ConceptStepIcon} from './concept-step-icon';
-import {ConceptDemonstration} from './concept-demonstration';
 import './reading-concepts.css';
 const symbols:Record<string,ReactNode>={
  cycle:<><path d="M20 8a9 9 0 0 0-15-3L2 8m0-5v5h5m-3 8a9 9 0 0 0 15 3l3-3m0 5v-5h-5"/></>,
@@ -30,5 +29,5 @@ const aliases:Record<string,string>={
  high:'failure',medium:'chart',low:'verification',priority:'layers',evidence:'qc',
 };
 export function ReadingConcepts({concepts}:{concepts:ReadingConcept[]}){
- return <dl className="reading-concepts">{concepts.map(concept=><div className={`reading-concept reading-concept-${concept.id}`} key={concept.id}><dt><span className="reading-concept-icon" aria-hidden="true">{concept.demonstration?.icons?<ConceptStepIcon conceptId={concept.id} index={0} icon={concept.demonstration.icons[0]}/>:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" focusable="false">{symbols[concept.id]||symbols[aliases[concept.id]]||<path d="M4 4h7v16H4zm9 0h7v16h-7"/>}</svg>}</span><span className="reading-concept-title">{concept.title}</span></dt><dd>{concept.description}{concept.example&&<span className="concept-example"><span className="concept-example-title">Ejemplo aplicado · situación de trabajo</span><span><b>Situación:</b> {concept.example.context}</span><span><b>Qué hace QA:</b> {concept.example.action}</span><span><b>Resultado:</b> {concept.example.result}</span></span>}{concept.demonstration&&<ConceptDemonstration conceptId={concept.id} title={concept.title} steps={concept.demonstration.steps} icons={concept.demonstration.icons}/>}</dd></div>)}</dl>;
+ return <dl className="reading-concepts">{concepts.map(concept=><div className={`reading-concept reading-concept-${concept.id}`} key={concept.id}><dt><span className="reading-concept-icon" aria-hidden="true">{concept.demonstration?.icons?<ConceptStepIcon conceptId={concept.id} index={0} icon={concept.demonstration.icons[0]}/>:<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" focusable="false">{symbols[concept.id]||symbols[aliases[concept.id]]||<path d="M4 4h7v16H4zm9 0h7v16h-7"/>}</svg>}</span><span className="reading-concept-title">{concept.title}</span></dt><dd>{concept.description}{concept.example&&<span className="concept-example"><span className="concept-example-title">Ejemplo aplicado · situación de trabajo</span><span><b>Situación:</b> {concept.example.context}</span><span><b>Qué hace QA:</b> {concept.example.action}</span><span><b>Resultado:</b> {concept.example.result}</span>{concept.example.counterexample&&<span><b>Contraejemplo:</b> {concept.example.counterexample}</span>}</span>}</dd></div>)}</dl>;
 }

@@ -78,6 +78,15 @@ export class FirebaseEmailAdapter {
 
   /** Queues a verification email, not a Firebase Auth verification link. */
   async queueVerification(email: string, verificationLink: string): Promise<void> {
+    await this.queueMessage(
+      email,
+      'Confirma tu correo — QAPath Academy',
+      `Confirma tu cuenta de QAPath Academy abriendo este enlace dentro de 24 horas:\n\n${verificationLink}\n\nSi no solicitaste esta cuenta, ignora este mensaje.`,
+    );
+  }
+
+  /** Queues any transactional message with a one-use link (verification or MFA reset). */
+  async queueMessage(email: string, subject: string, text: string): Promise<void> {
     const collection = readFirebaseMailConfig().collection;
     if (!this.writerPromise) {
       this.writerPromise = this.overrideWriter
@@ -91,10 +100,7 @@ export class FirebaseEmailAdapter {
     });
     await writer(collection, {
       to: email,
-      message: {
-        subject: 'Confirma tu correo — QAPath Academy',
-        text: `Confirma tu cuenta de QAPath Academy abriendo este enlace dentro de 24 horas:\n\n${verificationLink}\n\nSi no solicitaste esta cuenta, ignora este mensaje.`,
-      },
+      message: { subject, text },
       // The collection contains a one-use verification URL. Configure a
       // Firestore TTL policy for expireAt to remove processed mail documents.
       expireAt: new Date(Date.now() + 48 * 60 * 60 * 1000),

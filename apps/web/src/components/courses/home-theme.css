@@ -1,0 +1,55 @@
+/*
+ * SPEC-UX-310 · Tema publicado del Home. Solo actúa con [data-home-theme] (cualquier preset distinto de
+ * «QAPath Original» sin cambios); el diseño original no recibe ningún override. El layout raíz aplica el tema
+ * en toda la plataforma: estas reglas afinan Home y menú; el resto usa las variables --q-* (site-theme.ts).
+ */
+body[data-home-theme]{background:var(--home-bg);color:var(--home-text);color-scheme:var(--home-scheme)}
+body[data-home-theme] .main-content{color:var(--home-text)}
+body[data-home-theme] .sidebar{background:var(--home-sidebar);border-right-color:var(--home-border)}
+body[data-home-theme] .sidebar .brand-wordmark b,body[data-home-theme] .sidebar .brand-wordmark{color:var(--home-text)}
+body[data-home-theme] .sidebar .brand-wordmark span{color:var(--home-primary)}
+body[data-home-theme] .sidebar .brand-wordmark small{color:var(--home-muted)}
+body[data-home-theme] .sidebar .nav-item{color:var(--home-muted)}
+body[data-home-theme] .sidebar .nav-item:hover{background:var(--home-cta-bg);color:var(--home-text)}
+body[data-home-theme] .sidebar .nav-item.active{background:color-mix(in srgb,var(--home-primary) 14%,var(--home-sidebar));color:var(--home-text);border-color:color-mix(in srgb,var(--home-primary) 45%,var(--home-border));border-left-color:var(--home-primary)}
+body[data-home-theme] .catalog-nav-search input{background:var(--home-cta-bg)!important;border-color:var(--home-border)!important;color:var(--home-text)!important}
+body[data-home-theme] .catalog-nav-search input::placeholder{color:var(--home-muted)}
+body[data-home-theme] .catalog-nav-search-icon{color:var(--home-muted)}
+body[data-home-theme] .catalog-nav-search kbd{background:var(--home-surface);border-color:var(--home-border);color:var(--home-muted)}
+body[data-home-theme] .sidebar-promo{background:var(--home-surface);border-color:var(--home-border)}
+body[data-home-theme] .sidebar-promo p{color:var(--home-text)}body[data-home-theme] .sidebar-promo small{color:var(--home-muted)}body[data-home-theme] .sidebar-promo svg{color:var(--home-primary)}
+body[data-home-theme] .catalog-mobile-tabs{background:var(--home-sidebar);border-top-color:var(--home-border)}
+body[data-home-theme] .catalog-mobile-tabs a,body[data-home-theme] .catalog-mobile-tabs button{color:var(--home-muted)}
+body[data-home-theme] .catalog-mobile-tabs .selected{color:var(--home-primary)}
+body[data-home-theme] :focus-visible{outline-color:var(--home-focus)!important}
+
+[data-home-theme].course-home{color:var(--home-text)}
+[data-home-theme] .course-breadcrumb{color:var(--home-muted)}
+[data-home-theme] .course-breadcrumb a{color:var(--home-accent)}
+[data-home-theme] .course-breadcrumb [aria-current]{color:var(--home-text)}
+[data-home-theme] .course-home-head{border-bottom-color:var(--home-border)}
+[data-home-theme] .course-home-head h1{color:var(--home-text)}
+[data-home-theme] .page-description,[data-home-theme] .course-home-count{color:var(--home-muted)}
+[data-home-theme] .button-primary{background:var(--home-primary);border-color:var(--home-primary);color:var(--home-primary-text)}
+[data-home-theme] .button-primary:hover{filter:brightness(1.08);background:var(--home-primary)}
+[data-home-theme] .button-outline{background:var(--home-cta-bg);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-home-cta{box-shadow:0 10px 30px color-mix(in srgb,var(--home-primary) 25%,transparent)}
+[data-home-theme] .course-home-search svg{color:var(--home-muted)}
+[data-home-theme] .course-home-search input{background:var(--home-surface);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-home-search input::placeholder{color:var(--home-muted)}
+[data-home-theme] .course-home-clear{background:var(--home-cta-bg);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-home-filters button{background:var(--home-surface);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-home-filters button.is-active{background:color-mix(in srgb,var(--home-primary) 16%,var(--home-surface));border-color:var(--home-primary);color:var(--home-text);box-shadow:inset 0 -3px 0 var(--home-primary)}
+[data-home-theme] .course-tile{background:radial-gradient(120% 70% at 50% 18%,color-mix(in srgb,var(--accent) 12%,transparent),transparent 60%),var(--home-surface);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] a.course-tile:hover{border-color:color-mix(in srgb,var(--accent) 60%,var(--home-border));box-shadow:0 18px 40px color-mix(in srgb,var(--home-text) 14%,transparent)}
+[data-home-theme] .course-tile h3{color:var(--home-text)}
+[data-home-theme] .course-tile-summary,[data-home-theme] .course-tile-next{color:var(--home-muted)}
+[data-home-theme] .course-tile-dur{background:var(--home-cta-bg);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-tile-chips span{background:var(--home-cta-bg);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-tile-cta{background:var(--home-cta-bg);border-color:var(--home-border);color:var(--home-text)}
+[data-home-theme] .course-tile-cta.is-primary{background:var(--home-primary);border-color:var(--home-primary);color:var(--home-primary-text)}
+[data-home-theme] .progress-line{background:color-mix(in srgb,var(--home-border) 80%,transparent)}
+[data-home-theme] .progress-line i{background:var(--home-primary)}
+[data-home-theme] .course-empty{border-color:var(--home-border);color:var(--home-muted)}
+[data-home-theme] .feedback.bad{background:color-mix(in srgb,var(--home-error) 14%,var(--home-surface));color:var(--home-text);border:1px solid var(--home-error)}
+[data-home-theme] .course-content-group{border-color:var(--home-border)}

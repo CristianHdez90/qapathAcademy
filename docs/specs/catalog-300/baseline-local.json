@@ -1,0 +1,451 @@
+{
+  "source": "C:\\ProyectosIA\\QAPathAcademy\\QAPath-Academy-4-Identity-PostgreSQL-DDD\\qapath-academy",
+  "base": "5dcbdf45b5b21b43d8f99ae01e0e62dbaa6c60c2",
+  "copiedAt": "2026-10-29T09:20:30.536Z",
+  "files": [
+    {
+      "file": "apps/api/src/app.module.ts",
+      "sha256": "3fddf2f3b30d920c00868750b1e19c42b319bf7264fd405621319cf9ac6d2978"
+    },
+    {
+      "file": "apps/api/src/application/tokens.ts",
+      "sha256": "53f7319935f9704e808fb9488cf1013a9b287a6112a0bea4ad0410477ea8fcce"
+    },
+    {
+      "file": "apps/api/src/infrastructure/adapters/json-content.adapter.ts",
+      "sha256": "e1dd5da4d6cebbdcbd67ad865e1684f3c8c5454ba6160b00319c43d2410f68a8"
+    },
+    {
+      "file": "apps/api/src/infrastructure/adapters/postgres-progress.adapter.ts",
+      "sha256": "3976b4fe5de1efe7d72ee6bdc4db03adc66d27f04451eb37a7b4bc7417c42616"
+    },
+    {
+      "file": "apps/web/next-env.d.ts",
+      "sha256": "0f70629890b72a0a82e91972cc032c04b658b26c265373cb711cf576bfbf8fcc"
+    },
+    {
+      "file": "apps/web/scripts/prepare-learning-navigation.mjs",
+      "sha256": "8b63a5165b84f1921ed7ab2c43ee5ff0768ea0964c2a76e4e37bd1fd1789d482"
+    },
+    {
+      "file": "apps/web/src/app/study/[week]/page.tsx",
+      "sha256": "1a3ebf853b40818e0a3e640867e77bf8295959905ab4ff0b5136b154fb2edff7"
+    },
+    {
+      "file": "apps/web/src/components/academy/concept-demonstration.css",
+      "deleted": true
+    },
+    {
+      "file": "apps/web/src/components/academy/concept-demonstration.tsx",
+      "deleted": true
+    },
+    {
+      "file": "apps/web/src/components/academy/learning-steps.tsx",
+      "sha256": "c3e60fbdb632b039868839abf57f6407664dd49a1ecb3f1afa60fdcaeb6b9719"
+    },
+    {
+      "file": "apps/web/src/components/academy/lesson-study.tsx",
+      "sha256": "0de52db927ca16180fc2addfb0ef3f009c9bf1f7f55868d227be5e5d5a2ca64e"
+    },
+    {
+      "file": "apps/web/src/components/academy/reading-concepts.css",
+      "sha256": "7ba247e67f73e32bfa0d95d2985db9ce2525c6cb54b360e901dc172c434dc1ef"
+    },
+    {
+      "file": "apps/web/src/components/academy/reading-concepts.tsx",
+      "sha256": "f9458c4f3f849e8b692a4b58681c387e146ff126edc72730f64e34af20c58542"
+    },
+    {
+      "file": "apps/web/src/components/assistant/qa-assistant.tsx",
+      "sha256": "79b9a51d36d87e5d16793279ebe9919635f770691496c4bb675a901e36877100"
+    },
+    {
+      "file": "apps/web/src/components/layout/learning-tree.tsx",
+      "sha256": "8079095b4685868d31591cdd821024bfe105ed230b4fb4cbaa2f06fda3ef20a3"
+    },
+    {
+      "file": "apps/web/src/components/layout/sidebar.tsx",
+      "sha256": "4dcf6b7d435919b438e3b17a7e99bc6f1321f8c8d83a7d319a6fbf92cad14a7f"
+    },
+    {
+      "file": "apps/web/src/features/navigation/learning-tree.json",
+      "sha256": "731d949598c5d716127930bd80110110c5f35e3386a1f51db21a89393443a9c1"
+    },
+    {
+      "file": "apps/web/src/features/progress/learning-navigation.ts",
+      "sha256": "29568c45e9ac19734a97ad3d232a79cf207cf376ba0a690eb881ac88e85d1ca8"
+    },
+    {
+      "file": "apps/web/src/features/progress/progress-provider.tsx",
+      "sha256": "7e9be14172544eed8378ed90533c68605d49aa963898e5cee064af9ec1ad8031"
+    },
+    {
+      "file": "apps/web/src/features/progress/reading-coverage.ts",
+      "sha256": "1cb3d8ad4b56fc585e87f748183191d5eda0b8d77d485a33c57becf674db68f5"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-lesson-pagination.ts",
+      "sha256": "cb375ce5822af2989146557ddc953b4e0d53e173c9ea4e2c22bb17cfe0197673"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-reading-tracker.ts",
+      "sha256": "f3b9d69137689e44794bcfc06d126c40f02cc4860608dff82cd4f6a49e2859d1"
+    },
+    {
+      "file": "apps/web/tests/e2e/learning-tree.spec.ts",
+      "sha256": "13e2d7e4cb34a11fd035eb69c4a2f58359658e4f916dc51728a34f81b05aebfc"
+    },
+    {
+      "file": "apps/web/tests/e2e/lesson-pagination.spec.ts",
+      "sha256": "31987125e725a33e556572a4d1de0b2f8839b35cd43fa90500dee0842191c98d"
+    },
+    {
+      "file": "apps/web/tests/e2e/reading-concepts.spec.ts",
+      "sha256": "a894d3c9c7748e28fb18a410137c3ddf54b18e57ac35a17049a47212ca146883"
+    },
+    {
+      "file": "libs/content/src/data/catalog.json",
+      "sha256": "413a51062d01518f78841e17023c60edb942d510d710cf9b2b1587ab93fa236e"
+    },
+    {
+      "file": "libs/content/src/data/study-guides.json",
+      "sha256": "a16773648f458c38c9b056a39700034cbb3a3299edf403b27c57ae57845b2ee1"
+    },
+    {
+      "file": "libs/content/src/index.ts",
+      "sha256": "607b82c3ac5083597d64d671b37291805eb7fac1a178e4498f536ff448d3408b"
+    },
+    {
+      "file": "libs/learning/src/domain/content-repository.ts",
+      "sha256": "1422b3863b93814600b64e938061b8031419de35e531aa7cd88ce0b5f0381ede"
+    },
+    {
+      "file": "libs/learning/src/domain/models.ts",
+      "sha256": "5de599f63a0f6303620a8caf6c24e4a356965cbf5862af4183cad00c963bf4b5"
+    },
+    {
+      "file": "libs/learning/src/index.ts",
+      "sha256": "0238c27ec13889419feccdba6fbe32363f46563094fda4d9559df5df8c9c499e"
+    },
+    {
+      "file": "libs/progress/src/domain/automatic-completion.ts",
+      "sha256": "ffa3ce03eadc5d52cfe7cb41c15cb478c9c73f738e3210cc95d8b9106c8b7f7f"
+    },
+    {
+      "file": "libs/progress/src/domain/progress-commands.ts",
+      "sha256": "c0424a69df06c8481068c46ed7c44019c010bd2f6a95283420f6c2c64b10cd8d"
+    },
+    {
+      "file": "libs/progress/src/domain/progress.ts",
+      "sha256": "c43cc552b364a6ab835accb227b406013fcea1014e08f9f8fdf1cedd5c721d5c"
+    },
+    {
+      "file": "libs/progress/src/index.ts",
+      "sha256": "226a7318562bb15421e946b9969ad6f84ded20e395f1df6732601228c360608a"
+    },
+    {
+      "file": "packages/contracts/src/auth.ts",
+      "sha256": "a36da8b4d86f219e9b09c3f97a7e00dade8ff688964658a27d399b46d19e85cd"
+    },
+    {
+      "file": "packages/contracts/src/index.ts",
+      "sha256": "3b53e1bd6ba0d5dbcb3b10ed8fb96ca6e10008383222f229e26b9319e9fc9f2f"
+    },
+    {
+      "file": "packages/contracts/src/schemas.ts",
+      "sha256": "01549dfc4672afadc6db3f4d3e504cd15ae2f102f72149b8c497278a944c0922"
+    },
+    {
+      "file": "tests/learning-navigation.test.mjs",
+      "sha256": "7d860ff71c46025acfb10f0c5ed4bb065c86b303536aa750f775e4fc15ccd31a"
+    },
+    {
+      "file": "tests/learning-tree.test.mjs",
+      "sha256": "2f22d4f8939a5a28c52cbb931eaaf687f6bc8ae178cf44ee14347c53f063dc80"
+    },
+    {
+      "file": "tests/practice-completion.test.mjs",
+      "sha256": "c3d651a8c200804987503568dc116a0d01338ad462f05b9020aa79522f78144e"
+    },
+    {
+      "file": "tests/reading-concepts.test.mjs",
+      "sha256": "b5d717a2651fb0fcecc2fe377abc4a4cf0545ae3a3102e075ca2513c00e2c4d8"
+    },
+    {
+      "file": "apps/api/src/presentation/controllers/foundation-check.controller.ts",
+      "sha256": "9739e06deeff4acc07af9d19284a53df2411ce8d0b849fbf874be14b75e17f1f"
+    },
+    {
+      "file": "apps/web/src/components/academy/chapter-experience.css",
+      "sha256": "1b08a288d19cf1fc42421b5d6e5f4eacc88d26f561dc3e72cb5d8bc9a166fbd7"
+    },
+    {
+      "file": "apps/web/src/components/academy/chapter-experience.tsx",
+      "sha256": "48c1d4cf2f721b88a702c68a79c4170048793147bf23c2a4470a2b376a201153"
+    },
+    {
+      "file": "apps/web/src/components/academy/concept-details-fallback.tsx",
+      "sha256": "1981c26464ad4f7402c6fcc0e3c27bbba0ae716ee4f895f286e8cce9628fd034"
+    },
+    {
+      "file": "apps/web/src/components/academy/concept-step-details.css",
+      "sha256": "ca4b1ac4010c1f0f4ecf1b562400f564a032af223699e6b5c8e798bc3eb74527"
+    },
+    {
+      "file": "apps/web/src/components/academy/concept-step-details.tsx",
+      "sha256": "99a684915cc9284d02287c68c795f93f5b7d5dbd584e3b62202b8e519b4522d7"
+    },
+    {
+      "file": "apps/web/src/components/academy/focused-study.css",
+      "sha256": "54b5891f753e821902060265b78b48d75d76f05290bbc04b9cb89e1b3eda36b5"
+    },
+    {
+      "file": "apps/web/src/components/academy/focused-study.tsx",
+      "sha256": "467326c3215ed8cc84b13bfbed4cb2f9c75718c1411df00c2def490bfcdd00f2"
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-check.tsx",
+      "sha256": "71a74f985d1d5ffbba79afceacc85761cfaa0b9cb09954c6258669ed8ace1e8c"
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-study.css",
+      "sha256": "716915ef03620ae31c8d471c13b251c8479d80f15f0afbd4580959a085389a4e"
+    },
+    {
+      "file": "apps/web/src/components/academy/foundation-study.tsx",
+      "sha256": "2b8cc4ebf28641b5260801b0c63caffb97bd95842a02b644d8fed5db8a164984"
+    },
+    {
+      "file": "apps/web/src/components/academy/lesson-download.ts",
+      "sha256": "ee1ba4236f224b1b78005b1c9feba2b2af95d253f5499b26c7d1bc1ad98ac674"
+    },
+    {
+      "file": "apps/web/src/components/academy/lesson-study-legacy.tsx",
+      "sha256": "5b7da4049eb993e6225c31af15350e4ae0f2871a227dae3d832c7c0ab78428fd"
+    },
+    {
+      "file": "apps/web/src/components/academy/reading-reference.tsx",
+      "sha256": "cf4eb1786fae9498490a6c2145015caaaba3f65899b81613d5e26a5a7627cd6e"
+    },
+    {
+      "file": "apps/web/src/components/academy/study-dialog.tsx",
+      "sha256": "aa10ffc590f958ab75e0e7cf578423d6b2f2edc421ee8a31fac269355b16f459"
+    },
+    {
+      "file": "apps/web/src/features/progress/focused-reading-geometry.ts",
+      "sha256": "e5ad1e0fa1240378d8fc2d5b74412691fa0ac70d734d2706175b1ddd140e4633"
+    },
+    {
+      "file": "apps/web/src/features/progress/reading-text-map.ts",
+      "sha256": "ad7ac0b2c70409c214f5d27cc4b070257f9a67461fcfd93fe58d85de7a81b423"
+    },
+    {
+      "file": "apps/web/src/features/progress/study-steps.ts",
+      "sha256": "e7f35687f2ce8313226dc8eaa627ad6f980c372095ebaf1f276e451ccc1d02ac"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-card-reading.ts",
+      "sha256": "522502cb16923d56d13572e82532b5409dd221fd1d4d66c3bd174bbe1214c0f9"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-focused-reading.ts",
+      "sha256": "2ad767b7dcd07f0b2c8040ef40ba78901096c415c1932c76481be1c715e187f5"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-focused-study-mode.ts",
+      "sha256": "f8b3a1301f4f7520d582f9e552e7e2e7329a50465242c2eca50c82589e64927e"
+    },
+    {
+      "file": "apps/web/src/features/progress/use-study-navigation.ts",
+      "sha256": "c8d6617332a1222baad7314e51e277fa28b4bd21eab54c3386ccb691cb3a9406"
+    },
+    {
+      "file": "apps/web/src/features/study/concept-detail-state.ts",
+      "sha256": "e3cc6565ab230a228541c329cee8af0e95435c0607fa1edd69318e274e5d8b1e"
+    },
+    {
+      "file": "apps/web/src/features/study/demonstration-details.ts",
+      "sha256": "a30e013d5f4e6c125c9d8edb0823cce5285e9aac30711ff0beccf8779e7d4709"
+    },
+    {
+      "file": "apps/web/tests/e2e/concept-details.spec.ts",
+      "sha256": "82de2f577e056bf8b5e6f74dc18ccf070018722e2a19588bb8ab0dd45d8a5889"
+    },
+    {
+      "file": "apps/web/tests/e2e/focused-reading.spec.ts",
+      "sha256": "1bac6903483f8178f9a0e44b33d297087bc51ba3295a303b5ab845f39cbe51cf"
+    },
+    {
+      "file": "apps/web/tests/e2e/focused-study.spec.ts",
+      "sha256": "ff5f4dbde0387021e1dbeba18bc2e430b29b91fc27d2b31b2a6cab5e7a1dfe63"
+    },
+    {
+      "file": "apps/web/tests/e2e/foundation-v2.spec.ts",
+      "sha256": "4660b5082a8bec358a2096466c16a85e60d279768b05b441fbd72fc609d9da9d"
+    },
+    {
+      "file": "docs/specs/SPEC-CATALOG-300-cursos-y-rutas-personalizadas-TO-BE.md",
+      "sha256": "e764e0a3b0db5465cd5787462fc04799816c6a50574505957ecb0e54f37e6843"
+    },
+    {
+      "file": "docs/specs/SPEC-CONTENT-210-consolidado-aprendizaje-interactivo-TO-BE.md",
+      "sha256": "f781cc38a89e9007b6aab4f2ef510a9868fcc869f274ffddea5939103411bb3d"
+    },
+    {
+      "file": "docs/specs/SPEC-CONTENT-220-Fundamentos-del-Testing-TO-BE.md",
+      "sha256": "27cc0c473186a08de216714ef9c8e8dd52902f7d4d55c36f6531be02b1f42815"
+    },
+    {
+      "file": "docs/specs/SPEC-UX-120-modo-estudio-enfocado-to-be.md",
+      "sha256": "200bc3b6f61cabdd12ea359c725916f1536d4347a01f4e70479bc089cc1b47c8"
+    },
+    {
+      "file": "docs/specs/content/00-baseline-y-fuentes.md",
+      "sha256": "cd28137f0b7543da117d67565dde743abe73aac82e2137f22e88f1d4a381648a"
+    },
+    {
+      "file": "docs/specs/content/00-contrato-grafos-y-globos.md",
+      "sha256": "99fdb27a625e6f34dc30a2bd3f3484d37184a7b9a725ff357f2ae325f12b5bad"
+    },
+    {
+      "file": "docs/specs/content/00-decisiones-pendientes.md",
+      "sha256": "8f372bd57f8545d49c65460e207fc0d7e8476f7ec7bd42e004b694915ab36502"
+    },
+    {
+      "file": "docs/specs/content/00-matriz-auditoria-curricular.md",
+      "sha256": "45123af00ca197d6d371f38b9474162e24906e0af7895faeaa1ed58640f492e6"
+    },
+    {
+      "file": "docs/specs/content/00-plan-pruebas-contenido-y-ux.md",
+      "sha256": "30bfefb4e20ae153f31133472f52045250bbddf29a148aaa4b1ba8bde34a00d2"
+    },
+    {
+      "file": "docs/specs/content/00-roadmap-por-modulos.md",
+      "sha256": "0058e83c2e7076fb834fc5ffa8edcb072a2bf43157427978622a92c1e9befbf2"
+    },
+    {
+      "file": "docs/specs/content/W01-C01-acta-implementacion-local.md",
+      "sha256": "fe3ca5a8ba5f74676806265f44e5a079839c020331a0c41439257d9472b73d3e"
+    },
+    {
+      "file": "docs/specs/content/W01-C01-entrega-local.md",
+      "sha256": "73337f6f721d884df712980f6dec79ee0c429dcf9e65e0114cb2299c1455a560"
+    },
+    {
+      "file": "docs/specs/content/W01-C01-propuesta-capitulo.md",
+      "sha256": "affc912db4ae5054010e166601ac181d3180e30c821b40d82aade29ebcd4761c"
+    },
+    {
+      "file": "docs/specs/content/W01-C01-validacion-local.md",
+      "sha256": "f7a3a4a5d93d47440b480aaf529f6c1798b16d72376d21b7f8f24d25b2345ab4"
+    },
+    {
+      "file": "docs/specs/content/ajuste-global-sin-asi-se-aplica.md",
+      "sha256": "7e7acd75bfcf24f848ff00e3839fd1ad286a4c2758ff6bf86c95701f037de7bf"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/00-inventario-as-is.md",
+      "sha256": "1e5ab46fd314a3b8ebdcf8b8a240193ec830ab0618c7a1fabea49cc9225f6886"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/01-matriz-curricular-y-fuentes.md",
+      "sha256": "477cce05ecf7d29e61bad1ab0cc3fa5802729108829acbc2256fd7fa99ea86b5"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/02-mapa-as-is-to-be-y-riesgos.md",
+      "sha256": "78bdca9cd8b1f377fdc25e70c67ea4954da0bf3640dba331b9fc83006fc58e41"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/03-piloto-capitulo-01.md",
+      "sha256": "9e2826cd847bccd523ba9acbf93e1bda668dc2618d3a0fb9ae21f47e0d7c2685"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/04-contenido-de-los-8-capitulos-propuesto.md",
+      "sha256": "d1b62ce8a9de16d04ed944491fe8ed663f9495eef4517e7a9e74e35128454c5e"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/05-grafos-y-demostraciones.md",
+      "sha256": "dd3dadc58524f5c803a419a2b7249a2ec310be0db344d6b99e3fe22b74db811f"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/06-interacciones-y-accesibilidad.md",
+      "sha256": "04c4db5248174ca89022adbf15a277f57e0a696fff1a247550f6fc3bc6b6f734"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/07-plan-de-migracion-y-regresion.md",
+      "sha256": "70b23e31906baaa95c106c25a98c7e1b3aadb0513f078a421c8fb86264f8bdad"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/08-matriz-criterios-de-aceptacion.md",
+      "sha256": "5065fb2dd9927be3975438a839deae450a4004f2434e49a8a989e98c9bd23bd3"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/09-contrato-g3-implementacion-local.md",
+      "sha256": "345d804efd45d27b22b9a917d08ba88d3a56c83027165d087940b823978e08eb"
+    },
+    {
+      "file": "docs/specs/content/fundamentos/10-acta-implementacion-l0-l2.md",
+      "sha256": "a441163535a8b7c7f3048f0ed6594c55f1456265e9352a21dba98108baccef4b"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-as-is-evidence.md",
+      "sha256": "2609e8f72cfb5fdbca62e60388ed88131475c4ca9396fcd4125c19fe5e4421b0"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-d1-validation.md",
+      "sha256": "0295143409900945a3e7b26dc2fe9b29581b6beee0294d5ba0c034e35c03e79d"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-figma-handoff.md",
+      "sha256": "b2061b83ecfe91cff22fd9723bf7ba728905e81a844e10694ccd8532eb312221"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-implementation.md",
+      "sha256": "d66ffc2d78b1b35b2620c5b75268d65b590845344109bca04b7e32c4361c9632"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-risks.md",
+      "sha256": "b5659134e4e7cad32a65309236bebfb252bf8d4776e0203daed77bc528c910e7"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-step-mapping.md",
+      "sha256": "5502ae33e71f94ebbd854c03a3e5cc168df2f687aa8660c41a09a7f25656fd75"
+    },
+    {
+      "file": "docs/specs/ux/study-focused-test-matrix.md",
+      "sha256": "44977486ddb494c0b0d47ad40b85b320362ade9747009562408d78750564ecf3"
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2-keys.json",
+      "sha256": "3d320fa88e5ac90cd58e1b4cc348aef54c8eed5cc2eae94dc11487ff5d6640a7"
+    },
+    {
+      "file": "libs/content/src/data/fundamentals-v2.json",
+      "sha256": "667588131b37c269c65a7655bd3a1f1e57e18d985ed03fa42cb00d9f33f28d49"
+    },
+    {
+      "file": "libs/learning/src/application/grade-foundation-check.ts",
+      "sha256": "e97a7b67375a76a8a4b7ff624e144d78ff2b292b11d23bf3c15b157c050d0227"
+    },
+    {
+      "file": "libs/progress/src/domain/foundation-rules.ts",
+      "sha256": "4368761b53b07f0367638d0e8bab88710b844c4fe28a55e7f1af0617fd6f50c0"
+    },
+    {
+      "file": "tests/concept-details.test.mjs",
+      "sha256": "5d77ae66b0fe47448230d4edec2ea6b81b811d7da5f7bc81f88138926f6b3097"
+    },
+    {
+      "file": "tests/focused-reading.test.mjs",
+      "sha256": "fb6f149a7d2fde622e1148d782ecffce074ff21a42c856e83bb2c843cf2988a5"
+    },
+    {
+      "file": "tests/foundation-v2.test.mjs",
+      "sha256": "ddbc2614b6d808ff94d872338e3873a08aca230f365b9681d7f7cdbf31d95c7f"
+    },
+    {
+      "file": "tests/study-steps.test.mjs",
+      "sha256": "e1fc6df1824974b905e7e1298dda4e6b4f5507bb0927b261ce76b8e731f3c5da"
+    }
+  ]
+}

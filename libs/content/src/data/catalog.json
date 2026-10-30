@@ -199,13 +199,13 @@
     {
       "id": 1,
       "module": "fundamentos",
-      "title": "Mentalidad QA y ciclo de vida del software",
-      "goal": "Diferenciar calidad, testing, verificación y validación.",
+      "title": "Tipos, enfoques, niveles y pirámide de pruebas",
+      "goal": "Clasificar pruebas por objetivo, técnica, enfoque y nivel, y diseñar una cartera equilibrada.",
       "topics": [
-        "Qué hace QA y qué es un defecto",
-        "SDLC: cascada y enfoques ágiles",
-        "STLC y actividades de testing",
-        "Los 7 principios de testing"
+        "Tipos de pruebas: qué evaluamos y cómo",
+        "Enfoques y estrategias de pruebas",
+        "Cinco niveles de prueba según ISTQB",
+        "Pirámide de Cohn y trabajo conjunto QA–DEV"
       ],
       "tasks": [
         "Crear un glosario de 15 términos QA",
@@ -216,13 +216,13 @@
     {
       "id": 2,
       "module": "fundamentos",
-      "title": "Niveles, tipos y gestión de riesgos",
-      "goal": "Seleccionar tipos de prueba según el impacto del fallo.",
+      "title": "Principios, clasificaciones, BDD y release",
+      "goal": "Justificar decisiones con los siete principios, especificar con ejemplos y decidir una salida a producción.",
       "topics": [
-        "Unitarias, integración, sistema y aceptación",
-        "Funcionales y no funcionales",
-        "Smoke, regresión, exploratorias y E2E",
-        "Riesgo, impacto y probabilidad"
+        "Los siete principios del testing",
+        "Mapa definitivo de clasificaciones",
+        "Behavior-Driven Development (BDD)",
+        "Deployment, release y ambientes"
       ],
       "tasks": [
         "Clasificar 15 pruebas por nivel y tipo",

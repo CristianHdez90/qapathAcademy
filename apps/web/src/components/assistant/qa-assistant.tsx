@@ -7,6 +7,9 @@ import {useAuth,AuthApiError} from '@/features/auth/auth-provider';
 import './qa-assistant.css';
 import {studySuggestions} from './study-suggestions';
 import {ASK_LIA_EVENT} from './ask-lia';
+import {ASK_LIA_CONTEXT_EVENT,type ReadingContext,type ReadingSuggestion} from '@/features/assistant/reading-suggestions';
+import {useStudyDialog,STUDY_TOOL_EVENT,announceStudyTool} from '@/components/academy/study-dialog';
+import {useFocusedStudyMode} from '@/features/progress/use-focused-study-mode';
 
 type Message={role:'user'|'assistant';content:string};
 type Conversation={id:string;title:string;messages:Message[];revision:number;archived:boolean;updatedAt:string};
@@ -18,6 +21,7 @@ async function assistantRequest<T>(url:string,init:RequestInit={}){
  if(!response.ok)throw new AuthApiError(response.status,response.status===401?'Tu sesión venció. Vuelve a iniciar sesión.':body.message||body.error?.message||'No se pudo guardar o cargar la conversación.');
  return body.data;
 }
+const validHints=(value:unknown):ReadingSuggestion[]=>Array.isArray(value)?value.filter((item):item is ReadingSuggestion=>Array.isArray(item)&&typeof item[0]==='string'&&typeof item[1]==='string'&&item[1].length<=2000).slice(0,4):[];
 const suggestions=[['Casos de prueba','Ayúdame a diseñar casos de prueba para un formulario de inicio de sesión.'],['Reportar un bug','Enséñame a escribir un reporte de bug claro, con un ejemplo.'],['Playwright','Explícame cómo automatizar una prueba de login con Playwright y TypeScript.'],['Pruebas de API','¿Qué debo validar al probar una API REST?']];
 
 function Ladybug(){return <svg viewBox="0 0 64 64" fill="none" aria-hidden="true">
@@ -40,7 +44,9 @@ export function QaAssistant(){
  return <AssistantChat key={user?.id||'guest'} signedIn={!!user} authLoading={loading} open={open} setOpen={setOpen}/>;
 }
 function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;authLoading:boolean;open:boolean;setOpen:(open:boolean)=>void}){
- const path=usePathname();
+ const path=usePathname(),focused=useFocusedStudyMode();
+ const [topic,setTopic]=useState(''),[contextPrompt,setContextPrompt]=useState(''),[readingHints,setReadingHints]=useState<ReadingSuggestion[]>([]);
+ const studyDialog=useStudyDialog(focused&&open,()=>{setOpen(false);announceStudyTool(null)});
  const [messages,setMessages]=useState<Message[]>([]),[draft,setDraft]=useState(''),[busy,setBusy]=useState(false),[error,setError]=useState('');
  const [obscuresFocus,setObscuresFocus]=useState(false),[maximized,setMaximized]=useState(false);
  const [conversation,setConversation]=useState<Conversation|null>(null),[history,setHistory]=useState<Summary[]>([]),[historyOpen,setHistoryOpen]=useState(false),[archivedView,setArchivedView]=useState(false),[historyBusy,setHistoryBusy]=useState(signedIn),[nextOffset,setNextOffset]=useState<number|null>(null);
@@ -60,12 +66,12 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
  },[signedIn,authLoading]);
  const trigger=useRef<HTMLButtonElement>(null),input=useRef<HTMLTextAreaElement>(null),bottom=useRef<HTMLDivElement>(null),pending=useRef<AbortController|null>(null);
  const returnFocus=useRef<HTMLElement|null>(null);
- const close=()=>{setOpen(false);setMaximized(false);requestAnimationFrame(()=>(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus())};
+ const close=()=>{setOpen(false);if(focused)announceStudyTool(null);setMaximized(false);requestAnimationFrame(()=>(returnFocus.current?.isConnected?returnFocus.current:trigger.current)?.focus())};
  useEffect(()=>{
-  if(!open||!maximized)return;
+  if(!open||!maximized||focused)return;
   const previous=document.body.style.overflow;document.body.style.overflow='hidden';
   return()=>{document.body.style.overflow=previous};
- },[open,maximized]);
+ },[open,maximized,focused]);
  useEffect(()=>{
   const inspect=()=>{
    const focused=document.activeElement,button=trigger.current;
@@ -78,15 +84,26 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
  },[]);
  useEffect(()=>{
   const ask=(event:Event)=>{
-   const prompt=(event as CustomEvent<{prompt?:unknown}>).detail?.prompt;
+   const detail=(event as CustomEvent<{prompt?:unknown;preserveDraft?:boolean;topic?:string;week?:number;suggestions?:ReadingSuggestion[]}>).detail;
+   const prompt=detail?.prompt;
    if(typeof prompt!=='string'||!prompt.trim()||prompt.length>2000)return;
    returnFocus.current=document.activeElement instanceof HTMLElement?document.activeElement:null;
-   setDraft(prompt);setOpen(true);requestAnimationFrame(()=>input.current?.focus());
+   if(!detail.preserveDraft)setDraft(prompt);
+   else setDraft(old=>old||prompt);
+   setContextPrompt(prompt);setTopic(detail.topic?`Semana ${detail.week} · ${detail.topic}`:'');setReadingHints(validHints(detail.suggestions));
+   setOpen(true);if(focused)announceStudyTool('assistant');else requestAnimationFrame(()=>input.current?.focus());
   };
   window.addEventListener(ASK_LIA_EVENT,ask);return()=>window.removeEventListener(ASK_LIA_EVENT,ask);
- },[setOpen]);
+ },[setOpen,focused]);
+ // La lectura enfocada publica su tarjeta actual: las sugerencias siguen el foco sin abrir el panel ni tocar el borrador.
+ useEffect(()=>{
+  const sync=(event:Event)=>{const detail=(event as CustomEvent<ReadingContext>).detail;if(!detail||typeof detail.prompt!=='string'||detail.prompt.length>2000)return;
+   setContextPrompt(detail.prompt);setTopic(detail.topic?`Semana ${detail.week} · ${detail.topic}`:'');setReadingHints(validHints(detail.suggestions));};
+  window.addEventListener(ASK_LIA_CONTEXT_EVENT,sync);return()=>window.removeEventListener(ASK_LIA_CONTEXT_EVENT,sync);
+ },[]);
+ useEffect(()=>{if(!focused)return;const sync=(event:Event)=>{const tool=(event as CustomEvent<{tool:string|null}>).detail.tool;if(tool!=='assistant')setOpen(false)};window.addEventListener(STUDY_TOOL_EVENT,sync);return()=>window.removeEventListener(STUDY_TOOL_EVENT,sync)},[focused,setOpen]);
  useEffect(()=>()=>pending.current?.abort(),[]);
- useEffect(()=>{if(open&&signedIn&&!historyBusy&&!historyOpen&&!conversation?.archived)input.current?.focus()},[open,signedIn,historyBusy,historyOpen,conversation?.archived]);
+ useEffect(()=>{if(open&&!focused&&signedIn&&!historyBusy&&!historyOpen&&!conversation?.archived)input.current?.focus()},[open,focused,signedIn,historyBusy,historyOpen,conversation?.archived]);
  useEffect(()=>{if(open)bottom.current?.scrollIntoView({block:'nearest'})},[messages,busy,open,error]);
  async function refreshHistory(offset=0){
   if(busy||historyBusy)return;setHistoryBusy(true);setError('');
@@ -134,9 +151,9 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
    }
   }finally{clearTimeout(timer);if(pending.current===controller){pending.current=null;setBusy(false)}}
  }
- return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')+(open&&maximized?' is-maximized':'')}>
-  {open&&<section id="qa-assistant-panel" className="qa-chat" role="dialog" aria-label="MariBug, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'){e.stopPropagation();if(maximized)setMaximized(false);else close()}}}>
-   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>MariBug <span>IA</span></h2><p>Tu aliada en QA</p></div><div className="qa-window-controls"><button type="button" className="qa-icon-button" aria-label={maximized?'Restaurar tamaño del chat':'Maximizar chat'} title={maximized?'Restaurar tamaño':'Maximizar chat'} aria-pressed={maximized} onClick={event=>{event.currentTarget.focus();setMaximized(value=>!value)}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{maximized?<><path d="M8 8V4h12v12h-4"/><rect x="4" y="8" width="12" height="12" rx="1"/></>:<rect x="4" y="4" width="16" height="16" rx="1"/>}</svg></button><button type="button" className="qa-icon-button" onClick={close} aria-label="Cerrar asistente" title="Cerrar asistente">×</button></div></header>
+ const panel = open&&<section id="qa-assistant-panel" className="qa-chat" role={focused?undefined:"dialog"} aria-label="MariBug, asistente de QA Engineer" onBlur={e=>{const next=e.relatedTarget;if(!focused&&next instanceof Node&&!e.currentTarget.contains(next)&&!trigger.current?.contains(next))setOpen(false)}} onKeyDown={e=>{if(e.key==='Escape'&&!focused){e.stopPropagation();if(maximized)setMaximized(false);else close()}}}>
+   <header className="qa-chat-header"><span className="qa-chat-avatar"><Ladybug/></span><div><h2>MariBug <span>IA</span></h2><p>Tu aliada en QA</p></div><div className="qa-window-controls"><button type="button" className="qa-icon-button" aria-label={maximized?'Restaurar tamaño del chat':'Maximizar chat'} title={maximized?'Restaurar tamaño':'Maximizar chat'} aria-pressed={maximized} onClick={event=>{event.currentTarget.focus();setMaximized(value=>!value)}}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">{maximized?<><path d="M8 8V4h12v12h-4"/><rect x="4" y="8" width="12" height="12" rx="1"/></>:<rect x="4" y="4" width="16" height="16" rx="1"/>}</svg></button><button type="button" className="qa-icon-button" data-dialog-close onClick={close} aria-label="Cerrar asistente" title="Cerrar asistente">×</button></div></header>
+   {(focused||/^\/study\/\d+$/.test(path))&&topic&&<div className="qa-focused-context"><p>{topic}</p><button type="button" disabled={busy||historyBusy} onClick={()=>{setDraft(contextPrompt);setHistoryOpen(false);requestAnimationFrame(()=>input.current?.focus())}}>Usar pregunta de esta tarjeta</button>{readingHints.length>0&&<div className="qa-reading-hints" role="group" aria-label="Preguntas sobre lo que estás leyendo"><p>Preguntas sobre lo que estás leyendo</p><div className="qa-suggestions">{readingHints.map(([label,prompt])=><button key={label} type="button" disabled={busy||historyBusy||conversation?.archived} onClick={()=>{setHistoryOpen(false);if(signedIn)void send(prompt);else setDraft(prompt)}}>{label}<span aria-hidden="true">↗</span></button>)}</div>{!signedIn&&<p className="qa-reading-hints-note">Inicia sesión para enviarlas a MariBug.</p>}</div>}</div>}
    {signedIn&&<nav className="qa-chat-actions" aria-label="Gestionar conversaciones">
     <button type="button" disabled={busy||historyBusy} onClick={newConversation}>＋ Nueva</button>
     <button type="button" disabled={busy||historyBusy} aria-expanded={historyOpen} onClick={()=>{setHistoryOpen(!historyOpen);if(!historyOpen)void refreshHistory()}}>Historial</button>
@@ -169,7 +186,9 @@ function AssistantChat({signedIn,authLoading,open,setOpen}:{signedIn:boolean;aut
     <div className="qa-composer-meta"><span>IA · Revisa sus respuestas. No compartas datos sensibles.</span><span>{conversation?.archived?'Archivada · Restaura para continuar':busy?'Enviando…':conversation?'Guardada en tu cuenta':'Nueva conversación'}</span></div>
     <small>Tu consulta se envía al proveedor de IA configurado por la academia: Groq o Google Gemini.</small>
    </form>}
-  </section>}
-  <button ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente MariBug':'Abrir asistente MariBug'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>
+  </section>;
+ return <div className={'qa-helper'+(obscuresFocus?' hide-launcher':'')+(open&&maximized&&!focused?' is-maximized':'')}>
+  {focused?<dialog ref={studyDialog} className={'study-modal study-assistant-modal'+(maximized?' study-assistant-expanded':'')} aria-label="MariBug, asistente de QA Engineer">{panel}</dialog>:panel}
+  <button hidden={focused} ref={trigger} className={'qa-launcher'+(open?' is-open':'')} type="button" aria-label={open?'Cerrar asistente MariBug':'Abrir asistente MariBug'} aria-controls="qa-assistant-panel" aria-expanded={open} onClick={()=>{returnFocus.current=null;if(open)close();else setOpen(true)}}><Ladybug/></button>
  </div>;
 }

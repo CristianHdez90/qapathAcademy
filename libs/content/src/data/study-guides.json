@@ -12,140 +12,928 @@
           {
             "id": "qa",
             "title": "Aseguramiento de calidad (QA)",
-            "description": "QA mejora la forma de trabajar para prevenir defectos, no se limita a revisar una pantalla terminada. Incluye acordar criterios, revisar riesgos y mejorar el proceso con lo aprendido.",
+            "description": "QA se orienta a mejorar procesos para prevenir problemas. En Brisa, acordar una revisión de ejemplos y seguir si reduce interpretaciones contradictorias es una acción de QA.",
             "example": {
-              "context": "Un equipo publica descuentos sin revisar las reglas y repite errores en cada campaña.",
-              "action": "Propone una revisión conjunta de ejemplos antes de desarrollar y añade criterios a la Definition of Done.",
-              "result": "La regla de descuento y sus pruebas quedan acordadas antes de escribir el código."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. El equipo incorpora la pregunta «¿qué importes participan en el descuento?» a su revisión de reglas.",
+              "action": "Propone revisar conjuntamente ejemplos de la base de descuento y registra el acuerdo; los criterios de BT-14 y la Definition of Done tienen propósitos distintos.",
+              "result": "La mejora propuesta queda registrada para observar su efecto; no garantiza cero defectos.",
+              "counterexample": "Cambiar un esperado para ocultar un resultado incorrecto no mejora el proceso ni aporta confianza."
             },
             "demonstration": {
               "steps": [
                 "Detectar problema recurrente",
                 "Mejorar el proceso",
                 "Prevenir nuevos defectos"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Reconocer un patrón investigable.",
+                  "actions": [
+                    "Reúne BT-14 y busca reportes relacionados de cupones; si faltan, registra esa limitación.",
+                    "Separa hechos de explicaciones aún no contrastadas."
+                  ],
+                  "input": "BT-14 y reportes relacionados depurados, si están disponibles.",
+                  "evidence": "Patrón y límites anotados.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "Un caso aislado no demuestra recurrencia. No atribuyas culpa por una captura.",
+                  "briefActions": [
+                    "Reúne BT-14 y reportes relacionados.",
+                    "Separa los hechos de las hipótesis."
+                  ]
+                },
+                {
+                  "goal": "Acordar una mejora preventiva.",
+                  "actions": [
+                    "Propón revisar ejemplos de base de descuento.",
+                    "Acuerda quién registra y revisa ese acuerdo."
+                  ],
+                  "input": "Patrón.",
+                  "evidence": "Propuesta de mejora.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "No copiar la HU entera a la DoD.",
+                  "briefActions": [
+                    "Propón revisar ejemplos del descuento.",
+                    "Acuerda quién documenta y revisa la mejora."
+                  ]
+                },
+                {
+                  "goal": "Revisar el efecto de la mejora.",
+                  "actions": [
+                    "Aplica la revisión en la siguiente regla.",
+                    "Compara dudas detectadas y retrabajo observado."
+                  ],
+                  "input": "Acuerdo.",
+                  "evidence": "Seguimiento de mejora.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "No garantizar cero defectos.",
+                  "briefActions": [
+                    "Aplica la revisión a la siguiente regla.",
+                    "Observa dudas y retrabajo para evaluar su efecto."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "qc",
             "title": "Control de calidad (QC)",
-            "description": "QC evalúa si el producto cumple las características y criterios acordados. Examina evidencias del producto y ayuda a identificar discrepancias; el testing es una actividad que puede contribuir a ese control.",
+            "description": "QC evalúa el producto frente a características y criterios. Aquí contrasta el candidato, conserva discrepancias y comunica lo comprobado y lo pendiente.",
             "example": {
-              "context": "Un candidato de una tienda debe calcular bien precios y mostrar mensajes comprensibles.",
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Informar que el total incumple la regla y que el pago no se evaluó.",
               "action": "Compara el candidato con los criterios de aceptación y registra las diferencias encontradas.",
-              "result": "El reporte identifica qué características cumplen y cuáles requieren corrección."
+              "result": "El informe distingue el criterio incumplido, las comprobaciones realizadas y las pendientes.",
+              "counterexample": "«tres casos pasaron, por tanto todo está certificado». El testing contribuye al QC, pero los términos no son sinónimos."
             },
             "demonstration": {
               "steps": [
                 "Recibir producto",
                 "Comparar con criterios",
                 "Registrar conformidad"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Identificar qué candidato y reglas serán evaluados.",
+                  "actions": [
+                    "Registra bt14-rc3, QA-Brisa y el alcance «cotización con QA10».",
+                    "Confirma con negocio la exclusión del envío y el umbral de elegibilidad.",
+                    "Prepara 3 unidades de 35.000 COP, QA10 y envío de 10.000 COP; calcula 104.500 antes de ejecutar."
+                  ],
+                  "input": "Candidato identificado, BT-14, criterios y datos ficticios.",
+                  "roles": [
+                    "Lea",
+                    "Ana",
+                    "Diego, según necesidad"
+                  ],
+                  "evidence": "E01: versión, alcance y esperado independientes.",
+                  "pitfall": "Recibir «la última versión» sin un identificador comprobable.",
+                  "briefActions": [
+                    "Identifica versión, entorno y alcance.",
+                    "Confirma las reglas del cupón y del envío.",
+                    "Prepara los datos y calcula 104.500 COP."
+                  ]
+                },
+                {
+                  "goal": "Demostrar qué comportamiento cumple o incumple el candidato.",
+                  "actions": [
+                    "Ejecuta la cotización con los datos de E01 y anota el resultado de pantalla.",
+                    "Compara cada importe con el esperado; registra la diferencia de −1.000 COP.",
+                    "Relaciona la acción con la respuesta ficticia de 104.500 y la UI de 103.500, depurando datos sensibles.",
+                    "Conserva pasos, versión y observaciones separadas de hipótesis; solicita inspección para localizar la causa."
+                  ],
+                  "input": "E01 y criterios de cálculo y presentación.",
+                  "roles": [
+                    "Lea",
+                    "Diego"
+                  ],
+                  "evidence": "E02: matriz de resultados y evidencias con esperado/obtenido y relación UI/API.",
+                  "pitfall": "Reporta la discrepancia; no modifiques el esperado ni presentes este relato como una captura real de Network.",
+                  "briefActions": [
+                    "Ejecuta la cotización y anota el total.",
+                    "Compara el esperado y registra la diferencia.",
+                    "Contrasta pantalla y respuesta de la API.",
+                    "Conserva evidencias antes de atribuir una causa."
+                  ]
+                },
+                {
+                  "goal": "Comunicar lo conforme, lo no conforme y la incertidumbre restante.",
+                  "actions": [
+                    "Resume el criterio incumplido, las comprobaciones realizadas y lo no ejecutado; no inventes el resultado del pago.",
+                    "Relaciona el reporte con BT-14, E01/E02 y el resultado de inspección aportado por desarrollo.",
+                    "Recomienda corregir y repetir el caso; propone regresión sin cupón y con recogida cuando exista una versión corregida.",
+                    "Comunica riesgos y alternativas a los responsables; registra E04 como pendiente hasta ejecutarlo."
+                  ],
+                  "input": "Resultados, discrepancias y limitaciones.",
+                  "roles": [
+                    "Lea",
+                    "Ana",
+                    "Equipo de entrega"
+                  ],
+                  "evidence": "E03: informe de evaluación con riesgos residuales. E04: confirmación y regresión PENDIENTES.",
+                  "pitfall": "Convertir «no lo probé» en «aprobado» o tratar QA como quien certifica unilateralmente la liberación.",
+                  "briefActions": [
+                    "Resume lo comprobado y lo pendiente.",
+                    "Vincula BT-14 con el reporte y sus evidencias.",
+                    "Propón corregir, confirmar y hacer regresión.",
+                    "Comunica riesgos; conserva E04 como pendiente."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "testing",
             "title": "Testing",
-            "description": "Testing diseña y realiza evaluaciones para obtener información del producto. Compara resultados obtenidos con los esperados y comunica hallazgos y riesgos, sin prometer ausencia total de defectos.",
+            "description": "Testing evalúa productos y otros artefactos para aportar información. Incluye actividades estáticas y dinámicas; no se limita a ejecutar una aplicación.",
             "example": {
-              "context": "QA10 debe descontar 10% del subtotal, sin afectar el envío.",
-              "action": "Prueba 3 productos de 35000 COP con QA10 y envío de 10000 COP.",
-              "result": "El total esperado es 104500 COP; una diferencia se investiga con la petición y respuesta."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Revisar contradicciones del criterio y después ejecutar la cotización con datos conocidos.",
+              "action": "Revisa contradicciones en criterios (testing estático) y compara la cotización ficticia con un esperado independiente (testing dinámico).",
+              "result": "La comparación del relato muestra −1.000 COP en UI; la causa necesita evidencia de inspección.",
+              "counterexample": "Hacer clic sin comprobar ningún resultado. El caso dinámico compara 104.500 con 103.500 y conserva las condiciones de reproducción."
             },
             "demonstration": {
               "steps": [
                 "Preparar caso y datos",
                 "Ejecutar la prueba",
                 "Comparar esperado y obtenido"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Crear una comparación válida.",
+                  "actions": [
+                    "Identifica el criterio de envío sin descuento.",
+                    "Registra datos y 104.500 como esperado."
+                  ],
+                  "input": "BT-14.",
+                  "evidence": "Caso y oráculo.",
+                  "roles": [
+                    "Lea"
+                  ],
+                  "pitfall": "No tomar la UI como oráculo.",
+                  "briefActions": [
+                    "Identifica el criterio: envío sin descuento.",
+                    "Registra los datos y el esperado: 104.500 COP."
+                  ]
+                },
+                {
+                  "goal": "Observar el comportamiento.",
+                  "actions": [
+                    "Usa el candidato identificado.",
+                    "Guarda acción, pantalla y respuesta del relato."
+                  ],
+                  "input": "Caso.",
+                  "evidence": "E02.",
+                  "roles": [
+                    "Lea"
+                  ],
+                  "pitfall": "Datos ficticios.",
+                  "briefActions": [
+                    "Usa la versión identificada.",
+                    "Conserva la acción, pantalla y respuesta del relato."
+                  ]
+                },
+                {
+                  "goal": "Explicar una diferencia.",
+                  "actions": [
+                    "Contrasta 104.500 y 103.500.",
+                    "Registra −1.000 y el alcance del caso."
+                  ],
+                  "input": "E01/E02.",
+                  "evidence": "Discrepancia reproducible.",
+                  "roles": [
+                    "Lea",
+                    "Diego"
+                  ],
+                  "pitfall": "No declarar causa sin inspección.",
+                  "briefActions": [
+                    "Compara 104.500 con 103.500 COP.",
+                    "Registra −1.000 COP y las condiciones del caso."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "error",
             "title": "Error",
-            "description": "Un error es una acción humana equivocada. Puede aparecer al interpretar, diseñar o implementar, pero no debe atribuirse a una persona sin investigar la causa.",
+            "description": "Es una acción humana equivocada. En el relato, la interpretación incorrecta se conoce por la conversación e inspección, no por adivinar quién tuvo la culpa.",
             "example": {
-              "context": "La regla dice excluir el envío del descuento, pero se interpreta que aplica al total completo.",
-              "action": "Contrasta la interpretación con el criterio escrito y solicita ejemplos al negocio.",
-              "result": "Se aclara la regla; si ya existe una implementación incorrecta, se rastrea el defecto."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Interpretar «descuento del subtotal» como «descuento también del envío».",
+              "action": "En el relato, contrasta la interpretación reconocida por Diego con el criterio y los dos cálculos; investiga sin culpar por una captura.",
+              "result": "En el relato se aclara la interpretación mediante criterios y cálculos, sin atribuir culpa por una captura.",
+              "counterexample": "Señalar a una persona solo porque la pantalla muestra un total diferente."
             },
             "demonstration": {
               "steps": [
                 "Leer una regla",
                 "Interpretarla mal",
                 "Aclarar con evidencia"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Comprender el acuerdo.",
+                  "actions": [
+                    "Lee qué base recibe el 10 %.",
+                    "Identifica la exclusión explícita del envío."
+                  ],
+                  "input": "Criterio.",
+                  "evidence": "Interpretación escrita.",
+                  "roles": [
+                    "Ana",
+                    "equipo"
+                  ],
+                  "briefActions": [
+                    "Lee qué importe recibe el descuento.",
+                    "Identifica la exclusión del envío."
+                  ]
+                },
+                {
+                  "goal": "Reconocer el equívoco del relato.",
+                  "actions": [
+                    "Contrasta «incluye envío» con el criterio.",
+                    "Señala qué exclusión se omitió."
+                  ],
+                  "input": "Interpretación del relato.",
+                  "evidence": "Diferencia explicada.",
+                  "roles": [
+                    "Diego",
+                    "Lea"
+                  ],
+                  "pitfall": "No pedir introducir errores reales.",
+                  "briefActions": [
+                    "Contrasta la interpretación con el criterio.",
+                    "Señala la exclusión omitida en el relato."
+                  ]
+                },
+                {
+                  "goal": "Resolver la ambigüedad.",
+                  "actions": [
+                    "Muestra ambos cálculos a negocio.",
+                    "Registra el acuerdo correcto y su ejemplo."
+                  ],
+                  "input": "Cálculos.",
+                  "evidence": "Decisión trazable.",
+                  "roles": [
+                    "Ana",
+                    "equipo"
+                  ],
+                  "briefActions": [
+                    "Muestra ambos cálculos a negocio.",
+                    "Documenta el acuerdo y su ejemplo."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "defect",
             "title": "Defecto",
-            "description": "Un defecto es una imperfección en un artefacto, como código, requisito o diseño. Puede permanecer oculto hasta que una entrada o condición lo activa.",
+            "description": "Es una imperfección en un artefacto. En la inspección ficticia, la expresión de cálculo UI aplica el descuento a la base incorrecta.",
             "example": {
-              "context": "La fórmula usa (subtotal + envío) × 0.9 aunque el descuento solo aplica al subtotal.",
-              "action": "Documenta la condición incorrecta y un conjunto de datos que permite evidenciarla.",
-              "result": "Se identifica una fórmula defectuosa que debe cambiar a subtotal × 0.9 + envío."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Conservar esa expresión en el frontend.",
+              "action": "Relaciona la expresión UI ficticia (subtotal + envío) × 0,9 con la exclusión del envío; no presupone un defecto de API.",
+              "result": "La expresión UI ficticia queda vinculada a BT-14; corrección y confirmación siguen pendientes.",
+              "counterexample": "Una captura del fallo sin investigar todavía el artefacto no demuestra dónde está el defecto."
             },
             "demonstration": {
               "steps": [
                 "Regla de negocio",
                 "Fórmula incorrecta",
                 "Defecto identificado"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Establecer la referencia.",
+                  "actions": [
+                    "Identifica subtotal y envío por separado.",
+                    "Escribe el total esperado antes de inspeccionar código."
+                  ],
+                  "input": "BT-14.",
+                  "evidence": "Fórmula esperada.",
+                  "roles": [
+                    "Lea",
+                    "Diego"
+                  ],
+                  "briefActions": [
+                    "Separa subtotal y envío.",
+                    "Calcula el esperado antes de inspeccionar código."
+                  ]
+                },
+                {
+                  "goal": "Localizar un artefacto defectuoso.",
+                  "actions": [
+                    "Inspecciona la fórmula UI ficticia aportada.",
+                    "Muestra dónde el envío entra indebidamente en la base."
+                  ],
+                  "input": "Inspección del relato.",
+                  "evidence": "Expresión localizada.",
+                  "roles": [
+                    "Diego"
+                  ],
+                  "pitfall": "No asumir fallo de API.",
+                  "briefActions": [
+                    "Revisa la fórmula UI del relato.",
+                    "Localiza dónde se descuenta indebidamente el envío."
+                  ]
+                },
+                {
+                  "goal": "Vincular defecto y regla.",
+                  "actions": [
+                    "Relaciona expresión y criterio incumplido.",
+                    "Propón repetir el mismo caso después de corregir."
+                  ],
+                  "input": "Regla/inspección.",
+                  "evidence": "Reporte enlazado.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "Corrección aún no ejecutada.",
+                  "briefActions": [
+                    "Relaciona la fórmula con el criterio incumplido.",
+                    "Propón repetir el caso después de corregir."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "failure",
             "title": "Fallo",
-            "description": "Un fallo es una desviación observable durante la ejecución. Describe lo que hizo el sistema frente a lo esperado; el defecto que lo provoca todavía debe investigarse.",
+            "description": "Es la desviación observable durante la ejecución: la pantalla muestra 103.500 cuando corresponde 104.500.",
             "example": {
-              "context": "La UI muestra 103500 COP para una cotización cuyo esperado es 104500 COP.",
-              "action": "Conserva datos, versión, captura y respuesta de API para reproducir la diferencia.",
-              "result": "El fallo queda demostrado sin asumir todavía cuál componente contiene el defecto."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Reproducirla con cantidad, precio, cupón y envío registrados.",
+              "action": "Conserva las entradas, bt14-rc3, esperado y obtenido del relato para describir una desviación reproducible.",
+              "result": "La desviación del relato queda descrita con contexto; por sí sola no identifica causa ni responsable.",
+              "counterexample": "La sospecha de que el pago podría duplicarse es un riesgo; sin observarlo no debe reportarse como un fallo ocurrido."
             },
             "demonstration": {
               "steps": [
                 "Ejecutar datos concretos",
                 "Observar 103500 COP",
                 "Contrastar con 104500 COP"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Reproducir el síntoma.",
+                  "actions": [
+                    "Prepara 3 unidades y QA10.",
+                    "Solicita la cotización con envío."
+                  ],
+                  "input": "E01.",
+                  "evidence": "Ejecución identificada.",
+                  "roles": [
+                    "Lea"
+                  ],
+                  "briefActions": [
+                    "Prepara tres unidades y QA10.",
+                    "Solicita la cotización con envío."
+                  ]
+                },
+                {
+                  "goal": "Describir lo sucedido.",
+                  "actions": [
+                    "Anota 103.500 como obtenido.",
+                    "Conserva versión y contexto de esa pantalla."
+                  ],
+                  "input": "Ejecución.",
+                  "evidence": "Registro de observación.",
+                  "roles": [
+                    "Lea"
+                  ],
+                  "pitfall": "Distinguir relato de ejecución real.",
+                  "briefActions": [
+                    "Anota 103.500 COP como obtenido.",
+                    "Conserva versión y contexto de la pantalla."
+                  ]
+                },
+                {
+                  "goal": "Demostrar el incumplimiento.",
+                  "actions": [
+                    "Compara con el cálculo de E01.",
+                    "Describe diferencia y condición reproducible."
+                  ],
+                  "input": "Observación/oráculo.",
+                  "evidence": "Fallo documentado.",
+                  "roles": [
+                    "Lea"
+                  ],
+                  "pitfall": "Fallo no identifica por sí solo una persona.",
+                  "briefActions": [
+                    "Compara con el esperado de E01.",
+                    "Documenta la diferencia y cómo reproducirla."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "verification",
             "title": "Verificación",
-            "description": "La verificación comprueba conformidad con requisitos o especificaciones. Puede realizarse mediante revisiones o comprobaciones de un producto ejecutable.",
+            "description": "Contrasta con requisitos o especificaciones. La regla de excluir el envío permite decidir si el cálculo cumple.",
             "example": {
-              "context": "El requisito indica que la cantidad permitida es un entero entre 1 y 5.",
-              "action": "Revisa la regla e intenta cantidades 0, 1, 5 y 6.",
-              "result": "La implementación debe aceptar 1 y 5 y rechazar 0 y 6 según lo especificado."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Revisar criterio y comparar importe.",
+              "action": "Consulta BT-14 y compara el total de la pantalla ficticia con la fórmula que excluye el envío del descuento.",
+              "result": "La UI del relato incumple el total de 104.500 COP en el alcance evaluado; no se concluye sobre todo el producto.",
+              "counterexample": "Modificar la regla sin acuerdo para que cualquier resultado parezca conforme."
             },
             "demonstration": {
               "steps": [
                 "Consultar especificación",
                 "Comprobar implementación",
                 "Evaluar conformidad"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Definir qué se comprueba.",
+                  "actions": [
+                    "Localiza la exclusión del envío.",
+                    "Confirma alcance y datos de BT-14."
+                  ],
+                  "input": "Criterios.",
+                  "evidence": "Referencia de verificación.",
+                  "roles": [
+                    "Ana",
+                    "Lea"
+                  ],
+                  "briefActions": [
+                    "Consulta la exclusión del envío.",
+                    "Confirma alcance y datos de BT-14."
+                  ]
+                },
+                {
+                  "goal": "Reunir evidencia de conformidad.",
+                  "actions": [
+                    "Compara el resultado con el criterio.",
+                    "Anota cumplimientos e incumplimientos por separado."
+                  ],
+                  "input": "Caso.",
+                  "evidence": "Comparación por criterio.",
+                  "roles": [
+                    "Lea",
+                    "Diego"
+                  ],
+                  "briefActions": [
+                    "Compara el resultado con el criterio.",
+                    "Separa cumplimientos e incumplimientos."
+                  ]
+                },
+                {
+                  "goal": "Emitir una conclusión limitada.",
+                  "actions": [
+                    "Indica qué criterio incumple la UI.",
+                    "Declara qué no fue comprobado."
+                  ],
+                  "input": "Resultados.",
+                  "evidence": "Conclusión de alcance.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "No garantía global.",
+                  "briefActions": [
+                    "Indica qué criterio incumple la UI.",
+                    "Declara lo que no comprobaste."
+                  ]
+                }
               ]
             }
           },
           {
             "id": "validation",
             "title": "Validación",
-            "description": "La validación comprueba si el producto satisface necesidades reales de uso. Cumplir una especificación no garantiza que la solución sea adecuada para su usuario.",
+            "description": "Contrasta si la solución satisface la necesidad de uso. Un cálculo correcto puede ser insuficiente si el comprador no entiende lo que pagará.",
             "example": {
-              "context": "El formulario cumple todos los campos definidos, pero los compradores no entienden el costo final.",
-              "action": "Observa una sesión de compra con usuarios representativos y recopila las dificultades.",
-              "result": "Se propone mostrar subtotal, descuento y envío antes de confirmar; se comprueba si mejora la comprensión."
+              "context": "Caso ficticio BT-14 · Brisa Tienda. Observar si personas representativas comprenden subtotal, descuento y envío antes de confirmar.",
+              "action": "Propone observar con personas representativas si comprenden el desglose antes de confirmar; esta observación todavía no se ha realizado.",
+              "result": "La observación propuesta permitiría evaluar comprensión; todavía no se ha realizado. Una fórmula correcta no demuestra utilidad.",
+              "counterexample": "Deducir utilidad solo del estado HTTP o de la fórmula correcta."
             },
             "demonstration": {
               "steps": [
                 "Observar necesidad",
                 "Probar con usuarios",
                 "Validar utilidad"
+              ],
+              "stepDetails": [
+                {
+                  "goal": "Entender la decisión del comprador.",
+                  "actions": [
+                    "Pregunta qué necesita saber antes de confirmar.",
+                    "Registra dudas sobre costo total."
+                  ],
+                  "input": "Necesidad.",
+                  "evidence": "Hipótesis de uso.",
+                  "roles": [
+                    "Ana",
+                    "personas representativas"
+                  ],
+                  "briefActions": [
+                    "Pregunta qué necesita saber el comprador.",
+                    "Registra sus dudas sobre el costo total."
+                  ]
+                },
+                {
+                  "goal": "Observar comprensión.",
+                  "actions": [
+                    "Presenta el desglose ficticio sin explicar la respuesta.",
+                    "Pide interpretar cuánto se pagará."
+                  ],
+                  "input": "Prototipo/datos.",
+                  "evidence": "Notas de comprensión.",
+                  "roles": [
+                    "Facilitación"
+                  ],
+                  "pitfall": "Consentimiento y datos ficticios.",
+                  "briefActions": [
+                    "Presenta el desglose ficticio sin explicarlo.",
+                    "Pide interpretar cuánto se pagará."
+                  ]
+                },
+                {
+                  "goal": "Contrastar solución y necesidad.",
+                  "actions": [
+                    "Compara comprensión con el objetivo acordado.",
+                    "Propón y vuelve a evaluar una mejora."
+                  ],
+                  "input": "Observaciones.",
+                  "evidence": "Conclusión y siguiente paso.",
+                  "roles": [
+                    "Equipo"
+                  ],
+                  "pitfall": "Un usuario no representa a todos.",
+                  "briefActions": [
+                    "Compara la comprensión con el objetivo.",
+                    "Propón una mejora y vuelve a evaluarla."
+                  ]
+                }
               ]
             }
           }
-        ]
+        ],
+        "experience": {
+          "id": "W01-C01",
+          "goal": "Clasifica acciones como QA, QC o testing y prepara una comparación esperado/obtenido sin deducir una causa no investigada.",
+          "hook": "Brisa Tienda prepara un cupón durante un Sprint de dos semanas. El candidato muestra 103.500 COP; la regla acordada conduce a 104.500 COP. Faltan horas para enseñar el incremento: ¿por dónde empezarías?",
+          "notice": "Caso ficticio de entrenamiento. Personas, builds, conversaciones y evidencias son narrativos: no estás ejecutando la tienda ni el sandbox de QAPath. Consultar y responder no califica ni guarda progreso adicional.",
+          "openingQuestion": {
+            "question": "Antes de investigar, ¿qué harías como QA?",
+            "options": [
+              {
+                "text": "Declarar lista la versión porque los otros casos pasaron.",
+                "feedback": "El porcentaje no explica esta discrepancia ni la cobertura pendiente. No hay evidencia para ignorar la regla de importes.",
+                "correct": false
+              },
+              {
+                "text": "Calcular el esperado desde la regla, reproducir y comparar pantalla/respuesta, dejando versión y datos.",
+                "feedback": "Mejor punto de partida: hace verificable la observación y permite investigar sin inventar su causa.",
+                "correct": true
+              },
+              {
+                "text": "Cambiar el esperado a 103.500 para que el caso pase.",
+                "feedback": "El esperado procede de la regla acordada. Copiar el obtenido elimina la comprobación que necesitas.",
+                "correct": false
+              },
+              {
+                "text": "Afirmar de inmediato que el backend tiene una fórmula defectuosa.",
+                "feedback": "La pantalla demuestra un fallo observable. Todavía falta localizarlo: puede estar en API, datos, presentación o en el propio esperado.",
+                "correct": false
+              }
+            ]
+          },
+          "caseStudy": {
+            "title": "BT-14 · Un total que parece pequeño, un riesgo que no lo es",
+            "story": [
+              "Como comprador quiero conocer el importe final al aplicar QA10 para decidir la compra antes de confirmar.",
+              "Ana es Product Owner. Lea tiene especialidad QA dentro de Developers junto con Diego, que trabaja en frontend. Nico, Scrum Master, facilita resolver impedimentos. La calidad se comparte durante el Sprint: no se entrega toda a una fase QA al final.",
+              "Estos criterios son de BT-14. La Definition of Done es un acuerdo de calidad del incremento, no una copia de cada importe de la historia. La especialidad QA, «tres amigos» y triage son prácticas de este equipo; no son accountabilities ni eventos adicionales exigidos por Scrum.",
+              "El equipo no declara Done un cambio que incumple su Definition of Done. QA informa con evidencia a quienes gobiernan la liberación: no certifica unilateralmente ni cambia criterios para ocultar incumplimientos. Posponer el cupón o utilizar un incremento anterior conforme son alternativas a discutir."
+            ],
+            "rules": [
+              {
+                "label": "Producto básico",
+                "value": "35.000 COP por unidad."
+              },
+              {
+                "label": "Cantidad",
+                "value": "3 unidades → subtotal 105.000 COP."
+              },
+              {
+                "label": "Elegibilidad QA10",
+                "value": "Subtotal mínimo de 100.000 COP."
+              },
+              {
+                "label": "Descuento",
+                "value": "10 % del subtotal = 10.500 COP."
+              },
+              {
+                "label": "Envío delivery",
+                "value": "10.000 COP; no recibe descuento."
+              },
+              {
+                "label": "Oráculo independiente",
+                "value": "105.000 − 10.500 + 10.000 = 104.500 COP."
+              },
+              {
+                "label": "Observación inicial del relato",
+                "value": "UI 103.500 COP → obtenido − esperado = −1.000 COP."
+              }
+            ],
+            "dialogue": [
+              {
+                "speaker": "Lea · QA en Developers",
+                "text": "Con los criterios calculo 104.500. Voy a guardar los datos y revisar qué devolvió la petición antes de localizar la causa."
+              },
+              {
+                "speaker": "Ana · Product Owner",
+                "text": "Confirmo que el envío no recibe descuento y que el comprador debe conocer ese desglose antes de confirmar."
+              },
+              {
+                "speaker": "Diego · Frontend en Developers",
+                "text": "La respuesta de cotización ficticia trae 104.500, pero la pantalla vuelve a calcular el descuento sobre subtotal más envío. En esta inspección ficticia encuentro (105000 + 10000) × 0,9 = 103500; había interpretado mal la exclusión."
+              },
+              {
+                "speaker": "Lea · QA en Developers",
+                "text": "Documentemos el fallo y la evidencia de inspección. Después repetiremos el caso corregido y variantes relacionadas. En retrospectiva, discutamos cómo mejorar la conversación sobre ejemplos. La inspección es una revelación del relato, no un hallazgo del código real de QAPath."
+              }
+            ],
+            "evidence": [
+              {
+                "id": "E01",
+                "description": "Build bt14-rc3, entorno QA-Brisa, alcance, entradas y esperado calculado independientemente.",
+                "state": "Por preparar · didáctica"
+              },
+              {
+                "id": "E02",
+                "description": "Comparación ficticia UI 103.500 / respuesta 104.500, condiciones de reproducción y datos depurados.",
+                "state": "Por preparar · didáctica"
+              },
+              {
+                "id": "E03",
+                "description": "Discrepancia −1.000, criterio, referencia a inspección, riesgo y limitaciones; pago no evaluado.",
+                "state": "Por preparar · didáctica"
+              },
+              {
+                "id": "E04",
+                "description": "Confirmación del mismo caso y regresión sin cupón/con recogida, cuando exista una corrección.",
+                "state": "PENDIENTE · no ejecutada"
+              }
+            ]
+          },
+          "diagrams": [
+            {
+              "id": "qa-qc-testing",
+              "title": "Cómo se complementan QA, QC y testing",
+              "nodes": [
+                {
+                  "id": "objetivo",
+                  "label": "Dar confianza con alcance y riesgos conocidos"
+                },
+                {
+                  "id": "proceso",
+                  "label": "QA: mejorar el proceso"
+                },
+                {
+                  "id": "producto",
+                  "label": "QC: evaluar el producto"
+                },
+                {
+                  "id": "pruebas",
+                  "label": "Testing: actividades de evaluación"
+                },
+                {
+                  "id": "evidencia",
+                  "label": "Evidencia y limitaciones"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "objetivo",
+                  "to": "proceso",
+                  "label": "incluye"
+                },
+                {
+                  "from": "objetivo",
+                  "to": "producto",
+                  "label": "incluye"
+                },
+                {
+                  "from": "proceso",
+                  "to": "pruebas",
+                  "label": "orienta y mejora"
+                },
+                {
+                  "from": "pruebas",
+                  "to": "producto",
+                  "label": "contribuye"
+                },
+                {
+                  "from": "pruebas",
+                  "to": "evidencia",
+                  "label": "produce"
+                },
+                {
+                  "from": "producto",
+                  "to": "evidencia",
+                  "label": "aporta"
+                },
+                {
+                  "from": "evidencia",
+                  "to": "proceso",
+                  "label": "retroalimenta"
+                }
+              ],
+              "alternative": "El objetivo común es aportar confianza con límites explícitos. QA mejora el proceso y orienta cómo evaluar. Testing produce información que contribuye al QC; QC evalúa el producto. La evidencia y sus limitaciones retroalimentan las mejoras del proceso. Las flechas representan relaciones y feedback, no una jerarquía de personas ni ceremonias obligatorias."
+            },
+            {
+              "id": "qc-candidato",
+              "title": "Evalúa el candidato mediante QC",
+              "nodes": [
+                {
+                  "id": "recibir",
+                  "label": "Recibir producto"
+                },
+                {
+                  "id": "comparar",
+                  "label": "Comparar con criterios"
+                },
+                {
+                  "id": "registrar",
+                  "label": "Registrar conformidad"
+                }
+              ],
+              "edges": [
+                {
+                  "from": "recibir",
+                  "to": "comparar",
+                  "label": "candidato y criterios identificados"
+                },
+                {
+                  "from": "comparar",
+                  "to": "registrar",
+                  "label": "resultados y límites documentados"
+                }
+              ],
+              "alternative": "Identifica candidato, contexto y alcance; compara resultados con criterios independientes; comunica conformidades, incumplimientos y riesgos. «Registrar conformidad» también registra la no conformidad: no significa aprobar siempre. Rectángulos: etapas; flechas: transferencia de insumos y evidencias."
+            }
+          ],
+          "activity": {
+            "title": "Arma un reporte que pueda usar el equipo",
+            "prompt": "Sigue Recibir → Comparar → Registrar. Con BT-14 y los datos visibles, decide qué registrar. No existe todavía una corrección evaluada; puedes reintentar y consultar la explicación sin responder.",
+            "decisions": [
+              {
+                "question": "1. ¿Qué base recibe el descuento?",
+                "options": [
+                  {
+                    "text": "Subtotal 105.000 COP.",
+                    "feedback": "Correcto: la regla excluye el envío.",
+                    "correct": true
+                  },
+                  {
+                    "text": "Total con envío 115.000 COP.",
+                    "feedback": "Incluir envío produce el total incorrecto de 103.500 y contradice el criterio.",
+                    "correct": false
+                  },
+                  {
+                    "text": "103.500 COP observados.",
+                    "feedback": "El obtenido no es la base del descuento ni un oráculo independiente.",
+                    "correct": false
+                  }
+                ]
+              },
+              {
+                "question": "2. ¿Qué evidencia conserva la diferencia?",
+                "options": [
+                  {
+                    "text": "Esperado/obtenido, entradas/build y respuesta/pantalla.",
+                    "feedback": "Permite contrastar y reproducir; separa hechos de hipótesis.",
+                    "correct": true
+                  },
+                  {
+                    "text": "Solo una captura.",
+                    "feedback": "Omite versión, entradas y referencia para decidir lo esperado.",
+                    "correct": false
+                  },
+                  {
+                    "text": "Cambiar el esperado.",
+                    "feedback": "Borra el desacuerdo en lugar de evaluarlo.",
+                    "correct": false
+                  }
+                ]
+              },
+              {
+                "question": "3. ¿Cuál es el estado del caso al terminar de leer?",
+                "options": [
+                  {
+                    "text": "Discrepancia documentada; confirmación pendiente.",
+                    "feedback": "Correcto: repetir el caso y la regresión requiere una corrección y una ejecución evidenciada.",
+                    "correct": true
+                  },
+                  {
+                    "text": "Defecto corregido y probado.",
+                    "feedback": "No existe evidencia de esa corrección ni de su ejecución.",
+                    "correct": false
+                  },
+                  {
+                    "text": "Versión aprobada automáticamente.",
+                    "feedback": "Leer o abrir globos no evalúa el candidato ni aprueba una liberación.",
+                    "correct": false
+                  }
+                ]
+              }
+            ],
+            "modelAnswer": "Para bt14-rc3, 3 × 35.000 con QA10 y delivery debe producir 104.500 COP. La observación ficticia es 103.500; la respuesta del relato es 104.500. Registro −1.000 en UI y la evidencia de inspección que aporta desarrollo. Recomiendo corregir, confirmar con los mismos datos y ejecutar regresión relacionada; no marco la confirmación como realizada."
+          },
+          "transfer": {
+            "prompt": "Una plataforma de reservas cumple la regla escrita, pero las personas no entienden cuándo queda confirmada la reserva. No hay importes ni cupones.",
+            "questions": [
+              {
+                "question": "¿Qué acción propones de validación?",
+                "guide": "Observar comprensión con personas representativas y contrastar con la necesidad de saber si existe una reserva confirmada."
+              },
+              {
+                "question": "¿Qué comprobarías por verificación?",
+                "guide": "Respuesta y estado de reserva frente al criterio documentado."
+              },
+              {
+                "question": "¿Qué mejora de proceso discutirías?",
+                "guide": "Incluir ejemplos de confirmación y ausencia de disponibilidad en la revisión temprana; es una propuesta contextual, no una nueva ceremonia Scrum."
+              }
+            ]
+          },
+          "closing": {
+            "summary": "QA mejora cómo trabajamos; QC evalúa el producto; testing aporta información a esa evaluación. Describe el resultado incorrecto antes de atribuir una causa. Verificar una regla y validar utilidad son preguntas complementarias.",
+            "pitfall": "Aprobar por un porcentaje global o presentar una hipótesis como defecto localizado.",
+            "questions": [
+              "¿Qué dato te falta si solo recibes una captura?",
+              "¿Por qué 104.500 no debe calcularse leyendo el valor actual?",
+              "¿Qué evidencia permite distinguir fallo UI y error de API?"
+            ],
+            "glossary": [
+              {
+                "term": "Build",
+                "meaning": "Versión identificada."
+              },
+              {
+                "term": "HU",
+                "meaning": "Historia de usuario."
+              },
+              {
+                "term": "CA",
+                "meaning": "Criterio de aceptación."
+              },
+              {
+                "term": "Oráculo",
+                "meaning": "Referencia para decidir el esperado."
+              },
+              {
+                "term": "DoD",
+                "meaning": "Definition of Done: acuerdo de calidad del incremento."
+              },
+              {
+                "term": "Riesgo residual",
+                "meaning": "Incertidumbre que permanece después de las acciones realizadas."
+              }
+            ],
+            "sources": [
+              {
+                "title": "ISTQB · CTFL, §§1.1–1.3",
+                "url": "https://istqb.org/?download_id=3345&sdm_process_download=1",
+                "version": "4.0.1",
+                "consulted": "2026-10-28"
+              },
+              {
+                "title": "The Scrum Guide",
+                "url": "https://scrumguides.org/scrum-guide.html",
+                "version": "Noviembre 2020",
+                "consulted": "2026-10-28"
+              }
+            ]
+          }
+        }
       },
       {
         "title": "Cómo se relacionan SDLC y STLC",

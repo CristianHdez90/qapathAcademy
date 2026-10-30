@@ -15,7 +15,7 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  await page.getByLabel('Contraseña',{exact:true}).fill(password);
  await page.getByLabel('Confirmar contraseña').fill(password);
  await page.getByRole('button',{name:/Registrarme/}).click();
- await expect(page.getByRole('status')).toContainText('enviamos instrucciones');
+ await expect(page).toHaveURL(/\/login\?registered=1$/);await expect(page.getByRole('status')).toContainText('Te enviamos un enlace de verificación');
  const inbox=await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${process.env.FIREBASE_PROJECT_ID}/oobCodes`).then(r=>r.json()) as {oobCodes:{email:string;oobCode:string}[]};
  const code=inbox.oobCodes.find(item=>item.email===email)?.oobCode;
  expect(!!code).toBeTruthy();
@@ -24,26 +24,25 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  expect(page.url()).not.toContain('oobCode');
  await page.goto('/login');await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña',{exact:true}).fill(password);
  await page.getByRole('button',{name:/Continuar/}).click();await expect(page).toHaveURL(/\/account$/);
- await page.goto('/study/1');await studyReading(page);
+ await page.goto('/study/3');await studyReading(page);
  await page.reload();await expect(page.getByText('✓ Lectura registrada',{exact:true})).toBeVisible();
  const headers={Origin:baseURL!};
  const content=createRequire(resolve(__dirname,'../../../../package.json'));
- const catalog=content('./libs/content/src/data/catalog.json') as {weeks:{id:number;tasks:string[]}[];quizzes:Record<string,{correct:number}[]>};
- const guides=content('./libs/content/src/data/study-guides.json') as Record<string,{question:{correct:number}}>;
  const progress=async()=>(await (await page.request.get('/api/v1/me/progress',{maxRetries:1})).json()).data;
  expect((await progress()).weeks).toEqual([]);
  expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'toggle',key:'weeks',value:1}})).status()).toBe(400);
  const caseMatrix=foundationExamples.map((example,i)=>{const row={id:`TC-${i+1}`,exampleId:example.id,criterion:example.criterion,title:example.technique,preconditions:'Cuenta de entrenamiento preparada',data:JSON.stringify(example.data),steps:example.steps.map((step,i)=>`${i+1}. ${step}`).join('\n'),expected:example.expected,observed:example.expected,status:'Aprobado',bug:''};return {...row,execution:{fingerprint:caseFingerprint(row),obtained:row.observed}}});
  expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'submit-evidence',kind:'exercise',id:'1',text:JSON.stringify({week:1,completion:'validated',caseMatrix})}})).ok()).toBeTruthy();
- await page.getByLabel('Ir a un apartado').selectOption('self-check');await page.locator('.options').first().getByRole('button').nth(guides['1'].question.correct).click();
- await expect.poll(async()=>(await progress()).lessonChecks).toContain(1);
- expect((await progress()).weeks).toEqual([]);
- await page.goto('/modules/fundamentos');
- for(const [i,question] of catalog.quizzes.fundamentos.entries())await page.locator('.question').nth(i).getByRole('radio').nth(question.correct).check();
- await page.getByRole('button',{name:/Calificar respuestas/}).click();
+ // Fundamentos v2: lectura por tarjeta + minitests corregidos por el servidor (no se aceptan aprobados del cliente).
+ const {foundationRules}=content('./libs/progress/dist/index.js') as typeof import('@qapath/progress');
+ const keys=content('./libs/content/src/data/fundamentals-v2-keys.json') as Record<string,{correct:string}>;
+ const week1=foundationRules.filter(rule=>rule.week===1);
+ expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'foundation-check-passed',questionId:week1[0].checks[0]}})).status()).toBe(400);
+ for(const cardId of week1.flatMap(rule=>rule.cards))expect((await page.request.patch('/api/v1/me/progress',{headers,data:{type:'foundation-card-read',cardId}})).ok()).toBeTruthy();
+ for(const id of week1.flatMap(rule=>rule.checks)){const graded=await (await page.request.post(`/api/v1/me/foundation/checks/${id}`,{headers,data:{optionId:keys[id].correct}})).json();expect(graded.data.credited).toBe(true)}
  await expect.poll(async()=>(await progress()).weeks).toEqual([1]);
- await page.reload();await expect(page.getByLabel('Semana 1: completada',{exact:true})).toBeVisible();
- await page.goto('/study/1');await expect(page.getByText('✓ Semana completada automáticamente',{exact:true})).toBeVisible();
+ await page.goto('/modules/fundamentos');await expect(page.getByLabel('Semana 1: completada',{exact:true})).toBeVisible();
+ await page.goto('/study/1#study-finish');await expect(page.getByText('✓ Semana completada automáticamente',{exact:true})).toBeVisible();
  expect((await page.request.get('/api/v1/admin/status')).status()).toBe(403);
  const setup=await page.request.post('/api/v1/auth/mfa/setup',{headers,data:{password}});expect(setup.ok()).toBeTruthy();
  const enrollment=await setup.json() as {data:{secret:string}};

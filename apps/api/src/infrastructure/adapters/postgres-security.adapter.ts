@@ -1,7 +1,18 @@
 import {Injectable} from '@nestjs/common';
-import {users,authSessions,adminAuditEvents,emailVerificationTokens,authChallenges,mfaCredentials,recoveryCodes,and,eq,gt,isNull,lt,sql} from '@qapath/database';
+import {users,authSessions,adminAuditEvents,emailVerificationTokens,authChallenges,mfaCredentials,recoveryCodes,mfaResetTokens,and,eq,gt,isNull,lt,sql} from '@qapath/database';
 import type {AccountSecurityPort,RestrictedChallenge} from '@qapath/identity';
 import {DatabaseProvider} from '../database.provider';
+type Tx=Parameters<Parameters<DatabaseProvider['db']['transaction']>[0]>[0];
+/** Borra la credencial TOTP y los códigos, desactiva MFA y revoca sesiones, desafíos y enlaces pendientes. */
+async function clearMfa(tx:Tx,userId:string){
+ const now=new Date();
+ await tx.delete(mfaCredentials).where(eq(mfaCredentials.userId,userId));
+ await tx.delete(recoveryCodes).where(eq(recoveryCodes.userId,userId));
+ await tx.update(users).set({mfaEnabled:false,failedAttempts:0,lockedUntil:null,updatedAt:now}).where(eq(users.id,userId));
+ await tx.update(authSessions).set({revokedAt:now}).where(and(eq(authSessions.userId,userId),isNull(authSessions.revokedAt)));
+ await tx.update(authChallenges).set({consumedAt:now}).where(and(eq(authChallenges.userId,userId),isNull(authChallenges.consumedAt)));
+ await tx.update(mfaResetTokens).set({consumedAt:now}).where(and(eq(mfaResetTokens.userId,userId),isNull(mfaResetTokens.consumedAt)));
+}
 @Injectable()
 export class PostgresSecurityAdapter implements AccountSecurityPort {
  constructor(private readonly provider:DatabaseProvider){}
@@ -63,4 +74,30 @@ export class PostgresSecurityAdapter implements AccountSecurityPort {
  async claimMfaStep(userId:string,step:number){const [v]=await this.provider.db.update(mfaCredentials).set({lastUsedStep:step}).where(and(eq(mfaCredentials.userId,userId),lt(mfaCredentials.lastUsedStep,step))).returning({userId:mfaCredentials.userId});return !!v;}
  async claimRecoveryCode(userId:string,hash:string){const [v]=await this.provider.db.update(recoveryCodes).set({usedAt:new Date()}).where(and(eq(recoveryCodes.userId,userId),eq(recoveryCodes.codeHash,hash),isNull(recoveryCodes.usedAt))).returning({userId:recoveryCodes.userId});return !!v;}
  async audit(userId:string,action:string){await this.provider.db.insert(adminAuditEvents).values({actorUserId:userId,targetUserId:userId,action});}
+ async createMfaReset(userId:string,tokenHash:string,expiresAt:Date){
+  return this.provider.db.transaction(async tx=>{
+   await tx.select({id:users.id}).from(users).where(eq(users.id,userId)).for('update');
+   const [recent]=await tx.select({id:mfaResetTokens.id}).from(mfaResetTokens).where(and(eq(mfaResetTokens.userId,userId),isNull(mfaResetTokens.consumedAt),gt(mfaResetTokens.createdAt,new Date(Date.now()-60000)))).limit(1);
+   if(recent)return false;
+   await tx.update(mfaResetTokens).set({consumedAt:new Date()}).where(and(eq(mfaResetTokens.userId,userId),isNull(mfaResetTokens.consumedAt)));
+   await tx.insert(mfaResetTokens).values({userId,tokenHash,expiresAt});
+   await tx.insert(adminAuditEvents).values({actorUserId:userId,targetUserId:userId,action:'MFA_RESET_REQUESTED'});return true;
+  });
+ }
+ async consumeMfaReset(tokenHash:string){
+  return this.provider.db.transaction(async tx=>{
+   const [record]=await tx.update(mfaResetTokens).set({consumedAt:new Date()}).where(and(eq(mfaResetTokens.tokenHash,tokenHash),isNull(mfaResetTokens.consumedAt),gt(mfaResetTokens.expiresAt,new Date()))).returning({userId:mfaResetTokens.userId});
+   if(!record)return null;
+   await clearMfa(tx,record.userId);
+   await tx.insert(adminAuditEvents).values({actorUserId:record.userId,targetUserId:record.userId,action:'MFA_RESET_BY_EMAIL'});
+   return record.userId;
+  });
+ }
+ async resetMfa(userId:string,actorUserId:string,reason:'ADMIN'){
+  await this.provider.db.transaction(async tx=>{
+   await tx.select({id:users.id}).from(users).where(eq(users.id,userId)).for('update');
+   await clearMfa(tx,userId);
+   await tx.insert(adminAuditEvents).values({actorUserId,targetUserId:userId,action:`MFA_RESET_BY_${reason}`});
+  });
+ }
 }

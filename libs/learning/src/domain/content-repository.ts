@@ -1,4 +1,4 @@
-import type {Module,Week,Question,StudyGuide,Lab,Resource,ScrumRole,ScrumStep,ScrumEvent} from './models';
+import type {Module,Week,Question,StudyGuide,Lab,Resource,ScrumRole,ScrumStep,ScrumEvent,FoundationCheck} from './models';
 
 /** Puertos mínimos por caso de uso: Interface Segregation Principle (ISP). */
 export interface ModuleCatalogPort {
@@ -20,8 +20,12 @@ export interface LessonPort {
 export interface ScrumPort {
   scrum():{roles:ScrumRole[];steps:ScrumStep[];events:ScrumEvent[];quiz:Question[]};
 }
+export interface FoundationCheckPort {
+  foundationCheck(questionId:string):FoundationCheck | undefined;
+  foundationKey(questionId:string):{correct:string;feedback:Record<string,string>} | undefined;
+}
 export interface QuizPort extends ScrumPort {
   quiz(moduleId:string):Question[] | undefined;
 }
 /** Composición de puertos que satisface un adaptador completo; los casos de uso no dependen de ella. */
-export interface ContentRepository extends ModuleDetailPort,LessonPort,QuizPort,ResourcesPort,ProjectChecklistPort {}
+export interface ContentRepository extends ModuleDetailPort,LessonPort,QuizPort,ResourcesPort,ProjectChecklistPort,FoundationCheckPort {}

@@ -2,12 +2,15 @@ import {automaticCompletion,QUIZ_PASS_PERCENT} from './automatic-completion';
 import {learningRules} from './learning-rules';
 import {practiceCompleted} from './practice-completion';
 import {evidenceTextLimit} from './evidence-policy';
+import {isFoundationWeek,foundationCardsRead,foundationChapters,foundationChapterPassed,foundationCardExists,foundationRules} from './foundation-rules';
 /** Estado serializable versionado. Nunca incluye contraseñas ni identificadores personales. */
 export type Progress = {
   version:2;weeks:number[];read:number[];tasks:string[];labs:string[];
   final:number[];quizzes:Record<string,number>;notes:Record<string,string>;
   scrumIntro:boolean;scrumQuizScore:number;hours:number;
   readingSections:Record<string,number[]>;lessonChecks:number[];evidence:Record<string,string>;
+  /** Fundamentos v2: lecturas verificadas por tarjeta y minitests corregidos por el servidor (solo «true»). */
+  foundationCards?:Record<string,true>;foundationChecks?:Record<string,true>;
 };
 export function emptyProgress():Progress{return {version:2,weeks:[],read:[],tasks:[],labs:[],final:[],quizzes:{},notes:{},scrumIntro:false,scrumQuizScore:0,hours:9,readingSections:{},lessonChecks:[],evidence:{}};}
 export function fromUnknown(value:unknown):Progress {
@@ -29,7 +32,9 @@ export function fromUnknown(value:unknown):Progress {
    if(/^([1-9]|1[0-9]|2[0-4])$/.test(key)&&Array.isArray(sections))readingSections[key]=[...new Set(sections.filter((n):n is number=>Number.isInteger(n)&&n>=0&&n<20))];
   }
   const evidence=Object.fromEntries(Object.entries(objStrings('evidence')).filter(([,text])=>typeof text==='string'&&text.trim().length>=40));
-  return automaticCompletion({...base,final:nums('final'),quizzes:objNums('quizzes'),notes:objStrings('notes'),readingSections,lessonChecks:nums('lessonChecks'),evidence,scrumIntro:v.scrumIntro===true,scrumQuizScore:typeof v.scrumQuizScore==='number'?Math.min(100,Math.max(0,v.scrumQuizScore)):0,hours:typeof v.hours==='number'&&v.hours>=1&&v.hours<=60?v.hours:9});
+  const flags=(key:string,valid:(id:string)=>boolean)=>{const obj=v[key];if(!obj||typeof obj!=='object'||Array.isArray(obj))return undefined;const entries=Object.entries(obj).filter(([id,val])=>val===true&&valid(id));return entries.length?Object.fromEntries(entries.map(([id])=>[id,true as const])):undefined;};
+  const foundationCards=flags('foundationCards',foundationCardExists),foundationChecks=flags('foundationChecks',id=>foundationRules.some(rule=>rule.checks.includes(id)));
+  return automaticCompletion({...base,...(foundationCards?{foundationCards}:{}),...(foundationChecks?{foundationChecks}:{}),final:nums('final'),quizzes:objNums('quizzes'),notes:objStrings('notes'),readingSections,lessonChecks:nums('lessonChecks'),evidence,scrumIntro:v.scrumIntro===true,scrumQuizScore:typeof v.scrumQuizScore==='number'?Math.min(100,Math.max(0,v.scrumQuizScore)):0,hours:typeof v.hours==='number'&&v.hours>=1&&v.hours<=60?v.hours:9});
 }
 export function toggleInArray<T>(values:T[],value:T):T[]{return values.includes(value)?values.filter(x=>x!==value):[...values,value];}
 /** Four equally weighted stages: reading, validated practice, self-check and module quiz. */
@@ -43,7 +48,12 @@ export function progressPercentage(progress:Progress,scope:number|readonly numbe
   const practice=practiceCompleted(progress.evidence,rule.week)?1:0;
   const check=progress.lessonChecks.includes(rule.week)?1:0;
   const quiz=(progress.quizzes[rule.module]??0)>=QUIZ_PASS_PERCENT?1:0;
-  return (reading+practice+check+quiz)/4;
+  const historical=(reading+practice+check+quiz)/4;
+  if(!isFoundationWeek(rule.week))return historical;
+  // Fundamentos v2: lectura por tarjeta, minitests por capítulo y práctica. Se conserva el avance histórico mayor.
+  const cards=foundationCardsRead(progress,rule.week),chapters=foundationChapters(rule.week);
+  const current=((cards.total?cards.read/cards.total:0)+chapters.filter(item=>foundationChapterPassed(progress,item)).length/chapters.length+practice)/3;
+  return Math.max(historical,current);
  });
  const value=100*fractions.reduce((sum,fraction)=>sum+fraction,0)/rules.length;
  // Reserve 100% for all requirements; retain small advances in the full 24-week route.

@@ -1,9 +1,18 @@
 import {Module} from '@nestjs/common';
+import {ManageCourseCatalog,ManageCourseLessons} from '@qapath/learning';
+import {checkStudyFile} from '@qapath/contracts';
+import {PostgresCourseLessonsAdapter} from './infrastructure/adapters/postgres-course-lessons.adapter';
+import {CourseLessonsController,AdminCourseLessonsController} from './presentation/controllers/course-lessons.controller';
+import {PostgresCourseCatalogAdapter,PersonalLearningPaths} from './infrastructure/adapters/postgres-course-catalog.adapter';
+import {CourseCatalogController,AdminCoursesController,PersonalPathsController} from './presentation/controllers/course-catalog.controller';
 import {APP_GUARD} from '@nestjs/core';
-import {GetLesson,GetModule,GetScrum,GradeQuiz,ListModules,ListResources,GetProjectChecklist} from '@qapath/learning';
+import {GetLesson,GetModule,GetScrum,GradeQuiz,GradeFoundationCheck,ListModules,ListResources,GetProjectChecklist} from '@qapath/learning';
 import type {ContentRepository} from '@qapath/learning';
 import {SecureAuthenticationService} from '@qapath/identity';
-import {ManageStudents} from '@qapath/administration';
+import {ManageStudents,ManageAppearance} from '@qapath/administration';
+import {DEFAULT_APPEARANCE,contrastIssues,type AppearanceConfig} from '@qapath/contracts';
+import {AppearanceController,AdminAppearanceController} from './presentation/controllers/appearance.controller';
+import {PostgresAppearanceAdapter} from './infrastructure/adapters/postgres-appearance.adapter';
 import type {AdministrationPort} from '@qapath/administration';
 import type {IdentityRepository} from '@qapath/identity';
 import {JsonContentAdapter} from './infrastructure/adapters/json-content.adapter';
@@ -25,6 +34,7 @@ import {QuizController} from './presentation/controllers/quiz.controller';
 import {AuthController} from './presentation/controllers/auth.controller';
 import {ProgressController} from './presentation/controllers/progress.controller';
 import {StudentQuizController} from './presentation/controllers/student-quiz.controller';
+import {FoundationCheckController,StudentFoundationCheckController} from './presentation/controllers/foundation-check.controller';
 import {InstructorController} from './presentation/controllers/instructor.controller';
 import {AdminController} from './presentation/controllers/admin.controller';
 import {OriginGuard,SessionGuard,RolesGuard} from './presentation/security/session-security';
@@ -38,11 +48,16 @@ import {AiSettingsAdapter} from './infrastructure/adapters/ai-settings.adapter';
 import {GroqQaAdapter} from './infrastructure/adapters/groq-qa.adapter';
 import {QaAiAdapter} from './infrastructure/adapters/qa-ai.adapter';
 @Module({
- controllers:[AiSettingsController,PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,AdminController,InstructorController,QaAssistantController],
+ controllers:[CourseLessonsController,AdminCourseLessonsController,AppearanceController,AdminAppearanceController,CourseCatalogController,AdminCoursesController,PersonalPathsController,AiSettingsController,PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,FoundationCheckController,StudentFoundationCheckController,AdminController,InstructorController,QaAssistantController],
  providers:[
+  PostgresCourseCatalogAdapter,PostgresCourseLessonsAdapter,
+  {provide:ManageCourseLessons,useFactory:(repo:PostgresCourseLessonsAdapter)=>new ManageCourseLessons(repo,checkStudyFile),inject:[PostgresCourseLessonsAdapter]},
+  {provide:ManageCourseCatalog,useFactory:(repo:PostgresCourseCatalogAdapter)=>{const limit=Number(process.env.CATALOG_MAX_PATHS||10);if(!Number.isInteger(limit)||limit<1||limit>50)throw new Error('CATALOG_MAX_PATHS debe estar entre 1 y 50');return new ManageCourseCatalog(repo,new PersonalLearningPaths(repo),limit)},inject:[PostgresCourseCatalogAdapter]},
   AiSettingsAdapter,GroqQaAdapter,QaAiAdapter,GeminiQaAdapter,QaQuotaAdapter,QaConversationsAdapter,
   DatabaseProvider,PostgresIdentityAdapter,PostgresProgressAdapter,PostgresAdministrationAdapter,CryptoAuthAdapter,PostgresSecurityAdapter,TotpAdapter,FirebaseEmailAdapter,FirebaseAuthAdapter,VerificationEmailAdapter,
   {provide:ADMIN_REPOSITORY,useExisting:PostgresAdministrationAdapter},
+  PostgresAppearanceAdapter,
+  {provide:ManageAppearance,useFactory:(repo:PostgresAppearanceAdapter)=>new ManageAppearance<AppearanceConfig>(repo,{defaults:DEFAULT_APPEARANCE,issues:config=>contrastIssues(config.tokens)}),inject:[PostgresAppearanceAdapter]},
   {provide:ManageStudents,useFactory:(repo:AdministrationPort,crypto:CryptoAuthAdapter)=>new ManageStudents(repo,crypto),inject:[ADMIN_REPOSITORY,CryptoAuthAdapter]},
   {provide:IDENTITY_REPOSITORY,useExisting:PostgresIdentityAdapter},
   {provide:PROGRESS_REPOSITORY,useExisting:PostgresProgressAdapter},
@@ -54,6 +69,7 @@ import {QaAiAdapter} from './infrastructure/adapters/qa-ai.adapter';
   {provide:USE_CASES.getLesson,useFactory:(repo:ContentRepository)=>new GetLesson(repo),inject:[CONTENT_REPOSITORY]},
   {provide:USE_CASES.getScrum,useFactory:(repo:ContentRepository)=>new GetScrum(repo),inject:[CONTENT_REPOSITORY]},
   {provide:USE_CASES.gradeQuiz,useFactory:(repo:ContentRepository)=>new GradeQuiz(repo),inject:[CONTENT_REPOSITORY]},
+  {provide:USE_CASES.gradeFoundationCheck,useFactory:(repo:ContentRepository)=>new GradeFoundationCheck(repo),inject:[CONTENT_REPOSITORY]},
   {provide:USE_CASES.listResources,useFactory:(repo:ContentRepository)=>new ListResources(repo),inject:[CONTENT_REPOSITORY]},
   {provide:USE_CASES.getProjectChecklist,useFactory:(repo:ContentRepository)=>new GetProjectChecklist(repo),inject:[CONTENT_REPOSITORY]},
   DomainExceptionFilter

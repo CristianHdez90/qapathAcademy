@@ -1,0 +1,18 @@
+.lesson-admin{margin-top:1.5rem}
+.lesson-admin code{font-family:ui-monospace,monospace;font-size:.9em}
+.lesson-admin-list{display:grid;gap:.6rem;margin:1rem 0;padding:0;list-style:none}
+.lesson-admin-list>li,.lesson-file-list>li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.8rem;padding:.8rem 1rem;border:1px solid #36586a;border-radius:12px;background:#0b1a2a}
+.lesson-admin-list>li>div:first-child,.lesson-file-list>li>div:first-child{display:grid;gap:.25rem;min-width:0;flex:1 1 240px;overflow-wrap:anywhere}
+.lesson-admin-list small,.lesson-file-list small{color:#a9b9cc}
+.lesson-admin-list .course-toolbar,.lesson-file-list .course-toolbar{margin:0}
+.lesson-file-list{display:grid;gap:.5rem;margin:1rem 0 0;padding:0;list-style:none}
+.lesson-file-list>li.has-error{border-color:#ffb4a8}
+.lesson-file-list>li.has-error small{color:#ffb4a8}
+.lesson-editor{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid #36586a}
+.lesson-dropzone{display:grid;justify-items:center;gap:.5rem;padding:1.4rem;border:2px dashed #52758b;border-radius:14px;text-align:center}
+.lesson-dropzone.is-dragging{border-color:#52dfb7;background:#0f2a2a}
+.lesson-preview{margin-top:1.4rem;padding:1.4rem;border:1px solid #52dfb7;border-radius:16px;background:#080f20}
+.lesson-preview h1{font-size:clamp(24px,2.6vw,34px);font-weight:800;margin:.4rem 0 1rem}
+.lesson-templates{margin:1rem 0}
+.lesson-templates summary{cursor:pointer;font-weight:700}
+.lesson-templates small{font-weight:400;opacity:.8}

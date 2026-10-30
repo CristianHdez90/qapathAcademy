@@ -2,6 +2,7 @@
 import {createContext,useCallback,useContext,useEffect,useMemo,useState} from 'react';
 import type {ReactNode} from 'react';
 import type {AuthUserDTO,LoginOutcomeDTO} from '@qapath/contracts';
+import {safeLearningPathReturn} from '@/features/courses/safe-return';
 export type AuthContextValue={user:AuthUserDTO|null;loading:boolean;authError:string;signIn:(email:string,password:string)=>Promise<LoginOutcomeDTO>;signUp:(email:string,password:string)=>Promise<{message:string}>;signOut:()=>Promise<void>;refresh:()=>Promise<void>;complete:(outcome:LoginOutcomeDTO)=>void};
 const Context=createContext<AuthContextValue|null>(null);
 export class AuthApiError extends Error {constructor(readonly status:number,message:string){super(message)}}
@@ -31,4 +32,4 @@ export function AuthProvider({children}:{children:ReactNode}){
  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 export function useAuth(){const value=useContext(Context);if(!value)throw new Error('AuthProvider no configurado');return value;}
-export function authRedirect(outcome:LoginOutcomeDTO){if(outcome.stage==='AUTHENTICATED')return outcome.user?.role==='ADMIN'?'/admin':'/account';if(outcome.stage==='VERIFY_EMAIL')return '/verify-email';return '/auth/continue'}
+export function authRedirect(outcome:LoginOutcomeDTO,returnTo?:string|null){const next=safeLearningPathReturn(returnTo);if(outcome.stage==='AUTHENTICATED')return outcome.user?.role==='ADMIN'?'/admin':outcome.user?.role==='STUDENT'&&next?next:'/account';if(outcome.stage==='VERIFY_EMAIL')return '/verify-email';return '/auth/continue'+(next?'?next='+encodeURIComponent(next):'')}

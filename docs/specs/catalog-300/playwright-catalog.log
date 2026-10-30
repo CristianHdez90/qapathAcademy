@@ -1,0 +1,215 @@
+[WebServer] (node:44532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:17708) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 14 tests using 1 worker
+
+(node:42384) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 [chromium] › tests\e2e\catalog-300.spec.ts:7:5 › Home has all eight courses and a keyboard search; retired hero and modules are absent (4.5s)
+  ok  2 [chromium] › tests\e2e\catalog-300.spec.ts:20:5 › mobile search closes with Escape, restores focus and fits 320 px (1.5s)
+  ok  3 [chromium] › tests\e2e\catalog-300.spec.ts:28:5 › Scrum and CTFL reuse their existing experiences and course metadata (3.9s)
+  x   4 [chromium] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog (1.7s)
+(node:46660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  5 [chromium] › tests\e2e\catalog-300.spec.ts:38:5 › ADMIN creates, publishes, archives and restores without exposing drafts (7.0s)
+  ok  6 [chromium] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress (3.3s)
+  x   7 [chromium] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership (920ms)
+(node:30288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 [webkit] › tests\e2e\catalog-300.spec.ts:7:5 › Home has all eight courses and a keyboard search; retired hero and modules are absent (12.3s)
+  ok  9 [webkit] › tests\e2e\catalog-300.spec.ts:20:5 › mobile search closes with Escape, restores focus and fits 320 px (4.6s)
+  ok 10 [webkit] › tests\e2e\catalog-300.spec.ts:28:5 › Scrum and CTFL reuse their existing experiences and course metadata (5.7s)
+  x  11 [webkit] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog (2.2s)
+(node:32552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 12 [webkit] › tests\e2e\catalog-300.spec.ts:38:5 › ADMIN creates, publishes, archives and restores without exposing drafts (18.2s)
+  x  13 [webkit] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress (45.9s)
+(node:9908) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  14 [webkit] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership (9.0s)
+
+
+  1) [chromium] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "Catálogo temporalmente no disponible"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <div role="alert" class="feedback bad">…</div> aka getByText('Catálogo temporalmente no disponibleReintentar')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        2 × locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+          - unexpected value ""
+
+
+      33 | test('API errors have a retry and cannot masquerade as an empty catalog',async({page})=>{
+      34 |  await page.route('**/api/v1/courses?*',route=>route.fulfill({status:503,json:{error:{message:'Catálogo temporalmente no disponible'}}}));
+    > 35 |  await page.goto('/courses');await expect(page.getByRole('alert')).toContainText('Catálogo temporalmente no disponible');await expect(page.getByText('No encontramos cursos',{exact:false})).toHaveCount(0);
+         |                                                                    ^
+      36 |  await page.unroute('**/api/v1/courses?*');await page.getByRole('button',{name:'Reintentar',exact:true}).click();await expect(page.locator('.course-card')).toHaveCount(8);
+      37 | });
+      38 | test('ADMIN creates, publishes, archives and restores without exposing drafts',async({page},info)=>{
+        at C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web\tests\e2e\catalog-300.spec.ts:35:68
+
+    Error Context: test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "No tienes permisos"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert">No tienes permisos para administrar cursos.</p> aka getByText('No tienes permisos para')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        - locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+        - unexpected value ""
+
+
+      71 |  const paths=(await(await page.request.get('/api/v1/me/learning-paths')).json()).data;
+      72 |  await session(page,'student-b');if(paths.length)expect((await page.request.get('/api/v1/me/learning-paths/'+paths[0].id)).status()).toBe(404);
+    > 73 |  await page.goto('/admin/courses');await expect(page.getByRole('alert')).toContainText('No tienes permisos');
+         |                                                                          ^
+      74 | });
+      75 |
+        at C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web\tests\e2e\catalog-300.spec.ts:73:74
+
+    Error Context: test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-chromium\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-chromium\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-chromium\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "Catálogo temporalmente no disponible"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <div role="alert" class="feedback bad">…</div> aka getByText('Catálogo temporalmente no disponibleReintentar')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+        2 × locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+          - unexpected value ""
+
+
+      33 | test('API errors have a retry and cannot masquerade as an empty catalog',async({page})=>{
+      34 |  await page.route('**/api/v1/courses?*',route=>route.fulfill({status:503,json:{error:{message:'Catálogo temporalmente no disponible'}}}));
+    > 35 |  await page.goto('/courses');await expect(page.getByRole('alert')).toContainText('Catálogo temporalmente no disponible');await expect(page.getByText('No encontramos cursos',{exact:false})).toHaveCount(0);
+         |                                                                    ^
+      36 |  await page.unroute('**/api/v1/courses?*');await page.getByRole('button',{name:'Reintentar',exact:true}).click();await expect(page.locator('.course-card')).toHaveCount(8);
+      37 | });
+      38 | test('ADMIN creates, publishes, archives and restores without exposing drafts',async({page},info)=>{
+        at C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web\tests\e2e\catalog-300.spec.ts:35:68
+
+    Error Context: test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-webkit\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-webkit\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\catalog-300-API-errors-hav-af236-querade-as-an-empty-catalog-webkit\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/login$/
+    Received string:  "http://127.0.0.1:3017/account"
+    Timeout: 5000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 5000ms
+        8 × locator resolved to <html lang="es">…</html>
+          - unexpected value "http://127.0.0.1:3017/account"
+
+
+      61 |  await expect(page.getByRole('status')).toContainText('Ruta guardada.');
+      62 |  const saved=(await(await page.request.get('/api/v1/me/learning-paths')).json()).data.find((path:{title:string})=>path.title===title);expect(saved.courses.map((course:{slug:string})=>course.slug)).toEqual(['manual','fundamentos']);
+    > 63 |  await page.goto('/account');await page.getByRole('button',{name:'Cerrar sesión',exact:true}).click();await expect(page).toHaveURL(/\/login$/);
+         |                                                                                                                          ^
+      64 |  await session(page);await page.goto('/learning-paths');await expect(page.getByRole('heading',{name:title,exact:false})).toBeVisible();
+      65 |  expect((await(await page.request.get('/api/v1/me/progress')).json())).toEqual(before);
+      66 |  await page.goto('/modules/cicd');await expect(page).toHaveURL(/\/legacy\/modules\/cicd$/);await expect(page.getByText('Contenido histórico · Tus notas',{exact:false})).toBeVisible();
+        at C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web\tests\e2e\catalog-300.spec.ts:63:122
+
+    Error Context: test-results\catalog-300-student-route--b0213-hanging-historical-progress-webkit\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\catalog-300-student-route--b0213-hanging-historical-progress-webkit\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\catalog-300-student-route--b0213-hanging-historical-progress-webkit\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [webkit] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "No tienes permisos"
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 5000ms
+      - waiting for getByRole('alert')
+
+
+      71 |  const paths=(await(await page.request.get('/api/v1/me/learning-paths')).json()).data;
+      72 |  await session(page,'student-b');if(paths.length)expect((await page.request.get('/api/v1/me/learning-paths/'+paths[0].id)).status()).toBe(404);
+    > 73 |  await page.goto('/admin/courses');await expect(page.getByRole('alert')).toContainText('No tienes permisos');
+         |                                                                          ^
+      74 | });
+      75 |
+        at C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web\tests\e2e\catalog-300.spec.ts:73:74
+
+    Error Context: test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-webkit\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-webkit\trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace test-results\catalog-300-ADMIN-APIs-rej-734cd--and-enforce-path-ownership-webkit\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5 failed
+    [chromium] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog 
+    [chromium] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership 
+    [webkit] › tests\e2e\catalog-300.spec.ts:33:5 › API errors have a retry and cannot masquerade as an empty catalog 
+    [webkit] › tests\e2e\catalog-300.spec.ts:55:5 › student route ordering persists across logout/login without changing historical progress 
+    [webkit] › tests\e2e\catalog-300.spec.ts:69:5 › ADMIN APIs reject anonymous and STUDENT sessions and enforce path ownership 
+  9 passed (2.3m)
+undefined
+C:\Users\ingcr\.codex\worktrees\catalog-300\qapath-academy\apps\web:
+ ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL  Command "playwright" not found

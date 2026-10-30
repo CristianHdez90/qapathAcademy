@@ -1,5 +1,6 @@
 import 'reflect-metadata';
 import {NestFactory} from '@nestjs/core';
+import type {NestExpressApplication} from '@nestjs/platform-express';
 import {AppModule} from './app.module';
 import {existsSync} from 'node:fs';
 import {readFirebaseMailConfig} from './infrastructure/adapters/firebase-email.adapter';
@@ -18,7 +19,9 @@ async function bootstrap(){
   else throw new Error('EMAIL_TRANSPORT no permitido en producción.');
  }
  const allowed=(process.env.WEB_ORIGIN||'http://localhost:3000,http://127.0.0.1:3000').split(',').map(v=>v.trim());
- const app=await NestFactory.create(AppModule,{cors:{origin:allowed,credentials:true}});
+ const app=await NestFactory.create<NestExpressApplication>(AppModule,{cors:{origin:allowed,credentials:true}});
+ // SPEC-CONTENT-320: las lecciones suben archivos de texto (hasta 300 KB c/u). El resto de endpoints valida tamaños con zod.
+ app.useBodyParser('json',{limit:process.env.API_JSON_LIMIT||'2mb'});
  app.setGlobalPrefix('api/v1');
  app.use((_req:unknown,res:{setHeader:(name:string,value:string)=>void},next:()=>void)=>{res.setHeader('Cache-Control','no-store');res.setHeader('X-Content-Type-Options','nosniff');next();});
  app.enableShutdownHooks();

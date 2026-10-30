@@ -3,20 +3,22 @@ import {createRequire} from 'node:module';
 import {resolve} from 'node:path';
 import type {Progress,ProgressCommand} from '@qapath/progress';
 const requireProgress=createRequire(resolve(__dirname,'../../../../package.json'));
-const {emptyProgress,applyProgressCommand}=requireProgress('./libs/progress/dist/index.js') as typeof import('@qapath/progress');
+const {emptyProgress,applyProgressCommand,foundationRules}=requireProgress('./libs/progress/dist/index.js') as typeof import('@qapath/progress');
 
 test('recommended next action opens the pending practice activity rather than restarting a lesson',async({page},testInfo)=>{
- const state={...emptyProgress(),readingSections:{1:[0,1,2,3]}};
+ // Guest progress: week 1 cards read and minitests passed (local only); practice is the pending stage.
+ const week1=foundationRules.filter(rule=>rule.week===1);
+ const state={...emptyProgress(),foundationCards:Object.fromEntries(week1.flatMap(r=>r.cards).map(id=>[id,true])),foundationChecks:Object.fromEntries(week1.flatMap(r=>r.checks).map(id=>[id,true]))};
  await page.route('**/api/v1/auth/me',route=>route.fulfill({status:401,json:{message:'No autenticado'}}));
  await page.addInitScript(value=>localStorage.setItem('qapath-academy-v2',JSON.stringify(value)),state);
  await page.setViewportSize({width:1440,height:1000});await page.goto('/');
  const next=page.getByRole('link',{name:'Continuar: Práctica',exact:false});
  await expect(next).toHaveAttribute('href','/study/1#practical-exercise');
  await page.screenshot({path:testInfo.outputPath('dashboard-desktop.png')});await next.click();
- await expect(page.locator('#practical-exercise')).toHaveAttribute('open','');
- await expect(page.locator('#practical-exercise').getByRole('link',{name:'Abrir actividad de la semana 1',exact:false})).toBeVisible();
- await page.getByLabel('Ir a un apartado').selectOption('study-notes');
- const note=page.getByLabel('Mis notas',{exact:true});await note.fill('Primera idea');await note.fill('Idea revisada para el siguiente reto');
+ await expect(page.locator('[data-study-step]')).toHaveAttribute('data-study-step','practical-exercise');
+ await expect(page.getByRole('link',{name:'Abrir actividad de la semana 1',exact:false})).toBeVisible();
+ await page.goto('/study/1#study-notes');
+ const note=page.getByRole('textbox',{name:'Mis notas',exact:true});await note.fill('Primera idea');await note.fill('Idea revisada para el siguiente reto');
  await expect(note).toHaveValue('Idea revisada para el siguiente reto');
  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('qapath-academy-v2')||'{}').notes?.['1'])).toBe('Idea revisada para el siguiente reto');
 });
@@ -34,7 +36,7 @@ test('notes expose save failures inline, retry preserves text, and contextual Ma
  });
  await page.route('**/api/v1/assistant/conversations',route=>route.fulfill({json:{data:{items:[],nextOffset:null}}}));
  await page.route('**/api/v1/assistant/chat',async route=>{aiCalls++;const messages=route.request().postDataJSON().messages;await route.fulfill({json:{data:{answer:'Probemos un ejemplo práctico de QA.',conversation:{id:'00000000-0000-4000-8000-000000000001',title:'Ayuda contextual',revision:1,archived:false,updatedAt:new Date().toISOString(),messages:[...messages,{role:'assistant',content:'Probemos un ejemplo práctico de QA.'}]}}}})});
- await page.goto('/study/1');
+ await page.goto('/study/3');
  await expect(page.getByRole('navigation',{name:'Etapas de la semana'})).toHaveAttribute('aria-busy','false');
  await page.screenshot({path:testInfo.outputPath('study-desktop.png')});
  const notes=page.getByLabel('Mis notas',{exact:true});await expect(notes).not.toBeVisible();
@@ -47,12 +49,12 @@ test('notes expose save failures inline, retry preserves text, and contextual Ma
  await expect(notes).toHaveValue('Mi resumen del ciclo de vida del software y los riesgos de calidad.');
  await page.getByLabel('Ir a un apartado').selectOption('study-notes');await page.locator('#study-notes').getByRole('button',{name:'Reintentar guardado'}).click();
  await expect(page.locator('#study-notes').getByRole('status')).toHaveText('✓ Guardado en tu cuenta');
- expect(state.notes['1']).toContain('Mi resumen');
+ expect(state.notes['3']).toContain('Mi resumen');
  const chapter=page.getByRole('navigation',{name:'Índice de la clase'}).getByRole('link').nth(1);
  const title=await chapter.innerText();await chapter.click();await expect(chapter).toHaveAttribute('aria-current','location');
  const ask=page.getByRole('button',{name:'Preguntar a MariBug sobre este tema'});await ask.click();
  const question=page.getByLabel('Tu pregunta sobre QA');await expect(question).toBeFocused();
- await expect(question).toHaveValue(/Estoy estudiando la semana 1/);
+ await expect(question).toHaveValue(/Estoy estudiando la semana 3/);
  expect(await question.inputValue()).toContain(title.replace(/^\d+\s*/,''));expect(aiCalls).toBe(0);
  await question.press('Escape');await expect(ask).toBeFocused();
  await ask.click();await page.getByRole('button',{name:'Enviar pregunta'}).click();
