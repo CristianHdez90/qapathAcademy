@@ -1,0 +1,2 @@
+# Las migraciones SQL se versionan y se extraen siempre con LF: su checksum no depende del sistema operativo.
+*.sql text eol=lf

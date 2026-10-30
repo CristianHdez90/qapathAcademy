@@ -15,6 +15,7 @@ export type LessonDTO={week:Week;guide:StudyGuide};
 export const academyApi={
  appearance:()=>get<import('@qapath/contracts').PublishedAppearanceDTO>('/appearance/home'),
  course:(slug:string)=>get<import('@qapath/contracts').CourseDTO>(`/courses/${encodeURIComponent(slug)}`),
+ courseOutline:(slug:string)=>get<import('@qapath/contracts').PublicCourseOutlineDTO>(`/courses/${encodeURIComponent(slug)}/outline`),
  courseLessons:(slug:string)=>get<import('@qapath/contracts').LessonSummaryDTO[]>(`/courses/${encodeURIComponent(slug)}/lessons`),
  courseLesson:(slug:string,id:string)=>get<import('@qapath/contracts').LessonDTO>(`/courses/${encodeURIComponent(slug)}/lessons/${encodeURIComponent(id)}`),
  modules:()=>get<ModuleOverview[]>('/modules'),
