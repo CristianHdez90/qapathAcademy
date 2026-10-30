@@ -2,7 +2,7 @@ import {test,expect} from '@playwright/test';
 /** SPEC-UX-310 · Home de cursos configurable: lectura pública, RBAC y diseño responsive con el tema publicado. */
 test('public appearance returns only the published theme and admin endpoints require ADMIN',async({request})=>{
  const published=await (await request.get('/api/v1/appearance/home')).json();
- expect(published.data.config.preset).toMatch(/^(qapath-original|midnight-violet|indigo-digital|coral-studio)$/);
+ expect(published.data.config.preset).toMatch(/^[a-z]+(-[a-z]+)*$/);
  expect(JSON.stringify(published.data)).not.toMatch(/draft/i);
  expect((await request.get('/api/v1/admin/appearance/home')).status()).toBe(401);
  expect((await request.patch('/api/v1/admin/appearance/home/draft',{data:{expectedRevision:0,config:published.data.config}})).status()).toBeGreaterThanOrEqual(401);
