@@ -50,7 +50,7 @@ test('library: admin creates, publishes and assigns a lesson to a course index; 
  await expect(page.getByText('Curso guardado correctamente.')).toBeVisible();
  await page.context().clearCookies();await session(page,'student-a');
  await page.goto('/courses/fundamentos');
- await expect(page.locator('.study-lessons li')).toHaveCount(1); // el glosario es borrador: no se muestra
+ await expect(page.locator('[data-supplementary] .module-chapters li')).toHaveCount(1); // el glosario es borrador: no se muestra
  await page.getByRole('link',{name:/Ciclo de vida de un defecto/}).click();
  await expect(page.getByRole('heading',{level:1,name:'Ciclo de vida de un defecto'})).toBeVisible();
  await expect(page.locator('.study-section.has-aside')).toHaveCount(1);

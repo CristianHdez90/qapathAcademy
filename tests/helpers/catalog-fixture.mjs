@@ -33,7 +33,7 @@ export async function createCatalogFixture({port=0,origin='http://localhost:3017
  historical.quizzes={cicd:100,portafolio:100};const initialProgress=progress.fromUnknown(historical);
  await db.query('INSERT INTO student_progress(user_id,state) VALUES($1,$2::jsonb)',[fixtureUsers['student-a'].id,JSON.stringify(initialProgress)]);
  const migration=readFileSync(new URL('../../packages/database/sql/008_course_catalog.sql',import.meta.url),'utf8');await db.exec(migration);
- for(const file of ['011_course_coming_soon.sql','012_course_lessons.sql','013_lesson_library.sql','014_course_outlines.sql'])await db.exec(readFileSync(new URL('../../packages/database/sql/'+file,import.meta.url),'utf8'));
+ for(const file of ['011_course_coming_soon.sql','012_course_lessons.sql','013_lesson_library.sql','014_course_outlines.sql','015_content_modules.sql'])await db.exec(readFileSync(new URL('../../packages/database/sql/'+file,import.meta.url),'utf8'));
  const query=async(sql,args)=>{const result=await db.query(sql,args);return {rows:result.rows,rowCount:result.affectedRows??result.rows.length}};
  let gate=Promise.resolve();
  const pool={query,connect:async()=>{let release;const next=new Promise(done=>{release=done}),previous=gate;gate=previous.then(()=>next);await previous;return {query,release}}};
@@ -45,7 +45,10 @@ export async function createCatalogFixture({port=0,origin='http://localhost:3017
  const {CourseLessonsController,AdminCourseLessonsController}=loadApiSource('src/presentation/controllers/course-lessons.controller.ts');
  const {PostgresCourseOutlineAdapter}=loadApiSource('src/infrastructure/adapters/postgres-course-outline.adapter.ts');
  const outline=new learning.ManageCourseOutline(new PostgresCourseOutlineAdapter({connection:{pool}}),apiRequire('@qapath/contracts').checkStudyFile);
- const {AdminCourseOutlineController,CourseOutlineController,OutlineProgressController}=loadApiSource('src/presentation/controllers/course-outline.controller.ts');
+ const {AdminCourseOutlineController,AdminModuleOutlineController,CourseOutlineController,OutlineProgressController}=loadApiSource('src/presentation/controllers/course-outline.controller.ts');
+ const {PostgresContentModulesAdapter}=loadApiSource('src/infrastructure/adapters/postgres-content-modules.adapter.ts');
+ const modules=new learning.ManageContentModules(new PostgresContentModulesAdapter({connection:{pool}}));
+ const {AdminModulesController}=loadApiSource('src/presentation/controllers/content-modules.controller.ts');
  const {NestFactory,APP_GUARD}=apiRequire('@nestjs/core'),nest=apiRequire('@nestjs/common');
  const {OriginGuard,SessionGuard,RolesGuard,Public,cookieName}=loadApiSource('src/presentation/security/session-security.ts');
  const {SecureAuthenticationService}=apiRequire('@qapath/identity');
@@ -66,7 +69,7 @@ export async function createCatalogFixture({port=0,origin='http://localhost:3017
  nest.Req()(FixtureAuth.prototype,'me',0);nest.Body()(FixtureAuth.prototype,'login',0);nest.Res({passthrough:true})(FixtureAuth.prototype,'login',1);nest.Res({passthrough:true})(FixtureAuth.prototype,'logout',0);
  const legacyCases={listModules:new learning.ListModules(content),getModule:new learning.GetModule(content),getLesson:new learning.GetLesson(content),getScrum:new learning.GetScrum(content),listResources:new learning.ListResources(content),getProjectChecklist:new learning.GetProjectChecklist(content)};
  class FixtureModule{}
- nest.Module({controllers:[AdminCourseOutlineController,CourseOutlineController,OutlineProgressController,CourseLessonsController,AdminCourseLessonsController,CourseCatalogController,AdminCoursesController,PersonalPathsController,CatalogController,ProgressController,FixtureAuth],providers:[{provide:learning.ManageCourseCatalog,useValue:service},{provide:learning.ManageCourseLessons,useValue:lessons},{provide:learning.ManageCourseOutline,useValue:outline},{provide:CONTENT_REPOSITORY,useValue:content},{provide:PROGRESS_REPOSITORY,useValue:progressPort},...Object.entries(legacyCases).map(([key,value])=>({provide:USE_CASES[key],useValue:value})),{provide:SecureAuthenticationService,useValue:{findSession:async token=>fixtureUsers[token]||null}},{provide:APP_GUARD,useClass:OriginGuard},{provide:APP_GUARD,useClass:SessionGuard},{provide:APP_GUARD,useClass:RolesGuard}]})(FixtureModule);
+ nest.Module({controllers:[AdminCourseOutlineController,AdminModuleOutlineController,AdminModulesController,CourseOutlineController,OutlineProgressController,CourseLessonsController,AdminCourseLessonsController,CourseCatalogController,AdminCoursesController,PersonalPathsController,CatalogController,ProgressController,FixtureAuth],providers:[{provide:learning.ManageCourseCatalog,useValue:service},{provide:learning.ManageCourseLessons,useValue:lessons},{provide:learning.ManageCourseOutline,useValue:outline},{provide:learning.ManageContentModules,useValue:modules},{provide:CONTENT_REPOSITORY,useValue:content},{provide:PROGRESS_REPOSITORY,useValue:progressPort},...Object.entries(legacyCases).map(([key,value])=>({provide:USE_CASES[key],useValue:value})),{provide:SecureAuthenticationService,useValue:{findSession:async token=>fixtureUsers[token]||null}},{provide:APP_GUARD,useClass:OriginGuard},{provide:APP_GUARD,useClass:SessionGuard},{provide:APP_GUARD,useClass:RolesGuard}]})(FixtureModule);
  process.env.WEB_ORIGIN=origin;
  const app=await NestFactory.create(FixtureModule,{logger:false});app.setGlobalPrefix('api/v1');await app.listen(port,'127.0.0.1');
  return {db,app,repository,service,initialProgress,legacy,migration,base:await app.getUrl(),cookieName:cookieName(),close:async()=>{await app.close();await db.close()}};

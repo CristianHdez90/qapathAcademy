@@ -1,12 +1,14 @@
 'use client';
 import Link from 'next/link';
 import {useCallback,useEffect,useMemo,useState} from 'react';
-import {courseOutlineSchema,OUTLINE_LIMITS,OUTLINE_PASS_PERCENT,type AdminCourseOutlineDTO,type CourseDTO,type CourseOutline,type OutlineCard,type OutlineChapter,type OutlineGradeDTO,type OutlineQuestion,type OutlineWeek} from '@qapath/contracts';
+import {courseOutlineSchema,OUTLINE_LIMITS,OUTLINE_PASS_PERCENT,type AdminCourseOutlineDTO,type ContentModuleDTO,type CourseDTO,type OutlineOwnerKind,type CourseOutline,type OutlineCard,type OutlineChapter,type OutlineGradeDTO,type OutlineQuestion,type OutlineWeek} from '@qapath/contracts';
 import {useAuth} from '@/features/auth/auth-provider';
 import {courseRequest} from '@/features/courses/course-api';
 import {StudyFilesField,type StudyItem} from '@/components/study/study-files-field';
 import {OutlineCardView} from './outline-card';
 import {FocusedReader} from './focused-reader';
+import {StudyMarkdown} from '@/components/study/study-markdown';
+import {outlineHrefResolver,resolveOutlineTarget} from './outline-links';
 import '@/components/courses/courses.css';
 import '@/components/study/admin-course-lessons.css';
 import './outline.css';
@@ -31,35 +33,40 @@ function humanPath(path:PropertyKey[]){
  const out:string[]=[];for(let i=0;i<path.length;i++){const key=String(path[i]);if(names[key]&&typeof path[i+1]==='number'){out.push(`${names[key]} ${Number(path[i+1])+1}`);i++}else out.push(fields[key]??key)}
  return out.join(' › ');
 }
-export function OutlineEditorPage({courseId}:{courseId:string}){
+export function OutlineEditorPage({courseId,kind='course'}:{courseId:string;kind?:OutlineOwnerKind}){
  const {user,loading}=useAuth();
  if(loading)return <p role="status">Verificando permisos…</p>;
- if(!user)return <><h1>Contenido del curso</h1><Link href="/login">Inicia sesión con una cuenta ADMIN</Link></>;
+ if(!user)return <><h1>{kind==='module'?'Contenido del módulo':'Contenido del curso'}</h1><Link href="/login">Inicia sesión con una cuenta ADMIN</Link></>;
  if(user.role!=='ADMIN')return <p role="alert">No tienes permisos para editar el contenido de los cursos.</p>;
- return <OutlineEditor courseId={courseId}/>;
+ return <OutlineEditor courseId={courseId} kind={kind}/>;
 }
-/** SPEC-CONTENT-330 · Editor del contenido del curso: semanas, capítulos, tarjetas y minitests con vista previa. */
-function OutlineEditor({courseId}:{courseId:string}){
- const [course,setCourse]=useState<CourseDTO|null>(null),[state,setState]=useState<AdminCourseOutlineDTO|null>(null),[outline,setOutline]=useState<CourseOutline>({weeks:[]});
+type Owner={title:string;slug?:string;fundamentals:boolean;back:{href:string;label:string};courses?:ContentModuleDTO['courses']};
+/** SPEC-CONTENT-330/331 · Editor del contenido de un curso o de un módulo propio: semanas, capítulos, tarjetas y minitests con vista previa. */
+function OutlineEditor({courseId,kind}:{courseId:string;kind:OutlineOwnerKind}){
+ const api=kind==='module'?`/admin/modules/${courseId}/outline`:`/admin/courses/${courseId}/outline`;
+ const [course,setCourse]=useState<Owner|null>(null),[state,setState]=useState<AdminCourseOutlineDTO|null>(null),[outline,setOutline]=useState<CourseOutline>({weeks:[]});
  const [sel,setSel]=useState<Sel>(null),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState(''),[fullPreview,setFullPreview]=useState(false);
  const apply=useCallback((data:AdminCourseOutlineDTO)=>{setState(data);setOutline(data.draft);setSel(old=>old??(data.draft.weeks[0]?{week:data.draft.weeks[0].id,chapter:data.draft.weeks[0].chapters[0]?.id,card:data.draft.weeks[0].chapters[0]?.cards[0]?.id}:null))},[]);
- useEffect(()=>{let alive=true;void Promise.all([courseRequest<CourseDTO>(`/admin/courses/${courseId}`),courseRequest<AdminCourseOutlineDTO>(`/admin/courses/${courseId}/outline`)]).then(([c,o])=>{if(!alive)return;setCourse(c);apply(o)}).catch(e=>{if(alive)setError(e instanceof Error?e.message:'No se pudo cargar el contenido.')});return()=>{alive=false}},[courseId,apply]);
+ useEffect(()=>{let alive=true;
+  const owner:Promise<Owner>=kind==='module'?courseRequest<ContentModuleDTO>(`/admin/modules/${courseId}`).then(m=>({title:m.title,fundamentals:true,back:{href:'/admin/modules',label:'← Módulos y experiencias'},courses:m.courses}))
+   :courseRequest<CourseDTO>(`/admin/courses/${courseId}`).then(c=>({title:c.title,slug:c.slug,fundamentals:c.slug==='fundamentos'||c.assignments.some(a=>a.kind==='LEGACY_MODULE'&&a.ref==='fundamentos'),back:{href:'/admin/courses',label:'← Gestionar cursos'}}));
+  void Promise.all([owner,courseRequest<AdminCourseOutlineDTO>(api)]).then(([c,o])=>{if(!alive)return;setCourse(c);apply(o)}).catch(e=>{if(alive)setError(e instanceof Error?e.message:'No se pudo cargar el contenido.')});return()=>{alive=false}},[courseId,kind,api,apply]);
  const dirty=!!state&&JSON.stringify(outline)!==JSON.stringify(state.draft);
  useEffect(()=>{if(!dirty)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault()};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn)},[dirty]);
  const run=async(work:()=>Promise<AdminCourseOutlineDTO>,done:string)=>{setBusy(true);setError('');setMessage('');try{apply(await work());setMessage(done)}catch(e){setError(e instanceof Error?e.message:'No se pudo completar la acción.')}finally{setBusy(false)}};
  const save=useCallback(async()=>{
   if(!state)return;const parsed=courseOutlineSchema.safeParse(outline);
   if(!parsed.success){const issue=parsed.error.issues[0];setError(`Revisa ${humanPath(issue.path)}: ${issue.message}`);return}
-  await run(()=>courseRequest<AdminCourseOutlineDTO>(`/admin/courses/${courseId}/outline/draft`,'PUT',{expectedRevision:state.draftRevision,outline}),'Borrador guardado. Publícalo cuando esté listo.');
+  await run(()=>courseRequest<AdminCourseOutlineDTO>(`${api}/draft`,'PUT',{expectedRevision:state.draftRevision,outline}),'Borrador guardado. Publícalo cuando esté listo.');
  // eslint-disable-next-line react-hooks/exhaustive-deps
- },[state,outline,courseId]);
+ },[state,outline,api]);
  useEffect(()=>{const key=(e:KeyboardEvent)=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();if(dirty&&!busy)void save()}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key)},[dirty,busy,save]);
  const publish=()=>{if(!state)return;if(dirty){setError('Guarda el borrador antes de publicar.');return}
-  if(!window.confirm(`¿Publicar el contenido de «${course?.title}»?\n\nLos estudiantes verán estas semanas, capítulos y tarjetas en el índice del curso.${course?.slug==='fundamentos'?'\nEl avance guardado en la versión anterior de Fundamentos no se transfiere a esta versión.':''}`))return;
-  void run(()=>courseRequest(`/admin/courses/${courseId}/outline/publish`,'POST',{expectedRevision:state.draftRevision}),'Contenido publicado.')};
- const unpublish=()=>{if(!window.confirm('¿Despublicar el contenido? El curso vuelve a mostrar su contenido anterior. El borrador se conserva.'))return;void run(()=>courseRequest(`/admin/courses/${courseId}/outline/unpublish`,'POST'),'Contenido despublicado; el borrador se conserva.')};
- const discard=()=>{if(!state)return;if(!window.confirm('¿Descartar el borrador y volver a la versión publicada? Se perderán los cambios no publicados.'))return;void run(()=>courseRequest(`/admin/courses/${courseId}/outline/discard`,'POST',{expectedRevision:state.draftRevision}),'Borrador descartado.')};
- const importFundamentals=()=>{if(!state)return;if(outline.weeks.length&&!window.confirm('El borrador actual se reemplazará por una copia de Fundamentos. ¿Continuar?'))return;void run(()=>courseRequest(`/admin/courses/${courseId}/outline/import-fundamentals`,'POST',{expectedRevision:state.draftRevision}),'Copia de Fundamentos cargada como borrador. Lo publicado no cambia hasta que publiques.')};
+  if(!window.confirm(`¿Publicar el contenido de «${course?.title}»?\n\n${kind==='module'?(course?.courses?.length?`Se verá en: ${course.courses.map(c=>c.title).join(', ')}.`:'El módulo aún no está asignado a ningún curso.'):'Los estudiantes verán estas semanas, capítulos y tarjetas en el índice del curso.'}${course?.slug==='fundamentos'?'\nEl avance guardado en la versión anterior de Fundamentos no se transfiere a esta versión.':''}`))return;
+  void run(()=>courseRequest(`${api}/publish`,'POST',{expectedRevision:state.draftRevision}),'Contenido publicado.')};
+ const unpublish=()=>{if(!window.confirm('¿Despublicar el contenido? El curso vuelve a mostrar su contenido anterior. El borrador se conserva.'))return;void run(()=>courseRequest(`${api}/unpublish`,'POST'),'Contenido despublicado; el borrador se conserva.')};
+ const discard=()=>{if(!state)return;if(!window.confirm('¿Descartar el borrador y volver a la versión publicada? Se perderán los cambios no publicados.'))return;void run(()=>courseRequest(`${api}/discard`,'POST',{expectedRevision:state.draftRevision}),'Borrador descartado.')};
+ const importFundamentals=()=>{if(!state)return;if(outline.weeks.length&&!window.confirm('El borrador actual se reemplazará por una copia de Fundamentos. ¿Continuar?'))return;void run(()=>courseRequest(`${api}/import-fundamentals`,'POST',{expectedRevision:state.draftRevision}),'Copia de Fundamentos cargada como borrador. Lo publicado no cambia hasta que publiques.')};
  // Edición inmutable por id
  const updWeek=(id:string,fn:(w:OutlineWeek)=>OutlineWeek)=>setOutline(o=>({weeks:o.weeks.map(w=>w.id===id?fn(w):w)}));
  const updChapter=(weekId:string,id:string,fn:(c:OutlineChapter)=>OutlineChapter)=>updWeek(weekId,w=>({...w,chapters:w.chapters.map(c=>c.id===id?fn(c):c)}));
@@ -69,10 +76,12 @@ function OutlineEditor({courseId}:{courseId:string}){
  const previewWeeks=useMemo(()=>outline.weeks.map(w=>({...w,chapters:w.chapters.map(c=>({...c,quiz:c.quiz.map(q=>({id:q.id,question:q.question,options:q.options}))}))})),[outline]);
  if(error&&!state)return <p role="alert" className="feedback bad">{error}</p>;
  if(!state||!course)return <p className="hint" aria-busy="true">Cargando contenido…</p>;
- const isFundamentals=course.slug==='fundamentos'||course.assignments.some(a=>a.kind==='LEGACY_MODULE'&&a.ref==='fundamentos');
+ const isFundamentals=course.fundamentals;
+ const learnBase=course.slug?`/courses/${course.slug}/learn`:'#vista-previa';
  return <section className="course-editor outline-editor" aria-labelledby="outline-editor-title">
-  <Link href="/admin/courses">← Gestionar cursos</Link>
-  <p className="eyebrow">CONTENIDO DEL CURSO · MODO ENFOCADO</p><h1 id="outline-editor-title">{course.title}</h1>
+  <Link href={course.back.href}>{course.back.label}</Link>
+  <p className="eyebrow">{kind==='module'?'MÓDULO PROPIO':'CONTENIDO DEL CURSO'} · MODO ENFOCADO</p><h1 id="outline-editor-title">{course.title}</h1>
+  {kind==='module'&&<p className="hint">{course.courses?.length?`Asignado a: ${course.courses.map(c=>c.title).join(', ')}. Se muestra en esos cursos después del contenido propio de cada curso.`:'Aún no está asignado. Asígnalo desde Gestionar cursos → «Contenido asignado» → Módulos y experiencias.'}</p>}
   <p>Organiza el curso en <strong>semanas → capítulos → tarjetas</strong>. Cada tarjeta se lee sola: el texto (Markdown) a la izquierda y las gráficas (.mmd, .json, .svg) a la derecha. Agrega un minitest al final de cada capítulo (aprobación {OUTLINE_PASS_PERCENT} %).</p>
   <div className="outline-editor-bar">
    <span className="hint">{state.publishedAt?`Publicado (versión ${state.publishedRevision})`:'Sin publicar'} · borrador rev. {state.draftRevision}{dirty?' · cambios sin guardar':state.dirty?' · borrador con cambios no publicados':''}</span>
@@ -88,7 +97,7 @@ function OutlineEditor({courseId}:{courseId:string}){
   </div>
   {error&&<p role="alert" className="feedback bad">{error}</p>}{message&&<p role="status" className="feedback good">{message}</p>}
   <div className="outline-editor-grid">
-   <nav className="outline-tree" aria-label="Estructura del curso">
+   <nav className="outline-tree" aria-label={kind==='module'?'Estructura del módulo':'Estructura del curso'}>
     {!outline.weeks.length&&<p className="hint">El curso aún no tiene contenido. Crea la primera semana{isFundamentals?' o importa la copia de Fundamentos':''}.</p>}
     <ul>{outline.weeks.map((w,wi)=><li key={w.id}>
      <div className={`outline-node${sel?.week===w.id&&!sel.chapter?' is-selected':''}`}><button type="button" onClick={()=>setSel({week:w.id})}>Semana {wi+1} · {w.title}</button>
@@ -110,31 +119,68 @@ function OutlineEditor({courseId}:{courseId:string}){
    </nav>
    <div className="outline-form">
     {!sel||!week?<p className="hint">Selecciona una semana, un capítulo o una tarjeta para editarla.</p>
-    :card&&chapter?<CardForm key={card.id} card={card} onChange={next=>updCard(week.id,chapter.id,card.id,()=>next)}/>
+    :card&&chapter?<CardForm key={card.id} card={card} resolveHref={outlineHrefResolver(learnBase,outline.weeks)} onChange={next=>updCard(week.id,chapter.id,card.id,()=>next)}/>
     :chapter&&sel.quiz?<QuizForm key={chapter.id+'quiz'} chapter={chapter} onChange={quiz=>updChapter(week.id,chapter.id,c=>({...c,quiz}))}/>
     :chapter?<div><h2>Capítulo</h2><label>Título<input maxLength={160} value={chapter.title} onChange={e=>updChapter(week.id,chapter.id,c=>({...c,title:e.target.value}))}/></label><label>Resultado de aprendizaje<textarea maxLength={400} value={chapter.outcome} onChange={e=>updChapter(week.id,chapter.id,c=>({...c,outcome:e.target.value}))}/></label><p className="hint">{chapter.cards.length} tarjetas · minitest con {chapter.quiz.length} preguntas.</p></div>
-    :<div><h2>Semana {outline.weeks.indexOf(week)+1}</h2><label>Título<input maxLength={160} value={week.title} onChange={e=>updWeek(week.id,w=>({...w,title:e.target.value}))}/></label><label>Resumen<textarea maxLength={400} value={week.summary} onChange={e=>updWeek(week.id,w=>({...w,summary:e.target.value}))}/></label><p className="hint">Se muestra en el índice del curso como «SEMANA {String(outline.weeks.indexOf(week)+1).padStart(2,'0')}», con {week.chapters.length} capítulo(s).</p></div>}
+    :<WeekForm key={week.id} week={week} number={outline.weeks.indexOf(week)+1} weeks={outline.weeks} learnBase={learnBase} onChange={next=>updWeek(week.id,()=>next)}/>}
    </div>
   </div>
   {fullPreview&&<div className="lesson-modal" role="dialog" aria-modal="true" aria-label="Vista previa del curso"><div className="lesson-modal-card course-editor">
    <div className="course-toolbar"><button type="button" className="button button-outline" onClick={()=>setFullPreview(false)}>Cerrar vista previa</button></div>
-   <FocusedReader preview courseTitle={course.title} weeks={previewWeeks} initialChapter={sel?.chapter} grade={async(id,answers)=>localGrade(outline,id,answers)}/>
+   <FocusedReader preview courseTitle={course.title} learnHref={learnBase} weeks={previewWeeks} initialChapter={sel?.chapter} initialCard={sel?.card} grade={async(id,answers)=>localGrade(outline,id,answers)}/>
   </div></div>}
  </section>;
 }
-function CardForm({card,onChange}:{card:OutlineCard;onChange:(card:OutlineCard)=>void}){
+function CardForm({card,onChange,resolveHref}:{card:OutlineCard;onChange:(card:OutlineCard)=>void;resolveHref?:(href:string)=>string|null|undefined}){
  const [items,setItems]=useState<StudyItem[]>(()=>card.visuals.map((v,i)=>({key:`${card.id}-${i}`,filename:v.filename,kind:v.kind,content:v.content})));
  // Los .md cargados se vuelven el texto de la tarjeta; las gráficas válidas quedan a la derecha.
  const change=(next:StudyItem[])=>{const md=next.filter(i=>i.kind==='markdown');const visuals=next.filter(i=>i.kind!=='markdown');setItems(visuals);
-  onChange({...card,text:md.length?[card.text,...md.map(i=>i.content)].filter(t=>t.trim()).join('\n\n'):card.text,visuals:visuals.filter(i=>!i.error&&i.kind).map(i=>({filename:i.filename,kind:i.kind as 'mermaid'|'interaction'|'svg',content:i.content}))})};
+  onChange({...card,source:md.length&&!card.source?md[0].filename:card.source,text:md.length?[card.text,...md.map(i=>i.content)].filter(t=>t.trim()).join('\n\n'):card.text,visuals:visuals.filter(i=>!i.error&&i.kind).map(i=>({filename:i.filename,kind:i.kind as 'mermaid'|'interaction'|'svg',content:i.content}))})};
  return <div className="split">
   <div><h2>Tarjeta</h2>
    <label>Título<input maxLength={160} value={card.title} onChange={e=>onChange({...card,title:e.target.value})}/></label>
    <label>Texto (Markdown: **negrita**, listas, tablas, &gt; citas y bloques ```mermaid)<textarea className="markdown" maxLength={OUTLINE_LIMITS.text} value={card.text} onChange={e=>onChange({...card,text:e.target.value})}/></label>
    <p className="hint">{card.text.length.toLocaleString('es')} / {OUTLINE_LIMITS.text.toLocaleString('es')} caracteres</p>
+   <label>Archivo de origen (opcional)<input maxLength={120} placeholder="C01-tema.md" value={card.source??''} onChange={e=>onChange({...card,source:e.target.value.trim()?e.target.value:undefined})}/></label>
+   <p className="hint">Si el índice de la semana enlaza «[Tema](C01-tema.md)», el enlace abre esta tarjeta. Se completa solo al cargar un .md.</p>
    <fieldset><legend>Gráficas de la derecha ({card.visuals.length}/{OUTLINE_LIMITS.visuals})</legend><p className="hint">Arrastra .mmd, .json (mapa con globos o gráfica) o .svg. Si arrastras un .md, su texto se agrega al cuerpo de la tarjeta.</p><StudyFilesField items={items} onChange={change} label="Cargar gráficas de la tarjeta"/></fieldset>
   </div>
-  <div className="outline-preview" aria-label="Vista previa de la tarjeta"><p className="eyebrow">VISTA PREVIA · ASÍ LA VERÁ EL ESTUDIANTE</p><h1>{card.title||'Tarjeta sin título'}</h1><OutlineCardView card={card}/></div>
+  <div className="outline-preview" aria-label="Vista previa de la tarjeta"><p className="eyebrow">VISTA PREVIA · ASÍ LA VERÁ EL ESTUDIANTE</p><h1>{card.title||'Tarjeta sin título'}</h1><OutlineCardView card={card} resolveHref={resolveHref}/></div>
+ </div>;
+}
+const LINK=/\[([^\]]+)\]\(([^)\s]+)\)/g;
+/** Semana: título y resumen en Markdown (índice con enlaces a capítulos y tarjetas), con carga de .md y vista previa. */
+function WeekForm({week,number,weeks,learnBase,onChange}:{week:OutlineWeek;number:number;weeks:OutlineWeek[];learnBase:string;onChange:(week:OutlineWeek)=>void}){
+ const [fileError,setFileError]=useState('');
+ const resolveHref=useMemo(()=>outlineHrefResolver(learnBase,weeks,week.id),[learnBase,weeks,week.id]);
+ const chapters=weeks.flatMap(w=>w.chapters);
+ const links=[...week.summary.matchAll(LINK)].filter(m=>!/^(https?:|mailto:)/i.test(m[2]));
+ const broken=links.filter(m=>!resolveOutlineTarget(m[2],weeks,week.id));
+ const load=async(file:File|undefined)=>{
+  setFileError('');if(!file)return;
+  if(!/\.(md|markdown)$/i.test(file.name)){setFileError('Carga un archivo .md con el índice de la semana.');return}
+  const text=(await file.text()).replace(/^\uFEFF/,'').replace(/\r\n?/g,'\n');
+  if(text.length>OUTLINE_LIMITS.summary){setFileError(`El .md supera ${OUTLINE_LIMITS.summary.toLocaleString('es')} caracteres.`);return}
+  if(/<script|<iframe|javascript:/i.test(text)){setFileError('El índice no puede incluir scripts, iframes ni enlaces javascript:.');return}
+  if(week.summary.trim()&&!window.confirm('El resumen actual se reemplazará por el contenido del .md. ¿Continuar?'))return;
+  onChange({...week,summary:text});
+ };
+ return <div className="split">
+  <div><h2>Semana {number}</h2>
+   <label>Título<input maxLength={160} value={week.title} onChange={e=>onChange({...week,title:e.target.value})}/></label>
+   <label>Resumen e índice (Markdown)<textarea className="markdown" maxLength={OUTLINE_LIMITS.summary} value={week.summary} onChange={e=>onChange({...week,summary:e.target.value})}/></label>
+   <p className="hint">{week.summary.length.toLocaleString('es')} / {OUTLINE_LIMITS.summary.toLocaleString('es')} caracteres</p>
+   <label className="outline-file">Cargar .md del índice<input type="file" accept=".md,.markdown,text/markdown" onChange={e=>{void load(e.target.files?.[0]);e.target.value=''}}/></label>
+   {fileError&&<p role="alert" className="feedback bad">{fileError}</p>}
+   <details className="outline-link-help"><summary>Cómo enlazar capítulos y tarjetas</summary>
+    <p>Los enlaces abren la tarjeta en <strong>lectura enfocada</strong>:</p>
+    <ul><li><code>[Tema](capitulo:2)</code> · capítulo por número</li><li><code>[Tema](tarjeta:5)</code> · tarjeta por número</li><li><code>[Tema](C02-tema.md)</code> · tarjeta cargada desde ese .md (o «C02» = capítulo 2)</li><li><code>[Tema](Título del capítulo)</code> · por título</li></ul>
+    <p>Capítulos disponibles:</p><ol>{chapters.map(c=><li key={c.id}>{c.title} <small>· {c.cards.length} tarjeta(s){c.cards.some(k=>k.source)?` · ${c.cards.filter(k=>k.source).map(k=>k.source).join(', ')}`:''}</small></li>)}</ol>
+   </details>
+   {broken.length>0&&<p className="feedback bad" role="status">{broken.length===1?'1 enlace no':`${broken.length} enlaces no`} apunta(n) a un capítulo o tarjeta y se mostrará(n) como texto: {broken.slice(0,6).map(m=>`«${m[1]}» (${m[2]})`).join(', ')}{broken.length>6?'…':''}</p>}
+   {links.length>0&&!broken.length&&<p className="feedback good" role="status">✓ {links.length} enlace(s) del índice resueltos.</p>}
+  </div>
+  <div className="outline-preview" aria-label="Vista previa del índice de la semana"><p className="eyebrow">VISTA PREVIA · ÍNDICE DEL CURSO</p><p className="eyebrow">SEMANA {String(number).padStart(2,'0')}</p><h1>{week.title||'Semana sin título'}</h1>{week.summary.trim()?<StudyMarkdown source={week.summary} resolveHref={resolveHref}/>:<p className="hint">Escribe el resumen o carga un .md: aparecerá bajo el título de la semana en el índice del curso.</p>}</div>
  </div>;
 }
 function QuizForm({chapter,onChange}:{chapter:OutlineChapter;onChange:(quiz:OutlineQuestion[])=>void}){

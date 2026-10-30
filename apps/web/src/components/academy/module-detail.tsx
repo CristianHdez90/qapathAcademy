@@ -13,7 +13,8 @@ import tree from '@/features/navigation/learning-tree.json';
  * Vista del módulo (RQ-02 a RQ-04): sin tarjeta de objetivo/avance, sin estado ni MariBug y sin evaluación del módulo.
  * Fundamentos muestra sus 8 capítulos; el resto de módulos evalúa con el «Test de cierre» de su última semana (D-10).
  */
-export function ModuleDetail({module,weeks,resources,actions}:{module:Module;weeks:Week[];labs?:unknown[];resources:Resource[];quiz?:PublicQuestion[];actions?:ReactNode}){
+/** `extraRows`: filas adicionales del mismo índice (p. ej. «Lecturas complementarias» de la biblioteca). */
+export function ModuleDetail({module,weeks,resources,actions,extraRows}:{module:Module;weeks:Week[];labs?:unknown[];resources:Resource[];quiz?:PublicQuestion[];actions?:ReactNode;extraRows?:ReactNode}){
  const {state,ready}=useProgress();
  const next=nextLearningAction(state,module.weeks);
  const branch=tree.find(item=>item.id===module.id);
@@ -27,7 +28,7 @@ export function ModuleDetail({module,weeks,resources,actions}:{module:Module;wee
     return <li key={chapter.id}><Link href={`/study/${w.id}#${chapter.anchor}`}>Capítulo {String(chapter.number).padStart(2,'0')} · {chapter.title}</Link><small>{ready?(passed?'✓ Aprobado':`${read}/${chapter.cards.length} tarjetas leídas`):'Cargando…'}</small></li>;})}</ol>
    :<div className="chip-row">{w.topics.slice(0,2).map(t=><span className="skill-chip" key={t}>{t}</span>)}</div>}
   </div><span className="lesson-arrow" aria-hidden="true">↗</span></div>;
- })}</div>
+ })}{extraRows}</div>
  {module.id!=='fundamentos'&&weeks.length>0&&<p className="module-closing-test"><Link className="text-link" href={`/study/${weeks[weeks.length-1].id}#closing-test`}>Test de cierre del curso ↗</Link> <span>· al final de la semana {weeks[weeks.length-1].id}</span></p>}
  <section className="practice-banner" aria-label="Ejercicios prácticos del curso"><h2>Practica con herramientas reales</h2><p>Actividades por semana con ejecución, resultados y evidencia.</p><p>Prácticas completadas: {weeks.filter(w=>practiceCompleted(state.evidence,w.id)).length} / {weeks.length}</p><div className="practical-actions">{weeks.map(w=><Link key={w.id} className="button button-outline" href={`/practice/${w.id}`}>{state.evidence[`exercise:${w.id}`]?'✓ Práctica registrada':'Ejercicio'} · Semana {w.id} ↗</Link>)}</div></section>
  {resources.length>0&&<section className="resource-strip"><p className="eyebrow">DOCUMENTACIÓN OFICIAL</p>{resources.map(r=><a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer">{r.title} ↗</a>)}</section>}

@@ -1,7 +1,7 @@
 import {z} from 'zod';
 export const courseStatusSchema=z.enum(['DRAFT','PUBLISHED','ARCHIVED']);
-/** LESSON = lección de la biblioteca de contenido (ref = id). */
-const reference=z.object({kind:z.enum(['LEGACY_MODULE','SCRUM','CTFL','LESSON']),ref:z.string().min(1).max(100)}).strict();
+/** LESSON = lección de la biblioteca; MODULE = módulo propio (ref = id). */
+const reference=z.object({kind:z.enum(['LEGACY_MODULE','SCRUM','CTFL','LESSON','MODULE']),ref:z.string().min(1).max(100)}).strict();
 export const courseInputSchema=z.object({
  slug:z.string().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),title:z.string().trim().min(3).max(250),
  summary:z.string().trim().max(500),description:z.string().trim().max(8000),category:z.string().trim().min(1).max(80),

@@ -1,7 +1,9 @@
 import {Module} from '@nestjs/common';
-import {ManageCourseCatalog,ManageCourseLessons,ManageCourseOutline} from '@qapath/learning';
+import {ManageContentModules,ManageCourseCatalog,ManageCourseLessons,ManageCourseOutline} from '@qapath/learning';
+import {PostgresContentModulesAdapter} from './infrastructure/adapters/postgres-content-modules.adapter';
+import {AdminModulesController} from './presentation/controllers/content-modules.controller';
 import {PostgresCourseOutlineAdapter} from './infrastructure/adapters/postgres-course-outline.adapter';
-import {AdminCourseOutlineController,CourseOutlineController,OutlineProgressController} from './presentation/controllers/course-outline.controller';
+import {AdminCourseOutlineController,AdminModuleOutlineController,CourseOutlineController,OutlineProgressController} from './presentation/controllers/course-outline.controller';
 import {checkStudyFile} from '@qapath/contracts';
 import {PostgresCourseLessonsAdapter} from './infrastructure/adapters/postgres-course-lessons.adapter';
 import {CourseLessonsController,AdminCourseLessonsController} from './presentation/controllers/course-lessons.controller';
@@ -50,9 +52,10 @@ import {AiSettingsAdapter} from './infrastructure/adapters/ai-settings.adapter';
 import {GroqQaAdapter} from './infrastructure/adapters/groq-qa.adapter';
 import {QaAiAdapter} from './infrastructure/adapters/qa-ai.adapter';
 @Module({
- controllers:[AdminCourseOutlineController,CourseOutlineController,OutlineProgressController,CourseLessonsController,AdminCourseLessonsController,AppearanceController,AdminAppearanceController,CourseCatalogController,AdminCoursesController,PersonalPathsController,AiSettingsController,PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,FoundationCheckController,StudentFoundationCheckController,AdminController,InstructorController,QaAssistantController],
+ controllers:[AdminCourseOutlineController,AdminModuleOutlineController,AdminModulesController,CourseOutlineController,OutlineProgressController,CourseLessonsController,AdminCourseLessonsController,AppearanceController,AdminAppearanceController,CourseCatalogController,AdminCoursesController,PersonalPathsController,AiSettingsController,PracticeController,HealthController,CatalogController,QuizController,AuthController,ProgressController,StudentQuizController,FoundationCheckController,StudentFoundationCheckController,AdminController,InstructorController,QaAssistantController],
  providers:[
-  PostgresCourseCatalogAdapter,PostgresCourseLessonsAdapter,PostgresCourseOutlineAdapter,
+  PostgresCourseCatalogAdapter,PostgresCourseLessonsAdapter,PostgresCourseOutlineAdapter,PostgresContentModulesAdapter,
+  {provide:ManageContentModules,useFactory:(repo:PostgresContentModulesAdapter)=>new ManageContentModules(repo),inject:[PostgresContentModulesAdapter]},
   {provide:ManageCourseOutline,useFactory:(repo:PostgresCourseOutlineAdapter)=>new ManageCourseOutline(repo,checkStudyFile),inject:[PostgresCourseOutlineAdapter]},
   {provide:ManageCourseLessons,useFactory:(repo:PostgresCourseLessonsAdapter)=>new ManageCourseLessons(repo,checkStudyFile),inject:[PostgresCourseLessonsAdapter]},
   {provide:ManageCourseCatalog,useFactory:(repo:PostgresCourseCatalogAdapter)=>{const limit=Number(process.env.CATALOG_MAX_PATHS||10);if(!Number.isInteger(limit)||limit<1||limit>50)throw new Error('CATALOG_MAX_PATHS debe estar entre 1 y 50');return new ManageCourseCatalog(repo,new PersonalLearningPaths(repo),limit)},inject:[PostgresCourseCatalogAdapter]},

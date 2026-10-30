@@ -32,6 +32,8 @@ export class PostgresCourseCatalogAdapter implements CourseRepositoryPort{
   // Las lecciones asignadas deben existir en la biblioteca y no estar eliminadas.
   const lessons=input.assignments.filter(ref=>ref.kind==='LESSON').map(ref=>ref.ref);
   if(lessons.length&&Number((await db.query('SELECT count(*) total FROM course_lessons WHERE id::text=ANY($1::text[]) AND deleted_at IS NULL',[lessons])).rows[0].total)!==lessons.length)throw new CatalogError('INVALID','Alguna lección asignada no existe o fue eliminada. Recarga el editor.');
+  const modules=input.assignments.filter(ref=>ref.kind==='MODULE').map(ref=>ref.ref);
+  if(modules.length&&Number((await db.query('SELECT count(*) total FROM content_modules WHERE id::text=ANY($1::text[]) AND deleted_at IS NULL',[modules])).rows[0].total)!==modules.length)throw new CatalogError('INVALID','Algún módulo asignado no existe o fue eliminado. Recarga el editor.');
   await db.query('DELETE FROM course_content WHERE course_id=$1',[id]);
   for(const [position,ref] of input.assignments.entries())await db.query('INSERT INTO course_content(course_id,kind,content_ref,position) VALUES($1,$2,$3,$4)',[id,ref.kind,ref.ref,position]);
  }
@@ -50,7 +52,13 @@ export class PostgresCourseCatalogAdapter implements CourseRepositoryPort{
  }
  async update(actor:string,id:string,revision:number,input:CourseInput,status:CourseStatus){return this.transaction(async db=>{
   const before=await this.locked(db,id,revision);courseTransition(before,status);
-  if(before.slug!==input.slug)throw new CatalogError('CONFLICT','El slug es estable y no puede cambiarse.');
+  // Slug editable (cambia la URL /courses/:slug). Los cursos base del catálogo lo conservan porque la plataforma enlaza a ellos.
+  if(before.slug!==input.slug){
+   const seeded=(await db.query('SELECT catalog_seeded FROM courses WHERE id=$1',[id])).rows[0]?.catalog_seeded===true;
+   if(seeded)throw new CatalogError('CONFLICT','Este curso es parte del catálogo base: su slug (URL) no puede cambiarse.');
+   if((await db.query('SELECT 1 FROM courses WHERE slug=$1 AND id<>$2',[input.slug,id])).rowCount)throw new CatalogError('CONFLICT',`El slug «${input.slug}» ya lo usa otro curso.`);
+   await db.query('UPDATE courses SET slug=$2 WHERE id=$1',[id,input.slug]);
+  }
   const lessonRefs=input.assignments.filter(ref=>ref.kind==='LESSON').map(ref=>ref.ref);
   validateCourse(input,status,lessonRefs.length?Number((await db.query("SELECT count(*) total FROM course_lessons WHERE id::text=ANY($1::text[]) AND status='PUBLISHED' AND deleted_at IS NULL",[lessonRefs])).rows[0].total):0);
   await db.query('UPDATE courses SET title=$2,summary=$3,description=$4,category=$5,skills=$6::jsonb,cover=$7,position=$8,content_kind=$9,status=$10,published=$11,coming_soon=$12,catalog_managed=true,revision=revision+1,updated_at=now() WHERE id=$1',[id,...values(input),status,status==='PUBLISHED',input.comingSoon===true]);

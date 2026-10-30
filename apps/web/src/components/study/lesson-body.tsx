@@ -1,6 +1,6 @@
 'use client';
 import type {StudyFileKind} from '@qapath/contracts';
-import {StudyMarkdown} from './study-markdown';
+import {StudyMarkdown,type HrefResolver} from './study-markdown';
 import {StudyFileView} from './study-file-view';
 type File={kind:StudyFileKind;filename:string;content:string};
 type Section={key:string;text?:string;visuals:File[]};
@@ -25,11 +25,11 @@ export function lessonSections(files:File[],title?:string):Section[]{
  });
  return sections;
 }
-export function LessonBody({files,title}:{files:File[];title?:string}){
+export function LessonBody({files,title,resolveHref}:{files:File[];title?:string;resolveHref?:HrefResolver}){
  return <div className="study-lesson-files">{lessonSections(files,title).map(section=>{
   const visuals=section.visuals.map((file,i)=><StudyFileView key={i} file={file}/>);
   if(section.text===undefined)return <section key={section.key} className="study-section">{visuals}</section>;
-  if(!section.visuals.length)return <section key={section.key} className="study-section"><StudyMarkdown source={section.text}/></section>;
-  return <section key={section.key} className="study-section has-aside"><div className="study-section-text"><StudyMarkdown source={section.text}/></div><aside className="study-section-aside" aria-label="Gráficas de la sección">{visuals}</aside></section>;
+  if(!section.visuals.length)return <section key={section.key} className="study-section"><StudyMarkdown source={section.text} resolveHref={resolveHref}/></section>;
+  return <section key={section.key} className="study-section has-aside"><div className="study-section-text"><StudyMarkdown source={section.text} resolveHref={resolveHref}/></div><aside className="study-section-aside" aria-label="Gráficas de la sección">{visuals}</aside></section>;
  })}</div>;
 }
