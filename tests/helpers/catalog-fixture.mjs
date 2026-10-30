@@ -33,7 +33,7 @@ export async function createCatalogFixture({port=0,origin='http://localhost:3017
  historical.quizzes={cicd:100,portafolio:100};const initialProgress=progress.fromUnknown(historical);
  await db.query('INSERT INTO student_progress(user_id,state) VALUES($1,$2::jsonb)',[fixtureUsers['student-a'].id,JSON.stringify(initialProgress)]);
  const migration=readFileSync(new URL('../../packages/database/sql/008_course_catalog.sql',import.meta.url),'utf8');await db.exec(migration);
- for(const file of ['011_course_coming_soon.sql','012_course_lessons.sql'])await db.exec(readFileSync(new URL('../../packages/database/sql/'+file,import.meta.url),'utf8'));
+ for(const file of ['011_course_coming_soon.sql','012_course_lessons.sql','013_lesson_library.sql'])await db.exec(readFileSync(new URL('../../packages/database/sql/'+file,import.meta.url),'utf8'));
  const query=async(sql,args)=>{const result=await db.query(sql,args);return {rows:result.rows,rowCount:result.affectedRows??result.rows.length}};
  let gate=Promise.resolve();
  const pool={query,connect:async()=>{let release;const next=new Promise(done=>{release=done}),previous=gate;gate=previous.then(()=>next);await previous;return {query,release}}};

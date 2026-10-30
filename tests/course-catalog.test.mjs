@@ -8,9 +8,13 @@ test('course invariants reject unsafe slugs, covers, references and unusable pub
  assert.doesNotThrow(()=>validateCourse(input,'PUBLISHED'));
  for(const change of [{slug:'../x'},{cover:'https://untrusted.example/a.svg'},{title:'x'},{position:-1},{assignments:[{kind:'LEGACY_MODULE',ref:'unknown'}]},{assignments:[...input.assignments,...input.assignments]}])assert.throws(()=>validateCourse({...input,...change},'PUBLISHED'));
  assert.throws(()=>validateCourse({...input,assignments:[]},'PUBLISHED'));assert.doesNotThrow(()=>validateCourse({...input,assignments:[]},'DRAFT'));
- // SPEC-CONTENT-320: un curso CURATED puede publicarse solo con lecciones de estudio publicadas.
- const curated={...input,contentKind:'CURATED',assignments:[]};
- assert.throws(()=>validateCourse(curated,'PUBLISHED',0));assert.doesNotThrow(()=>validateCourse(curated,'PUBLISHED',1));assert.throws(()=>validateCourse({...curated,summary:''},'PUBLISHED',2));
+ // SPEC-CONTENT-321: lecciones de la biblioteca como contenido asignado (en cualquier tipo de curso).
+ const lesson={kind:'LESSON',ref:'6f1c3a52-3e1b-4c55-9d0e-1a2b3c4d5e6f'},curated={...input,contentKind:'CURATED',assignments:[lesson]};
+ assert.throws(()=>validateCourse({...curated,assignments:[]},'PUBLISHED',0));assert.throws(()=>validateCourse(curated,'PUBLISHED',0));
+ assert.doesNotThrow(()=>validateCourse(curated,'PUBLISHED',1));assert.throws(()=>validateCourse({...curated,summary:''},'PUBLISHED',1));
+ assert.doesNotThrow(()=>validateCourse({...input,assignments:[...input.assignments,lesson]},'PUBLISHED',0));
+ assert.throws(()=>validateCourse({...curated,assignments:[{kind:'LESSON',ref:'../etc'}]},'DRAFT'));
+ assert.throws(()=>validateCourse({...input,assignments:[...input.assignments,{kind:'LEGACY_MODULE',ref:'fundamentos'}]},'DRAFT'));
  assert.equal(courseInputSchema.safeParse({...input,userId:'forged'}).success,false);
  assert.equal(courseUpdateSchema.safeParse({...input,status:'ARCHIVED',revision:1}).success,false);
 });

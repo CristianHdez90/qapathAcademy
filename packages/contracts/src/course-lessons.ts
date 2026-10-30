@@ -8,7 +8,7 @@ export const STUDY_FILE_KINDS=['markdown','mermaid','interaction','svg'] as cons
 export type StudyFileKind=typeof STUDY_FILE_KINDS[number];
 export const STUDY_FILE_LIMITS:Record<StudyFileKind,number>={markdown:200_000,mermaid:50_000,interaction:200_000,svg:300_000};
 export const MAX_FILES_PER_LESSON=30;
-export const MAX_LESSONS_PER_COURSE=60;
+export const MAX_LESSONS_PER_COURSE=200;
 export const STUDY_FILE_ACCEPT='.md,.markdown,.mmd,.mermaid,.json,.svg';
 const EXPORT_HINT:Record<string,string>={
  drawio:'Los archivos .drawio deben exportarse a SVG: en diagrams.net usa Archivo → Exportar como → SVG y carga ese .svg.',
@@ -88,15 +88,16 @@ export function suggestLessonTitle(filename:string,content:string){
  return (heading||filename.replace(/\.[^.]+$/,'').replace(/[-_]+/g,' ')).slice(0,160);
 }
 
-export const lessonStatusSchema=z.enum(['DRAFT','PUBLISHED','ARCHIVED']);
+export const lessonStatusSchema=z.enum(['DRAFT','PUBLISHED']);
 export const studyFileUploadSchema=z.object({filename:z.string().min(3).max(120),content:z.string().min(1).max(320_000)}).strict();
-export const lessonInputSchema=z.object({title:z.string().trim().min(3).max(160),summary:z.string().trim().max(400).default(''),files:z.array(studyFileUploadSchema).max(MAX_FILES_PER_LESSON).default([])}).strict();
+export const lessonInputSchema=z.object({title:z.string().trim().min(3).max(160),summary:z.string().trim().max(400).default(''),status:lessonStatusSchema.default('DRAFT'),files:z.array(studyFileUploadSchema).max(MAX_FILES_PER_LESSON).default([])}).strict();
 export const lessonUpdateSchema=z.object({
- revision:z.number().int().positive(),title:z.string().trim().min(3).max(160),summary:z.string().trim().max(400),status:z.enum(['DRAFT','PUBLISHED']),
+ revision:z.number().int().positive(),title:z.string().trim().min(3).max(160),summary:z.string().trim().max(400),status:lessonStatusSchema,
  /** Orden final de la lección: archivos existentes ({id}) y nuevos ({filename,content}). Los existentes omitidos se retiran (no se borran). */
  files:z.array(z.union([z.object({id:z.string().uuid()}).strict(),studyFileUploadSchema])).max(MAX_FILES_PER_LESSON),
 }).strict();
-export const lessonReorderSchema=z.object({order:z.array(z.object({id:z.string().uuid(),revision:z.number().int().positive()}).strict()).min(1).max(MAX_LESSONS_PER_COURSE)}).strict();
+export const lessonLibraryQuerySchema=z.object({search:z.string().max(120).default(''),deleted:z.enum(['true','false']).default('false')}).strict();
 export type StudyFileDTO={id:string;kind:StudyFileKind;filename:string;content:string;size:number;position:number};
-export type LessonSummaryDTO={id:string;courseId:string;position:number;title:string;summary:string;status:z.infer<typeof lessonStatusSchema>;revision:number;fileCount:number;kinds:StudyFileKind[];updatedAt:string};
+export type LessonCourseUseDTO={id:string;slug:string;title:string;status:string};
+export type LessonSummaryDTO={id:string;title:string;summary:string;status:z.infer<typeof lessonStatusSchema>;revision:number;fileCount:number;kinds:StudyFileKind[];updatedAt:string;deletedAt:string|null;courses:LessonCourseUseDTO[]};
 export type LessonDTO=LessonSummaryDTO&{files:StudyFileDTO[]};

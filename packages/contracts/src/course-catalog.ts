@@ -1,12 +1,13 @@
 import {z} from 'zod';
 export const courseStatusSchema=z.enum(['DRAFT','PUBLISHED','ARCHIVED']);
-const reference=z.object({kind:z.enum(['LEGACY_MODULE','SCRUM','CTFL']),ref:z.string().min(1).max(100)}).strict();
+/** LESSON = lección de la biblioteca de contenido (ref = id). */
+const reference=z.object({kind:z.enum(['LEGACY_MODULE','SCRUM','CTFL','LESSON']),ref:z.string().min(1).max(100)}).strict();
 export const courseInputSchema=z.object({
  slug:z.string().min(3).max(100).regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),title:z.string().trim().min(3).max(250),
  summary:z.string().trim().max(500),description:z.string().trim().max(8000),category:z.string().trim().min(1).max(80),
  skills:z.array(z.string().trim().min(1).max(80)).max(24),position:z.number().int().min(0).max(10000),
  cover:z.string().max(300).regex(/^\/course-covers\/[a-zA-Z0-9_-]+\.(svg|png|webp|jpg)$/).nullable(),
- contentKind:z.enum(['LEGACY_MODULE','SCRUM','CTFL','CURATED']),assignments:z.array(reference).max(24),
+ contentKind:z.enum(['LEGACY_MODULE','SCRUM','CTFL','CURATED']),assignments:z.array(reference).max(200),
  /** «En construcción»: visible en el catálogo con aviso, sin ofrecer aún el contenido. */
  comingSoon:z.boolean().optional(),
 }).strict();
