@@ -10,7 +10,7 @@ test('registro → verificar correo → iniciar sesión → guardar progreso →
  await page.goto('/register');await page.getByLabel('Correo electrónico').fill(email);
  await page.getByLabel('Contraseña',{exact:true}).fill(password);await page.getByLabel('Confirmar contraseña').fill(password);
  await page.getByRole('button',{name:/Registrarme/}).click();
- await expect(page.getByText(/enviamos instrucciones de verificación/)).toBeVisible();
+ await expect(page).toHaveURL(/\/login\?registered=1$/);await expect(page.getByRole('status')).toContainText('Te enviamos un enlace de verificación');
  await verifyEmail(page,email);
  await page.goto('/login');await page.getByLabel('Correo electrónico').fill(email);await page.getByLabel('Contraseña').fill(password);
  await page.getByRole('button',{name:/Continuar/}).click();await expect(page).toHaveURL(/account/);

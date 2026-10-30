@@ -15,7 +15,7 @@ test('Firebase Auth: correo, sesión, PostgreSQL, MFA y aislamiento',async({page
  await page.getByLabel('Contraseña',{exact:true}).fill(password);
  await page.getByLabel('Confirmar contraseña').fill(password);
  await page.getByRole('button',{name:/Registrarme/}).click();
- await expect(page.getByRole('status')).toContainText('enviamos instrucciones');
+ await expect(page).toHaveURL(/\/login\?registered=1$/);await expect(page.getByRole('status')).toContainText('Te enviamos un enlace de verificación');
  const inbox=await fetch(`http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}/emulator/v1/projects/${process.env.FIREBASE_PROJECT_ID}/oobCodes`).then(r=>r.json()) as {oobCodes:{email:string;oobCode:string}[]};
  const code=inbox.oobCodes.find(item=>item.email===email)?.oobCode;
  expect(!!code).toBeTruthy();

@@ -71,8 +71,13 @@ export class SecureAuthenticationService {
       const {user}=await this.userByEmail(emailInput);
       if(!user||!user.isActive)return {message:'Si corresponde, recibirás un enlace de verificación.'};
       if(user.lockedUntil&&user.lockedUntil>new Date())throw new AccountLocked();
-      try{const linked=await this.externalCredentials(user,password);await this.externalVerification(linked,password)}catch(error){if(!(error instanceof AuthError))throw error;await this.d.users.recordFailure(user.id)}
-      return {message:'Si corresponde, recibirás un enlace de verificación.'};
+      let linked:IdentityUser;
+      try{linked=await this.externalCredentials(user,password)}catch(error){if(!(error instanceof AuthError))throw error;await this.d.users.recordFailure(user.id);return {message:'Si el correo y la contraseña son correctos, recibirás un enlace de verificación.'}}
+      // Con la contraseña correcta ya se demostró la titularidad: se puede informar el estado real sin revelar cuentas a terceros.
+      if(linked.emailVerifiedAt)return {message:'Tu correo ya está verificado. Ya puedes iniciar sesión.',verified:true};
+      const sent=await this.externalVerification(linked,password);
+      return sent?{message:'Te enviamos un nuevo enlace de verificación. Revisa también la carpeta de spam o promociones.',sent:true}
+       :{message:'Ya enviamos un enlace hace poco. Revisa tu correo (también spam) o inténtalo de nuevo en unos minutos.'};
     }
     // Responses are identical for existing, unknown and verified accounts.
     try{const {user}=await this.userByEmail(emailInput);if(user)await this.sendVerification(user)}catch(err){if(!(err instanceof AuthError))throw err}
@@ -240,9 +245,10 @@ export class SecureAuthenticationService {
     return this.d.users.syncExternalVerification(user.id,identity.emailVerified);
   }
   private async externalVerification(user:IdentityUser,password:string){
-    if(user.emailVerifiedAt||!user.isActive)return;
+    if(user.emailVerifiedAt||!user.isActive)return false;
     const allowed=await this.d.security.createVerification(user.id,this.d.tokens.hash(this.d.tokens.issue()),new Date(Date.now()+DAY));
     if(allowed)await this.d.external!.sendVerification(user.email,password);
+    return allowed;
   }
   async updateExternalEmail(userId:string,email:string){
     if(!this.d.external)return;

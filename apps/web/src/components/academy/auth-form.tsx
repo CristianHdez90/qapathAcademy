@@ -4,14 +4,14 @@ import {useRouter} from 'next/navigation';
 import {useState} from 'react';
 import type {FormEvent} from 'react';
 import {useAuth,authRedirect} from '@/features/auth/auth-provider';
-export function AuthForm({mode}:{mode:'login'|'register'}){
+export function AuthForm({mode,registered=false}:{mode:'login'|'register';registered?:boolean}){
  const {signIn,signUp,loading}=useAuth();const router=useRouter();
  const [email,setEmail]=useState(''),[password,setPassword]=useState(''),[confirm,setConfirm]=useState('');
  const [error,setError]=useState(''),[message,setMessage]=useState(''),[busy,setBusy]=useState(false);const register=mode==='register';
  async function submit(e:FormEvent){e.preventDefault();setError('');setMessage('');
   if(register&&password!==confirm){setError('Las contraseñas no coinciden.');return;}
   setBusy(true);try{
-   if(register){const result=await signUp(email,password);setMessage(result.message+' Revisa tu correo antes de iniciar sesión.');setPassword('');setConfirm('');}
+   if(register){await signUp(email,password);setPassword('');setConfirm('');router.replace('/login?registered=1');return;}
    else{const outcome=await signIn(email,password);router.replace(authRedirect(outcome,new URLSearchParams(location.search).get('next')));}
   }catch(e){setError(e instanceof Error?e.message:'No fue posible completar la solicitud.')}finally{setBusy(false)}
  }
@@ -20,9 +20,9 @@ export function AuthForm({mode}:{mode:'login'|'register'}){
  <form onSubmit={e=>{void submit(e)}}><label>Correo electrónico<input disabled={loading} autoComplete="email" type="email" required maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="estudiante@ejemplo.com"/></label>
  <label>Contraseña<input disabled={loading} autoComplete={register?'new-password':'current-password'} type="password" required minLength={register?12:1} maxLength={128} value={password} onChange={e=>setPassword(e.target.value)} placeholder={register?'Mínimo 12 caracteres':'Tu contraseña'}/></label>
  {register&&<label>Confirmar contraseña<input disabled={loading} type="password" autoComplete="new-password" required minLength={12} value={confirm} onChange={e=>setConfirm(e.target.value)}/></label>}
+ {!register&&registered&&!error&&<div role="status" className="feedback good"><p><strong>Cuenta creada.</strong> Te enviamos un enlace de verificación: ábrelo (revisa también spam o promociones) y luego inicia sesión aquí.</p><p><Link className="text-link" href="/verify-email">¿No te llegó el correo? Reenviar verificación</Link></p></div>}
  {error&&<p role="alert" className="feedback bad">{error}</p>}{message&&<p role="status" className="feedback good">{message}</p>}
  <button className="button button-primary" disabled={loading||busy}>{busy?'Procesando…':register?'Registrarme':'Continuar'} ↗</button></form>
  <p>{register?'¿Ya tienes cuenta?':'¿Aún no tienes cuenta?'} <Link className="text-link" href={register?'/login':'/register'}>{register?'Iniciar sesión':'Registrarme'}</Link></p>
- {!register&&<p><Link className="text-link" href="/verify-email">Reenviar correo de verificación</Link></p>}
  <p className="hint">Las sesiones y los desafíos MFA usan cookies HttpOnly. No almacenamos claves en el navegador.</p></section></div>;
 }
