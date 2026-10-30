@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import {useCallback,useEffect,useMemo,useState} from 'react';
 import type {CSSProperties} from 'react';
-import {APPEARANCE_PRESETS,APPEARANCE_TOKEN_KEYS,COURSE_ACCENTS,COURSE_ILLUSTRATIONS,CONTRAST_RULES,PRESET_LABELS,PRESET_TOKENS,contrastRatio,type AdminAppearanceDTO,type AppearanceConfig,type AppearancePreset,type AppearanceTokenKey,type AppearanceVersionDTO,type CourseDTO,type CoursePageDTO,type CoursePresentation} from '@qapath/contracts';
+import {APPEARANCE_PRESETS,APPEARANCE_TOKEN_KEYS,COURSE_ACCENTS,COURSE_ILLUSTRATIONS,CONTRAST_RULES,PRESET_DESCRIPTIONS,PRESET_LABELS,PRESET_TOKENS,contrastRatio,type AdminAppearanceDTO,type AppearanceConfig,type AppearancePreset,type AppearanceTokenKey,type AppearanceVersionDTO,type CourseDTO,type CoursePageDTO,type CoursePresentation} from '@qapath/contracts';
 import {useAuth} from '@/features/auth/auth-provider';
 import {courseRequest,CourseApiError} from '@/features/courses/course-api';
 import {courseAccent,orderCourses,themeVars} from '@/features/appearance/appearance';
@@ -70,7 +70,7 @@ function Editor(){
    <h2>Presets de diseño</h2>
    <div className="appearance-presets" role="radiogroup" aria-label="Preset de diseño">{APPEARANCE_PRESETS.map(preset=>{const tokens=PRESET_TOKENS[preset];return <button key={preset} type="button" role="radio" aria-checked={config.preset===preset} className={`appearance-preset${config.preset===preset?' is-active':''}`} onClick={()=>setPreset(preset)}>
     <span className="appearance-swatch" style={{background:tokens.background,borderColor:tokens.border}}><i style={{background:tokens.surface}}/><i style={{background:tokens.primary}}/><i style={{background:tokens.accent}}/><i style={{background:tokens.textPrimary}}/></span>
-    <strong>{PRESET_LABELS[preset]}</strong><small>{preset==='qapath-original'?'Diseño actual: azul noche + turquesa':preset==='midnight-violet'?'Oscuro + violeta + aqua':preset==='indigo-digital'?'Claro + índigo + lima':'Claro cálido + coral + dorado'}</small>{config.preset===preset&&<span className="types-here">Seleccionado</span>}</button>})}</div>
+    <strong>{PRESET_LABELS[preset]}</strong><small>{PRESET_DESCRIPTIONS[preset]}</small>{config.preset===preset&&<span className="types-here">Seleccionado</span>}</button>})}</div>
    <div className="appearance-row"><h2>Ajuste de tokens</h2><button type="button" className="button button-outline" onClick={()=>setPreset(config.preset)}>Restablecer preset</button></div>
    <p className="hint">El tema publicado se aplica en toda la plataforma: Home, cursos, lecciones, prácticas, cuenta y administración. Solo colores hexadecimales de tokens autorizados; no se aceptan estilos CSS libres.</p>
    <div className="appearance-tokens">{APPEARANCE_TOKEN_KEYS.map(key=><label key={key} className="appearance-token"><span>{TOKEN_LABELS[key]}</span><span className="appearance-token-inputs"><input type="color" value={config.tokens[key]} onChange={e=>update({tokens:{...config.tokens,[key]:e.target.value}})} aria-label={`${TOKEN_LABELS[key]} (selector)`}/><input type="text" value={config.tokens[key]} maxLength={7} pattern="#[0-9a-fA-F]{6}" onChange={e=>update({tokens:{...config.tokens,[key]:e.target.value}})} aria-label={`${TOKEN_LABELS[key]} (hexadecimal)`}/></span></label>)}</div>

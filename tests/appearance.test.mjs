@@ -6,7 +6,8 @@ const c=require('../packages/contracts/dist/index.js');
 const {ManageAppearance,AppearanceConflict,AppearanceInvalid}=require('../libs/administration/dist/index.js');
 
 test('SPEC-UX-310: los cuatro presets cumplen el contraste mínimo y QAPath Original reproduce el diseño actual',()=>{
- assert.deepEqual([...c.APPEARANCE_PRESETS],['qapath-original','midnight-violet','indigo-digital','coral-studio']);
+ assert.deepEqual([...c.APPEARANCE_PRESETS],['qapath-original','midnight-violet','indigo-digital','coral-studio','ocean-depths','forest-night','graphite-pro','sunset-dusk','arctic-light','mint-fresh','lavender-calm','sand-paper','high-contrast']);
+ for(const preset of c.APPEARANCE_PRESETS){assert.ok(c.PRESET_LABELS[preset],preset);assert.ok(c.PRESET_DESCRIPTIONS[preset],preset);assert.equal(c.appearanceTokensSchema.safeParse(c.PRESET_TOKENS[preset]).success,true,preset)}
  for(const preset of c.APPEARANCE_PRESETS)assert.deepEqual(c.contrastIssues(c.PRESET_TOKENS[preset]),[],preset);
  assert.equal(c.DEFAULT_APPEARANCE.preset,'qapath-original');assert.equal(c.DEFAULT_APPEARANCE.home.title,'Explora cursos');
  assert.equal(c.isLightTheme(c.PRESET_TOKENS['indigo-digital']),true);assert.equal(c.isLightTheme(c.PRESET_TOKENS['qapath-original']),false);
