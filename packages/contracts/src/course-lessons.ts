@@ -42,6 +42,14 @@ export const chartInteractionSchema=z.object({
  if(chart.chart==='pie'&&chart.series.length!==1)ctx.addIssue({code:'custom',message:'Una gráfica de torta usa exactamente una serie.'});
  chart.data.forEach((row,index)=>{if(!(chart.xKey in row))ctx.addIssue({code:'custom',message:`Fila ${index+1}: falta «${chart.xKey}».`});for(const serie of chart.series)if(typeof row[serie.key]!=='number')ctx.addIssue({code:'custom',message:`Fila ${index+1}: «${serie.key}» debe ser numérico.`})});
 });
+/** Gráficas de Fundamentos reutilizables: mapa de tipos de prueba, pirámide de niveles o bloques de apoyo (se muestran como texto). */
+const FUNDAMENTOS_TYPES=['functional','nonfunctional','blackbox','whitebox','static','scope','purpose','changes','approach'] as const;
+const FUNDAMENTOS_LEVELS=['component','componentIntegration','system','systemIntegration','acceptance','roles'] as const;
+export const fundamentosInteractionSchema=z.object({
+ type:z.literal('fundamentos'),view:z.enum(['types-map','levels-pyramid','bloques']),
+ focus:z.union([z.array(z.enum(FUNDAMENTOS_TYPES)).max(9),z.enum(FUNDAMENTOS_LEVELS)]).optional(),compact:z.boolean().optional(),
+ blocks:z.array(z.object({kind:z.enum(['h','p','list','table','callout','flow','code','facts','gherkin'])}).passthrough()).max(40).optional(),
+}).strict();
 export type GraphInteraction=z.infer<typeof graphInteractionSchema>;
 export type ChartInteraction=z.infer<typeof chartInteractionSchema>;
 export type StudyInteraction=GraphInteraction|ChartInteraction;
@@ -69,8 +77,8 @@ export function checkStudyFile(filename:string,raw:string):StudyFileCheck{
  if(kind==='interaction'){
   let json:unknown;try{json=JSON.parse(content)}catch(error){return {ok:false,message:`JSON inválido: ${(error as Error).message}`}}
   const type=(json as {type?:unknown})?.type;
-  const schema=type==='graph'?graphInteractionSchema:type==='chart'?chartInteractionSchema:undefined;
-  if(!schema)return {ok:false,message:'El JSON debe declarar "type": "graph" (React Flow) o "type": "chart" (Recharts).'};
+  const schema=type==='graph'?graphInteractionSchema:type==='chart'?chartInteractionSchema:type==='fundamentos'?fundamentosInteractionSchema:undefined;
+  if(!schema)return {ok:false,message:'El JSON debe declarar "type": "graph" (React Flow), "chart" (Recharts) o "fundamentos" (mapas de Fundamentos).'};
   const parsed=schema.safeParse(json);if(!parsed.success)return {ok:false,message:`Interacción inválida · ${firstIssue(parsed.error)}`};
   return {ok:true,kind,content:JSON.stringify(parsed.data,null,1)};
  }

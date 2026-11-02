@@ -9,7 +9,7 @@ import {publishReadingContext} from '@/features/assistant/reading-suggestions';
 import {STUDY_MODE_EVENT} from '@/features/progress/use-focused-study-mode';
 import {StudyDialog,STUDY_TOOL_EVENT,announceStudyTool} from '@/components/academy/study-dialog';
 import {OutlineCardView} from './outline-card';
-import {outlineHrefResolver} from './outline-links';
+import {chapterName,outlineHrefResolver} from './outline-links';
 import '@/components/study/study.css';
 import '@/components/academy/focused-study.css';
 import '@/components/academy/course-study-menu.css';
@@ -91,8 +91,8 @@ export function FocusedReader({courseTitle,courseHref,learnHref,weeks,initialCha
  const stepLabel=(s:Step)=>s.kind==='quiz'?`Minitest · ${s.chapter.title}`:s.chapter.cards[s.cardIndex].title;
  return <div className={preview?'outline-reader':'focused-study outline-reader'} data-outline-reader>
   <header className="focused-header">{courseHref?<Link href={courseHref} className="text-link">← Volver al curso</Link>:<span/>}{preview&&<p className="outline-preview-flag">VISTA PREVIA · el avance no se guarda</p>}
-   <div><p className="eyebrow">SEMANA {two(step.weekIndex+1)} · {step.week.title.toUpperCase()}</p><h1>{courseTitle}</h1></div>
-   <p className="focused-navigation-status" aria-live="polite" aria-atomic="true">Capítulo {two(step.chapterNumber)} · {step.chapter.title} · paso {position} de {chapterSteps.length} · {percent}% del curso leído</p>
+   <div><p className="eyebrow">SEMANA {two(step.weekIndex+1)} · {courseTitle}</p><h1>{step.week.title}</h1></div>
+   <p className="focused-navigation-status" aria-live="polite" aria-atomic="true">Capítulo {two(step.chapterNumber)} · {chapterName(step.chapter.title)} · paso {position} de {chapterSteps.length} · {percent}% del curso leído</p>
    <progress aria-label="Avance del curso" value={percent} max={100}/></header>
   <section className="focused-card" aria-labelledby="outline-step-title" onClickCapture={followInternal}>
    <p className="chapter-label">CAPÍTULO {two(step.chapterNumber)} · {position} / {chapterSteps.length}</p>
@@ -124,7 +124,7 @@ export function FocusedReader({courseTitle,courseHref,learnHref,weeks,initialCha
       <div className="course-menu-row"><a className="course-menu-button" href={first?`${base}?chapter=${first.id}`:base} aria-current={current?'page':undefined} onClick={event=>{if(first&&plain(event)){event.preventDefault();goTo({chapter:first.id})}}}>{done&&<span className="course-menu-done" aria-label="Semana completada">✓</span>}Semana {wi+1} · lectura ↗</a></div>
       {current&&<p className="course-menu-here">Estás aquí · {week.title}</p>}
       <ol className="course-menu-chapters">{week.chapters.map(chapter=>{const n=steps.find(s=>s.chapter.id===chapter.id)?.chapterNumber??0;
-       return <li key={chapter.id}><a href={`${base}?chapter=${chapter.id}`} aria-current={chapter.id===step.chapter.id?'step':undefined} onClick={event=>{if(plain(event)){event.preventDefault();goTo({chapter:chapter.id})}}}>Capítulo {two(n)} · {chapter.title}</a>{chapterDone(chapter)&&<span className="course-menu-done" aria-label="Completado">✓</span>}</li>})}</ol>
+       return <li key={chapter.id}><a href={`${base}?chapter=${chapter.id}`} aria-current={chapter.id===step.chapter.id?'step':undefined} onClick={event=>{if(plain(event)){event.preventDefault();goTo({chapter:chapter.id})}}}>Capítulo {two(n)} · {chapterName(chapter.title)}</a>{chapterDone(chapter)&&<span className="course-menu-done" aria-label="Completado">✓</span>}</li>})}</ol>
      </div>})}
     <p className="course-menu-progress">Avance del curso: <strong>{percent}%</strong></p>
    </details></nav>

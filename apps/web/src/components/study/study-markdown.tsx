@@ -4,6 +4,7 @@ import {useMemo} from 'react';
 import ReactMarkdown,{type Components} from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {MermaidDiagram} from './lazy';
+import {RichFence} from '@/components/outline/rich-blocks';
 /**
  * Lección .md: Markdown + GFM (tablas, listas de tareas). El HTML crudo se muestra como texto (no se interpreta).
  * Los bloques ```mermaid se dibujan como diagramas. Los encabezados bajan un nivel: el título de la lección es el h1.
@@ -17,6 +18,8 @@ const components:Components={
  code:({className,children})=>{
   const language=/language-([\w-]+)/.exec(className||'')?.[1],text=String(children??'').replace(/\n$/,'');
   if(language==='mermaid')return <MermaidDiagram code={text}/>;
+  // Bloques enriquecidos (```qapath-…): mismos componentes y estilos que Fundamentos.
+  if(language?.startsWith('qapath-'))return <RichFence language={language} source={text}/>;
   if(!language&&!text.includes('\n'))return <code>{children}</code>;
   return <pre className="study-code" data-language={language}><code>{text}</code></pre>;
  },
