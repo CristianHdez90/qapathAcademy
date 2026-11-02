@@ -1,5 +1,5 @@
 import {Injectable} from '@nestjs/common';
-import {users,authSessions,adminAuditEvents,emailVerificationTokens,authChallenges,mfaCredentials,recoveryCodes,mfaResetTokens,and,eq,gt,isNull,lt,sql} from '@qapath/database';
+import {users,authSessions,adminAuditEvents,emailVerificationTokens,authChallenges,mfaCredentials,recoveryCodes,mfaResetTokens,passwordResetTokens,and,eq,gt,isNull,lt,sql} from '@qapath/database';
 import type {AccountSecurityPort,RestrictedChallenge} from '@qapath/identity';
 import {DatabaseProvider} from '../database.provider';
 type Tx=Parameters<Parameters<DatabaseProvider['db']['transaction']>[0]>[0];
@@ -91,6 +91,31 @@ export class PostgresSecurityAdapter implements AccountSecurityPort {
    await clearMfa(tx,record.userId);
    await tx.insert(adminAuditEvents).values({actorUserId:record.userId,targetUserId:record.userId,action:'MFA_RESET_BY_EMAIL'});
    return record.userId;
+  });
+ }
+ async createPasswordReset(userId:string,tokenHash:string,expiresAt:Date){
+  return this.provider.db.transaction(async tx=>{
+   await tx.select({id:users.id}).from(users).where(eq(users.id,userId)).for('update');
+   const [recent]=await tx.select({id:passwordResetTokens.id}).from(passwordResetTokens).where(and(eq(passwordResetTokens.userId,userId),gt(passwordResetTokens.createdAt,new Date(Date.now()-60000)))).limit(1);
+   if(recent)return false;
+   await tx.update(passwordResetTokens).set({consumedAt:new Date()}).where(and(eq(passwordResetTokens.userId,userId),isNull(passwordResetTokens.consumedAt)));
+   await tx.insert(passwordResetTokens).values({userId,tokenHash,expiresAt});
+   await tx.insert(adminAuditEvents).values({targetUserId:userId,action:'PASSWORD_RESET_REQUESTED'});return true;
+  });
+ }
+ async consumePasswordReset(tokenHash:string){
+  const [record]=await this.provider.db.update(passwordResetTokens).set({consumedAt:new Date()}).where(and(eq(passwordResetTokens.tokenHash,tokenHash),isNull(passwordResetTokens.consumedAt),gt(passwordResetTokens.expiresAt,new Date()))).returning({userId:passwordResetTokens.userId});
+  return record?.userId??null;
+ }
+ async completePasswordReset(userId:string,passwordHash:string|null){
+  await this.provider.db.transaction(async tx=>{
+   const now=new Date();
+   // La contraseña la eligió el titular: deja de ser «inicial» y la cuenta se desbloquea.
+   await tx.update(users).set({...(passwordHash?{passwordHash}:{}),mustChangePassword:false,failedAttempts:0,lockedUntil:null,updatedAt:now}).where(eq(users.id,userId));
+   await tx.update(authSessions).set({revokedAt:now}).where(and(eq(authSessions.userId,userId),isNull(authSessions.revokedAt)));
+   await tx.update(authChallenges).set({consumedAt:now}).where(and(eq(authChallenges.userId,userId),isNull(authChallenges.consumedAt)));
+   await tx.update(passwordResetTokens).set({consumedAt:now}).where(and(eq(passwordResetTokens.userId,userId),isNull(passwordResetTokens.consumedAt)));
+   await tx.insert(adminAuditEvents).values({actorUserId:userId,targetUserId:userId,action:'PASSWORD_RESET_COMPLETED'});
   });
  }
  async resetMfa(userId:string,actorUserId:string,reason:'ADMIN'){

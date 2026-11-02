@@ -70,3 +70,4 @@
 .mfa-secret-mask{font:700 14px ui-monospace,SFMono-Regular,Consolas,monospace;letter-spacing:1px;color:#8ea9c3}
 .mfa-copy-status{font-size:12px;color:#b7d6de;min-height:14px}
 .mfa-security-note{font-size:12px;color:#f1d19c!important;padding:11px 13px;background:#3f321f;border:1px solid #6a5632;border-radius:8px;line-height:1.5}
+.auth-forgot{margin:-4px 0 12px;font-size:12px;text-align:right}

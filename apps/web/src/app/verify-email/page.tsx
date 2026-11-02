@@ -9,6 +9,8 @@ export default function VerifyEmailPage(){
  useEffect(()=>{
   void authRequest<{provider:string}>('/auth/config').then(config=>setFirebaseAuth(config.provider==='firebase')).catch(()=>setError('No fue posible consultar el servicio de autenticación.'));
   const query=new URLSearchParams(window.location.search);
+  // Firebase usa la misma URL de acción para todos sus correos: el de contraseña se redirige a su página.
+  if(query.get('mode')==='resetPassword'&&query.get('oobCode')){window.location.replace(`/auth/reset-password?oobCode=${encodeURIComponent(query.get('oobCode')!)}`);return}
   const hash=new URLSearchParams(window.location.hash.replace(/^#/,''));const token=query.get('mode')==='verifyEmail'?query.get('oobCode'):hash.get('token');
   if(!token)return;window.history.replaceState(null,'',window.location.pathname);
   void authRequest<{verified:boolean}>('/auth/verify-email','POST',{token}).then(()=>{setVerified(true);setMessage('Correo verificado. Ya puedes iniciar sesión.')}).catch(e=>setError(e instanceof Error?e.message:'No fue posible verificar el correo.'));

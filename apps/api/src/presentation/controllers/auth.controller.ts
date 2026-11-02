@@ -1,5 +1,5 @@
 import {BadRequestException,Body,Controller,Get,HttpCode,Post,Req,Res,UnauthorizedException,HttpException,HttpStatus,ServiceUnavailableException} from '@nestjs/common';
-import {loginSchema,registerSchema,changeInitialPasswordSchema,verifyEmailSchema,verificationResendSchema,mfaCodeSchema,mfaSetupSchema,mfaResetConfirmSchema} from '@qapath/contracts';
+import {loginSchema,registerSchema,changeInitialPasswordSchema,verifyEmailSchema,verificationResendSchema,mfaCodeSchema,mfaSetupSchema,mfaResetConfirmSchema,passwordForgotSchema,passwordResetSchema} from '@qapath/contracts';
 import {SecureAuthenticationService,AuthConflict,AuthError,AccountLocked,SecurityFlowError} from '@qapath/identity';
 import type {AuthOutcome} from '@qapath/identity';
 import {Public,AuthenticatedRequest,cookieName,extractSessionCookie} from '../security/session-security';
@@ -33,6 +33,9 @@ export class AuthController {
  @Public() @Post('mfa/verify') @HttpCode(200) async mfaVerify(@Req()req:AuthenticatedRequest,@Body()body:unknown,@Res({passthrough:true})res:CookieResponse){const input=mfaCodeSchema.safeParse(body);if(!input.success)throw new BadRequestException('Código inválido.');try{const result=await this.auth.verifyMfa(readChallenge(req),input.data.code);setCookies(res,result);return {data:{stage:result.stage,user:result.user}};}catch(err){handleSecurity(err)}}
  @Public() @Post('mfa/reset/request') @HttpCode(200) async mfaResetRequest(@Req()req:AuthenticatedRequest){try{return {data:await this.auth.requestMfaReset(readChallenge(req))}}catch(err){handleSecurity(err)}}
  @Public() @Post('mfa/reset/confirm') @HttpCode(200) async mfaResetConfirm(@Body()body:unknown,@Res({passthrough:true})res:CookieResponse){const input=mfaResetConfirmSchema.safeParse(body);if(!input.success)throw new BadRequestException('Enlace inválido o vencido.');try{const result=await this.auth.confirmMfaReset(input.data.token);res.setHeader('Set-Cookie',[clearAuth(),clearChallenge()]);return {data:result}}catch(err){handleSecurity(err)}}
+ /** «¿Olvidaste tu contraseña?»: respuesta genérica (no revela si el correo existe). */
+ @Public() @Post('password/forgot') @HttpCode(200) async passwordForgot(@Body()body:unknown){const input=passwordForgotSchema.safeParse(body);if(!input.success)throw new BadRequestException('Escribe un correo válido.');try{return {data:await this.auth.requestPasswordReset(input.data.email)}}catch(err){handleSecurity(err)}}
+ @Public() @Post('password/reset') @HttpCode(200) async passwordReset(@Body()body:unknown,@Res({passthrough:true})res:CookieResponse){const input=passwordResetSchema.safeParse(body);if(!input.success)throw new BadRequestException('Enlace inválido o contraseña fuera de rango (12 a 128 caracteres).');try{const result=await this.auth.confirmPasswordReset(input.data.token,input.data.newPassword);res.setHeader('Set-Cookie',[clearAuth(),clearChallenge()]);return {data:result}}catch(err){handleSecurity(err)}}
  @Get('me')me(@Req()req:AuthenticatedRequest){return {data:req.user}}
  @Post('logout') @HttpCode(200) async logout(@Req()req:AuthenticatedRequest,@Res({passthrough:true})response:CookieResponse){const token=req.sessionToken??extractSessionCookie(req.headers.cookie);if(token)await this.auth.signOut(token);response.setHeader('Set-Cookie',[clearAuth(),clearChallenge()]);return {data:{success:true}}}
 }
