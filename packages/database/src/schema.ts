@@ -94,6 +94,13 @@ export const mfaResetTokens=pgTable('mfa_reset_tokens',{
  consumedAt:timestamp('consumed_at',{withTimezone:true}),createdAt:timestamp('created_at',{withTimezone:true}).notNull().defaultNow()
 },t=>[index('mfa_reset_tokens_user_idx').on(t.userId,t.createdAt)]);
 
+/** «¿Olvidaste tu contraseña?»: enlaces de un solo uso. */
+export const passwordResetTokens=pgTable('password_reset_tokens',{
+ id:uuid('id').defaultRandom().primaryKey(),userId:uuid('user_id').notNull().references(()=>users.id,{onDelete:'cascade'}),
+ tokenHash:varchar('token_hash',{length:64}).notNull().unique(),expiresAt:timestamp('expires_at',{withTimezone:true}).notNull(),
+ consumedAt:timestamp('consumed_at',{withTimezone:true}),createdAt:timestamp('created_at',{withTimezone:true}).notNull().defaultNow()
+},t=>[index('password_reset_tokens_user_idx').on(t.userId,t.createdAt)]);
+
 /** SPEC-UX-310 · Apariencia del Home (singleton 'home') y versiones publicadas inmutables. */
 export const siteAppearanceSettings=pgTable('site_appearance_settings',{
  id:varchar('id',{length:32}).primaryKey(),draft:jsonb('draft').$type<Record<string,unknown>|null>(),

@@ -93,7 +93,7 @@ export type QuizResult = {score:number;total:number;percent:number;feedback:Quiz
 
 export {gradeQuizRequestSchema,foundationCheckRequestSchema} from './schemas';
 
-export {registerSchema,loginSchema,progressCommandSchema,verifyEmailSchema,verificationResendSchema,changeInitialPasswordSchema,mfaSetupSchema,mfaCodeSchema,mfaResetConfirmSchema,adminMfaResetSchema} from './auth';
+export {registerSchema,loginSchema,progressCommandSchema,verifyEmailSchema,verificationResendSchema,changeInitialPasswordSchema,mfaSetupSchema,mfaCodeSchema,mfaResetConfirmSchema,adminMfaResetSchema,passwordForgotSchema,passwordResetSchema} from './auth';
 export type {AuthUserDTO} from './auth';
 
 export {listStudentsSchema,newStudentSchema,changeStudentSchema,auditQuerySchema} from './admin';

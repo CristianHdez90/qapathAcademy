@@ -29,6 +29,12 @@ export interface AccountSecurityPort {
   consumeMfaReset(tokenHash:string):Promise<string|null>;
   /** Restablecimiento administrativo: borra la credencial y los códigos, revoca sesiones y audita al actor. */
   resetMfa(userId:string,actorUserId:string,reason:'ADMIN'):Promise<void>;
+  /** Reserva un enlace de restablecimiento de contraseña (anula los anteriores). false si se pidió hace menos de 60 s. */
+  createPasswordReset?(userId:string,tokenHash:string,expiresAt:Date):Promise<boolean>;
+  /** Consume el enlace local; devuelve el usuario o null si es inválido, usado o vencido. */
+  consumePasswordReset?(tokenHash:string):Promise<string|null>;
+  /** Tras el restablecimiento: guarda el hash (si es local), desbloquea, cierra sesiones y desafíos, anula enlaces y audita. */
+  completePasswordReset?(userId:string,passwordHash:string|null):Promise<void>;
 }
 export interface TotpPort {
   createSecret():string;
@@ -39,7 +45,7 @@ export interface TotpPort {
   newRecoveryCodes():string[];
   hashRecoveryCode(code:string):string;
 }
-export interface VerificationMailer {sendVerification(email:string,token:string):Promise<void>;sendMfaReset?(email:string,token:string):Promise<void>}
+export interface VerificationMailer {sendVerification(email:string,token:string):Promise<void>;sendMfaReset?(email:string,token:string):Promise<void>;sendPasswordReset?(email:string,token:string):Promise<void>}
 export class SecurityFlowError extends Error {constructor(message:string,readonly status:400|401|403|429|503=400){super(message);this.name='SecurityFlowError'}}
 export type SecureAuthDependencies={users:IdentityRepository;passwords:PasswordPort;sessions:SessionPort;tokens:TokenPort;security:AccountSecurityPort;totp:TotpPort;mailer:VerificationMailer;external?:ExternalIdentityPort};
 const DAY=86400000;
@@ -215,6 +221,43 @@ export class SecureAuthenticationService {
     const userId=await this.d.security.consumeMfaReset(this.d.tokens.hash(token));
     if(!userId)throw new SecurityFlowError('Enlace inválido, usado o vencido.');
     return {reset:true};
+  }
+  /**
+   * «¿Olvidaste tu contraseña?». La respuesta es idéntica exista o no la cuenta (no revela correos registrados).
+   * Una solicitud por minuto por cuenta. Con Firebase, el correo lo envía Firebase con su propio código.
+   */
+  async requestPasswordReset(emailInput:string){
+    const generic={message:'Si el correo pertenece a una cuenta, te enviamos un enlace para restablecer la contraseña. Revisa también spam o promociones; el enlace vence en 1 hora.'};
+    const security=this.d.security;
+    if(!security.createPasswordReset||(!this.d.external?.sendPasswordReset&&!this.d.mailer.sendPasswordReset))throw new SecurityFlowError('El restablecimiento de contraseña no está disponible. Pide ayuda a un administrador.',503);
+    let found:IdentityUser|null=null;
+    try{found=(await this.userByEmail(emailInput)).user}catch(error){if(!(error instanceof AuthError))throw error}
+    if(!found||!found.isActive)return generic;
+    const token=this.d.tokens.issue();
+    if(!await security.createPasswordReset(found.id,this.d.tokens.hash(token),new Date(Date.now()+60*60000)))return generic;
+    if(this.d.external?.sendPasswordReset){
+      // Una cuenta sin identidad Firebase (EMAIL_NOT_FOUND) no recibe correo, pero la respuesta no cambia.
+      try{await this.d.external.sendPasswordReset(found.email)}catch(error){if(!(error instanceof AuthError))throw error}
+    }else await this.d.mailer.sendPasswordReset!(found.email,token);
+    return generic;
+  }
+  async confirmPasswordReset(token:string,newPassword:string){
+    if(newPassword.length<12||newPassword.length>128)throw new SecurityFlowError('Contraseña: entre 12 y 128 caracteres.');
+    const security=this.d.security;
+    if(!security.completePasswordReset)throw new SecurityFlowError('El restablecimiento de contraseña no está disponible.',503);
+    if(this.d.external?.confirmPasswordReset){
+      if(!/^[A-Za-z0-9_-]{16,512}$/.test(token))throw new SecurityFlowError('Enlace inválido o vencido.');
+      let email:string;
+      try{email=(await this.d.external.confirmPasswordReset(token,newPassword)).email}catch(error){if(error instanceof AuthError)throw new SecurityFlowError('Enlace inválido, usado o vencido.');throw error}
+      const user=await this.d.users.findByEmail(EmailAddress.create(email).value);
+      if(user?.isActive)await security.completePasswordReset(user.id,null);
+      return {reset:true,message:'Contraseña actualizada. Ya puedes iniciar sesión con la nueva contraseña.'};
+    }
+    if(!/^[A-Za-z0-9_-]{32,128}$/.test(token)||!security.consumePasswordReset)throw new SecurityFlowError('Enlace inválido o vencido.');
+    const userId=await security.consumePasswordReset(this.d.tokens.hash(token));
+    if(!userId)throw new SecurityFlowError('Enlace inválido, usado o vencido.');
+    await security.completePasswordReset(userId,await this.d.passwords.hash(newPassword));
+    return {reset:true,message:'Contraseña actualizada. Ya puedes iniciar sesión con la nueva contraseña.'};
   }
   async resetMfaByAdmin(targetEmail:string,actorUserId:string){
     let email:string;try{email=EmailAddress.create(targetEmail).value}catch{throw new SecurityFlowError('Correo inválido.')}

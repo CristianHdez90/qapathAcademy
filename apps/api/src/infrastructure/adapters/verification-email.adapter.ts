@@ -34,6 +34,20 @@ export class VerificationEmailAdapter implements VerificationMailer {
     });
   }
 
+  /** «¿Olvidaste tu contraseña?»: enlace de un solo uso (1 hora). */
+  async sendPasswordReset(email: string, token: string): Promise<void> {
+    const link = this.link('/auth/reset-password', token);
+    const subject = 'Restablece tu contraseña — QAPath Academy';
+    const text = `Recibimos una solicitud para restablecer la contraseña de tu cuenta.\n\nAbre este enlace dentro de 1 hora para elegir una contraseña nueva:\n\n${link}\n\nAl cambiarla se cierran tus sesiones abiertas y la cuenta se desbloquea.\nSi no fuiste tú, ignora este mensaje: tu contraseña actual sigue funcionando.`;
+    await this.deliver(email, token, link, {
+      label: 'Restablecer contraseña',
+      subject,
+      text,
+      firebase: () => this.firebase.queueMessage(email, subject, text),
+      kind: 'password-reset',
+    });
+  }
+
   // Fragment avoids leaking the secret through GET logs and Referer headers.
   private link(path: string, token: string) {
     const appUrl = (process.env.APP_URL || 'http://localhost:3000').replace(/\/$/, '');

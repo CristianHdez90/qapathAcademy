@@ -65,12 +65,13 @@ export class FirebaseAuthAdapter implements ExternalIdentityPort {
   if(!response.ok){
    const code=safeProviderCode(data.error);
    // Log only enumerated codes and fixed operations, never provider text or request payloads.
-   const safeOperation=['signUp','signInWithPassword','sendOobCode','update'].includes(operation)?operation:'unknown';
+   const safeOperation=['signUp','signInWithPassword','sendOobCode','update','resetPassword'].includes(operation)?operation:'unknown';
    console.warn(`FirebaseAuth operation=${safeOperation} status=${response.status} code=${code}`);
    if(code==='EMAIL_EXISTS')throw new AuthConflict();
    if(code==='TOO_MANY_ATTEMPTS_TRY_LATER'||code==='QUOTA_EXCEEDED'||response.status===429)throw new SecurityFlowError('Se alcanzó el límite de solicitudes. Inténtalo más tarde.',429);
    if(code==='INVALID_OOB_CODE'||code==='EXPIRED_OOB_CODE')throw new SecurityFlowError('Enlace inválido, usado o vencido.');
    if(['INVALID_LOGIN_CREDENTIALS','INVALID_PASSWORD','EMAIL_NOT_FOUND','USER_DISABLED','INVALID_ID_TOKEN','TOKEN_EXPIRED'].includes(code))throw new AuthError();
+   if(code==='WEAK_PASSWORD')throw new SecurityFlowError('La contraseña es demasiado débil. Usa al menos 12 caracteres combinando letras, números y símbolos.');
    if(configurationErrors[code])throw new SecurityFlowError(`Firebase Authentication [${code}]: ${configurationErrors[code]}`,503);
    throw new SecurityFlowError(`Firebase Authentication rechazó la operación [${code}]. Revisa el código de diagnóstico en los logs de la API.`,503);
   }
@@ -128,6 +129,16 @@ export class FirebaseAuthAdapter implements ExternalIdentityPort {
  async changeEmail(uid:string,email:string){
   try{await this.admin().updateUser(uid,{email,emailVerified:false});await this.admin().revokeRefreshTokens(uid);}
   catch{throw new SecurityFlowError('No fue posible actualizar Firebase. Reintenta guardar el correo para sincronizar la cuenta.',503);}
+ }
+ async sendPasswordReset(email:string){
+  await this.request('sendOobCode',{requestType:'PASSWORD_RESET',email,continueUrl:`${process.env.APP_URL?.replace(/\/$/,'')}/login`});
+ }
+ async confirmPasswordReset(code:string,newPassword:string){
+  const response=await this.request<{email?:string}>('resetPassword',{oobCode:code,newPassword});
+  if(!response.email)throw new AuthError();
+  // Cierra las sesiones de Firebase emitidas antes del cambio (validSession compara tokensValidAfterTime).
+  try{const user=await this.admin().getUserByEmail(response.email);await this.admin().revokeRefreshTokens(user.uid)}catch{/* la contraseña ya cambió; las sesiones locales se revocan igual */}
+  return {email:response.email.toLowerCase()};
  }
  async validSession(uid:string,email:string,issuedAt?:Date){
   if(!issuedAt)return false;

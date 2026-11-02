@@ -13,6 +13,9 @@ export const progressCommandSchema=z.union([
 export type AuthUserDTO={id:string;email:string;role:'STUDENT'|'INSTRUCTOR'|'ADMIN';mfaEnabled:boolean};
 
 export const verifyEmailSchema=z.object({token:z.string().regex(/^[A-Za-z0-9_-]{16,2048}$/)}).strict();
+export const passwordForgotSchema=z.object({email:z.string().email().max(254)}).strict();
+/** token: enlace local (#token=…) o código oobCode de Firebase. */
+export const passwordResetSchema=z.object({token:z.string().regex(/^[A-Za-z0-9_-]{16,512}$/),newPassword:z.string().min(12).max(128)}).strict();
 export const mfaResetConfirmSchema=z.object({token:z.string().regex(/^[A-Za-z0-9_-]{32,128}$/)}).strict();
 export const adminMfaResetSchema=z.object({email:z.string().email().max(254)}).strict();
 export const verificationResendSchema=z.object({email:z.string().email().max(254),password:z.string().min(1).max(128).optional()}).strict();
