@@ -7,7 +7,7 @@ import {useAuth} from '@/features/auth/auth-provider';
 import {StudyMarkdown} from '@/components/study/study-markdown';
 import {KIND_LABEL} from '@/components/study/course-lessons';
 import {outlineApi} from './outline-api';
-import {outlineHrefResolver} from './outline-links';
+import {chapterName,outlineHrefResolver} from './outline-links';
 import '@/components/academy/module-detail.css';
 import '@/components/study/study.css';
 import './outline.css';
@@ -49,13 +49,13 @@ export function OutlineIndex({outline,course,lessons=[],actions}:{outline:Public
  return <section aria-labelledby="outline-index-title">
   <CourseHeading course={course} weeks={outline.weeks.length}/>
   {actions}
-  <div className="section-head compact"><div><p className="eyebrow">CONTENIDO DE ESTUDIO</p><h2 id="outline-index-title">Clases y actividades</h2></div>{chapters.length>0&&<Link className="button button-primary" href={`${base}?chapter=${(pending??chapters[0]).id}`}>{progress&&(progress.readCards.length||Object.keys(progress.passedChapters).length)?'Continuar':'Comenzar'}: {(pending??chapters[0]).title} ↗</Link>}</div>
+  <div className="section-head compact"><div><p className="eyebrow">CONTENIDO DE ESTUDIO</p><h2 id="outline-index-title">Clases y actividades</h2></div>{chapters.length>0&&<Link className="button button-primary" href={`${base}?chapter=${(pending??chapters[0]).id}`}>{progress&&(progress.readCards.length||Object.keys(progress.passedChapters).length)?'Continuar':'Comenzar'}: {chapterName((pending??chapters[0]).title)} ↗</Link>}</div>
   <div className="lesson-list">{outline.weeks.map((week,wi)=>{const done=!!progress&&week.chapters.length>0&&week.chapters.every(c=>c.cards.every(card=>progress.readCards.includes(card.id))&&(!c.quiz.length||passed(c.id)));
    return <div className="lesson-row" key={week.id}><span className="learning-week-state" aria-label={`Semana ${wi+1}: ${done?'completada':'pendiente'}`}>{done?'✓':'○'}</span><div className="lesson-info">
     <Link href={week.chapters[0]?`${base}?chapter=${week.chapters[0].id}`:base} className="lesson-link"><span>SEMANA {two(wi+1)}</span><h3>{week.title} <span>↗</span></h3></Link>
     {week.summary.trim()&&<div className="outline-week-summary"><StudyMarkdown source={week.summary} resolveHref={outlineHrefResolver(base,outline.weeks,week.id)}/></div>}
     {week.chapters.length>0&&<ol className="module-chapters">{week.chapters.map(chapter=>{const read=progress?chapter.cards.filter(c=>progress.readCards.includes(c.id)).length:0;
-     return <li key={chapter.id}><Link href={`${base}?chapter=${chapter.id}`}>Capítulo {two(number.get(chapter.id)??0)} · {chapter.title}</Link><small>{!user||student&&!progress?`${chapter.cards.length} tarjetas${chapter.quiz.length?' · minitest':''}`:!student?`${chapter.cards.length} tarjetas${chapter.quiz.length?` · minitest (${chapter.quiz.length})`:''}`:passed(chapter.id)?'✓ Aprobado':`${read}/${chapter.cards.length} tarjetas leídas${chapter.quiz.length?' · con minitest':''}`}</small></li>})}</ol>}
+     return <li key={chapter.id}><Link href={`${base}?chapter=${chapter.id}`}>Capítulo {two(number.get(chapter.id)??0)} · {chapterName(chapter.title)}</Link><small>{!user||student&&!progress?`${chapter.cards.length} tarjetas${chapter.quiz.length?' · minitest':''}`:!student?`${chapter.cards.length} tarjetas${chapter.quiz.length?` · minitest (${chapter.quiz.length})`:''}`:passed(chapter.id)?'✓ Aprobado':`${read}/${chapter.cards.length} tarjetas leídas${chapter.quiz.length?' · con minitest':''}`}</small></li>})}</ol>}
    </div><span className="lesson-arrow" aria-hidden="true">↗</span></div>})}
    <SupplementaryRows slug={outline.slug} lessons={lessons}/>
   </div>

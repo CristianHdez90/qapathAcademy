@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import {useEffect,useMemo,useState} from 'react';
-import type {Week,StudyGuide,FoundationWeek,FoundationChapter,FoundationCard,FoundationClassifier} from '@qapath/contracts';
+import type {Week,StudyGuide,FoundationWeek,FoundationChapter,FoundationCard} from '@qapath/contracts';
 import {foundationChapters,foundationChapterPassed,FOUNDATION_PASS_RATIO} from '@qapath/progress';
 import {useAuth} from '@/features/auth/auth-provider';
 import {useProgress} from '@/features/progress/progress-provider';
@@ -20,6 +20,7 @@ import {SaveFeedback} from './save-feedback';
 import {StudyDialog,STUDY_TOOL_EVENT,announceStudyTool} from './study-dialog';
 import {FoundationCheckBlock} from './foundation-check';
 import {StateBalloons} from './state-balloons';
+import {Classifier} from './foundation-classifier';
 import './focused-study.css';
 import './foundation-study.css';
 
@@ -60,19 +61,6 @@ function CardView({card,cardIndex,total,typesMap=false,levelsMap=false}:{card:Fo
  </>;
  if(!typesMap&&!levelsMap&&!card.aside?.length)return body;
  return <div className={`foundation-card-layout${card.aside?.length?' has-wide-aside':''}`}><div className="foundation-card-main">{body}</div><aside className="foundation-card-aside" aria-label={card.aside?.length?'Ejemplo de la tarjeta':levelsMap?'Mapa de los niveles de prueba':'Mapa de los tipos de prueba'}>{card.aside?.length?<FoundationRichContent blocks={card.aside}/>:levelsMap?<LevelsPyramid focus={card.levelFocus} compact/>:<TestTypesMap focus={card.focus}/>}</aside></div>;
-}
-
-function Classifier({activity}:{activity:FoundationClassifier}){
- const [answers,setAnswers]=useState<Record<string,Record<string,string>>>({}),[checked,setChecked]=useState(false);
- const complete=activity.items.every(item=>activity.axes.every(axis=>answers[item.id]?.[axis.id]));
- return <div className="foundation-activity"><p>{activity.prompt}</p>
-  {activity.items.map(item=><fieldset key={item.id} className="foundation-activity-item"><legend>{item.text}</legend><div className="foundation-axes">{activity.axes.map(axis=>{
-   const value=answers[item.id]?.[axis.id]||'',right=value===item.answers[axis.id];
-   return <label key={axis.id}>{axis.label}<select value={value} onChange={event=>{setChecked(false);setAnswers(old=>({...old,[item.id]:{...old[item.id],[axis.id]:event.target.value}}))}}><option value="">Elige…</option>{axis.options.map(option=><option key={option.id} value={option.id}>{option.label}</option>)}</select>{checked&&value&&<small className={right?'good':'bad'}>{right?'✓':'✗'} {right?'Correcto':`Revisa: ${axis.options.find(o=>o.id===item.answers[axis.id])?.label}`}</small>}</label>;
-  })}</div>{checked&&<p className="hint">{item.feedback}</p>}</fieldset>)}
-  <div className="foundation-actions"><button type="button" className="button button-primary" disabled={!complete} onClick={()=>setChecked(true)}>Comprobar clasificación</button><button type="button" className="button button-outline" onClick={()=>{setAnswers({});setChecked(false)}}>Reiniciar actividad</button></div>
-  <p className="hint" role="status">{checked?'Revisa el feedback de cada eje. Esta actividad es formativa: no afecta tu progreso.':complete?'Listo para comprobar.':'Completa los tres ejes de cada prueba.'}</p>
- </div>;
 }
 
 /** Fundamentos v2 (SPEC-CONTENT-220): una tarjeta a la vez y un minitest por tarjeta. */

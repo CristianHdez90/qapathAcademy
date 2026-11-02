@@ -14,6 +14,8 @@ const MODULE_PREFIX=/^m[0-9a-f]{6}_/;
 const slug=(text:string)=>text.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\.(md|markdown)$/,'').replace(/^[a-z]?\d+[\s._-]+/,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const basename=(path:string)=>decodeURIComponent(path.split(/[?#]/)[0].split('/').pop()??'').toLowerCase();
 const unprefixed=(id:string)=>id.replace(MODULE_PREFIX,'');
+/** «Capítulo 01 · Tipos…» → «Tipos…» (evita repetir el número cuando el título ya lo incluye). */
+export const chapterName=(title:string)=>title.replace(/^Cap[ií]tulo\s+\d+\s*[·:.\-–—]\s*/i,'');
 export type OutlineTarget={kind:'chapter'|'card';id:string};
 /** Ámbito de la numeración: el contenido propio del curso o un módulo asignado (sus ids comparten prefijo). */
 function scope(weeks:Week[],weekId?:string){
