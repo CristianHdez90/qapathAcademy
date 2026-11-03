@@ -81,3 +81,5 @@
 @media(max-width:900px){.outline-reader .focused-card .study-section.has-aside{grid-template-columns:minmax(0,1fr)}.outline-reader .focused-card .study-section-aside{position:static;order:-1}}
 .outline-reader .focused-card .study-section:not(.has-aside) .study-markdown{max-width:none}
 .outline-reader .focused-card .study-section:not(.has-aside) .study-markdown>p,.outline-reader .focused-card .study-section:not(.has-aside) .study-markdown>ul,.outline-reader .focused-card .study-section:not(.has-aside) .study-markdown>ol{max-width:78ch}
+.outline-week-intro .study-markdown{max-width:78ch;font-size:16px;line-height:1.85}
+.outline-check{display:flex;gap:.5rem;align-items:center;font-size:.9rem;margin:.6rem 0}.outline-check input{width:18px;height:18px}

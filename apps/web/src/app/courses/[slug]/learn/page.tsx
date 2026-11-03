@@ -9,6 +9,6 @@ export default async function CourseLearnPage({params,searchParams}:{params:Prom
  let outline;
  try{outline=await academyApi.courseOutline(slug)}catch(error){if(error instanceof ApiError&&(error.status===404||error.status===400))notFound();throw error}
  const id=(value:unknown)=>typeof value==='string'&&/^[A-Za-z0-9_-]{1,80}$/.test(value)?value:undefined;
- // ?chapter= abre el capítulo; ?card= abre la tarjeta exacta (enlaces del índice de la semana).
- return <CourseReader outline={outline} initialChapter={id(query.chapter)} initialCard={id(query.card)}/>;
+ // ?week= abre el inicio de la semana; ?chapter= abre el capítulo; ?card= abre la tarjeta exacta (enlaces del índice de la semana).
+ return <CourseReader outline={outline} initialChapter={id(query.chapter)} initialCard={id(query.card)} initialWeek={id(query.week)}/>;
 }

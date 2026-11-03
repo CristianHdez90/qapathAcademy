@@ -21,10 +21,12 @@ test('copia de Fundamentos: misma estructura y contenido que la lectura original
   for(const card of original.cards)assert.ok(ids.includes(card.id),`tarjeta ${card.id}`);
   for(const [field,suffix] of [['teamCase','caso'],['diagram','mapa'],['balloons','aplica'],['activity','actividad'],['transfer','entregable']])if(original[field])assert.ok(ids.includes(`${original.id}-${suffix}`),`${original.id} ${field}`);
   assert.equal(ids.at(-1),`${original.id}-cierre`);
+  assert.equal(copy.cards.filter(c=>!c.extra).length,original.cards.length,'solo las tarjetas de lectura cuentan en el avance');
   assert.equal(copy.quiz.length,original.cards.flatMap(c=>c.checks).length,'todas las preguntas');
   // Los bloques ```qapath-… contienen JSON válido.
   for(const card of copy.cards)for(const m of card.text.matchAll(/```(qapath-[\w-]+)\n([\s\S]*?)\n```/g))if(m[1]!=='qapath-destacado')assert.doesNotThrow(()=>JSON.parse(m[2]),`${card.id} ${m[1]}`);
  }
+ assert.ok(outline.weeks.every(w=>w.practice>=1&&w.practice<=24),'cada semana conserva su práctica');
  const opening=copied[0].cards[0].text;
  assert.match(opening,/## La escena/);assert.match(opening,/qapath-pregunta/);assert.match(opening,/Resultados de aprendizaje/);
  assert.equal(JSON.parse(copied[0].cards[0].visuals[0].content).view,'types-map');

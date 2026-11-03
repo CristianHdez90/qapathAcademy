@@ -9,12 +9,15 @@ const id=z.string().regex(/^[A-Za-z0-9_-]{1,64}$/,'Identificador inválido.');
 const line=(max:number,min=0)=>z.string().trim().min(min).max(max);
 export const outlineVisualSchema=z.object({filename:z.string().min(3).max(120),kind:z.enum(['mermaid','interaction','svg']).optional(),content:z.string().min(1).max(320_000)}).strict();
 /** `source`: nombre del .md de origen; permite que los enlaces del índice ([texto](C01-tema.md)) abran esta tarjeta. */
-export const outlineCardSchema=z.object({id,title:line(160,3),text:z.string().max(OUTLINE_LIMITS.text),source:z.string().max(120).optional(),visuals:z.array(outlineVisualSchema).max(OUTLINE_LIMITS.visuals)}).strict();
+export const outlineCardSchema=z.object({id,title:line(160,3),text:z.string().max(OUTLINE_LIMITS.text),source:z.string().max(120).optional(),
+ /** Tarjeta de apoyo (apertura, caso, mapa, cierre…): se lee igual pero no cuenta en «tarjetas leídas». */
+ extra:z.boolean().optional(),visuals:z.array(outlineVisualSchema).max(OUTLINE_LIMITS.visuals)}).strict();
 export const outlineQuestionSchema=z.object({id,question:line(400,3),options:z.array(line(240,1)).min(2).max(OUTLINE_LIMITS.options),correct:z.number().int().min(0),explanation:line(600)}).strict()
  .refine(q=>q.correct<q.options.length,{message:'La respuesta correcta debe ser una de las opciones.',path:['correct']});
 export const outlineChapterSchema=z.object({id,title:line(160,3),outcome:line(400),cards:z.array(outlineCardSchema).max(OUTLINE_LIMITS.cards),quiz:z.array(outlineQuestionSchema).max(OUTLINE_LIMITS.questions)}).strict();
 /** `summary` admite Markdown (por ejemplo una tabla índice con enlaces a capítulos y tarjetas). */
-export const outlineWeekSchema=z.object({id,title:line(160,3),summary:z.string().max(OUTLINE_LIMITS.summary),chapters:z.array(outlineChapterSchema).max(OUTLINE_LIMITS.chapters)}).strict();
+/** `practice`: semana (1–24) de la práctica existente que completa esta semana (/practice/N), con su mismo avance. */
+export const outlineWeekSchema=z.object({id,title:line(160,3),summary:z.string().max(OUTLINE_LIMITS.summary),practice:z.number().int().min(1).max(24).optional(),chapters:z.array(outlineChapterSchema).max(OUTLINE_LIMITS.chapters)}).strict();
 export const courseOutlineSchema=z.object({weeks:z.array(outlineWeekSchema).max(OUTLINE_LIMITS.weeks)}).strict().superRefine((outline,ctx)=>{
  const ids=new Set<string>();
  const check=(value:string,path:(string|number)[])=>{if(ids.has(value))ctx.addIssue({code:'custom',message:`Identificador repetido: ${value}`,path});ids.add(value)};
@@ -42,6 +45,8 @@ export type AdminCourseOutlineDTO={courseId:string;ownerKind:OutlineOwnerKind;ti
 export type OutlineGradeDTO={score:number;total:number;percent:number;passed:boolean;feedback:{questionId:string;correct:boolean;expected:number;explanation:string}[]};
 export type OutlineProgressDTO={readCards:string[];passedChapters:Record<string,number>};
 export const EMPTY_OUTLINE:CourseOutline={weeks:[]};
+/** Tarjetas que cuentan en el avance de lectura (sin las de apoyo). */
+export const lessonCards=<T extends {extra?:boolean}>(chapter:{cards:T[]})=>chapter.cards.filter(c=>!c.extra);
 export const outlineCards=(outline:{weeks:{chapters:{cards:{id:string}[]}[]}[]})=>outline.weeks.flatMap(w=>w.chapters.flatMap(c=>c.cards));
 
 /** SPEC-CONTENT-331 · Módulos propios (contenido reutilizable asignable a cursos). */

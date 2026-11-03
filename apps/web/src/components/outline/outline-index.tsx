@@ -2,8 +2,11 @@
 import Link from 'next/link';
 import {useEffect,useMemo,useState,type ReactNode} from 'react';
 import type {CourseDTO,LessonSummaryDTO,OutlineProgressDTO,PublicCourseOutlineDTO} from '@qapath/contracts';
-import {OUTLINE_PASS_PERCENT} from '@qapath/contracts';
+import {OUTLINE_PASS_PERCENT,lessonCards} from '@qapath/contracts';
 import {useAuth} from '@/features/auth/auth-provider';
+import {practiceCompleted} from '@qapath/progress';
+import {useProgress} from '@/features/progress/progress-provider';
+import '@/components/academy/practical-exercise.css';
 import {StudyMarkdown} from '@/components/study/study-markdown';
 import {KIND_LABEL} from '@/components/study/course-lessons';
 import {outlineApi} from './outline-api';
@@ -38,26 +41,28 @@ export function LessonsIndex({course,lessons,actions}:{course:CourseDTO;lessons:
  * el avance del estudiante, «Continuar» y, al final, las lecturas complementarias de la biblioteca.
  */
 export function OutlineIndex({outline,course,lessons=[],actions}:{outline:PublicCourseOutlineDTO;course:CourseDTO;lessons?:LessonSummaryDTO[];actions?:ReactNode}){
- const {user}=useAuth();const student=user?.role==='STUDENT';
+ const {user}=useAuth();const student=user?.role==='STUDENT';const {state:legacy}=useProgress();
  const [progress,setProgress]=useState<OutlineProgressDTO|null>(null);
+ const practices=outline.weeks.map((w,i)=>({n:i+1,week:w.practice})).filter((x):x is {n:number;week:number}=>!!x.week);
  useEffect(()=>{if(!student)return;let alive=true;void outlineApi.progress(outline.slug).then(p=>{if(alive)setProgress(p)}).catch(()=>{});return()=>{alive=false}},[student,outline.slug]);
  const chapters=outline.weeks.flatMap(w=>w.chapters);
  const number=useMemo(()=>new Map(chapters.map((c,i)=>[c.id,i+1])),[chapters]);
  const passed=(id:string)=>(progress?.passedChapters[id]??-1)>=OUTLINE_PASS_PERCENT;
- const pending=progress?chapters.find(c=>c.cards.some(card=>!progress.readCards.includes(card.id))||(c.quiz.length>0&&!passed(c.id))):undefined;
+ const pending=progress?chapters.find(c=>lessonCards(c).some(card=>!progress.readCards.includes(card.id))||(c.quiz.length>0&&!passed(c.id))):undefined;
  const base=`/courses/${outline.slug}/learn`;
  return <section aria-labelledby="outline-index-title">
   <CourseHeading course={course} weeks={outline.weeks.length}/>
   {actions}
   <div className="section-head compact"><div><p className="eyebrow">CONTENIDO DE ESTUDIO</p><h2 id="outline-index-title">Clases y actividades</h2></div>{chapters.length>0&&<Link className="button button-primary" href={`${base}?chapter=${(pending??chapters[0]).id}`}>{progress&&(progress.readCards.length||Object.keys(progress.passedChapters).length)?'Continuar':'Comenzar'}: {chapterName((pending??chapters[0]).title)} ↗</Link>}</div>
-  <div className="lesson-list">{outline.weeks.map((week,wi)=>{const done=!!progress&&week.chapters.length>0&&week.chapters.every(c=>c.cards.every(card=>progress.readCards.includes(card.id))&&(!c.quiz.length||passed(c.id)));
+  <div className="lesson-list">{outline.weeks.map((week,wi)=>{const done=!!progress&&week.chapters.length>0&&week.chapters.every(c=>lessonCards(c).every(card=>progress.readCards.includes(card.id))&&(!c.quiz.length||passed(c.id)));
    return <div className="lesson-row" key={week.id}><span className="learning-week-state" aria-label={`Semana ${wi+1}: ${done?'completada':'pendiente'}`}>{done?'✓':'○'}</span><div className="lesson-info">
-    <Link href={week.chapters[0]?`${base}?chapter=${week.chapters[0].id}`:base} className="lesson-link"><span>SEMANA {two(wi+1)}</span><h3>{week.title} <span>↗</span></h3></Link>
+    <Link href={week.chapters[0]?`${base}?week=${week.id}`:base} className="lesson-link"><span>SEMANA {two(wi+1)}</span><h3>{week.title} <span>↗</span></h3></Link>
     {week.summary.trim()&&<div className="outline-week-summary"><StudyMarkdown source={week.summary} resolveHref={outlineHrefResolver(base,outline.weeks,week.id)}/></div>}
-    {week.chapters.length>0&&<ol className="module-chapters">{week.chapters.map(chapter=>{const read=progress?chapter.cards.filter(c=>progress.readCards.includes(c.id)).length:0;
-     return <li key={chapter.id}><Link href={`${base}?chapter=${chapter.id}`}>Capítulo {two(number.get(chapter.id)??0)} · {chapterName(chapter.title)}</Link><small>{!user||student&&!progress?`${chapter.cards.length} tarjetas${chapter.quiz.length?' · minitest':''}`:!student?`${chapter.cards.length} tarjetas${chapter.quiz.length?` · minitest (${chapter.quiz.length})`:''}`:passed(chapter.id)?'✓ Aprobado':`${read}/${chapter.cards.length} tarjetas leídas${chapter.quiz.length?' · con minitest':''}`}</small></li>})}</ol>}
+    {week.chapters.length>0&&<ol className="module-chapters">{week.chapters.map(chapter=>{const lesson=lessonCards(chapter),read=progress?lesson.filter(c=>progress.readCards.includes(c.id)).length:0;
+     return <li key={chapter.id}><Link href={`${base}?chapter=${chapter.id}`}>Capítulo {two(number.get(chapter.id)??0)} · {chapterName(chapter.title)}</Link><small>{!user||student&&!progress?`${lesson.length} tarjetas${chapter.quiz.length?' · minitest':''}`:!student?`${lesson.length} tarjetas${chapter.quiz.length?` · minitest (${chapter.quiz.length})`:''}`:passed(chapter.id)?'✓ Aprobado':`${read}/${lesson.length} tarjetas leídas${chapter.quiz.length?' · con minitest':''}`}</small></li>})}</ol>}
    </div><span className="lesson-arrow" aria-hidden="true">↗</span></div>})}
    <SupplementaryRows slug={outline.slug} lessons={lessons}/>
   </div>
+  {practices.length>0&&<section className="practice-banner" aria-label="Ejercicios prácticos del curso"><h2>Practica con herramientas reales</h2><p>Actividades por semana con ejecución, resultados y evidencia.</p><p>Prácticas completadas: {practices.filter(x=>practiceCompleted(legacy.evidence,x.week)).length} / {practices.length}</p><div className="practical-actions">{practices.map(x=><Link key={x.n} className="button button-outline" href={`/practice/${x.week}`}>{practiceCompleted(legacy.evidence,x.week)?'✓ Práctica registrada':'Ejercicio'} · Semana {x.n} ↗</Link>)}</div></section>}
  </section>;
 }
