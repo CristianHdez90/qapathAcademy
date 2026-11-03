@@ -21,7 +21,7 @@ function handleSecurity(err:unknown):never{
 @Controller('auth')
 export class AuthController {
  constructor(private readonly auth:SecureAuthenticationService){}
- @Public() @Get('config') config(){return {data:{provider:this.auth.externalIdentityEnabled?'firebase':'local'}};}
+ @Public() @Get('config') config(){return {data:{provider:this.auth.externalIdentityEnabled?'firebase':'local',mfaEmailReset:this.auth.mfaEmailResetEnabled}};}
  @Public() @Post('register') async register(@Body()body:unknown){const input=registerSchema.safeParse(body);if(!input.success)throw new BadRequestException('Datos de registro inválidos.');try{return {data:await this.auth.signUp(input.data.email,input.data.password)}}catch(err){if(err instanceof AuthConflict)throw new BadRequestException(err.message);handleSecurity(err)}}
  @Public() @Post('resend-verification') @HttpCode(200) async resend(@Body()body:unknown){const input=verificationResendSchema.safeParse(body);if(!input.success)throw new BadRequestException('Correo inválido.');try{return {data:await this.auth.resendVerification(input.data.email,input.data.password)}}catch(err){handleSecurity(err)}}
  @Public() @Post('verify-email') @HttpCode(200) async verifyEmail(@Body()body:unknown){const input=verifyEmailSchema.safeParse(body);if(!input.success)throw new BadRequestException('Token inválido.');try{return {data:await this.auth.verifyEmail(input.data.token)}}catch(err){handleSecurity(err)}}

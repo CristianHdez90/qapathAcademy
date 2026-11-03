@@ -35,6 +35,10 @@ export interface AccountSecurityPort {
   consumePasswordReset?(tokenHash:string):Promise<string|null>;
   /** Tras el restablecimiento: guarda el hash (si es local), desbloquea, cierra sesiones y desafíos, anula enlaces y audita. */
   completePasswordReset?(userId:string,passwordHash:string|null):Promise<void>;
+  /** Desbloqueo administrativo: borra intentos fallidos y bloqueo; audita al actor. */
+  unlockAccount?(userId:string,actorUserId:string):Promise<void>;
+  /** Registra en la auditoría una acción administrativa sobre la cuenta. */
+  auditAdmin?(userId:string,actorUserId:string,action:string):Promise<void>;
 }
 export interface TotpPort {
   createSecret():string;
@@ -52,6 +56,8 @@ const DAY=86400000;
 export class SecureAuthenticationService {
   constructor(private readonly d:SecureAuthDependencies){}
   get externalIdentityEnabled(){return !!this.d.external;}
+  /** «¿Perdiste tu app?» por correo: solo con identidad local y un transporte de correo propio. */
+  get mfaEmailResetEnabled(){return !this.d.external&&!!this.d.mailer.sendMfaReset;}
   private async userByEmail(input:string){let email:string;try{email=EmailAddress.create(input).value}catch{throw new AuthError()};return {email,user:await this.d.users.findByEmail(email)}}
   async signUp(emailInput:string,password:string){
     const email=EmailAddress.create(emailInput).value;
@@ -258,6 +264,23 @@ export class SecureAuthenticationService {
     if(!userId)throw new SecurityFlowError('Enlace inválido, usado o vencido.');
     await security.completePasswordReset(userId,await this.d.passwords.hash(newPassword));
     return {reset:true,message:'Contraseña actualizada. Ya puedes iniciar sesión con la nueva contraseña.'};
+  }
+  /** Administración: quita el bloqueo por intentos fallidos (no cambia la contraseña). */
+  async unlockByAdmin(userId:string,actorUserId:string){
+    const user=await this.d.users.findById(userId);
+    if(!user)throw new SecurityFlowError('No existe esa cuenta.');
+    if(!this.d.security.unlockAccount)throw new SecurityFlowError('El desbloqueo no está disponible.',503);
+    await this.d.security.unlockAccount(user.id,actorUserId);
+    return {unlocked:true,email:user.email};
+  }
+  /** Administración: envía al titular el enlace para elegir una contraseña nueva (el administrador nunca la conoce). */
+  async sendPasswordResetByAdmin(userId:string,actorUserId:string){
+    const user=await this.d.users.findById(userId);
+    if(!user)throw new SecurityFlowError('No existe esa cuenta.');
+    if(!user.isActive)throw new SecurityFlowError('La cuenta está inactiva: actívala antes de enviar el enlace.');
+    await this.requestPasswordReset(user.email);
+    await this.d.security.auditAdmin?.(user.id,actorUserId,'PASSWORD_RESET_SENT_BY_ADMIN');
+    return {sent:true,email:user.email,message:`Enviamos a ${user.email} un enlace para elegir una contraseña nueva (vence en 1 hora). Si lo pediste hace menos de un minuto, espera y vuelve a intentarlo.`};
   }
   async resetMfaByAdmin(targetEmail:string,actorUserId:string){
     let email:string;try{email=EmailAddress.create(targetEmail).value}catch{throw new SecurityFlowError('Correo inválido.')}

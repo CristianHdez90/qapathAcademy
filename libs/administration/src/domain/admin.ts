@@ -1,6 +1,6 @@
 /** Bounded context Administration: DTOs de lectura, reglas y puertos sin HTTP/SQL. */
 export type StudentStatus='active'|'inactive'|'all';
-export type Student={id:string;email:string;role:'STUDENT';isActive:boolean;emailVerified:boolean;mustChangePassword:boolean;mfaEnabled:boolean;createdAt:string;updatedAt:string};
+export type Student={id:string;email:string;role:'STUDENT';isActive:boolean;emailVerified:boolean;mustChangePassword:boolean;mfaEnabled:boolean;lockedUntil:string|null;createdAt:string;updatedAt:string};
 export type StudentProgressView={completedWeeks:number[];readWeeks:number[];tasksCount:number;labsCount:number;finalCount:number;quizScores:Record<string,number>;scrumCompleted:boolean;progressPercent:number;revision:number;updatedAt:string|null};
 export type StudentRow=Student&{progressPercent:number;completedCount:number;lastProgressAt:string|null};
 export type StudentDetail={student:Student;progress:StudentProgressView};
