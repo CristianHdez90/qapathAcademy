@@ -2,10 +2,10 @@
 import {CatalogError} from './course-catalog';
 import type {StudyFileValidator} from './course-lessons';
 export type OutlineVisual={filename:string;kind?:'mermaid'|'interaction'|'svg';content:string};
-export type OutlineCard={id:string;title:string;text:string;source?:string;visuals:OutlineVisual[]};
+export type OutlineCard={id:string;title:string;text:string;source?:string;extra?:boolean;visuals:OutlineVisual[]};
 export type OutlineQuestion={id:string;question:string;options:string[];correct:number;explanation:string};
 export type OutlineChapter={id:string;title:string;outcome:string;cards:OutlineCard[];quiz:OutlineQuestion[]};
-export type OutlineWeek={id:string;title:string;summary:string;chapters:OutlineChapter[]};
+export type OutlineWeek={id:string;title:string;summary:string;practice?:number;chapters:OutlineChapter[]};
 export type CourseOutline={weeks:OutlineWeek[]};
 /** Dueño del contenido: un curso (contenido propio) o un módulo propio reutilizable. */
 export type OutlineOwner={kind:'course'|'module';id:string};

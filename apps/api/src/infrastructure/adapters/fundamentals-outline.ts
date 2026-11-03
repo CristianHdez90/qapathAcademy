@@ -61,7 +61,7 @@ function card(chapter:FoundationChapter,source:FoundationCard):OutlineCard{
 function opening(chapter:FoundationChapter):OutlineCard{
  const facts=(chapter.intro??[]).filter(b=>b.kind==='facts'),rest=(chapter.intro??[]).filter(b=>b.kind!=='facts');
  const story=chapter.opening?.story??[];
- return {id:`${chapter.id}-apertura`,title:chapter.title,
+ return {id:`${chapter.id}-apertura`,title:chapter.title,extra:true,
   visuals:chapter.typesMap?[visual('mapa del capitulo.json',{view:'types-map'})]:chapter.levelsMap?[visual('niveles de prueba.json',{view:'levels-pyramid'})]:[],
   text:join([
    !!facts.length&&fence('qapath-bloques',facts),
@@ -76,7 +76,7 @@ function opening(chapter:FoundationChapter):OutlineCard{
 /** Pasos posteriores a las tarjetas, en el mismo orden que la lectura original. */
 function after(chapter:FoundationChapter):OutlineCard[]{
  const label=`Capítulo ${two(chapter.number)}`,cards:OutlineCard[]=[];
- const add=(suffix:string,title:string,text:string)=>cards.push({id:`${chapter.id}-${suffix}`,title,text,visuals:[]});
+ const add=(suffix:string,title:string,text:string)=>cards.push({id:`${chapter.id}-${suffix}`,title,text,extra:true,visuals:[]});
  if(chapter.teamCase?.length)add('caso','Caso del equipo',fence('qapath-caso',chapter.teamCase));
  if(chapter.diagram)add('mapa','Mapa de relaciones',fence('qapath-mapa',chapter.diagram));
  if(chapter.balloons)add('aplica',`Así se aplica · ${chapter.balloons.title}`,fence('qapath-globos',chapter.balloons));
@@ -98,7 +98,7 @@ function questions(source:FoundationCard[]):OutlineQuestion[]{
  */
 export function fundamentalsOutline():CourseOutline{
  const weeks=Object.values((contentSnapshot.foundation as unknown as {weeks:Record<string,FoundationWeek>}).weeks).sort((a,b)=>a.week-b.week);
- return {weeks:weeks.map(week=>({id:`FND-W${two(week.week)}`,title:week.title,summary:week.summary.slice(0,8000),chapters:week.chapters.map(chapter=>({
+ return {weeks:weeks.map(week=>({id:`FND-W${two(week.week)}`,title:week.title,summary:week.summary.slice(0,8000),practice:week.week,chapters:week.chapters.map(chapter=>({
   id:chapter.id,title:`Capítulo ${two(chapter.number)} · ${chapter.title}`.slice(0,160),outcome:chapter.outcome.slice(0,400),
   cards:[opening(chapter),...chapter.cards.map(c=>card(chapter,c)),...after(chapter)],quiz:questions(chapter.cards),
  }))}))};
