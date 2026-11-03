@@ -107,6 +107,13 @@ export class PostgresSecurityAdapter implements AccountSecurityPort {
   const [record]=await this.provider.db.update(passwordResetTokens).set({consumedAt:new Date()}).where(and(eq(passwordResetTokens.tokenHash,tokenHash),isNull(passwordResetTokens.consumedAt),gt(passwordResetTokens.expiresAt,new Date()))).returning({userId:passwordResetTokens.userId});
   return record?.userId??null;
  }
+ async unlockAccount(userId:string,actorUserId:string){
+  await this.provider.db.transaction(async tx=>{
+   await tx.update(users).set({failedAttempts:0,lockedUntil:null,updatedAt:new Date()}).where(eq(users.id,userId));
+   await tx.insert(adminAuditEvents).values({actorUserId,targetUserId:userId,action:'ACCOUNT_UNLOCKED_BY_ADMIN'});
+  });
+ }
+ async auditAdmin(userId:string,actorUserId:string,action:string){await this.provider.db.insert(adminAuditEvents).values({actorUserId,targetUserId:userId,action});}
  async completePasswordReset(userId:string,passwordHash:string|null){
   await this.provider.db.transaction(async tx=>{
    const now=new Date();
